@@ -10,133 +10,147 @@ use App\Auth\Middleware;
 
 class ProfileController extends Controller
 {
+    // [SECURITY] Allowed MIME types for image uploads
+    private const ALLOWED_MIME_TYPES = [
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'image/webp',
+    ];
+
+    // [SECURITY] Max upload size: 5MB
+    private const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+
     /**
      * Show a detailed profile of a single user (Homeowner or Craftsman).
      */
     public function show($username = null)
     {
         $userModel = new User();
-        $user = null;
+        $user      = null;
 
         // 1. Direct username lookup (e.g., /profile/ahmed_dev)
         if ($username) {
             $user = $userModel->findByUsername($username);
-        } 
-        // 2. Legacy lookup by ID, immediately redirect to clean URL
+        }
+        // 2. Legacy lookup by ID → redirect to clean URL
         elseif (isset($_GET['id'])) {
-            $user = $userModel->findById($_GET['id']);
+            $userId = (int) $_GET['id'];
+            $user   = $userModel->findById($userId);
             if ($user && !empty($user['username'])) {
-                header("Location: " . APP_URL . "/profile/" . $user['username'], true, 301);
+                header("Location: " . APP_URL . "/profile/" . rawurlencode($user['username']), true, 301);
                 exit;
             }
-        } 
-        // 3. Fallback for just /profile - redirect to own profile
+        }
+        // 3. Fallback: redirect to own profile
         elseif (isset($_SESSION['user_id'])) {
             $user = $userModel->findById($_SESSION['user_id']);
             if ($user && !empty($user['username'])) {
-                header("Location: " . APP_URL . "/profile/" . $user['username']);
+                header("Location: " . APP_URL . "/profile/" . rawurlencode($user['username']));
                 exit;
             }
         }
 
         if (!$user) {
-            // Can be expanded to return a proper 404 view later
-            echo "User not found or no valid username.";
+            http_response_code(404);
+            $viewPath = BASE_PATH . '/resources/views/errors/404.php';
+            if (file_exists($viewPath)) require $viewPath;
+            else echo "404 - User not found.";
             exit;
         }
 
-        // We use the internal $id for related queries
-        $id = $user['id'];
-
+        $id              = $user['id'];
         $craftsmanDetails = null;
 
         if ($user['role'] === 'craftsman') {
-            $craftsmanModel = new CraftsmanProfile();
+            $craftsmanModel  = new CraftsmanProfile();
             $craftsmanDetails = $craftsmanModel->findByUserId($id);
 
-            // If they haven't created a specific profile record yet
             if (!$craftsmanDetails) {
                 $craftsmanDetails = [
-                    'service_category' => 'General Handyman',
-                    'hourly_rate' => 0.00,
-                    'bio' => '',
-                    'portfolio_images' => '[]',
-                    'is_verified' => false,
-                    'created_at' => $user['created_at']
+                    'service_category'  => 'General Handyman',
+                    'hourly_rate'       => 0.00,
+                    'bio'               => '',
+                    'portfolio_images'  => '[]',
+                    'is_verified'       => false,
+                    'created_at'        => $user['created_at']
                 ];
             }
         }
 
-        $reviews = [];
-        $rating = ['avg_rating' => 0, 'total_reviews' => 0];
+        $reviews    = [];
+        $rating     = ['avg_rating' => 0, 'total_reviews' => 0];
         $isFavorite = false;
 
         if ($user['role'] === 'craftsman') {
             $reviewModel = new Review();
-            $reviews = $reviewModel->getReviewsForCraftsman($id);
-            $rating = $reviewModel->getCraftsmanRating($id);
+            $reviews     = $reviewModel->getReviewsForCraftsman($id);
+            $rating      = $reviewModel->getCraftsmanRating($id);
 
             if (isset($_SESSION['user_id']) && ($_SESSION['role'] ?? '') === 'homeowner') {
                 $favoriteModel = new Favorite();
-                $isFavorite = $favoriteModel->isFavorite($_SESSION['user_id'], $id);
+                $isFavorite    = $favoriteModel->isFavorite($_SESSION['user_id'], $id);
             }
         }
 
-        // Prepare SEO Tags
-        $fullName = $user['first_name'] . ' ' . $user['last_name'];
-        $ogTitle = $fullName . ' - Profile on CraftConnect';
-        $metaDesc = "View the profile of {$fullName} on CraftConnect.";
-        
+        $fullName  = $user['first_name'] . ' ' . $user['last_name'];
+        $ogTitle   = $fullName . ' - Profile on CraftConnect';
+        $metaDesc  = "View the profile of {$fullName} on CraftConnect.";
+
         if ($user['role'] === 'craftsman') {
-            $service = $craftsmanDetails['service_category'] ?? 'Professional';
-            $loc = !empty($user['wilaya']) ? " in {$user['wilaya']}" : "";
+            $service  = $craftsmanDetails['service_category'] ?? 'Professional';
+            $loc      = !empty($user['wilaya']) ? " in {$user['wilaya']}" : "";
             $metaDesc = "Hire {$fullName}, a skilled {$service}{$loc} on CraftConnect. Read reviews and view their portfolio.";
         }
 
-        $ogImage = APP_URL . get_profile_picture_url($user['profile_picture'] ?? 'default.png', $user['first_name'], $user['last_name']);
+        $ogImage = APP_URL . get_profile_picture_url(
+            $user['profile_picture'] ?? 'default.png',
+            $user['first_name'],
+            $user['last_name']
+        );
 
         $this->view('layouts/app', [
-            'pageTitle' => $fullName . ' - Profile',
-            'contentView' => 'profile/show',
-            'user' => $user,
-            'craftsmanDetails' => $craftsmanDetails,
-            'reviews' => $reviews,
-            'rating' => $rating,
-            'isFavorite' => $isFavorite,
+            'pageTitle'       => $fullName . ' - Profile',
+            'contentView'     => 'profile/show',
+            'user'            => $user,
+            'craftsmanDetails'=> $craftsmanDetails,
+            'reviews'         => $reviews,
+            'rating'          => $rating,
+            'isFavorite'      => $isFavorite,
             'metaDescription' => $metaDesc,
-            'ogTitle' => $ogTitle,
-            'ogDescription' => $metaDesc,
-            'ogImage' => $ogImage
+            'ogTitle'         => $ogTitle,
+            'ogDescription'   => $metaDesc,
+            'ogImage'         => $ogImage
         ]);
     }
 
     /**
-     * Show the edit profile form
+     * Show the edit profile form.
      */
     public function edit()
     {
         Middleware::requireLogin();
         $id = $_SESSION['user_id'];
 
-        $userModel = new User();
-        $user = $userModel->findById($id);
-
+        $userModel       = new User();
+        $user            = $userModel->findById($id);
         $craftsmanDetails = null;
+
         if ($user['role'] === 'craftsman') {
-            $craftsmanModel = new CraftsmanProfile();
+            $craftsmanModel  = new CraftsmanProfile();
             $craftsmanDetails = $craftsmanModel->findByUserId($id);
         }
 
         $this->view('layouts/app', [
-            'pageTitle' => 'Edit Profile - CraftConnect',
-            'contentView' => 'profile/edit',
-            'user' => $user,
-            'craftsmanDetails' => $craftsmanDetails
+            'pageTitle'       => 'Edit Profile - CraftConnect',
+            'contentView'     => 'profile/edit',
+            'user'            => $user,
+            'craftsmanDetails'=> $craftsmanDetails
         ]);
     }
 
     /**
-     * Process profile updates
+     * Process profile updates.
      */
     public function update()
     {
@@ -145,61 +159,61 @@ class ProfileController extends Controller
         $id = $_SESSION['user_id'];
 
         $firstName = trim($_POST['first_name'] ?? '');
-        $lastName = trim($_POST['last_name'] ?? '');
-        $phone = trim($_POST['phone_number'] ?? '');
-        $wilaya = trim($_POST['wilaya'] ?? '');
-        $username = trim($_POST['username'] ?? '');
+        $lastName  = trim($_POST['last_name'] ?? '');
+        $phone     = trim($_POST['phone_number'] ?? '');
+        $wilaya    = trim($_POST['wilaya'] ?? '');
+        $username  = trim($_POST['username'] ?? '');
 
-        // Handle basic User table updates
+        // [SECURITY] Input length limits
+        if (strlen($firstName) > 100 || strlen($lastName) > 100) {
+            // Silently truncate
+            $firstName = mb_substr($firstName, 0, 100);
+            $lastName  = mb_substr($lastName, 0, 100);
+        }
+        if (strlen($phone) > 20) $phone = mb_substr($phone, 0, 20);
+
         $userModel = new User();
-        $user = $userModel->findById($id);
+        $user      = $userModel->findById($id);
 
-        // Username Logic
+        // Username update logic
         $usernameUpdateSql = "";
-        $usernameParams = [];
+        $usernameParams    = [];
         if (!empty($username) && $username !== $user['username']) {
-            // Check regex format server-side
-            if (preg_match('/^[a-zA-Z][a-zA-Z0-9_-]{2,}$/', $username)) {
-                // Sanitize slug
-                $username = strtolower(trim($username));
-                
-                // Check if 14 days have passed
+            if (preg_match('/^[a-zA-Z][a-zA-Z0-9_-]{2,29}$/', $username)) {
+                $username  = strtolower(trim($username));
                 $canUpdate = true;
+
                 if (!empty($user['username_updated_at'])) {
                     $lastUpdated = strtotime($user['username_updated_at']);
                     if (time() - $lastUpdated < (14 * 24 * 60 * 60)) {
                         $canUpdate = false;
                     }
                 }
-                
+
                 if ($canUpdate) {
-                    // Check if unique
                     $existing = $userModel->findByUsername($username);
-                    if (!$existing || $existing['id'] == $id) {
-                        $usernameUpdateSql = ", username = :username, username_updated_at = NOW()";
+                    if (!$existing || (int)$existing['id'] === (int)$id) {
+                        $usernameUpdateSql        = ", username = :username, username_updated_at = NOW()";
                         $usernameParams['username'] = $username;
                     }
                 }
             }
         }
 
-        $sql = "UPDATE users SET first_name = :first_name, last_name = :last_name, phone_number = :phone_number, wilaya = :wilaya {$usernameUpdateSql} WHERE id = :id";
+        $sql    = "UPDATE users SET first_name = :first_name, last_name = :last_name, phone_number = :phone_number, wilaya = :wilaya {$usernameUpdateSql} WHERE id = :id";
         $params = [
-            'first_name' => $firstName,
-            'last_name' => $lastName,
+            'first_name'   => $firstName,
+            'last_name'    => $lastName,
             'phone_number' => $phone,
-            'wilaya' => $wilaya,
-            'id' => $id
+            'wilaya'       => $wilaya,
+            'id'           => $id
         ];
 
         $userModel->executeQuery($sql, array_merge($params, $usernameParams));
 
         // Handle Profile Picture Removal
         if (isset($_POST['remove_picture']) && $_POST['remove_picture'] == '1') {
-            $userModel->executeQuery("UPDATE users SET profile_picture = 'default.png' WHERE id = :id", [
-                'id' => $id
-            ]);
-            // If we successfully remove from DB, also delete the old file if it exists and isn't default
+            $userModel->executeQuery("UPDATE users SET profile_picture = 'default.png' WHERE id = :id", ['id' => $id]);
             if (!empty($user['profile_picture']) && $user['profile_picture'] !== 'default.png') {
                 $oldFile = BASE_PATH . '/public/uploads/profile/' . $user['profile_picture'];
                 if (file_exists($oldFile)) {
@@ -209,101 +223,111 @@ class ProfileController extends Controller
         }
         // Handle Profile Picture Upload
         elseif (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
-            $tmpName = $_FILES['profile_picture']['tmp_name'];
-            $name = basename($_FILES['profile_picture']['name']);
-            $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
-
-            if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
-                $newName = time() . '_' . uniqid() . '.' . $ext;
-                $uploadDir = BASE_PATH . '/public/uploads/profile/';
-                if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0777, true);
-                }
-
-                if (move_uploaded_file($tmpName, $uploadDir . $newName)) {
-                    $userModel->executeQuery("UPDATE users SET profile_picture = :pic WHERE id = :id", [
-                        'pic' => $newName,
-                        'id' => $id
-                    ]);
-                }
-            }
+            $uploadError = $this->handleProfilePictureUpload(
+                $_FILES['profile_picture'],
+                $id,
+                $user,
+                $userModel
+            );
+            // $uploadError is a string message if failed, null on success — can surface to user if needed
         }
 
         // Handle Craftsman specific updates
         if ($user['role'] === 'craftsman') {
             $craftsmanModel = new CraftsmanProfile();
 
+            $bio          = trim($_POST['bio'] ?? '');
+            $hourlyRate   = (float) ($_POST['hourly_rate'] ?? 0);
+            $category     = trim($_POST['service_category'] ?? 'General Handyman');
+
+            // [SECURITY] Input length limits
+            if (strlen($bio) > 2000) $bio = mb_substr($bio, 0, 2000);
+
             $data = [
-                'service_category' => $_POST['service_category'] ?? 'General Handyman',
-                'hourly_rate' => $_POST['hourly_rate'] ?? 0,
-                'bio' => $_POST['bio'] ?? ''
+                'service_category' => $category,
+                'hourly_rate'      => max(0, $hourlyRate),
+                'bio'              => $bio
             ];
 
-            // --- Portfolio Image Management ---
+            // Portfolio Image Management
             $uploadDir = BASE_PATH . '/public/uploads/portfolio/';
             if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
+                mkdir($uploadDir, 0755, true);
             }
 
-            // Get old images from DB
-            $existing = $craftsmanModel->findByUserId($id);
-            $oldImages = [];
+            $existing   = $craftsmanModel->findByUserId($id);
+            $oldImages  = [];
             if ($existing && !empty($existing['portfolio_images'])) {
                 $oldImages = json_decode($existing['portfolio_images'], true) ?: [];
             }
 
-            // Get images the user chose to KEEP (hidden inputs named existing_images[])
-            $keptImages = $_POST['existing_images'] ?? [];
+            // Only keep filenames that actually exist on disk (prevent path traversal via kept images)
+            $keptImagesRaw = $_POST['existing_images'] ?? [];
+            $keptImages    = [];
+            foreach ($keptImagesRaw as $img) {
+                $safe = basename($img); // Strip any directory traversal
+                if ($safe && file_exists($uploadDir . $safe)) {
+                    $keptImages[] = $safe;
+                }
+            }
 
             // Delete removed images from disk
             foreach ($oldImages as $oldImg) {
-                if (!in_array($oldImg, $keptImages)) {
-                    $filePath = $uploadDir . $oldImg;
+                if (!in_array($oldImg, $keptImages, true)) {
+                    $filePath = $uploadDir . basename($oldImg);
                     if (file_exists($filePath)) {
                         unlink($filePath);
                     }
                 }
             }
 
-            // Upload new images
+            // Upload new portfolio images
             $newImages = [];
             if (!empty($_FILES['portfolio_images']['name'][0])) {
-                $allowedExts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-                $maxFiles = 10 - count($keptImages); // Enforce max 10 total
+                $maxFiles = max(0, 10 - count($keptImages));
 
                 for ($i = 0; $i < min(count($_FILES['portfolio_images']['name']), $maxFiles); $i++) {
-                    if ($_FILES['portfolio_images']['error'][$i] === UPLOAD_ERR_OK) {
-                        $tmpName = $_FILES['portfolio_images']['tmp_name'][$i];
-                        $origName = basename($_FILES['portfolio_images']['name'][$i]);
-                        $ext = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
+                    if ($_FILES['portfolio_images']['error'][$i] !== UPLOAD_ERR_OK) continue;
 
-                        if (in_array($ext, $allowedExts) && $_FILES['portfolio_images']['size'][$i] <= 5 * 1024 * 1024) {
-                            $newName = time() . '_' . uniqid() . '_' . $i . '.' . $ext;
-                            if (move_uploaded_file($tmpName, $uploadDir . $newName)) {
-                                $newImages[] = $newName;
-                            }
-                        }
+                    $tmpName = $_FILES['portfolio_images']['tmp_name'][$i];
+                    $size    = $_FILES['portfolio_images']['size'][$i];
+
+                    // [SECURITY] File size check
+                    if ($size > self::MAX_UPLOAD_BYTES) continue;
+
+                    // [SECURITY] Verify actual MIME type
+                    $mime = $this->getRealMimeType($tmpName);
+                    if (!in_array($mime, self::ALLOWED_MIME_TYPES, true)) continue;
+
+                    $ext     = $this->mimeToExt($mime);
+                    $newName = bin2hex(random_bytes(16)) . '.' . $ext;
+
+                    if (move_uploaded_file($tmpName, $uploadDir . $newName)) {
+                        $newImages[] = $newName;
                     }
                 }
             }
 
-            // Merge kept + new
             $data['portfolio_images'] = array_merge($keptImages, $newImages);
-
             $craftsmanModel->updateOrCreate($id, $data);
         }
 
-        header('Location: ' . APP_URL . '/profile?id=' . $id);
+        // Update session name in case it changed
+        $_SESSION['name'] = $firstName;
+
+        header('Location: ' . APP_URL . '/profile/' . rawurlencode($user['username'] ?? $id));
         exit;
     }
 
     /**
-     * Publish or unpublish the marketing card to the marketplace.
+     * Publish or unpublish the craftsman's marketplace card.
      */
     public function publish()
     {
         Middleware::requireLogin();
-        $id = $_SESSION['user_id'];
+        Middleware::verifyCsrfToken();
+
+        $id   = $_SESSION['user_id'];
         $role = $_SESSION['role'] ?? '';
 
         if ($role !== 'craftsman') {
@@ -311,26 +335,26 @@ class ProfileController extends Controller
             exit;
         }
 
-        $status = $_POST['status'] ?? 1; // Default to published
-
+        $status         = (int) ($_POST['status'] ?? 1);
         $craftsmanModel = new CraftsmanProfile();
-        
-        // Check if profile is setup before publishing
-        if ($status == 1) {
-            $userModel = new User();
-            $user = $userModel->findById($id);
+
+        if ($status === 1) {
+            $userModel        = new User();
+            $user             = $userModel->findById($id);
             $craftsmanDetails = $craftsmanModel->findByUserId($id);
-            
+
             if (empty($craftsmanDetails['id']) || empty($user['wilaya']) || empty($user['phone_number'])) {
-                // Profile incomplete
                 header('Location: ' . APP_URL . '/profile?id=' . $id . '&error=incomplete');
                 exit;
             }
+        } else {
+            $userModel = new User();
+            $user      = $userModel->findById($id);
         }
 
         $craftsmanModel->setPublishStatus($id, $status);
 
-        header('Location: ' . APP_URL . '/profile/' . ($user['username'] ?? $id));
+        header('Location: ' . APP_URL . '/profile/' . rawurlencode($user['username'] ?? $id));
         exit;
     }
 
@@ -340,8 +364,8 @@ class ProfileController extends Controller
     public function checkUsername()
     {
         header('Content-Type: application/json');
-        
-        $username = trim($_GET['username'] ?? '');
+
+        $username      = trim($_GET['username'] ?? '');
         $currentUserId = $_SESSION['user_id'] ?? null;
 
         if (empty($username)) {
@@ -350,13 +374,86 @@ class ProfileController extends Controller
         }
 
         $userModel = new User();
-        $existing = $userModel->findByUsername($username);
+        $existing  = $userModel->findByUsername($username);
 
-        if ($existing && $existing['id'] != $currentUserId) {
+        if ($existing && (int)$existing['id'] !== (int)$currentUserId) {
             echo json_encode(['available' => false, 'message' => 'This username is already taken.']);
         } else {
             echo json_encode(['available' => true, 'message' => 'Username is available!']);
         }
         exit;
+    }
+
+    // ─── Private Helpers ──────────────────────────────────────────────────────
+
+    /**
+     * Handle profile picture upload with full validation.
+     * Returns null on success, error string on failure.
+     */
+    private function handleProfilePictureUpload(array $file, int $userId, array $user, User $userModel): ?string
+    {
+        $tmpName = $file['tmp_name'];
+        $size    = $file['size'];
+
+        // [SECURITY] File size check
+        if ($size > self::MAX_UPLOAD_BYTES) {
+            return "Profile picture must be under 5MB.";
+        }
+
+        // [SECURITY] Verify real MIME type from binary content, not extension
+        $mime = $this->getRealMimeType($tmpName);
+        if (!in_array($mime, self::ALLOWED_MIME_TYPES, true)) {
+            return "Invalid file type. Please upload a JPG, PNG, GIF, or WebP image.";
+        }
+
+        $ext       = $this->mimeToExt($mime);
+        // [SECURITY] Cryptographically random filename
+        $newName   = bin2hex(random_bytes(16)) . '.' . $ext;
+        $uploadDir = BASE_PATH . '/public/uploads/profile/';
+
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+
+        if (!move_uploaded_file($tmpName, $uploadDir . $newName)) {
+            return "Could not save the uploaded file.";
+        }
+
+        // Delete old picture from disk
+        if (!empty($user['profile_picture']) && $user['profile_picture'] !== 'default.png') {
+            $oldFile = $uploadDir . basename($user['profile_picture']);
+            if (file_exists($oldFile)) {
+                unlink($oldFile);
+            }
+        }
+
+        $userModel->executeQuery("UPDATE users SET profile_picture = :pic WHERE id = :id", [
+            'pic' => $newName,
+            'id'  => $userId
+        ]);
+
+        return null;
+    }
+
+    /**
+     * Get the real MIME type of a file using finfo (not extension).
+     */
+    private function getRealMimeType(string $tmpPath): string
+    {
+        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+        return $finfo->file($tmpPath) ?: 'application/octet-stream';
+    }
+
+    /**
+     * Map a MIME type to a safe file extension.
+     */
+    private function mimeToExt(string $mime): string
+    {
+        return [
+            'image/jpeg' => 'jpg',
+            'image/png'  => 'png',
+            'image/gif'  => 'gif',
+            'image/webp' => 'webp',
+        ][$mime] ?? 'jpg';
     }
 }
