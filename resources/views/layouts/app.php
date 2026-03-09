@@ -18,14 +18,14 @@
     
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="<?= APP_URL . $_SERVER['REQUEST_URI'] ?>">
+    <meta property="og:url" content="<?= htmlspecialchars(APP_URL . $_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8') ?>">
     <meta property="og:title" content="<?= htmlspecialchars($title) ?>">
     <meta property="og:description" content="<?= htmlspecialchars($desc) ?>">
     <meta property="og:image" content="<?= htmlspecialchars($img) ?>">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="<?= APP_URL . $_SERVER['REQUEST_URI'] ?>">
+    <meta property="twitter:url" content="<?= htmlspecialchars(APP_URL . $_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8') ?>">
     <meta property="twitter:title" content="<?= htmlspecialchars($title) ?>">
     <meta property="twitter:description" content="<?= htmlspecialchars($desc) ?>">
     <meta property="twitter:image" content="<?= htmlspecialchars($img) ?>">
