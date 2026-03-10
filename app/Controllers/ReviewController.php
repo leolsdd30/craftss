@@ -30,7 +30,7 @@ class ReviewController extends Controller
         $booking = $bookingModel->findById($bookingId);
 
         // Can only review completed bookings belonging to this homeowner
-        if (!$booking || $booking['homeowner_id'] != $_SESSION['user_id'] || $booking['status'] !== 'completed') {
+        if (!$booking || (int)$booking['homeowner_id'] !== (int)$_SESSION['user_id'] || $booking['status'] !== 'completed') {
             header("Location: " . APP_URL . "/homeowner/dashboard");
             exit;
         }
@@ -75,7 +75,7 @@ class ReviewController extends Controller
         $bookingModel = new \App\Models\Booking();
         $booking = $bookingModel->findById($bookingId);
 
-        if (!$booking || $booking['homeowner_id'] != $_SESSION['user_id'] || $booking['status'] !== 'completed') {
+        if (!$booking || (int)$booking['homeowner_id'] !== (int)$_SESSION['user_id'] || $booking['status'] !== 'completed') {
             header("Location: " . APP_URL . "/homeowner/dashboard");
             exit;
         }
@@ -115,11 +115,11 @@ class ReviewController extends Controller
             $notif = new Notification();
             $notif->send($booking['craftsman_id'], 'review_new', 'New Review Received', 
                 $_SESSION['name'] . ' left you a ' . $starRating . '-star review!', 
-                APP_URL . '/profile?id=' . $booking['craftsman_id']);
+                APP_URL . '/craftsman/dashboard#reviews');
 
-            header("Location: " . APP_URL . "/homeowner/dashboard?success=review_submitted");
+            header("Location: " . APP_URL . "/homeowner/dashboard?success=review_submitted#bookings");
         } else {
-            header("Location: " . APP_URL . "/homeowner/dashboard?error=review_failed");
+            header("Location: " . APP_URL . "/homeowner/dashboard?error=review_failed#bookings");
         }
         exit;
     }

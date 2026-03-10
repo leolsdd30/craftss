@@ -103,7 +103,7 @@
                 </div>
 
                 <!-- Tab: My Quotes -->
-                <div id="tab-quotes" class="tab-content">
+                <div id="tab-quotes" class="tab-content" style="display:none">
                     <?php if (!empty($quotes)): ?>
                     <div class="space-y-3">
                         <?php foreach ($quotes as $quote): ?>
@@ -512,17 +512,60 @@ var pendingFormId = null;
 
 function switchTab(tabName) {
     document.querySelectorAll('.tab-content').forEach(function(el) {
+        el.style.display = 'none';
         el.classList.add('hidden');
     });
     document.querySelectorAll('.tab-btn').forEach(function(btn) {
         btn.classList.remove('border-indigo-500', 'text-indigo-600');
-        btn.classList.add('border-transparent', 'text-gray-500');
+        btn.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
     });
-    document.getElementById('tab-' + tabName).classList.remove('hidden');
+    var target = document.getElementById('tab-' + tabName);
+    if (target) {
+        target.classList.remove('hidden');
+        target.style.display = '';
+    }
     var activeBtn = document.querySelector('[data-tab="' + tabName + '"]');
-    activeBtn.classList.remove('border-transparent', 'text-gray-500');
-    activeBtn.classList.add('border-indigo-500', 'text-indigo-600');
+    if (activeBtn) {
+        activeBtn.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+        activeBtn.classList.add('border-indigo-500', 'text-indigo-600');
+    }
+    
+    // Update URL hash without jumping the page
+    if (history.replaceState) {
+        history.replaceState(null, null, '#' + tabName);
+    } else {
+        window.location.hash = tabName;
+    }
 }
+
+// Read hash IMMEDIATELY (before paint) to prevent tab flicker
+(function() {
+    var hash = window.location.hash.substring(1);
+    // Strip any unexpected query strings from the hash just in case
+    hash = hash.split('?')[0];
+    
+    // Legacy mapping: old notifications sent #jobs instead of #active
+    if (hash === 'jobs') hash = 'active';
+
+    if (hash && document.getElementById('tab-' + hash)) {
+        switchTab(hash);
+    } else {
+        // Default: show first tab
+        switchTab('quotes');
+    }
+})();
+
+// Listen for hash changes when navigating via back/forward or typing in the address bar
+window.addEventListener('hashchange', function() {
+    var hash = window.location.hash.substring(1).split('?')[0];
+    
+    // Legacy mapping: old notifications sent #jobs instead of #active
+    if (hash === 'jobs') hash = 'active';
+
+    if (hash && document.getElementById('tab-' + hash)) {
+        switchTab(hash);
+    }
+});
 
 function showConfirmModal(formId, title, message, type) {
     pendingFormId = formId;

@@ -375,6 +375,13 @@
             input.classList.remove('border-red-400', 'border-green-400', 'border-yellow-400', 'ring-1', 'ring-red-400', 'ring-green-400', 'ring-yellow-400');
             feedback.className = 'mt-2 text-xs font-medium flex items-center transition-all duration-200';
 
+            // Same as original — no change needed, valid by default
+            if (val === originalValue) {
+                feedback.innerHTML = '';
+                usernameValid = true;
+                return true; 
+            }
+
             if (val === '') {
                 showError('Username cannot be empty.');
                 return false;
@@ -396,13 +403,6 @@
                 return false;
             }
 
-            // Same as original — no change needed
-            if (val === originalValue) {
-                feedback.innerHTML = '';
-                input.classList.remove('border-red-400', 'border-green-400', 'border-yellow-400', 'ring-1', 'ring-red-400', 'ring-green-400', 'ring-yellow-400');
-                usernameValid = true;
-                return false; // no need to check server
-            }
             return true;
         }
 

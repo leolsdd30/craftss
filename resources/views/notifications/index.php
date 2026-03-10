@@ -84,7 +84,17 @@
                         <span class="text-xs text-gray-400 whitespace-nowrap ml-4 mt-0.5"><?= $timeAgo ?></span>
                     </div>
                     <?php if (!empty($notif['link'])): ?>
-                    <a href="<?= APP_URL ?>/notifications/read?id=<?= $notif['id'] ?>&redirect=<?= urlencode($notif['link']) ?>" 
+                    <?php
+                        // Split link into base URL and hash fragment so urlencode doesn't destroy the #
+                        $linkParts = explode('#', $notif['link'], 2);
+                        $linkBase = $linkParts[0];
+                        $linkHash = $linkParts[1] ?? '';
+                        $notifHref = APP_URL . '/notifications/read?id=' . $notif['id'] . '&redirect=' . urlencode($linkBase);
+                        if (!empty($linkHash)) {
+                            $notifHref .= '&hash=' . urlencode($linkHash);
+                        }
+                    ?>
+                    <a href="<?= $notifHref ?>" 
                        class="inline-flex items-center mt-2 text-xs font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
                         View Details
                         <svg class="ml-1 h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">

@@ -202,7 +202,7 @@ class JobBoardController extends Controller
         $notif = new Notification();
         $notif->send($job['posted_by_user_id'], 'quote_new', 'New Quote Received', 
             $_SESSION['name'] . ' submitted a quote of $' . number_format($price, 2) . ' on your job: ' . $job['title'], 
-            APP_URL . '/jobs/show?id=' . $jobId);
+            APP_URL . '/homeowner/dashboard#quotes');
 
         header("Location: " . APP_URL . "/jobs/show?id=" . $jobId . "&success=quote_submitted");
         }
@@ -255,7 +255,7 @@ class JobBoardController extends Controller
         $notif = new Notification();
         $notif->send($quote['craftsman_id'], 'quote_accepted', 'Quote Accepted!', 
             'Your quote on "' . $job['title'] . '" has been accepted!', 
-            APP_URL . '/craftsman/dashboard');
+            APP_URL . '/craftsman/dashboard#active');
 
         header("Location: " . APP_URL . "/jobs/show?id=" . $quote['job_posting_id'] . "&success=quote_accepted");
         }
@@ -303,7 +303,7 @@ class JobBoardController extends Controller
     $notif = new Notification();
     $notif->send($quote['craftsman_id'], 'quote_rejected', 'Quote Declined', 
         'Your quote on "' . $job['title'] . '" was not accepted.', 
-        APP_URL . '/jobs');
+        APP_URL . '/craftsman/dashboard#quotes');
 
     header("Location: " . APP_URL . "/jobs/show?id=" . $quote['job_posting_id'] . "&success=quote_rejected");
         exit;

@@ -41,7 +41,7 @@ $router->get('/login', [AuthController::class , 'showLoginForm']);
 $router->post('/login', [AuthController::class , 'processLogin']);
 $router->get('/register', [AuthController::class , 'showRegisterForm']);
 $router->post('/register', [AuthController::class , 'processRegister']);
-$router->get('/logout', [AuthController::class , 'logout']);
+$router->post('/logout', [AuthController::class , 'logout']);
 
 // Role-based Dashboards
 $router->get('/homeowner/dashboard', [HomeownerController::class , 'dashboard']);

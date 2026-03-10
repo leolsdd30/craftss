@@ -122,8 +122,11 @@ class Message extends Model
                 LEFT JOIN messages lm ON lm.id = (
                     SELECT MAX(m3.id) FROM messages m3 WHERE m3.conversation_id = c.id
                 )
-                WHERE (c.initiator_id = :uid4 OR c.participant_id = :uid5)
-                AND c.status = 'accepted'
+                WHERE (
+                    (c.initiator_id = :uid4 AND c.status IN ('accepted', 'pending'))
+                    OR 
+                    (c.participant_id = :uid5 AND c.status = 'accepted')
+                )
                 AND lm.id IS NOT NULL
                 ORDER BY lm.created_at DESC";
 
@@ -257,8 +260,9 @@ class Message extends Model
     public function hasSharedBooking($userId1, $userId2)
     {
         $sql = "SELECT id FROM requests_bookings 
-                WHERE (homeowner_id = :u1 AND craftsman_id = :u2)
-                   OR (homeowner_id = :u3 AND craftsman_id = :u4)
+                WHERE ((homeowner_id = :u1 AND craftsman_id = :u2)
+                   OR (homeowner_id = :u3 AND craftsman_id = :u4))
+                AND status NOT IN ('requested', 'cancelled')
                 LIMIT 1";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['u1' => $userId1, 'u2' => $userId2, 'u3' => $userId2, 'u4' => $userId1]);

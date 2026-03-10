@@ -7,25 +7,41 @@
     
     <!-- SEO and Open Graph Meta Tags -->
     <?php
+        // Dynamically ascertain the absolute base URL for social media bots (Telegram, Facebook, etc)
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $baseUrl = $protocol . $host;
+        $absoluteAppUrl = (strpos(APP_URL ?? '', 'http') === 0) ? APP_URL : $baseUrl . APP_URL;
+        $currentUrl = $baseUrl . $_SERVER['REQUEST_URI'];
+
         $defaultDesc = 'CraftConnect - The premier platform connecting skilled craftsmen and homeowners in Algeria.';
-        $defaultImg = APP_URL . '/assets/img/og-preview.jpg'; // We can add a generic preview later
+        $defaultImg = APP_URL . '/assets/img/og-preview.jpg';
         
         $desc = $metaDescription ?? $ogDescription ?? $defaultDesc;
         $title = $ogTitle ?? $pageTitle ?? 'CraftConnect';
+        
+        // Ensure image is absolute
         $img = $ogImage ?? $defaultImg;
+        if (!empty($img) && strpos($img, 'http') !== 0) {
+            // Strip any double APP_URL prefixes if they accidentally crept in
+            if (strpos($img, APP_URL) === 0) {
+                $img = substr($img, strlen(APP_URL));
+            }
+            $img = $absoluteAppUrl . '/' . ltrim($img, '/');
+        }
     ?>
     <meta name="description" content="<?= htmlspecialchars($desc) ?>">
     
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="<?= htmlspecialchars(APP_URL . $_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8') ?>">
+    <meta property="og:url" content="<?= htmlspecialchars($currentUrl) ?>">
     <meta property="og:title" content="<?= htmlspecialchars($title) ?>">
     <meta property="og:description" content="<?= htmlspecialchars($desc) ?>">
     <meta property="og:image" content="<?= htmlspecialchars($img) ?>">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="<?= htmlspecialchars(APP_URL . $_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8') ?>">
+    <meta property="twitter:url" content="<?= htmlspecialchars($currentUrl) ?>">
     <meta property="twitter:title" content="<?= htmlspecialchars($title) ?>">
     <meta property="twitter:description" content="<?= htmlspecialchars($desc) ?>">
     <meta property="twitter:image" content="<?= htmlspecialchars($img) ?>">
@@ -100,7 +116,7 @@
                             $headerMsgModel = new \App\Models\Message();
                             $headerUnreadCount = $headerMsgModel->getUnreadConversationCount($_SESSION['user_id']);
                             $headerRequestCount = $headerMsgModel->getPendingRequestCount($_SESSION['user_id']);
-                            $headerTotalBadge = $headerUnreadCount + $headerRequestCount;
+                            $headerTotalBadge = $headerUnreadCount; // + $headerRequestCount;
 
                             // Get unread notification count
                             $headerNotifModel = new \App\Models\Notification();
@@ -126,7 +142,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                             </svg>
                             <?php if ($headerTotalBadge > 0): ?>
-                            <span id="nav-unread-badge" class="absolute -top-0.5 -right-0.5 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[10px] font-bold <?= $headerRequestCount > 0 ? 'bg-yellow-500' : 'bg-red-500' ?> text-white min-w-[18px] leading-none ring-2 ring-white">
+                            <span id="nav-unread-badge" class="absolute -top-0.5 -right-0.5 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500 text-white min-w-[18px] leading-none ring-2 ring-white">
                                 <?= $headerTotalBadge > 99 ? '99+' : $headerTotalBadge ?>
                             </span>
                             <?php endif; ?>

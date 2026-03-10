@@ -64,7 +64,16 @@ class User extends Model
         
         // Auto-generate a basic username if not provided
         if (empty($data['username'])) {
-            $baseSlug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $data['first_name'] . '_' . $data['last_name'])));
+            $baseName = strtolower($data['first_name'] . $data['last_name']);
+            // Remove anything that isn't an english letter or number
+            $baseSlug = preg_replace('/[^a-z0-9]/', '', $baseName);
+            
+            // Ensure the username starts with a letter (regex requirement)
+            if (empty($baseSlug) || !preg_match('/^[a-z]/', $baseSlug)) {
+                $baseSlug = 'user' . $baseSlug;
+            }
+            
+            // Append a 4-character random suffix to ensure it's highly likely unique
             $data['username'] = $baseSlug . '_' . substr(uniqid(), -4);
         }
 

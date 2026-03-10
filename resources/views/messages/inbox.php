@@ -35,7 +35,7 @@
         </div>
 
         <!-- Tab: Messages (Accepted Conversations) -->
-        <div id="msg-tab-messages" class="msg-tab-content">
+        <div id="msg-tab-messages" class="msg-tab-content" style="display:none">
             <?php if (!empty($conversations)): ?>
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
                 <?php foreach ($conversations as $convo): ?>
@@ -224,16 +224,53 @@ let pendingRequestUserId = null;
 let pendingRequestAction = null;
 
 function switchMsgTab(tabName) {
-    document.querySelectorAll('.msg-tab-content').forEach(el => el.classList.add('hidden'));
-    document.querySelectorAll('.msg-tab-btn').forEach(btn => {
-        btn.classList.remove('border-indigo-500', 'text-indigo-600');
-        btn.classList.add('border-transparent', 'text-gray-500');
+    document.querySelectorAll('.msg-tab-content').forEach(function(el) {
+        el.style.display = 'none';
+        el.classList.add('hidden');
     });
-    document.getElementById('msg-tab-' + tabName).classList.remove('hidden');
-    const activeBtn = document.querySelector('[data-msg-tab="' + tabName + '"]');
-    activeBtn.classList.remove('border-transparent', 'text-gray-500');
-    activeBtn.classList.add('border-indigo-500', 'text-indigo-600');
+    document.querySelectorAll('.msg-tab-btn').forEach(function(btn) {
+        btn.classList.remove('border-indigo-500', 'text-indigo-600');
+        btn.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+    });
+    var target = document.getElementById('msg-tab-' + tabName);
+    if (target) {
+        target.classList.remove('hidden');
+        target.style.display = '';
+    }
+    var activeBtn = document.querySelector('[data-msg-tab="' + tabName + '"]');
+    if (activeBtn) {
+        activeBtn.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+        activeBtn.classList.add('border-indigo-500', 'text-indigo-600');
+    }
+
+    if (history.replaceState) {
+        history.replaceState(null, null, '#' + tabName);
+    } else {
+        window.location.hash = tabName;
+    }
 }
+
+// Read hash IMMEDIATELY (before paint) to prevent tab flicker
+(function() {
+    var hash = window.location.hash.substring(1).split('?')[0];
+    if (hash && document.getElementById('msg-tab-' + hash)) {
+        switchMsgTab(hash);
+    } else {
+        <?php if (empty($conversations) && !empty($requests)): ?>
+        switchMsgTab('requests');
+        <?php else: ?>
+        switchMsgTab('messages');
+        <?php endif; ?>
+    }
+})();
+
+// Listen for hash changes
+window.addEventListener('hashchange', function() {
+    var hash = window.location.hash.substring(1).split('?')[0];
+    if (hash && document.getElementById('msg-tab-' + hash)) {
+        switchMsgTab(hash);
+    }
+});
 
 function acceptRequest(userId) {
     showMsgModal('accept', userId);
@@ -309,8 +346,5 @@ async function confirmMsgAction() {
     }
 }
 
-// Auto-switch to requests tab if there are pending requests and no messages
-<?php if (empty($conversations) && !empty($requests)): ?>
-switchMsgTab('requests');
-<?php endif; ?>
+
 </script>

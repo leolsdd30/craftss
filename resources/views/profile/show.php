@@ -126,9 +126,12 @@
                             </button>
                             <?php endif; ?>
 
-                            <a href="<?= APP_URL ?>/logout" class="w-full inline-flex justify-center items-center px-4 py-2.5 border border-transparent text-sm font-bold rounded-lg text-red-600 hover:text-red-700 hover:bg-red-50 focus:outline-none transition duration-150 mt-4">
-                                Logout
-                            </a>
+                            <form action="<?= APP_URL ?>/logout" method="POST" class="w-full mt-4">
+                                <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token'] ?? '') ?>">
+                                <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-2.5 border border-transparent text-sm font-bold rounded-lg text-red-600 hover:text-red-700 hover:bg-red-50 focus:outline-none transition duration-150">
+                                    Logout
+                                </button>
+                            </form>
                         <?php endif; ?>
                     </div>
 

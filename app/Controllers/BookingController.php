@@ -25,7 +25,7 @@ class BookingController extends Controller
         }
 
         // Cannot book yourself
-        if ($craftsmanId == $_SESSION['user_id']) {
+        if ((int)$craftsmanId === (int)$_SESSION['user_id']) {
             header("Location: " . APP_URL . "/profile?id=" . $craftsmanId);
             exit;
         }
@@ -82,17 +82,12 @@ class BookingController extends Controller
         ]);
 
         if ($success) {
-            // Auto-promote any pending message requests between these users
-            $msgModel = new Message();
-            $msgModel->autoPromoteOnBooking($_SESSION['user_id'], $craftsmanId);
-
-            // Notify the craftsman
             $notif = new Notification();
             $notif->send($craftsmanId, 'booking_new', 'New Booking Request', 
                 $_SESSION['name'] . ' has requested a booking with you.', 
-                APP_URL . '/craftsman/dashboard');
+                APP_URL . '/craftsman/dashboard#bookings');
 
-            $dashboard = $_SESSION['role'] === 'craftsman' ? '/craftsman/dashboard' : '/homeowner/dashboard';
+            $dashboard = $_SESSION['role'] === 'craftsman' ? '/craftsman/dashboard#bookings' : '/homeowner/dashboard#bookings';
             header("Location: " . APP_URL . $dashboard . "?success=booking_requested");
             exit;
         } else {
@@ -126,7 +121,7 @@ class BookingController extends Controller
         $bookingModel = new Booking();
         $booking = $bookingModel->findById($bookingId);
 
-        if (!$booking || $booking['craftsman_id'] != $_SESSION['user_id']) {
+        if (!$booking || (int)$booking['craftsman_id'] !== (int)$_SESSION['user_id']) {
             echo "Access Denied.";
             exit;
         }
@@ -141,9 +136,9 @@ class BookingController extends Controller
         $notif = new Notification();
         $notif->send($booking['homeowner_id'], 'booking_accepted', 'Booking Accepted!', 
             'Your booking request has been accepted. The job is now in progress.', 
-            APP_URL . '/homeowner/dashboard');
+            APP_URL . '/homeowner/dashboard#bookings');
 
-        header("Location: " . APP_URL . "/craftsman/dashboard?success=booking_accepted");
+        header("Location: " . APP_URL . "/craftsman/dashboard?success=booking_accepted#bookings");
         exit;
     }
 
@@ -169,7 +164,7 @@ class BookingController extends Controller
         $bookingModel = new Booking();
         $booking = $bookingModel->findById($bookingId);
 
-        if (!$booking || $booking['craftsman_id'] != $_SESSION['user_id'] || $booking['status'] !== 'requested') {
+        if (!$booking || (int)$booking['craftsman_id'] !== (int)$_SESSION['user_id'] || $booking['status'] !== 'requested') {
             echo "Access Denied.";
             exit;
         }
@@ -189,9 +184,9 @@ class BookingController extends Controller
         $notif = new Notification();
         $notif->send($booking['homeowner_id'], 'booking_counter', 'Counter-Offer Received', 
             $_SESSION['first_name'] . ' has sent a counter-offer for your booking. Please review the changes.', 
-            APP_URL . '/homeowner/dashboard');
+            APP_URL . '/homeowner/dashboard#bookings');
 
-        header("Location: " . APP_URL . "/craftsman/dashboard?success=counter_sent");
+        header("Location: " . APP_URL . "/craftsman/dashboard?success=counter_sent#bookings");
         exit;
     }
 
@@ -213,7 +208,7 @@ class BookingController extends Controller
         $bookingModel = new Booking();
         $booking = $bookingModel->findById($bookingId);
 
-        if (!$booking || $booking['homeowner_id'] != $_SESSION['user_id'] || $booking['status'] !== 'counter_offered') {
+        if (!$booking || (int)$booking['homeowner_id'] !== (int)$_SESSION['user_id'] || $booking['status'] !== 'counter_offered') {
             echo "Access Denied.";
             exit;
         }
@@ -224,9 +219,9 @@ class BookingController extends Controller
         $notif = new Notification();
         $notif->send($booking['craftsman_id'], 'counter_accepted', 'Counter-Offer Accepted!', 
             $_SESSION['first_name'] . ' accepted your counter-offer. The job is now in progress!', 
-            APP_URL . '/craftsman/dashboard');
+            APP_URL . '/craftsman/dashboard#bookings');
 
-        header("Location: " . APP_URL . "/homeowner/dashboard?success=counter_accepted");
+        header("Location: " . APP_URL . "/homeowner/dashboard?success=counter_accepted#bookings");
         exit;
     }
 
@@ -248,7 +243,7 @@ class BookingController extends Controller
         $bookingModel = new Booking();
         $booking = $bookingModel->findById($bookingId);
 
-        if (!$booking || $booking['homeowner_id'] != $_SESSION['user_id'] || $booking['status'] !== 'counter_offered') {
+        if (!$booking || (int)$booking['homeowner_id'] !== (int)$_SESSION['user_id'] || $booking['status'] !== 'counter_offered') {
             echo "Access Denied.";
             exit;
         }
@@ -259,9 +254,9 @@ class BookingController extends Controller
         $notif = new Notification();
         $notif->send($booking['craftsman_id'], 'counter_rejected', 'Counter-Offer Declined', 
             $_SESSION['first_name'] . ' has declined your counter-offer. The booking has been cancelled.', 
-            APP_URL . '/craftsman/dashboard');
+            APP_URL . '/craftsman/dashboard#bookings');
 
-        header("Location: " . APP_URL . "/homeowner/dashboard?success=counter_cancelled");
+        header("Location: " . APP_URL . "/homeowner/dashboard?success=counter_cancelled#bookings");
         exit;
     }
 
@@ -283,7 +278,7 @@ class BookingController extends Controller
         $bookingModel = new Booking();
         $booking = $bookingModel->findById($bookingId);
 
-        if (!$booking || $booking['craftsman_id'] != $_SESSION['user_id']) {
+        if (!$booking || (int)$booking['craftsman_id'] !== (int)$_SESSION['user_id']) {
             echo "Access Denied.";
             exit;
         }
@@ -294,9 +289,9 @@ class BookingController extends Controller
         $notif = new Notification();
         $notif->send($booking['homeowner_id'], 'booking_declined', 'Booking Declined', 
             'Unfortunately, your booking request was declined by the craftsman.', 
-            APP_URL . '/homeowner/dashboard');
+            APP_URL . '/homeowner/dashboard#bookings');
 
-        header("Location: " . APP_URL . "/craftsman/dashboard?success=booking_declined");
+        header("Location: " . APP_URL . "/craftsman/dashboard?success=booking_declined#bookings");
         exit;
     }
 
@@ -318,7 +313,7 @@ class BookingController extends Controller
         $bookingModel = new Booking();
         $booking = $bookingModel->findById($bookingId);
 
-        if (!$booking || $booking['craftsman_id'] != $_SESSION['user_id']) {
+        if (!$booking || (int)$booking['craftsman_id'] !== (int)$_SESSION['user_id']) {
             echo "Access Denied.";
             exit;
         }
@@ -330,10 +325,10 @@ class BookingController extends Controller
             $notif = new Notification();
             $notif->send($booking['homeowner_id'], 'booking_pending', 'Job Pending Confirmation', 
                 'The craftsman has marked the job as complete. Please confirm the work is done.', 
-                APP_URL . '/homeowner/dashboard');
+                APP_URL . '/homeowner/dashboard#bookings');
         }
 
-        header("Location: " . APP_URL . "/craftsman/dashboard?success=completion_pending");
+        header("Location: " . APP_URL . "/craftsman/dashboard?success=completion_pending#bookings");
         exit;
     }
 
@@ -355,7 +350,7 @@ class BookingController extends Controller
         $bookingModel = new Booking();
         $booking = $bookingModel->findById($bookingId);
 
-        if (!$booking || $booking['homeowner_id'] != $_SESSION['user_id'] || $booking['status'] !== 'pending_completion') {
+        if (!$booking || (int)$booking['homeowner_id'] !== (int)$_SESSION['user_id'] || $booking['status'] !== 'pending_completion') {
             echo "Access Denied.";
             exit;
         }
@@ -366,9 +361,9 @@ class BookingController extends Controller
         $notif = new Notification();
         $notif->send($booking['craftsman_id'], 'booking_completed', 'Job Confirmed Complete!', 
             $_SESSION['first_name'] . ' has confirmed the work is done. Great job!', 
-            APP_URL . '/craftsman/dashboard');
+            APP_URL . '/craftsman/dashboard#bookings');
 
-        header("Location: " . APP_URL . "/homeowner/dashboard?success=job_completed");
+        header("Location: " . APP_URL . "/homeowner/dashboard?success=job_completed#bookings");
         exit;
     }
 }

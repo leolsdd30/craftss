@@ -4,7 +4,6 @@ header("X-Frame-Options: DENY");
 header("X-XSS-Protection: 1; mode=block");
 header("X-Content-Type-Options: nosniff");
 header("Referrer-Policy: strict-origin-when-cross-origin");
-header("Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.tailwindcss.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://ui-avatars.com data: blob:; connect-src 'self'; frame-ancestors 'none';");
 
 // Define the absolute path to the root directory
 define('BASE_PATH', dirname(__DIR__));
@@ -43,14 +42,8 @@ else {
     }
 }
 
-// Only allow known HTTP methods
-$allowedMethods = ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'];
-if (!in_array(strtoupper($_SERVER['REQUEST_METHOD']), $allowedMethods)) {
-    http_response_code(405);
-    exit;
-}
-
 $method = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
+
 
 try {
     $router->dispatch($uri, $method);
