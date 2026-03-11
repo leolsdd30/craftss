@@ -44,7 +44,7 @@ class JobQuote extends Model
     public function getQuotesByJob($jobId)
     {
         $stmt = $this->db->prepare(
-            "SELECT q.*, u.first_name, u.last_name, u.email 
+            "SELECT q.*, u.first_name, u.last_name, u.email, u.username 
              FROM job_quotes q
              JOIN users u ON q.craftsman_id = u.id
              WHERE q.job_posting_id = :job_id
@@ -80,7 +80,8 @@ class JobQuote extends Model
             "SELECT q.id AS quote_id, q.job_posting_id, q.craftsman_id, q.quoted_price, 
                     q.cover_message, q.status AS quote_status, q.created_at AS quote_created_at,
                     j.title AS job_title, j.service_category,
-                    u.first_name AS craftsman_first_name, u.last_name AS craftsman_last_name, u.profile_picture AS craftsman_picture
+                    u.first_name AS craftsman_first_name, u.last_name AS craftsman_last_name, 
+                    u.profile_picture AS craftsman_picture, u.username AS craftsman_username, u.username AS craftsman_username
              FROM job_quotes q
              JOIN job_postings j ON q.job_posting_id = j.id
              JOIN users u ON q.craftsman_id = u.id

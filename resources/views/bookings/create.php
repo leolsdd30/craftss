@@ -3,7 +3,7 @@
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div class="mb-8">
-            <a href="<?= APP_URL ?>/profile?id=<?= $craftsman['id'] ?>" class="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-200">&larr; Back to Profile</a>
+            <a href="<?= APP_URL ?>/profile/<?= $craftsman['username'] ?>" class="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-200">&larr; Back to Profile</a>
             <h1 class="mt-2 text-3xl font-extrabold text-gray-900">Request Booking</h1>
             <p class="mt-1 text-sm text-gray-500">Send a direct booking request to this craftsman.</p>
         </div>
@@ -85,7 +85,7 @@
 
             <!-- Form Actions -->
             <div class="px-6 py-4 bg-gray-50 rounded-b-lg flex items-center justify-end space-x-3">
-                <a href="<?= APP_URL ?>/profile?id=<?= $craftsman['id'] ?>" class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-500 transition-colors duration-200">Cancel</a>
+                <a href="<?= APP_URL ?>/profile/<?= $craftsman['username'] ?>" class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-500 transition-colors duration-200">Cancel</a>
                 <button type="submit" class="inline-flex justify-center items-center px-6 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150">
                     <svg class="h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" />

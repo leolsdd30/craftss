@@ -36,11 +36,11 @@ class AdminController extends Controller
         $stats['total_messages'] = (int) $db->query("SELECT COUNT(*) FROM messages")->fetchColumn();
 
         // Recent users
-        $stmt = $db->query("SELECT id, first_name, last_name, email, role, is_active, created_at FROM users ORDER BY created_at DESC LIMIT 10");
+        $stmt = $db->query("SELECT id, first_name, last_name, email, role, is_active, created_at, username FROM users ORDER BY created_at DESC LIMIT 10");
         $recentUsers = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $this->view('layouts/app', [
-            'pageTitle' => 'Admin Dashboard - CraftConnect',
+            'pageTitle' => 'Admin Dashboard - Crafts',
             'contentView' => 'admin/dashboard',
             'stats' => $stats,
             'recentUsers' => $recentUsers
@@ -60,7 +60,7 @@ class AdminController extends Controller
         $roleFilter = $_GET['role'] ?? '';
         $statusFilter = $_GET['status'] ?? '';
 
-        $sql = "SELECT u.id, u.first_name, u.last_name, u.email, u.role, u.is_active, u.created_at,
+        $sql = "SELECT u.id, u.first_name, u.last_name, u.email, u.role, u.is_active, u.created_at, u.username,
                        cp.service_category, cp.is_verified
                 FROM users u
                 LEFT JOIN craftsmen_profiles cp ON u.id = cp.user_id
@@ -141,7 +141,7 @@ class AdminController extends Controller
 
         $filter = $_GET['filter'] ?? 'pending';
 
-        $sql = "SELECT cp.*, u.first_name, u.last_name, u.email, u.profile_picture, u.wilaya, u.created_at as user_created
+        $sql = "SELECT cp.*, u.first_name, u.last_name, u.email, u.profile_picture, u.wilaya, u.username, u.created_at as user_created
                 FROM craftsmen_profiles cp
                 JOIN users u ON cp.user_id = u.id
                 WHERE u.is_active = TRUE AND u.role = 'craftsman'";
@@ -198,12 +198,12 @@ class AdminController extends Controller
         $notif = new Notification();
         if ($newStatus) {
             $notif->send($userId, 'booking_accepted', 'Profile Verified!', 
-                'Congratulations! Your profile has been verified by CraftConnect. You now have a verified badge!', 
-                APP_URL . '/profile?id=' . $userId);
+                'Congratulations! Your profile has been verified by Crafts. You now have a verified badge!', 
+                APP_URL . '/profile/' . $userId);
         } else {
             $notif->send($userId, 'booking_declined', 'Verification Removed', 
                 'Your verified status has been removed. Please contact support for more info.', 
-                APP_URL . '/profile?id=' . $userId);
+                APP_URL . '/profile/' . $userId);
         }
 
         header("Location: " . APP_URL . "/admin/verifications?success=updated");

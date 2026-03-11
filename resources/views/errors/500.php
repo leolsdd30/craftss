@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>500 — Server Error | CraftConnect</title>
+    <title>500 — Server Error | Crafts</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -36,7 +36,7 @@
             </a>
         </div>
 
-        <p class="mt-10 text-xs text-gray-400">&copy; <?= date('Y') ?> CraftConnect. All rights reserved.</p>
+        <p class="mt-10 text-xs text-gray-400">&copy; <?= date('Y') ?> Crafts. All rights reserved.</p>
     </div>
 </body>
 </html>

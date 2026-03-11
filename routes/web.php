@@ -57,7 +57,7 @@ $router->post('/jobs/accept-quote', [JobBoardController::class , 'acceptQuote'])
 $router->post('/jobs/reject-quote', [JobBoardController::class , 'rejectQuote']);
 
 // Booking Routes
-$router->get('/bookings/create', [BookingController::class , 'create']);
+$router->get('/bookings/create/{username}', [BookingController::class , 'create']);
 $router->post('/bookings/create', [BookingController::class , 'store']);
 $router->post('/bookings/accept', [BookingController::class , 'accept']);
 $router->post('/bookings/decline', [BookingController::class , 'decline']);

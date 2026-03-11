@@ -31,7 +31,7 @@ class Booking extends Model
     public function getBookingsForCraftsman($craftsmanId)
     {
         $stmt = $this->db->prepare(
-            "SELECT rb.*, u.first_name, u.last_name, u.profile_picture, u.email
+            "SELECT rb.*, u.first_name, u.last_name, u.profile_picture, u.username, u.email, u.username
              FROM requests_bookings rb
              JOIN users u ON rb.homeowner_id = u.id
              WHERE rb.craftsman_id = :craftsman_id
@@ -47,7 +47,7 @@ class Booking extends Model
     public function getBookingsForHomeowner($homeownerId)
     {
         $stmt = $this->db->prepare(
-            "SELECT rb.*, u.first_name, u.last_name, u.profile_picture
+            "SELECT rb.*, u.first_name, u.last_name, u.profile_picture, u.username
              FROM requests_bookings rb
              JOIN users u ON rb.craftsman_id = u.id
              WHERE rb.homeowner_id = :homeowner_id

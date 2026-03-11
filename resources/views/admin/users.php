@@ -91,7 +91,7 @@
                         <tr class="hover:bg-gray-50 transition-colors">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-mono">#<?= $u['id'] ?></td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <a href="<?= APP_URL ?>/profile?id=<?= $u['id'] ?>" class="text-sm font-medium text-gray-900 hover:text-indigo-600 transition-colors">
+                                <a href="<?= APP_URL ?>/profile/<?= $u['username'] ?>" class="text-sm font-medium text-gray-900 hover:text-indigo-600 transition-colors">
                                     <?= htmlspecialchars($u['first_name'] . ' ' . $u['last_name']) ?>
                                 </a>
                             </td>

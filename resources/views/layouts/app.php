@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $pageTitle ?? 'CraftConnect' ?></title>
+    <title><?= $pageTitle ?? 'Crafts' ?></title>
     
     <!-- SEO and Open Graph Meta Tags -->
     <?php
@@ -14,11 +14,11 @@
         $absoluteAppUrl = (strpos(APP_URL ?? '', 'http') === 0) ? APP_URL : $baseUrl . APP_URL;
         $currentUrl = $baseUrl . $_SERVER['REQUEST_URI'];
 
-        $defaultDesc = 'CraftConnect - The premier platform connecting skilled craftsmen and homeowners in Algeria.';
+        $defaultDesc = 'Crafts — The premier platform connecting skilled craftsmen and homeowners in Algeria.';
         $defaultImg = APP_URL . '/assets/img/og-preview.jpg';
         
         $desc = $metaDescription ?? $ogDescription ?? $defaultDesc;
-        $title = $ogTitle ?? $pageTitle ?? 'CraftConnect';
+        $title = $ogTitle ?? $pageTitle ?? 'Crafts';
         
         // Ensure image is absolute
         $img = $ogImage ?? $defaultImg;
@@ -76,22 +76,47 @@
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen text-gray-900">
     <!-- Navbar -->
+    <?php
+        $appUrlPath = rtrim(parse_url(APP_URL, PHP_URL_PATH) ?? '', '/');
+        $currentUri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?? '';
+        
+        $route = $currentUri;
+        if ($appUrlPath !== '' && strpos($currentUri, $appUrlPath) === 0) {
+            $route = substr($currentUri, strlen($appUrlPath));
+        }
+        if ($route === '') $route = '/';
+        
+        $isHome = ($route === '/');
+        $isSearch = strpos($route, '/search') === 0;
+        $isJobs = strpos($route, '/jobs') === 0;
+        $isDashboard = strpos($route, '/homeowner/dashboard') === 0 || strpos($route, '/craftsman/dashboard') === 0 || strpos($route, '/admin/dashboard') === 0;
+        $isMessages = strpos($route, '/messages') === 0;
+        $isNotifs = strpos($route, '/notifications') === 0;
+
+        $baseNavClass = "text-sm font-medium transition-colors duration-200 border-b-2 border-transparent";
+        $activeNavClass = "text-indigo-600 hover:border-indigo-300";
+        $inactiveNavClass = "text-gray-500 hover:border-gray-300 hover:text-gray-700";
+        
+        $baseIconClass = "relative p-2 transition-colors duration-200 rounded-lg";
+        $activeIconClass = "text-indigo-600 bg-indigo-50";
+        $inactiveIconClass = "text-gray-400 hover:text-indigo-600 hover:bg-indigo-50";
+    ?>
     <nav class="bg-white shadow">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex">
                     <div class="flex-shrink-0 flex items-center">
-                        <a href="<?= APP_URL ?>/" class="text-2xl font-bold text-indigo-600">CraftConnect</a>
+                        <a href="<?= APP_URL ?>/" class="text-2xl font-bold text-indigo-600">Crafts</a>
                     </div>
                     <!-- Main Navigation Links -->
-                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                        <a href="<?= APP_URL ?>/" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                    <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-8">
+                        <a href="<?= APP_URL ?>/" class="<?= $baseNavClass . ' ' . ($isHome ? $activeNavClass : $inactiveNavClass) ?>">
                             Home
                         </a>
-                        <a href="<?= APP_URL ?>/search" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                        <a href="<?= APP_URL ?>/search" class="<?= $baseNavClass . ' ' . ($isSearch ? $activeNavClass : $inactiveNavClass) ?>">
                             Find Craftsmen
                         </a>
-                        <a href="<?= APP_URL ?>/jobs" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                        <a href="<?= APP_URL ?>/jobs" class="<?= $baseNavClass . ' ' . ($isJobs ? $activeNavClass : $inactiveNavClass) ?>">
                             Job Board
                         </a>
                     </div>
@@ -123,12 +148,12 @@
                             $headerNotifCount = $headerNotifModel->getUnreadCount($_SESSION['user_id']);
                         ?>
                         <?php if ($_SESSION['role'] !== 'admin'): ?>
-                        <a href="<?= $dashboardUrl ?>" class="text-sm font-medium text-gray-500 hover:text-gray-900 border-b-2 border-transparent hover:border-indigo-600 transition-colors duration-200">
+                        <a href="<?= $dashboardUrl ?>" class="text-sm font-medium transition-colors duration-200 border-b-2 border-transparent <?= $isDashboard ? 'text-indigo-600 hover:border-indigo-300' : 'text-gray-500 hover:text-gray-900 hover:border-gray-300' ?>">
                             Dashboard
                         </a>
                         <?php endif; ?>
                         <?php if ($_SESSION['role'] === 'admin'): ?>
-                        <a href="<?= APP_URL ?>/admin/dashboard" class="text-sm font-medium text-red-600 hover:text-red-800 border-b-2 border-transparent hover:border-red-500 transition-colors duration-200 flex items-center">
+                        <a href="<?= APP_URL ?>/admin/dashboard" class="text-sm font-medium transition-colors duration-200 flex items-center border-b-2 border-transparent <?= $isDashboard ? 'text-red-600 hover:border-red-300' : 'text-gray-500 hover:text-red-600 hover:border-gray-300' ?>">
                             <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
@@ -137,7 +162,7 @@
                         <?php endif; ?>
                         <span class="text-sm text-gray-300">|</span>
                         <!-- Messages Icon -->
-                        <a href="<?= APP_URL ?>/messages" class="relative p-2 text-gray-400 hover:text-indigo-600 transition-colors duration-200 rounded-lg hover:bg-indigo-50" title="Messages">
+                        <a href="<?= APP_URL ?>/messages" class="<?= $baseIconClass . ' ' . ($isMessages ? $activeIconClass : $inactiveIconClass) ?>" title="Messages">
                             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                             </svg>
@@ -148,7 +173,7 @@
                             <?php endif; ?>
                         </a>
                         <!-- Notifications Bell -->
-                        <a href="<?= APP_URL ?>/notifications" class="relative p-2 text-gray-400 hover:text-indigo-600 transition-colors duration-200 rounded-lg hover:bg-indigo-50" title="Notifications">
+                        <a href="<?= APP_URL ?>/notifications" class="<?= $baseIconClass . ' ' . ($isNotifs ? $activeIconClass : $inactiveIconClass) ?>" title="Notifications">
                             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                             </svg>
@@ -188,8 +213,32 @@
 
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 mt-auto">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <p class="text-center text-sm text-gray-500">&copy; <?= date('Y') ?> CraftConnect. All rights reserved.</p>
+        <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+                <div class="col-span-2 md:col-span-1">
+                    <a href="<?= APP_URL ?>/" class="text-xl font-bold text-indigo-600">Crafts</a>
+                    <p class="mt-2 text-sm text-gray-500">Connecting skilled craftsmen with homeowners across Algeria.</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-3">Platform</h3>
+                    <ul class="space-y-2">
+                        <li><a href="<?= APP_URL ?>/search" class="text-sm text-gray-500 hover:text-gray-900">Find Craftsmen</a></li>
+                        <li><a href="<?= APP_URL ?>/jobs" class="text-sm text-gray-500 hover:text-gray-900">Job Board</a></li>
+                        <li><a href="<?= APP_URL ?>/register" class="text-sm text-gray-500 hover:text-gray-900">Sign Up</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-3">Company</h3>
+                    <ul class="space-y-2">
+                        <li><a href="<?= APP_URL ?>/about" class="text-sm text-gray-500 hover:text-gray-900">About Us</a></li>
+                        <li><a href="#" class="text-sm text-gray-500 hover:text-gray-900">Contact</a></li>
+                        <li><a href="#" class="text-sm text-gray-500 hover:text-gray-900">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 pt-6">
+                <p class="text-center text-sm text-gray-400">&copy; <?= date('Y') ?> Crafts. All rights reserved.</p>
+            </div>
         </div>
     </footer>
 </body>

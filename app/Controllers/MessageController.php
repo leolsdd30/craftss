@@ -24,7 +24,7 @@ class MessageController extends Controller
         $requestCount = $messageModel->getPendingRequestCount($userId);
 
         $this->view('layouts/app', [
-            'pageTitle' => 'Messages - CraftConnect',
+            'pageTitle' => 'Messages - Crafts',
             'contentView' => 'messages/inbox',
             'conversations' => $conversations,
             'requests' => $requests,
@@ -97,7 +97,7 @@ class MessageController extends Controller
         $requestCount = $messageModel->getPendingRequestCount($userId);
 
         $this->view('layouts/app', [
-            'pageTitle' => 'Chat with ' . $otherUser['first_name'] . ' - CraftConnect',
+            'pageTitle' => 'Chat with ' . $otherUser['first_name'] . ' - Crafts',
             'contentView' => 'messages/conversation',
             'otherUser' => $otherUser,
             'messages' => $messages,

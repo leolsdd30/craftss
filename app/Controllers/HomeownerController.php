@@ -61,7 +61,7 @@ class HomeownerController extends Controller
         $myFavorites = $favoriteModel->getFavoritesForHomeowner($_SESSION['user_id']);
 
         $this->view('layouts/app', [
-            'pageTitle' => 'Homeowner Dashboard - CraftConnect',
+            'pageTitle' => 'Homeowner Dashboard - Crafts',
             'contentView' => 'homeowner/dashboard',
             'jobs' => $myJobs,
             'activeJobsCount' => $activeJobsCount,

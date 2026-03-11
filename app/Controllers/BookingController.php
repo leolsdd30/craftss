@@ -13,33 +13,31 @@ class BookingController extends Controller
     /**
      * Show the booking request form (from a craftsman's profile).
      */
-    public function create()
+    public function create($username = null)
     {
         Middleware::requireLogin();
 
-        $craftsmanId = $_GET['craftsman_id'] ?? null;
-
-        if (!$craftsmanId) {
+        if (!$username) {
             header("Location: " . APP_URL . "/search");
             exit;
         }
 
-        // Cannot book yourself
-        if ((int)$craftsmanId === (int)$_SESSION['user_id']) {
-            header("Location: " . APP_URL . "/profile?id=" . $craftsmanId);
-            exit;
-        }
-
         $userModel = new User();
-        $craftsman = $userModel->findById($craftsmanId);
+        $craftsman = $userModel->findByUsername($username);
 
         if (!$craftsman || $craftsman['role'] !== 'craftsman') {
             echo "Craftsman not found.";
             exit;
         }
 
+        // Cannot book yourself
+        if ((int)$craftsman['id'] === (int)$_SESSION['user_id']) {
+            header("Location: " . APP_URL . "/profile/" . $username);
+            exit;
+        }
+
         $this->view('layouts/app', [
-            'pageTitle' => 'Request Booking - CraftConnect',
+            'pageTitle' => 'Request Booking - Crafts',
             'contentView' => 'bookings/create',
             'craftsman' => $craftsman
         ]);
@@ -64,7 +62,7 @@ class BookingController extends Controller
             $craftsman = $userModel->findById($craftsmanId);
 
             $this->view('layouts/app', [
-                'pageTitle' => 'Request Booking - CraftConnect',
+                'pageTitle' => 'Request Booking - Crafts',
                 'contentView' => 'bookings/create',
                 'craftsman' => $craftsman,
                 'error' => 'Please fill in all required fields.'
@@ -95,7 +93,7 @@ class BookingController extends Controller
             $craftsman = $userModel->findById($craftsmanId);
 
             $this->view('layouts/app', [
-                'pageTitle' => 'Request Booking - CraftConnect',
+                'pageTitle' => 'Request Booking - Crafts',
                 'contentView' => 'bookings/create',
                 'craftsman' => $craftsman,
                 'error' => 'Failed to submit booking request. Please try again.'

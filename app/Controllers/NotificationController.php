@@ -20,7 +20,7 @@ class NotificationController extends Controller
         $unreadCount = $notifModel->getUnreadCount($userId);
 
         $this->view('layouts/app', [
-            'pageTitle' => 'Notifications - CraftConnect',
+            'pageTitle' => 'Notifications - Crafts',
             'contentView' => 'notifications/index',
             'notifications' => $notifications,
             'unreadCount' => $unreadCount

@@ -68,7 +68,7 @@
                              alt="<?= htmlspecialchars($c['first_name']) ?>" 
                              class="w-14 h-14 rounded-full object-cover border-2 <?= $c['is_verified'] ? 'border-green-300' : 'border-yellow-300' ?> shadow-sm">
                         <div class="flex-1 min-w-0">
-                            <a href="<?= APP_URL ?>/profile?id=<?= $c['user_id'] ?>" class="text-base font-bold text-gray-900 hover:text-indigo-600 transition-colors truncate block">
+                            <a href="<?= APP_URL ?>/profile/<?= $c['username'] ?>" class="text-base font-bold text-gray-900 hover:text-indigo-600 transition-colors truncate block">
                                 <?= htmlspecialchars($c['first_name'] . ' ' . $c['last_name']) ?>
                             </a>
                             <p class="text-sm text-indigo-600 font-semibold"><?= htmlspecialchars($c['service_category']) ?></p>

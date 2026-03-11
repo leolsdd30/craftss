@@ -107,7 +107,7 @@
                     <?php if (!empty($quotes)): ?>
                     <div class="space-y-3">
                         <?php foreach ($quotes as $quote): ?>
-                        <a href="<?= APP_URL ?>/jobs/show?id=<?= $quote['job_posting_id'] ?>" class="block bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:border-indigo-200 transition-all duration-200 p-5">
+                        <a href="<?= APP_URL ?>/jobs/<?= $quote['job_posting_id'] ?>" class="block bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:border-indigo-200 transition-all duration-200 p-5">
                             <div class="flex items-start justify-between">
                                 <div class="flex-1 min-w-0">
                                     <h3 class="text-base font-bold text-gray-900 truncate"><?= htmlspecialchars($quote['title']) ?></h3>
@@ -150,7 +150,7 @@
                     <?php if (!empty($acceptedQuotes)): ?>
                     <div class="space-y-3">
                         <?php foreach ($acceptedQuotes as $quote): ?>
-                        <a href="<?= APP_URL ?>/jobs/show?id=<?= $quote['job_posting_id'] ?>" class="block bg-white rounded-lg shadow-sm border border-green-200 hover:shadow-md transition-all duration-200 p-5">
+                        <a href="<?= APP_URL ?>/jobs/<?= $quote['job_posting_id'] ?>" class="block bg-white rounded-lg shadow-sm border border-green-200 hover:shadow-md transition-all duration-200 p-5">
                             <div class="flex items-start justify-between">
                                 <div class="flex-1 min-w-0">
                                     <h3 class="text-base font-bold text-gray-900 truncate"><?= htmlspecialchars($quote['title']) ?></h3>
@@ -247,7 +247,7 @@
                                     <input type="hidden" name="booking_id" value="<?= $booking['id'] ?>">
                                     <button type="button" onclick="showConfirmModal('decline-booking-<?= $booking['id'] ?>', 'Decline this booking?', 'Are you sure you want to decline <?= htmlspecialchars($booking['first_name']) ?>\'s booking request? This cannot be undone.', 'decline')" class="px-3 py-1.5 text-xs font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 transition duration-150">Decline</button>
                                 </form>
-                                <a href="<?= APP_URL ?>/profile?id=<?= $booking['homeowner_id'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Homeowner</a>
+                                <a href="<?= APP_URL ?>/profile/<?= $booking['username'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Homeowner</a>
                             </div>
 
                             <?php elseif ($booking['status'] === 'counter_offered'): ?>
@@ -265,7 +265,7 @@
                                     <input type="hidden" name="booking_id" value="<?= $booking['id'] ?>">
                                     <button type="button" onclick="showConfirmModal('complete-booking-<?= $booking['id'] ?>', 'Mark as Complete?', 'The homeowner will need to confirm the work is done before the job is fully closed.', 'accept')" class="px-3 py-1.5 text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition duration-150">Mark as Complete</button>
                                 </form>
-                                <a href="<?= APP_URL ?>/profile?id=<?= $booking['homeowner_id'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Homeowner</a>
+                                <a href="<?= APP_URL ?>/profile/<?= $booking['username'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Homeowner</a>
                             </div>
 
                             <?php elseif ($booking['status'] === 'pending_completion'): ?>
@@ -280,7 +280,7 @@
 
                             <?php else: ?>
                             <div class="mt-3 pt-3 border-t border-gray-100 flex items-center space-x-2">
-                                <a href="<?= APP_URL ?>/profile?id=<?= $booking['homeowner_id'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Homeowner</a>
+                                <a href="<?= APP_URL ?>/profile/<?= $booking['username'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Homeowner</a>
                             </div>
                             <?php endif; ?>
                         </div>
@@ -367,7 +367,7 @@
                             </svg>
                             Browse Job Board
                         </a>
-                        <a href="<?= APP_URL ?>/profile?id=<?= $_SESSION['user_id'] ?>" class="flex items-center w-full px-4 py-3 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition duration-150 border border-gray-200">
+                        <a href="<?= APP_URL ?>/profile/<?= $_SESSION['username'] ?>" class="flex items-center w-full px-4 py-3 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition duration-150 border border-gray-200">
                             <svg class="h-5 w-5 mr-3 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                             </svg>

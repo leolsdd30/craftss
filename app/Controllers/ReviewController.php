@@ -47,7 +47,7 @@ class ReviewController extends Controller
         $craftsman = $userModel->findById($booking['craftsman_id']);
 
         $this->view('layouts/app', [
-            'pageTitle' => 'Write a Review - CraftConnect',
+            'pageTitle' => 'Write a Review - Crafts',
             'contentView' => 'reviews/create',
             'craftsman' => $craftsman,
             'bookingId' => $bookingId
@@ -85,7 +85,7 @@ class ReviewController extends Controller
             $craftsman = $userModel->findById($booking['craftsman_id']);
 
             $this->view('layouts/app', [
-                'pageTitle' => 'Write a Review - CraftConnect',
+                'pageTitle' => 'Write a Review - Crafts',
                 'contentView' => 'reviews/create',
                 'craftsman' => $craftsman,
                 'bookingId' => $bookingId,

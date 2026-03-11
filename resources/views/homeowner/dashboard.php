@@ -7,7 +7,7 @@
             <h1 class="text-3xl font-extrabold text-gray-900">
                 Welcome back, <?= htmlspecialchars($_SESSION['first_name'] ?? 'Homeowner') ?>!
             </h1>
-            <p class="mt-1 text-sm text-gray-500">Here's an overview of your activity on CraftConnect.</p>
+            <p class="mt-1 text-sm text-gray-500">Here's an overview of your activity on Crafts.</p>
         </div>
 
         <!-- Success Messages -->
@@ -127,7 +127,7 @@
                     <?php if (!empty($jobs)): ?>
                     <div class="space-y-3">
                         <?php foreach ($jobs as $job): ?>
-                        <a href="<?= APP_URL ?>/jobs/show?id=<?= $job['id'] ?>" class="block bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:border-indigo-200 transition-all duration-200 p-5">
+                        <a href="<?= APP_URL ?>/jobs/<?= $job['id'] ?>" class="block bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:border-indigo-200 transition-all duration-200 p-5">
                             <div class="flex items-start justify-between">
                                 <div class="flex-1 min-w-0">
                                     <h3 class="text-base font-bold text-gray-900 truncate"><?= htmlspecialchars($job['title']) ?></h3>
@@ -177,7 +177,7 @@
                         <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-5">
                             <div class="flex items-start justify-between">
                                 <div class="flex-1 min-w-0">
-                                    <a href="<?= APP_URL ?>/jobs/show?id=<?= $quote['job_posting_id'] ?>" class="text-base font-bold text-indigo-600 hover:text-indigo-800 truncate block"><?= htmlspecialchars($quote['job_title']) ?></a>
+                                    <a href="<?= APP_URL ?>/jobs/<?= $quote['job_posting_id'] ?>" class="text-base font-bold text-indigo-600 hover:text-indigo-800 truncate block"><?= htmlspecialchars($quote['job_title']) ?></a>
                                     <p class="mt-1 text-sm text-gray-600">
                                         <span class="font-medium text-gray-900"><?= htmlspecialchars($quote['craftsman_first_name'] . ' ' . $quote['craftsman_last_name']) ?></span>
                                         quoted <span class="font-bold text-green-700">$<?= number_format($quote['quoted_price'], 2) ?></span>
@@ -204,7 +204,7 @@
                                     <input type="hidden" name="quote_id" value="<?= $quote['quote_id'] ?>">
                                     <button type="button" onclick="showConfirmModal('decline-quote-<?= $quote['quote_id'] ?>', 'Decline this quote?', 'Are you sure you want to decline <?= htmlspecialchars($quote['craftsman_first_name']) ?>\'s quote? This action cannot be undone.', 'decline')" class="px-3 py-1.5 text-xs font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 transition duration-150">Decline</button>
                                 </form>
-                                <a href="<?= APP_URL ?>/profile?id=<?= $quote['craftsman_id'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Profile</a>
+                                <a href="<?= APP_URL ?>/profile/<?= $quote['craftsman_username'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Profile</a>
                             </div>
                             <?php endif; ?>
                         </div>
@@ -310,7 +310,7 @@
                                         <input type="hidden" name="booking_id" value="<?= $booking['id'] ?>">
                                         <button type="button" onclick="showConfirmModal('cancel-counter-<?= $booking['id'] ?>', 'Cancel this booking?', 'This will cancel the booking entirely. This cannot be undone.', 'decline')" class="px-3 py-1.5 text-xs font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 transition duration-150">Cancel Booking</button>
                                     </form>
-                                    <a href="<?= APP_URL ?>/profile?id=<?= $booking['craftsman_id'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Craftsman</a>
+                                    <a href="<?= APP_URL ?>/profile/<?= $booking['username'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Craftsman</a>
                                 </div>
                             </div>
 
@@ -326,7 +326,7 @@
                                         <input type="hidden" name="booking_id" value="<?= $booking['id'] ?>">
                                         <button type="button" onclick="showConfirmModal('confirm-complete-<?= $booking['id'] ?>', 'Confirm Job Complete?', 'This confirms the work is done. You will be able to leave a review.', 'accept')" class="px-3 py-1.5 text-xs font-medium rounded-md text-white bg-green-600 hover:bg-green-700 transition duration-150">✅ Confirm Completion</button>
                                     </form>
-                                    <a href="<?= APP_URL ?>/profile?id=<?= $booking['craftsman_id'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Craftsman</a>
+                                    <a href="<?= APP_URL ?>/profile/<?= $booking['username'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Craftsman</a>
                                 </div>
                             </div>
 
@@ -338,7 +338,7 @@
                                     </svg>
                                     Write a Review
                                 </a>
-                                <a href="<?= APP_URL ?>/profile?id=<?= $booking['craftsman_id'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Craftsman</a>
+                                <a href="<?= APP_URL ?>/profile/<?= $booking['username'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Craftsman</a>
                             </div>
                             <?php elseif ($booking['status'] === 'completed' && !empty($booking['has_reviewed'])): ?>
                             <div class="mt-3 pt-3 border-t border-gray-100 flex items-center space-x-2">
@@ -348,7 +348,7 @@
                                     </svg>
                                     Reviewed
                                 </span>
-                                <a href="<?= APP_URL ?>/profile?id=<?= $booking['craftsman_id'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Craftsman</a>
+                                <a href="<?= APP_URL ?>/profile/<?= $booking['username'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Craftsman</a>
                             </div>
 
                             <?php elseif ($booking['status'] === 'in_progress'): ?>
@@ -358,7 +358,7 @@
 
                             <?php else: ?>
                             <div class="mt-3 pt-3 border-t border-gray-100 flex items-center space-x-2">
-                                <a href="<?= APP_URL ?>/profile?id=<?= $booking['craftsman_id'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Craftsman</a>
+                                <a href="<?= APP_URL ?>/profile/<?= $booking['username'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-150">View Craftsman</a>
                             </div>
                             <?php endif; ?>
                         </div>
@@ -426,7 +426,7 @@
                                             <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
                                         </svg>
                                     </button>
-                                    <a href="<?= APP_URL ?>/profile?id=<?= $favorite['id'] ?>" class="px-3 py-1.5 text-xs font-medium rounded text-indigo-700 bg-indigo-50 hover:bg-indigo-100 transition duration-150">
+                                    <a href="<?= APP_URL ?>/profile/<?= $favorite['username'] ?>" class="px-3 py-1.5 text-xs font-medium rounded text-indigo-700 bg-indigo-50 hover:bg-indigo-100 transition duration-150">
                                         View Profile
                                     </a>
                                 </div>

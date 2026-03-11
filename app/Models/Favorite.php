@@ -62,7 +62,7 @@ class Favorite extends Model
     {
         $stmt = $this->db->prepare(
             "SELECT f.id as favorite_id, f.created_at as favorited_at,
-                    u.id, u.first_name, u.last_name, u.profile_picture, u.wilaya,
+                    u.id, u.first_name, u.last_name, u.profile_picture, u.wilaya, u.username,
                     c.service_category, c.hourly_rate, 
                     COALESCE(AVG(r.star_rating), 0) as rating_score, 
                     COUNT(r.id) as reviews_count

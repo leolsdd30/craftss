@@ -27,13 +27,13 @@ class JobBoardController extends Controller
         $jobs = $jobModel->getOpenJobs($filters);
 
         $this->view('layouts/app', [
-            'pageTitle' => 'Browse Jobs - CraftConnect',
+            'pageTitle' => 'Browse Jobs - Crafts',
             'contentView' => 'jobboard/index',
             'jobs' => $jobs,
             'filters' => $filters,
-            'metaDescription' => 'Browse available jobs and projects posted by homeowners on CraftConnect. Find your next gig today.',
-            'ogTitle' => 'Browse Jobs on CraftConnect',
-            'ogDescription' => 'Browse available jobs and projects posted by homeowners on CraftConnect. Find your next gig today.'
+            'metaDescription' => 'Browse available jobs and projects posted by homeowners on Crafts. Find your next gig today.',
+            'ogTitle' => 'Browse Jobs on Crafts',
+            'ogDescription' => 'Browse available jobs and projects posted by homeowners on Crafts. Find your next gig today.'
         ]);
     }
 
@@ -46,7 +46,7 @@ class JobBoardController extends Controller
         Middleware::requireLogin();
 
         $this->view('layouts/app', [
-            'pageTitle' => 'Post a Job - CraftConnect',
+            'pageTitle' => 'Post a Job - Crafts',
             'contentView' => 'jobboard/create'
         ]);
     }
@@ -69,7 +69,7 @@ class JobBoardController extends Controller
         if (empty($title) || empty($category) || empty($description) || empty($address)) {
             // Re-render the form with an error (in a real app, you'd flash session data)
             $this->view('layouts/app', [
-                'pageTitle' => 'Post a Job - CraftConnect',
+                'pageTitle' => 'Post a Job - Crafts',
                 'contentView' => 'jobboard/create',
                 'error' => 'Please fill in all required fields.'
             ]);
@@ -94,7 +94,7 @@ class JobBoardController extends Controller
         }
         else {
             $this->view('layouts/app', [
-                'pageTitle' => 'Post a Job - CraftConnect',
+                'pageTitle' => 'Post a Job - Crafts',
                 'contentView' => 'jobboard/create',
                 'error' => 'Failed to post the job. Please try again.'
             ]);
@@ -106,13 +106,19 @@ class JobBoardController extends Controller
      */
     public function show($id = null)
     {
-        // Legacy redirect support
-        if (isset($_GET['id']) && !$id) {
-            header("Location: " . APP_URL . "/jobs/" . $_GET['id'], true, 301);
+        // Legacy redirect support for old /jobs/show?id=X URLs
+        if ($id === 'show' && isset($_GET['id'])) {
+            $legacyId = $_GET['id'];
+            // Rebuild query string excluding 'id' and 'route'
+            $query = $_GET;
+            unset($query['id'], $query['route']);
+            $queryString = !empty($query) ? '?' . http_build_query($query) : '';
+            
+            header("Location: " . APP_URL . "/jobs/" . $legacyId . $queryString, true, 301);
             exit;
         }
 
-        if (!$id) {
+        if (!$id || $id === 'show') {
             echo "Job not found.";
             exit;
         }
@@ -135,13 +141,13 @@ class JobBoardController extends Controller
             $alreadyQuoted = $quoteModel->hasAlreadyQuoted($id, $_SESSION['user_id']);
         }
 
-        $ogTitle = htmlspecialchars($job['title']) . ' - CraftConnect Job Board';
+        $ogTitle = htmlspecialchars($job['title']) . ' - Crafts Job Board';
         $metaDesc = "View the job '{$job['title']}' in the {$job['service_category']} category. " . 
                     ($job['budget_range'] ? "Budget: {$job['budget_range']} DZD. " : "") . 
-                    "Location: {$job['address']}. Apply now on CraftConnect.";
+                    "Location: {$job['address']}. Apply now on Crafts.";
 
         $this->view('layouts/app', [
-            'pageTitle' => $job['title'] . ' - CraftConnect',
+            'pageTitle' => $job['title'] . ' - Crafts',
             'contentView' => 'jobboard/show',
             'job' => $job,
             'quotes' => $quotes,
@@ -165,7 +171,7 @@ class JobBoardController extends Controller
         $message = $_POST['cover_message'] ?? '';
 
         if (!$jobId || empty($price)) {
-            header("Location: " . APP_URL . "/jobs/show?id=" . $jobId . "&error=price_required");
+            header("Location: " . APP_URL . "/jobs/" . $jobId . "?error=price_required");
             exit;
         }
 
@@ -179,14 +185,14 @@ class JobBoardController extends Controller
         }
 
         if ($job['posted_by_user_id'] == $_SESSION['user_id']) {
-            header("Location: " . APP_URL . "/jobs/show?id=" . $jobId . "&error=own_job");
+            header("Location: " . APP_URL . "/jobs/" . $jobId . "?error=own_job");
             exit;
         }
 
         // Validate: prevent duplicate quotes
         $quoteModel = new JobQuote();
         if ($quoteModel->hasAlreadyQuoted($jobId, $_SESSION['user_id'])) {
-            header("Location: " . APP_URL . "/jobs/show?id=" . $jobId . "&error=already_quoted");
+            header("Location: " . APP_URL . "/jobs/" . $jobId . "?error=already_quoted");
             exit;
         }
 
@@ -204,10 +210,10 @@ class JobBoardController extends Controller
             $_SESSION['name'] . ' submitted a quote of $' . number_format($price, 2) . ' on your job: ' . $job['title'], 
             APP_URL . '/homeowner/dashboard#quotes');
 
-        header("Location: " . APP_URL . "/jobs/show?id=" . $jobId . "&success=quote_submitted");
+        header("Location: " . APP_URL . "/jobs/" . $jobId . "?success=quote_submitted");
         }
         else {
-            header("Location: " . APP_URL . "/jobs/show?id=" . $jobId . "&error=submit_failed");
+            header("Location: " . APP_URL . "/jobs/" . $jobId . "?error=submit_failed");
         }
         exit;
     }
@@ -257,10 +263,10 @@ class JobBoardController extends Controller
             'Your quote on "' . $job['title'] . '" has been accepted!', 
             APP_URL . '/craftsman/dashboard#active');
 
-        header("Location: " . APP_URL . "/jobs/show?id=" . $quote['job_posting_id'] . "&success=quote_accepted");
+        header("Location: " . APP_URL . "/jobs/" . $quote['job_posting_id'] . "?success=quote_accepted");
         }
         else {
-            header("Location: " . APP_URL . "/jobs/show?id=" . $quote['job_posting_id'] . "&error=accept_failed");
+            header("Location: " . APP_URL . "/jobs/" . $quote['job_posting_id'] . "?error=accept_failed");
         }
         exit;
     }
@@ -305,7 +311,7 @@ class JobBoardController extends Controller
         'Your quote on "' . $job['title'] . '" was not accepted.', 
         APP_URL . '/craftsman/dashboard#quotes');
 
-    header("Location: " . APP_URL . "/jobs/show?id=" . $quote['job_posting_id'] . "&success=quote_rejected");
+    header("Location: " . APP_URL . "/jobs/" . $quote['job_posting_id'] . "?success=quote_rejected");
         exit;
     }
 }

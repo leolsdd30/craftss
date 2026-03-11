@@ -8,7 +8,7 @@
     <!-- Main Content Container -->
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-10">
         <div class="mb-4">
-            <a href="<?= APP_URL ?>/profile?id=<?= $user['id'] ?>" class="text-sm font-medium text-white hover:text-indigo-100 transition-colors duration-200 drop-shadow-md">&larr; Back to Profile</a>
+            <a href="<?= APP_URL ?>/profile/<?= $user['username'] ?>" class="text-sm font-medium text-white hover:text-indigo-100 transition-colors duration-200 drop-shadow-md">&larr; Back to Profile</a>
         </div>
         <div class="bg-white shadow-xl rounded-xl overflow-hidden">
             <div class="p-6 md:p-8">
@@ -233,7 +233,7 @@
                     <?php endif; ?>
                     <div class="pt-5 border-t border-gray-200">
                         <div class="flex justify-end gap-3">
-                            <a href="<?= APP_URL ?>/profile?id=<?= $user['id'] ?>" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150">
+                            <a href="<?= APP_URL ?>/profile/<?= $user['username'] ?>" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150">
                                 Cancel
                             </a>
                             <button type="submit" class="inline-flex justify-center py-2 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150">

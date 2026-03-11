@@ -16,19 +16,6 @@ class FavoriteController extends Controller
     {
         Middleware::requireLogin();
         
-        // CSRF protection for AJAX: validate Origin or Referer header
-        $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-        $referer = $_SERVER['HTTP_REFERER'] ?? '';
-        $appHost = parse_url(APP_URL, PHP_URL_HOST);
-        $originHost = !empty($origin) ? parse_url($origin, PHP_URL_HOST) : null;
-        $refererHost = !empty($referer) ? parse_url($referer, PHP_URL_HOST) : null;
-        
-        if ($originHost !== $appHost && $refererHost !== $appHost) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'message' => 'Invalid request origin.']);
-            exit;
-        }
-
         // Only homeowners can favorite
         if ($_SESSION['role'] !== 'homeowner') {
             header('Content-Type: application/json');
@@ -40,6 +27,14 @@ class FavoriteController extends Controller
         $inputRaw = file_get_contents('php://input');
         $input = $inputRaw ? json_decode($inputRaw, true) : null;
         
+        // Proper CSRF protection for AJAX
+        $token = $input['csrf_token'] ?? $_POST['csrf_token'] ?? '';
+        if (empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $token)) {
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'message' => 'CSRF Token Validation Failed.']);
+            exit;
+        }
+
         $craftsmanId = null;
         if (is_array($input) && isset($input['craftsman_id'])) {
             $craftsmanId = $input['craftsman_id'];

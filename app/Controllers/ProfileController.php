@@ -84,13 +84,13 @@ class ProfileController extends Controller
 
         // Prepare SEO Tags
         $fullName = $user['first_name'] . ' ' . $user['last_name'];
-        $ogTitle = $fullName . ' - Profile on CraftConnect';
-        $metaDesc = "View the profile of {$fullName} on CraftConnect.";
+        $ogTitle = $fullName . ' - Profile on Crafts';
+        $metaDesc = "View the profile of {$fullName} on Crafts.";
         
         if ($user['role'] === 'craftsman') {
             $service = $craftsmanDetails['service_category'] ?? 'Professional';
             $loc = !empty($user['wilaya']) ? " in {$user['wilaya']}" : "";
-            $metaDesc = "Hire {$fullName}, a skilled {$service}{$loc} on CraftConnect. Read reviews and view their portfolio.";
+            $metaDesc = "Hire {$fullName}, a skilled {$service}{$loc} on Crafts. Read reviews and view their portfolio.";
         }
 
         $ogImage = APP_URL . get_profile_picture_url($user['profile_picture'] ?? 'default.png', $user['first_name'], $user['last_name']);
@@ -128,7 +128,7 @@ class ProfileController extends Controller
         }
 
         $this->view('layouts/app', [
-            'pageTitle' => 'Edit Profile - CraftConnect',
+            'pageTitle' => 'Edit Profile - Crafts',
             'contentView' => 'profile/edit',
             'user' => $user,
             'craftsmanDetails' => $craftsmanDetails

@@ -13,7 +13,7 @@ class AuthController extends Controller
     public function showLoginForm($error = null)
     {
         $this->view('layouts/app', [
-            'pageTitle' => 'Sign In - CraftConnect',
+            'pageTitle' => 'Sign In - Crafts',
             'contentView' => 'auth/login',
             'error' => $error
         ]);
@@ -42,6 +42,7 @@ class AuthController extends Controller
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['role'] = $user['role'];
             $_SESSION['name'] = $user['first_name'];
+            $_SESSION['username'] = $user['username'];
 
             // Redirect to dashboard (or home for now)
             header("Location: " . APP_URL . "/");
@@ -58,7 +59,7 @@ class AuthController extends Controller
     public function showRegisterForm($error = null)
     {
         $this->view('layouts/app', [
-            'pageTitle' => 'Create Account - CraftConnect',
+            'pageTitle' => 'Create Account - Crafts',
             'contentView' => 'auth/register',
             'error' => $error
         ]);
@@ -111,6 +112,7 @@ class AuthController extends Controller
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['role'] = $user['role'];
             $_SESSION['name'] = $user['first_name'];
+            $_SESSION['username'] = $user['username'];
 
             header("Location: " . APP_URL . "/");
             exit;

@@ -50,7 +50,7 @@ class CraftsmanController extends Controller
         $myRating = $reviewModel->getCraftsmanRating($_SESSION['user_id']);
 
         $this->view('layouts/app', [
-            'pageTitle' => 'Craftsman Dashboard - CraftConnect',
+            'pageTitle' => 'Craftsman Dashboard - Crafts',
             'contentView' => 'craftsman/dashboard',
             'quotes' => $myQuotes,
             'activeBookings' => $activeBookings,

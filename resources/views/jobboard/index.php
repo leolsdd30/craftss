@@ -30,15 +30,24 @@
                         <input type="text" name="q" id="q" value="<?= htmlspecialchars($filters['search'] ?? '') ?>" placeholder="Search jobs by title or description..."
                             class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2.5 border">
                     </div>
-                    <button type="submit" class="inline-flex justify-center items-center px-6 py-2.5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150">
-                        <svg class="h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                        </svg>
-                        Search
-                    </button>
+                    <div class="flex gap-2">
+                        <button type="button" onclick="document.getElementById('job-filter-section').classList.toggle('hidden'); this.querySelector('svg').classList.toggle('-scale-y-100');" class="inline-flex justify-center items-center px-4 py-2.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                            <svg class="h-4 w-4 mr-1.5 text-gray-500 transition-transform duration-200 <?= (!empty($filters['category']) || !empty($filters['wilaya']) || !empty($filters['sort'])) ? '-scale-y-100' : '' ?>" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+                            </svg>
+                            Filters
+                        </button>
+                        <button type="submit" class="inline-flex justify-center items-center px-6 py-2.5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150">
+                            <svg class="h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                            </svg>
+                            Search
+                        </button>
+                    </div>
                 </div>
-                <!-- Row 2: Filters -->
-                <div class="flex flex-col sm:flex-row gap-3">
+                <!-- Row 2: Filters (Collapsible) -->
+                <div id="job-filter-section" class="<?= (!empty($filters['category']) || !empty($filters['wilaya']) || !empty($filters['sort'])) ? '' : 'hidden' ?> transition-all duration-300 ease-in-out">
+                    <div class="flex flex-col sm:flex-row gap-3">
                     <div class="sm:flex-1">
                         <label for="category" class="block text-xs font-medium text-gray-500 mb-1">Category</label>
                         <select name="category" id="category" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2 border bg-white">
@@ -78,17 +87,18 @@
                         </select>
                     </div>
                 </div>
-                <!-- Clear Filters -->
-                <?php if (!empty($filters['search']) || !empty($filters['category']) || !empty($filters['wilaya']) || !empty($filters['sort'])): ?>
-                <div class="flex justify-center pt-1">
-                    <a href="<?= APP_URL ?>/jobs" class="inline-flex items-center text-xs text-red-500 hover:text-red-700 font-medium transition-colors duration-150">
-                        <svg class="h-3.5 w-3.5 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        </svg>
-                        Clear all filters
-                    </a>
+                    <!-- Clear Filters -->
+                    <?php if (!empty($filters['search']) || !empty($filters['category']) || !empty($filters['wilaya']) || !empty($filters['sort'])): ?>
+                    <div class="flex justify-center pt-3">
+                        <a href="<?= APP_URL ?>/jobs" class="inline-flex items-center text-xs text-red-500 hover:text-red-700 font-medium transition-colors duration-150">
+                            <svg class="h-3.5 w-3.5 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                            Clear all filters
+                        </a>
+                    </div>
+                    <?php endif; ?>
                 </div>
-                <?php endif; ?>
             </form>
         </div>
 
