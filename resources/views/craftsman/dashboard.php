@@ -10,96 +10,120 @@
             <p class="mt-1 text-sm text-gray-500">Manage your business, track your bids, and grow your career.</p>
         </div>
 
-        <!-- Stat Cards -->
-        <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 mb-8">
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 bg-green-100 rounded-lg p-3">
-                        <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Earnings</p>
-                        <p class="text-2xl font-bold text-gray-900">$<?= number_format($totalEarnings, 2) ?></p>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3">
-                        <svg class="h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Active Jobs</p>
-                        <p class="text-2xl font-bold text-gray-900"><?= $activeBookings ?></p>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 bg-yellow-100 rounded-lg p-3">
-                        <svg class="h-6 w-6 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted Bids</p>
-                        <p class="text-2xl font-bold text-gray-900"><?= $submittedBids ?></p>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 bg-purple-100 rounded-lg p-3">
-                        <svg class="h-6 w-6 text-purple-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</p>
-                        <p class="text-2xl font-bold text-gray-900"><?= $rating['total_reviews'] > 0 ? '★ ' . $rating['avg_rating'] : '—' ?></p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Main Content Layout -->
+        <div class="flex flex-col lg:flex-row gap-8">
 
-        <!-- Main Content: Tabs + Sidebar -->
-        <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
+            <!-- Sidebar Navigation -->
+            <aside class="w-full lg:w-64 flex-shrink-0">
+                <nav class="space-y-1 bg-white rounded-xl shadow-sm border border-gray-100 p-3" id="dashboard-tabs">
+                    <button onclick="switchTab('overview')" data-tab="overview"
+                        class="group tab-btn flex items-center w-full px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200">
+                        <svg class="mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                        Overview
+                    </button>
+                    <button onclick="switchTab('quotes')" data-tab="quotes"
+                        class="group tab-btn flex items-center w-full px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200">
+                        <svg class="mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+                        My Quotes
+                        <?php if ($pendingBids > 0): ?>
+                        <span class="ml-auto bg-yellow-100 text-yellow-700 py-0.5 px-2 rounded-full text-xs font-bold"><?= $pendingBids ?></span>
+                        <?php endif; ?>
+                    </button>
+                    <button onclick="switchTab('active')" data-tab="active"
+                        class="group tab-btn flex items-center w-full px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200">
+                        <svg class="mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        Active Jobs
+                        <?php if ($activeBookings > 0): ?>
+                        <span class="ml-auto bg-indigo-100 text-indigo-700 py-0.5 px-2 rounded-full text-xs font-bold"><?= $activeBookings ?></span>
+                        <?php endif; ?>
+                    </button>
+                    <button onclick="switchTab('bookings')" data-tab="bookings"
+                        class="group tab-btn flex items-center w-full px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200">
+                        <svg class="mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        Bookings
+                        <?php if ($pendingBookings > 0): ?>
+                        <span class="ml-auto bg-red-100 text-red-700 py-0.5 px-2 rounded-full text-xs font-bold"><?= $pendingBookings ?></span>
+                        <?php endif; ?>
+                    </button>
+                    <button onclick="switchTab('reviews')" data-tab="reviews"
+                        class="group tab-btn flex items-center w-full px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200">
+                        <svg class="mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
+                        Reviews
+                    </button>
+                </nav>
 
-            <!-- Tabs Section -->
-            <div>
-                <!-- Tab Navigation -->
-                <div class="border-b border-gray-200 mb-6">
-                    <nav class="-mb-px flex space-x-6" id="dashboard-tabs">
-                        <button onclick="switchTab('quotes')" data-tab="quotes"
-                            class="tab-btn border-indigo-500 text-indigo-600 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
-                            My Quotes
-                            <?php if ($pendingBids > 0): ?>
-                            <span class="ml-1.5 inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700"><?= $pendingBids ?></span>
-                            <?php endif; ?>
-                        </button>
-                        <button onclick="switchTab('active')" data-tab="active"
-                            class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
-                            Active Jobs
-                            <?php if ($activeBookings > 0): ?>
-                            <span class="ml-1.5 inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-700"><?= $activeBookings ?></span>
-                            <?php endif; ?>
-                        </button>
-                        <button onclick="switchTab('bookings')" data-tab="bookings"
-                            class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
-                            Bookings
-                            <?php if ($pendingBookings > 0): ?>
-                            <span class="ml-1.5 inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-700"><?= $pendingBookings ?></span>
-                            <?php endif; ?>
-                        </button>
-                        <button onclick="switchTab('reviews')" data-tab="reviews"
-                            class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
-                            Reviews
-                        </button>
-                    </nav>
+                <!-- Sidebar Action Buttons -->
+                <div class="mt-4 space-y-2">
+                    <a href="<?= APP_URL ?>/jobs" class="flex items-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition">
+                        <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg> Browse Job Board
+                    </a>
+                    <a href="<?= APP_URL ?>/profile/<?= $_SESSION['username'] ?>" class="flex items-center w-full px-4 py-2 text-sm font-medium text-indigo-700 bg-indigo-50 border border-indigo-100 hover:bg-indigo-100 rounded-lg shadow-sm transition">
+                        <svg class="mr-2 h-4 w-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/></svg> My Public Profile
+                    </a>
+                </div>
+
+                <!-- Your Stats Card -->
+                <div class="mt-6 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                    <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-3">Performance</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">Quotes Won</span>
+                            <span class="text-sm font-bold text-green-600"><?= $activeBookings ?></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">Win Rate</span>
+                            <span class="text-sm font-bold text-gray-900">
+                                <?= $submittedBids > 0 ? round(($activeBookings / $submittedBids) * 100) : 0 ?>%
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">Pending Bids</span>
+                            <span class="text-sm font-bold text-yellow-600"><?= $pendingBids ?></span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <div class="flex-1 min-w-0">
+
+                <!-- Tab: Overview -->
+                <div id="tab-overview" class="tab-content" style="display:none">
+                    <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 mb-8">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col justify-between">
+                            <svg class="h-6 w-6 text-green-600 mb-3 bg-green-50 rounded p-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <p class="text-xs font-semibold text-gray-500 uppercase">Earnings</p>
+                            <p class="text-2xl font-bold text-gray-900">$<?= number_format($totalEarnings, 2) ?></p>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col justify-between">
+                            <svg class="h-6 w-6 text-indigo-600 mb-3 bg-indigo-50 rounded p-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                            <p class="text-xs font-semibold text-gray-500 uppercase">Active Jobs</p>
+                            <p class="text-2xl font-bold text-gray-900"><?= $activeBookings ?></p>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col justify-between">
+                            <svg class="h-6 w-6 text-yellow-600 mb-3 bg-yellow-50 rounded p-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+                            <p class="text-xs font-semibold text-gray-500 uppercase">Quotes</p>
+                            <p class="text-2xl font-bold text-gray-900"><?= $submittedBids ?></p>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col justify-between">
+                            <svg class="h-6 w-6 text-purple-600 mb-3 bg-purple-50 rounded p-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
+                            <p class="text-xs font-semibold text-gray-500 uppercase">Rating</p>
+                            <p class="text-2xl font-bold text-gray-900"><?= $rating['total_reviews'] > 0 ? '★ ' . $rating['avg_rating'] : '—' ?></p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-indigo-600 to-indigo-800 rounded-xl shadow-lg p-6 text-white overflow-hidden relative">
+                        <svg class="absolute -right-8 -bottom-8 h-48 w-48 text-white opacity-10" fill="currentColor" viewBox="0 0 20 20"><path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM5.884 6.607a1 1 0 01-.226 1.396l-.867.65a1 1 0 11-1.2-1.6l.867-.65a1 1 0 011.426.204zm9.512 0a1 1 0 011.426-.204l.867.65a1 1 0 11-1.2 1.6l-.867-.65a1 1 0 01-.226-1.396zM7.5 11a2.5 2.5 0 115 0 2.5 2.5 0 01-5 0zM5.18 14.122a1 1 0 01-1.2.6l-.974-.325a1 1 0 11.633-1.897l.974.325a1 1 0 01.567 1.297zm10.614-.697a1 1 0 01.633 1.897l-.974.325a1 1 0 11-1.2-.6l.974-.325a1 1 0 011.541-.322zM10 15a1 1 0 100 2v1a1 1 0 100-2v-1z"/></svg>
+                        <div class="relative z-10">
+                            <h3 class="font-bold text-xl mb-2">💡 Grow Your Business</h3>
+                            <p class="text-indigo-100 leading-relaxed max-w-md">
+                                Craftsmen who include detailed cover messages and photos of previous work win <span class="font-bold text-white underline decoration-yellow-400">5x more jobs</span>. Update your portfolio today!
+                            </p>
+                            <a href="<?= APP_URL ?>/profile/edit" class="mt-4 inline-flex items-center px-4 py-2 bg-white text-indigo-700 font-bold text-sm rounded-lg hover:bg-indigo-50 transition">
+                                Update Portfolio
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Tab: My Quotes -->
@@ -143,7 +167,7 @@
                 </div>
 
                 <!-- Tab: Active Jobs (accepted quotes) -->
-                <div id="tab-active" class="tab-content hidden">
+                <div id="tab-active" class="tab-content" style="display:none">
                     <?php 
                         $acceptedQuotes = array_filter($quotes ?? [], function($q) { return $q['status'] === 'accepted'; });
                     ?>
@@ -177,7 +201,7 @@
                 </div>
 
                 <!-- Tab: Bookings -->
-                <div id="tab-bookings" class="tab-content hidden">
+                <div id="tab-bookings" class="tab-content" style="display:none">
                     <?php if (!empty($bookings)): ?>
                     <div class="space-y-3">
                         <?php foreach ($bookings as $booking): ?>
@@ -298,7 +322,7 @@
                 </div>
 
                 <!-- Tab: Reviews -->
-                <div id="tab-reviews" class="tab-content hidden">
+                <div id="tab-reviews" class="tab-content" style="display:none">
                     <?php if (!empty($reviews)): ?>
                     <div class="mb-4 bg-white rounded-lg shadow-sm border border-gray-100 p-5">
                         <div class="flex items-center space-x-4">
@@ -355,68 +379,8 @@
 
             </div>
 
-            <!-- Sidebar -->
-            <div class="space-y-6">
-                <!-- Quick Actions -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4">Quick Actions</h3>
-                    <div class="space-y-2">
-                        <a href="<?= APP_URL ?>/jobs" class="flex items-center w-full px-4 py-3 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition duration-150">
-                            <svg class="h-5 w-5 mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                            </svg>
-                            Browse Job Board
-                        </a>
-                        <a href="<?= APP_URL ?>/profile/<?= $_SESSION['username'] ?>" class="flex items-center w-full px-4 py-3 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition duration-150 border border-gray-200">
-                            <svg class="h-5 w-5 mr-3 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                            </svg>
-                            View Public Profile
-                        </a>
-                        <a href="<?= APP_URL ?>/profile/edit" class="flex items-center w-full px-4 py-3 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition duration-150 border border-gray-200">
-                            <svg class="h-5 w-5 mr-3 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                            </svg>
-                            Edit Profile & Portfolio
-                        </a>
-                        <a href="<?= APP_URL ?>/search" class="flex items-center w-full px-4 py-3 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition duration-150 border border-gray-200">
-                            <svg class="h-5 w-5 mr-3 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                            </svg>
-                            See Other Craftsmen
-                        </a>
-                    </div>
                 </div>
 
-                <!-- Your Presence Card -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-3">Your Stats</h3>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-500">Quotes Won</span>
-                            <span class="text-sm font-bold text-green-600"><?= $activeBookings ?></span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-500">Quote Success Rate</span>
-                            <span class="text-sm font-bold text-gray-900">
-                                <?= $submittedBids > 0 ? round(($activeBookings / $submittedBids) * 100) : 0 ?>%
-                            </span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-500">Pending Bids</span>
-                            <span class="text-sm font-bold text-yellow-600"><?= $pendingBids ?></span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tip Card -->
-                <div class="bg-gradient-to-br from-green-600 to-green-800 rounded-xl shadow-lg p-6 text-white">
-                    <h3 class="font-bold text-lg">💡 Pro Tip</h3>
-                    <p class="mt-2 text-green-100 text-sm leading-relaxed">
-                        Craftsmen who include a detailed cover message with their quotes are 
-                        <span class="font-bold text-white">5x more likely</span> to get hired!
-                    </p>
-                </div>
             </div>
         </div>
     </div>
@@ -540,9 +504,7 @@ function switchTab(tabName) {
 
 // Read hash IMMEDIATELY (before paint) to prevent tab flicker
 (function() {
-    var hash = window.location.hash.substring(1);
-    // Strip any unexpected query strings from the hash just in case
-    hash = hash.split('?')[0];
+    var hash = window.location.hash.substring(1).split('?')[0];
     
     // Legacy mapping: old notifications sent #jobs instead of #active
     if (hash === 'jobs') hash = 'active';
@@ -550,8 +512,7 @@ function switchTab(tabName) {
     if (hash && document.getElementById('tab-' + hash)) {
         switchTab(hash);
     } else {
-        // Default: show first tab
-        switchTab('quotes');
+        switchTab('overview');
     }
 })();
 
