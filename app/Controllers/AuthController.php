@@ -12,6 +12,11 @@ class AuthController extends Controller
      */
     public function showLoginForm($error = null)
     {
+        if (isset($_SESSION['user_id'])) {
+            header("Location: " . APP_URL . "/");
+            exit;
+        }
+
         $this->view('layouts/app', [
             'pageTitle' => 'Sign In - Crafts',
             'contentView' => 'auth/login',
@@ -58,6 +63,11 @@ class AuthController extends Controller
      */
     public function showRegisterForm($error = null)
     {
+        if (isset($_SESSION['user_id'])) {
+            header("Location: " . APP_URL . "/");
+            exit;
+        }
+
         $this->view('layouts/app', [
             'pageTitle' => 'Create Account - Crafts',
             'contentView' => 'auth/register',

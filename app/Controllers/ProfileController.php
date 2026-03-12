@@ -317,7 +317,8 @@ class ProfileController extends Controller
             $craftsmanModel->updateOrCreate($id, $data);
         }
 
-        header('Location: ' . APP_URL . '/profile?id=' . $id);
+        $user = $userModel->findById($id);
+        header('Location: ' . APP_URL . '/profile/' . $user['username']);
         exit;
     }
 
