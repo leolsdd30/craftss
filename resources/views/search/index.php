@@ -1,4 +1,23 @@
 <!-- Find Craftsmen Page -->
+<?php
+// Calculate active filter count once here — used both in the Filters badge and the result count line
+$activeFilterCount = (int)!empty($filters['category'])
+                   + (int)!empty($filters['wilaya'])
+                   + (int)!empty($filters['sort']);
+
+// Category → top-bar color map (defined once, used inside the card loop)
+$catColors = [
+    'Plumbing'         => 'bg-blue-500',
+    'Electrical'       => 'bg-yellow-500',
+    'Carpentry'        => 'bg-orange-500',
+    'Painting'         => 'bg-pink-500',
+    'Roofing'          => 'bg-stone-500',
+    'HVAC'             => 'bg-cyan-500',
+    'Tiling'           => 'bg-teal-500',
+    'Landscaping'      => 'bg-green-500',
+    'General Handyman' => 'bg-indigo-500',
+];
+?>
 <div class="bg-gray-50 min-h-screen">
     <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
 
@@ -26,11 +45,7 @@
                                class="w-full pl-9 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm py-2.5 border">
                     </div>
                     <div class="flex gap-2">
-                        <?php
-                            $activeFilterCount = (int)!empty($filters['category'])
-                                              + (int)!empty($filters['wilaya'])
-                                              + (int)!empty($filters['sort']);
-                        ?>
+
                         <button type="button"
                                 onclick="document.getElementById('filter-section').classList.toggle('hidden')"
                                 class="inline-flex items-center px-4 py-2.5 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors duration-200 relative">
@@ -134,8 +149,8 @@
 
         <!-- Result count -->
         <p class="text-sm text-gray-500 mb-5">
-            Showing <span class="font-semibold text-gray-800"><?= count($craftsmen) ?></span>
-            <?= count($craftsmen) === 1 ? 'craftsman' : 'craftsmen' ?>
+            Showing <span class="font-semibold text-gray-800"><?= $totalResults ?></span>
+            <?= $totalResults === 1 ? 'craftsman' : 'craftsmen' ?>
             <?php if ($activeFilterCount > 0): ?>
             matching your filters
             <?php endif; ?>
@@ -148,27 +163,9 @@
             <!-- Card -->
             <div class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col overflow-hidden relative group">
 
-                <!-- Category color mapping -->
-                <?php
-                $catColors = [
-                    'Plumbing'         => 'bg-blue-500',
-                    'Electrical'       => 'bg-yellow-500',
-                    'Carpentry'        => 'bg-orange-500',
-                    'Painting'         => 'bg-pink-500',
-                    'Roofing'          => 'bg-stone-500',
-                    'HVAC'             => 'bg-cyan-500',
-                    'Tiling'           => 'bg-teal-500',
-                    'Landscaping'      => 'bg-green-500',
-                    'General Handyman' => 'bg-indigo-500'
-                ];
-                $topBarColor = $catColors[$craft['service_category']] ?? 'bg-gray-400';
-                ?>
-                <!-- Verified top banner or Category color banner -->
-                <?php if ($craft['is_verified']): ?>
-                <div class="h-1 bg-gradient-to-r from-green-400 to-emerald-500 w-full absolute top-0 left-0 z-10" title="Verified Professional"></div>
-                <?php else: ?>
+                <!-- Top color bar indicating service category -->
+                <?php $topBarColor = $catColors[$craft['service_category']] ?? 'bg-indigo-500'; ?>
                 <div class="h-1 <?= $topBarColor ?> w-full absolute top-0 left-0 z-10"></div>
-                <?php endif; ?>
 
                 <!-- Favorite heart — homeowners only -->
                 <?php if (isset($_SESSION['user_id']) && ($_SESSION['role'] ?? '') === 'homeowner'): ?>
@@ -301,6 +298,69 @@
             <?php endforeach; ?>
         </div>
 
+        <!-- Pagination -->
+        <?php if ($totalPages > 1): ?>
+        <div class="mt-12 flex justify-center">
+            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                <?php
+                    // Helper to build URLs preserving filters
+                    $buildUrl = function($pageNum) use ($filters) {
+                        $params = $_GET;
+                        $params['page'] = $pageNum;
+                        return APP_URL . '/search?' . http_build_query($params);
+                    };
+                ?>
+                
+                <!-- Previous Button -->
+                <?php if ($page > 1): ?>
+                <a href="<?= $buildUrl($page - 1) ?>" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Previous</span>
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+                <?php else: ?>
+                <span class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-gray-50 text-sm font-medium text-gray-300 cursor-not-allowed">
+                    <span class="sr-only">Previous</span>
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                </span>
+                <?php endif; ?>
+
+                <!-- Page Numbers -->
+                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <?php if ($i == $page): ?>
+                    <span aria-current="page" class="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                        <?= $i ?>
+                    </span>
+                    <?php else: ?>
+                    <a href="<?= $buildUrl($i) ?>" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                        <?= $i ?>
+                    </a>
+                    <?php endif; ?>
+                <?php endfor; ?>
+
+                <!-- Next Button -->
+                <?php if ($page < $totalPages): ?>
+                <a href="<?= $buildUrl($page + 1) ?>" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Next</span>
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+                <?php else: ?>
+                <span class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-gray-50 text-sm font-medium text-gray-300 cursor-not-allowed">
+                    <span class="sr-only">Next</span>
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                    </svg>
+                </span>
+                <?php endif; ?>
+            </nav>
+        </div>
+        <?php endif; ?>
+
         <?php else: ?>
 
         <!-- Empty state -->
@@ -348,24 +408,18 @@ async function toggleFavorite(craftsmanId, btnElement) {
     try {
         const res = await fetch('<?= APP_URL ?>/favorites/toggle', {
             method: 'POST',
-            credentials: 'same-origin',
-            headers: { 
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 craftsman_id: craftsmanId,
-                csrf_token: '<?= e($_SESSION['csrf_token'] ?? '') ?>'
+                csrf_token: '<?= $_SESSION['csrf_token'] ?? '' ?>'
             })
         });
         const data = await res.json();
         if (!data.success) {
             // Revert on failure
-            console.error(data.message);
             location.reload();
         }
     } catch (e) {
-        console.error(e);
         location.reload();
     }
 }

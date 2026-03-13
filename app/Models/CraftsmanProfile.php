@@ -10,7 +10,7 @@ class CraftsmanProfile extends Model
      * Get all published craftsmen with user details + avg rating from reviews.
      * The LEFT JOIN on reviews means craftsmen with no reviews get avg_rating=0, total_reviews=0.
      */
-    public function getAllCraftsmen($filters = [])
+    public function getAllCraftsmen($filters = [], $limit = 0, $offset = 0)
     {
         $sql = "SELECT cp.*,
                        u.first_name, u.last_name, u.email,
@@ -60,9 +60,53 @@ class CraftsmanProfile extends Model
             $sql .= " ORDER BY cp.is_verified DESC, cp.id DESC";
         }
 
+        if ($limit > 0) {
+            $sql .= " LIMIT " . (int)$limit . " OFFSET " . (int)$offset;
+        }
+
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get the total count of published craftsmen matching the given filters (for pagination).
+     */
+    public function countAllCraftsmen($filters = [])
+    {
+        $sql = "SELECT COUNT(DISTINCT cp.id) as total
+                FROM craftsmen_profiles cp
+                JOIN users u ON cp.user_id = u.id
+                WHERE u.is_active = TRUE
+                  AND u.role = 'craftsman'
+                  AND cp.is_published = TRUE";
+
+        $params = [];
+
+        if (!empty($filters['category'])) {
+            $sql .= " AND cp.service_category = :category";
+            $params['category'] = $filters['category'];
+        }
+
+        if (!empty($filters['wilaya'])) {
+            $sql .= " AND u.wilaya = :wilaya";
+            $params['wilaya'] = $filters['wilaya'];
+        }
+
+        if (!empty($filters['search'])) {
+            $sql .= " AND (u.first_name LIKE :search1
+                           OR u.last_name  LIKE :search2
+                           OR cp.bio       LIKE :search3)";
+            $params['search1'] = '%' . $filters['search'] . '%';
+            $params['search2'] = '%' . $filters['search'] . '%';
+            $params['search3'] = '%' . $filters['search'] . '%';
+        }
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result ? (int) $result['total'] : 0;
     }
 
     /**

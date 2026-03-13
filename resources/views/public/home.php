@@ -164,8 +164,72 @@ $slideshowUrls = array_map(fn($p) => [
      To add/remove a category: edit the $categories array in this section.
      Make sure any new category name matches exactly what's in the DB.
 =================================================================== -->
-<div class="py-16 bg-gray-50">
+<div class="pt-10 pb-16 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- ===================================================================
+             STATS BAR (Moved Up)
+             live numbers pulled from the DB via HomeController
+        =================================================================== -->
+        <div class="mb-16 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-10">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left divide-y md:divide-y-0 md:divide-x divide-gray-100">
+                
+                <!-- Stat 1: Craftsmen -->
+                <div class="flex items-center justify-center md:justify-center gap-4 py-4 md:py-0">
+                    <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl hidden sm:block">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-3xl font-extrabold text-gray-900">
+                            <?= ($stats['craftsmen'] ?? 0) > 0 ? number_format($stats['craftsmen']) . '+' : '—' ?>
+                        </p>
+                        <p class="mt-1 text-sm font-medium text-gray-500">Skilled Craftsmen</p>
+                    </div>
+                </div>
+
+                <!-- Stat 2: Wilayas covered -->
+                <div class="flex items-center justify-center md:justify-center gap-4 py-4 md:py-0">
+                    <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl hidden sm:block">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-3xl font-extrabold text-gray-900">
+                            <?= ($stats['wilayas'] ?? 0) > 0 ? $stats['wilayas'] : '—' ?>
+                        </p>
+                        <p class="mt-1 text-sm font-medium text-gray-500">Wilayas Covered</p>
+                    </div>
+                </div>
+
+                <!-- Stat 3: Completed jobs -->
+                <div class="flex items-center justify-center md:justify-center gap-4 py-4 md:py-0">
+                    <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl hidden sm:block">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-3xl font-extrabold text-gray-900">
+                            <?= ($stats['completed_bookings'] ?? 0) > 0 ? number_format($stats['completed_bookings']) . '+' : '—' ?>
+                        </p>
+                        <p class="mt-1 text-sm font-medium text-gray-500">Jobs Completed</p>
+                    </div>
+                </div>
+
+                <!-- Stat 4: Average rating -->
+                <div class="flex items-center justify-center md:justify-center gap-4 py-4 md:py-0">
+                    <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl hidden sm:block">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-3xl font-extrabold text-gray-900">
+                            <?= ($stats['avg_rating'] ?? 0) > 0 ? number_format($stats['avg_rating'], 1) . '★' : '—' ?>
+                        </p>
+                        <p class="mt-1 text-sm font-medium text-gray-500">Average Rating</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- END STATS BAR -->
+
         <div class="lg:text-center mb-10">
             <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">Browse by Trade</h2>
             <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
@@ -467,140 +531,143 @@ $slideshowUrls = array_map(fn($p) => [
 
 
 <!-- ===================================================================
-     STATS BAR — live numbers pulled from the DB via HomeController
-     Data variables: $stats['craftsmen'], $stats['completed_bookings'],
-                     $stats['wilayas'], $stats['avg_rating']
-     If the DB returns 0 for everything, you have no data yet — that is normal
-     on a fresh install. Add a few users and jobs to see real numbers.
+     CTA SECTION — Split by authentication and role
 =================================================================== -->
-<div class="bg-gray-50 border-b border-gray-100">
-    <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-2 gap-6 md:grid-cols-4 text-center">
+<?php if (!isset($_SESSION['user_id'])): ?>
+    <!-- Logged Out CTA (Split tabbed) -->
+    <div class="bg-gray-900 py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center">
 
-            <!-- Stat 1: Craftsmen -->
-            <div>
-                <p class="text-3xl font-extrabold text-indigo-600">
-                    <?= ($stats['craftsmen'] ?? 0) > 0 ? number_format($stats['craftsmen']) . '+' : '—' ?>
-                </p>
-                <p class="mt-1 text-sm font-medium text-gray-500">Skilled Craftsmen</p>
+            <h2 class="text-3xl font-extrabold text-white sm:text-4xl">Ready to get started?</h2>
+            <p class="mt-3 text-gray-400 text-base">Join the platform connecting skilled craftsmen with homeowners across Algeria.</p>
+
+            <!-- Tab Toggle -->
+            <div class="mt-8 inline-flex items-center bg-gray-800 rounded-full p-1">
+                <button id="cta-homeowner-btn"
+                        onclick="switchCtaTab('homeowner')"
+                        class="cta-tab flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 bg-white text-gray-900 shadow">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                    For Homeowners
+                </button>
+                <button id="cta-craftsman-btn"
+                        onclick="switchCtaTab('craftsman')"
+                        class="cta-tab flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 text-gray-400">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    For Craftsmen
+                </button>
             </div>
 
-            <!-- Stat 2: Wilayas covered -->
-            <div>
-                <p class="text-3xl font-extrabold text-indigo-600">
-                    <?= ($stats['wilayas'] ?? 0) > 0 ? $stats['wilayas'] : '—' ?>
+            <!-- Homeowners Panel -->
+            <div id="cta-homeowner" class="cta-content mt-10">
+                <p class="text-gray-300 text-base mb-8 max-w-xl mx-auto">
+                    Post your project, receive quotes from verified craftsmen, and hire the best one — all in one place.
                 </p>
-                <p class="mt-1 text-sm font-medium text-gray-500">Wilayas Covered</p>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <a href="<?= APP_URL ?>/register"
+                       class="inline-flex items-center justify-center px-7 py-3 text-base font-semibold rounded-lg text-gray-900 bg-white hover:bg-gray-100 transition duration-150">
+                        Sign Up Free
+                    </a>
+                    <a href="<?= APP_URL ?>/search"
+                       class="inline-flex items-center justify-center px-7 py-3 text-base font-semibold rounded-lg text-white border border-gray-600 hover:bg-gray-800 transition duration-150">
+                        Browse Craftsmen
+                    </a>
+                </div>
             </div>
 
-            <!-- Stat 3: Completed jobs -->
-            <div>
-                <p class="text-3xl font-extrabold text-indigo-600">
-                    <?= ($stats['completed_bookings'] ?? 0) > 0 ? number_format($stats['completed_bookings']) . '+' : '—' ?>
+            <!-- Craftsmen Panel (hidden by default) -->
+            <div id="cta-craftsman" class="cta-content hidden mt-10">
+                <p class="text-gray-300 text-base mb-8 max-w-xl mx-auto">
+                    Create your profile, showcase your work, and get booking requests from homeowners who need your exact skills — for free.
                 </p>
-                <p class="mt-1 text-sm font-medium text-gray-500">Jobs Completed</p>
-            </div>
-
-            <!-- Stat 4: Average rating -->
-            <div>
-                <p class="text-3xl font-extrabold text-indigo-600">
-                    <?= ($stats['avg_rating'] ?? 0) > 0 ? number_format($stats['avg_rating'], 1) . '★' : '—' ?>
-                </p>
-                <p class="mt-1 text-sm font-medium text-gray-500">Average Rating</p>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <a href="<?= APP_URL ?>/register"
+                       class="inline-flex items-center justify-center px-7 py-3 text-base font-semibold rounded-lg text-indigo-900 bg-indigo-300 hover:bg-indigo-200 transition duration-150">
+                        Join as a Craftsman
+                    </a>
+                    <a href="<?= APP_URL ?>/jobs"
+                       class="inline-flex items-center justify-center px-7 py-3 text-base font-semibold rounded-lg text-white border border-indigo-600 hover:bg-indigo-900 transition duration-150">
+                        Browse Job Board
+                    </a>
+                </div>
             </div>
 
         </div>
     </div>
-</div>
-<!-- END STATS BAR -->
 
+    <script>
+    function switchCtaTab(tab) {
+        document.querySelectorAll('.cta-content').forEach(function(el) {
+            el.classList.add('hidden');
+        });
+        document.getElementById('cta-' + tab).classList.remove('hidden');
 
+        ['homeowner', 'craftsman'].forEach(function(t) {
+            var btn = document.getElementById('cta-' + t + '-btn');
+            btn.classList.remove('bg-white', 'text-gray-900', 'shadow');
+            btn.classList.add('text-gray-400');
+        });
+        var activeBtn = document.getElementById('cta-' + tab + '-btn');
+        activeBtn.classList.add('bg-white', 'text-gray-900', 'shadow');
+        activeBtn.classList.remove('text-gray-400');
+    }
+    </script>
+<?php else: ?>
+    <!-- Logged In CTA (Role-based) -->
+    <div class="bg-gray-900 py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center">
 
-<!-- ===================================================================
-     SPLIT CTA — tabbed: For Homeowners / For Craftsmen
-     Same tab pattern as the How It Works section above.
-=================================================================== -->
-<div class="bg-gray-900 py-16 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-3xl font-extrabold text-white sm:text-4xl">
+                Welcome back, <?= htmlspecialchars($_SESSION['first_name'] ?? $_SESSION['name'] ?? 'User') ?>!
+            </h2>
+            
+            <?php if ($_SESSION['role'] === 'homeowner'): ?>
+                <p class="mt-3 text-gray-400 text-base max-w-xl mx-auto">
+                    Ready to tackle your next home project? Find the right professional or check your ongoing jobs.
+                </p>
+                <div class="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+                    <a href="<?= APP_URL ?>/homeowner/dashboard"
+                       class="inline-flex items-center justify-center px-7 py-3 text-base font-semibold rounded-lg text-gray-900 bg-white hover:bg-gray-100 transition duration-150">
+                        Go to Dashboard
+                    </a>
+                    <a href="<?= APP_URL ?>/search"
+                       class="inline-flex items-center justify-center px-7 py-3 text-base font-semibold rounded-lg text-white border border-gray-600 hover:bg-gray-800 transition duration-150">
+                        Find a Craftsman
+                    </a>
+                </div>
+            <?php elseif ($_SESSION['role'] === 'craftsman'): ?>
+                <p class="mt-3 text-gray-400 text-base max-w-xl mx-auto">
+                    Ready to find new clients and grow your business? Browse available jobs and send your proposals.
+                </p>
+                <div class="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+                    <a href="<?= APP_URL ?>/craftsman/dashboard"
+                       class="inline-flex items-center justify-center px-7 py-3 text-base font-semibold rounded-lg text-gray-900 bg-white hover:bg-gray-100 transition duration-150">
+                        Go to Dashboard
+                    </a>
+                    <a href="<?= APP_URL ?>/jobs"
+                       class="inline-flex items-center justify-center px-7 py-3 text-base font-semibold rounded-lg text-white border border-gray-600 hover:bg-gray-800 transition duration-150">
+                        Browse Job Board
+                    </a>
+                </div>
+            <?php else: ?>
+                <p class="mt-3 text-gray-400 text-base max-w-xl mx-auto">
+                    Manage the platform, users, and review the recent activities from your admin dashboard.
+                </p>
+                <div class="mt-10 flex justify-center">
+                    <a href="<?= APP_URL ?>/admin/dashboard"
+                       class="inline-flex items-center justify-center px-7 py-3 text-base font-semibold rounded-lg text-gray-900 bg-white hover:bg-gray-100 transition duration-150">
+                        Go to Admin Dashboard
+                    </a>
+                </div>
+            <?php endif; ?>
 
-        <h2 class="text-3xl font-extrabold text-white sm:text-4xl">Ready to get started?</h2>
-        <p class="mt-3 text-gray-400 text-base">Join the platform connecting skilled craftsmen with homeowners across Algeria.</p>
-
-        <!-- Tab Toggle -->
-        <div class="mt-8 inline-flex items-center bg-gray-800 rounded-full p-1">
-            <button id="cta-homeowner-btn"
-                    onclick="switchCtaTab('homeowner')"
-                    class="cta-tab flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 bg-white text-gray-900 shadow">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                </svg>
-                For Homeowners
-            </button>
-            <button id="cta-craftsman-btn"
-                    onclick="switchCtaTab('craftsman')"
-                    class="cta-tab flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 text-gray-400">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                </svg>
-                For Craftsmen
-            </button>
         </div>
-
-        <!-- Homeowners Panel -->
-        <div id="cta-homeowner" class="cta-content mt-10">
-            <p class="text-gray-300 text-base mb-8 max-w-xl mx-auto">
-                Post your project, receive quotes from verified craftsmen, and hire the best one — all in one place.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                <a href="<?= APP_URL ?>/register"
-                   class="inline-flex items-center justify-center px-7 py-3 text-base font-semibold rounded-lg text-gray-900 bg-white hover:bg-gray-100 transition duration-150">
-                    Sign Up Free
-                </a>
-                <a href="<?= APP_URL ?>/search"
-                   class="inline-flex items-center justify-center px-7 py-3 text-base font-semibold rounded-lg text-white border border-gray-600 hover:bg-gray-800 transition duration-150">
-                    Browse Craftsmen
-                </a>
-            </div>
-        </div>
-
-        <!-- Craftsmen Panel (hidden by default) -->
-        <div id="cta-craftsman" class="cta-content hidden mt-10">
-            <p class="text-gray-300 text-base mb-8 max-w-xl mx-auto">
-                Create your profile, showcase your work, and get booking requests from homeowners who need your exact skills — for free.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                <a href="<?= APP_URL ?>/register"
-                   class="inline-flex items-center justify-center px-7 py-3 text-base font-semibold rounded-lg text-indigo-900 bg-indigo-300 hover:bg-indigo-200 transition duration-150">
-                    Join as a Craftsman
-                </a>
-                <a href="<?= APP_URL ?>/jobs"
-                   class="inline-flex items-center justify-center px-7 py-3 text-base font-semibold rounded-lg text-white border border-indigo-600 hover:bg-indigo-900 transition duration-150">
-                    Browse Job Board
-                </a>
-            </div>
-        </div>
-
     </div>
-</div>
-
-<script>
-function switchCtaTab(tab) {
-    document.querySelectorAll('.cta-content').forEach(function(el) {
-        el.classList.add('hidden');
-    });
-    document.getElementById('cta-' + tab).classList.remove('hidden');
-
-    ['homeowner', 'craftsman'].forEach(function(t) {
-        var btn = document.getElementById('cta-' + t + '-btn');
-        btn.classList.remove('bg-white', 'text-gray-900', 'shadow');
-        btn.classList.add('text-gray-400');
-    });
-    var activeBtn = document.getElementById('cta-' + tab + '-btn');
-    activeBtn.classList.add('bg-white', 'text-gray-900', 'shadow');
-    activeBtn.classList.remove('text-gray-400');
-}
-</script>
-<!-- END SPLIT CTA -->
+<?php endif; ?>
+<!-- END CTA SECTION -->
 
 <!-- How It Works tab switcher script -->
 <script>

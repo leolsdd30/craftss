@@ -21,7 +21,14 @@ class SearchController extends Controller
             'sort' => $_GET['sort'] ?? null
         ];
 
-        $craftsmen = $craftsmanModel->getAllCraftsmen($filters);
+        $page = max(1, (int)($_GET['page'] ?? 1));
+        $perPage = 12; // 12 is optimal for grids of 3 or 4 columns
+        $offset = ($page - 1) * $perPage;
+
+        $total = $craftsmanModel->countAllCraftsmen($filters);
+        $totalPages = ceil($total / $perPage);
+
+        $craftsmen = $craftsmanModel->getAllCraftsmen($filters, $perPage, $offset);
 
         // Map favorites if user is logged in as homeowner
         if (isset($_SESSION['user_id']) && ($_SESSION['role'] ?? '') === 'homeowner') {
@@ -43,6 +50,9 @@ class SearchController extends Controller
             'contentView' => 'search/index',
             'craftsmen' => $craftsmen,
             'filters' => $filters,
+            'page' => $page,
+            'totalPages' => $totalPages,
+            'totalResults' => $total,
             'metaDescription' => 'Find and hire skilled professionals and craftsmen in Algeria. Read reviews, view portfolios, and request bookings directly on Crafts.',
             'ogTitle' => 'Find Skilled Professionals on Crafts',
             'ogDescription' => 'Find and hire skilled professionals and craftsmen in Algeria. Read reviews, view portfolios, and request bookings directly on Crafts.'
