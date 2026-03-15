@@ -31,6 +31,21 @@ class AuthController extends Controller
     {
         Middleware::verifyCsrfToken();
 
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        $limitKey = 'login_attempts_' . md5($ip);
+        if (!isset($_SESSION[$limitKey])) {
+            $_SESSION[$limitKey] = ['count' => 0, 'time' => time()];
+        }
+        
+        if (time() - $_SESSION[$limitKey]['time'] > 10) {
+            $_SESSION[$limitKey] = ['count' => 0, 'time' => time()];
+        }
+        
+        if ($_SESSION[$limitKey]['count'] >= 5) {
+            $this->showLoginForm("Too many failed attempts. Please try again later.");
+            return;
+        }
+
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
 
@@ -43,6 +58,14 @@ class AuthController extends Controller
         $user = $userModel->findByEmail($email);
 
         if ($user && $userModel->verifyPassword($password, $user['password_hash'])) {
+            if (isset($user['is_active']) && $user['is_active'] == 0) {
+                $_SESSION[$limitKey]['count']++;
+                $this->showLoginForm("Your account has been deactivated.");
+                return;
+            }
+
+            unset($_SESSION[$limitKey]);
+
             // Success! Session is already started globally in app.php
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['role'] = $user['role'];
@@ -71,6 +94,7 @@ class AuthController extends Controller
             exit;
         }
         else {
+            $_SESSION[$limitKey]['count']++;
             $this->showLoginForm("Invalid credentials. Please try again.");
         }
     }
@@ -98,6 +122,22 @@ class AuthController extends Controller
     public function processRegister()
     {
         Middleware::verifyCsrfToken();
+
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        $limitKey = 'register_attempts_' . md5($ip);
+        if (!isset($_SESSION[$limitKey])) {
+            $_SESSION[$limitKey] = ['count' => 0, 'time' => time()];
+        }
+        
+        if (time() - $_SESSION[$limitKey]['time'] > 900) {
+            $_SESSION[$limitKey] = ['count' => 0, 'time' => time()];
+        }
+        
+        if ($_SESSION[$limitKey]['count'] >= 5) {
+            $this->showRegisterForm("Too many attempts. Please try again later.");
+            return;
+        }
+        $_SESSION[$limitKey]['count']++;
 
         $firstName = $_POST['first_name'] ?? '';
         $lastName = $_POST['last_name'] ?? '';
@@ -135,6 +175,8 @@ class AuthController extends Controller
         ]);
 
         if ($success) {
+            unset($_SESSION[$limitKey]);
+
             // Automatically log them in after registration
             $user = $userModel->findByEmail($email);
             $_SESSION['user_id'] = $user['id'];

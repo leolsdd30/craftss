@@ -66,4 +66,26 @@ class HomeController extends Controller
             'ogDescription'   => 'Learn more about Crafts and our mission to empower Algerian craftsmen and connect them with homeowners.',
         ]);
     }
+
+    /**
+     * Show the contact page.
+     */
+    public function contact()
+    {
+        $this->view('layouts/app', [
+            'pageTitle'       => 'Contact Us - Crafts',
+            'contentView'     => 'public/contact',
+        ]);
+    }
+
+    /**
+     * Show the privacy policy page.
+     */
+    public function privacy()
+    {
+        $this->view('layouts/app', [
+            'pageTitle'       => 'Privacy Policy - Crafts',
+            'contentView'     => 'public/privacy',
+        ]);
+    }
 }

@@ -32,6 +32,9 @@
     ?>
     <meta name="description" content="<?= htmlspecialchars($desc) ?>">
     
+    <?php if (strpos($_SERVER['REQUEST_URI'] ?? '', '/admin') !== false || strpos($_SERVER['REQUEST_URI'] ?? '', '/dashboard') !== false): ?>
+    <meta name="robots" content="noindex, nofollow">
+    <?php endif; ?>
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="<?= htmlspecialchars($currentUrl) ?>">
@@ -252,8 +255,8 @@
                     <h3 class="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-3">Company</h3>
                     <ul class="space-y-2">
                         <li><a href="<?= APP_URL ?>/about" class="text-sm text-gray-500 hover:text-gray-900">About Us</a></li>
-                        <li><a href="#" class="text-sm text-gray-500 hover:text-gray-900">Contact</a></li>
-                        <li><a href="#" class="text-sm text-gray-500 hover:text-gray-900">Privacy Policy</a></li>
+                        <li><a href="<?= APP_URL ?>/contact" class="text-sm text-gray-500 hover:text-gray-900">Contact</a></li>
+                        <li><a href="<?= APP_URL ?>/privacy" class="text-sm text-gray-500 hover:text-gray-900">Privacy Policy</a></li>
                     </ul>
                 </div>
             </div>

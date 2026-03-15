@@ -22,6 +22,8 @@ use App\Controllers\MessageController;
 
 $router->get('/', [HomeController::class , 'index']);
 $router->get('/about', [HomeController::class , 'about']);
+$router->get('/contact', [HomeController::class , 'contact']);
+$router->get('/privacy', [HomeController::class , 'privacy']);
 
 // Public Search & Profile Routes
 $router->get('/search', [SearchController::class , 'index']);

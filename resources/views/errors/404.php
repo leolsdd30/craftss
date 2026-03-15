@@ -37,10 +37,6 @@ if (defined('APP_URL')) {
         <p class="text-gray-500 mb-8 text-lg">Sorry, the page you're looking for doesn't exist or has been moved.</p>
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a href="javascript:history.back()" class="inline-flex items-center px-5 py-2.5 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 transition duration-150 shadow-sm">
-                <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                Go Back
-            </a>
             <a href="<?= htmlspecialchars($homeUrl) ?>" class="inline-flex items-center px-5 py-2.5 text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 shadow-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4"/></svg>
                 Back to Home

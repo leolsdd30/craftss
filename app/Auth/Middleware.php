@@ -24,8 +24,8 @@ class Middleware
         self::requireLogin();
 
         if ($_SESSION['role'] !== $role) {
-            // Alternatively, load a 403 Forbidden page here.
-            echo "Access Denied: You do not have permission to view this page.";
+            http_response_code(403);
+            require_once __DIR__ . '/../../resources/views/errors/403.php';
             exit;
         }
     }
@@ -38,7 +38,8 @@ class Middleware
         self::requireLogin();
 
         if ($_SESSION['role'] !== 'admin') {
-            echo "Access Denied: Administrator privileges required.";
+            http_response_code(403);
+            require_once __DIR__ . '/../../resources/views/errors/403.php';
             exit;
         }
     }

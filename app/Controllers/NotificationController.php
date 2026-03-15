@@ -67,12 +67,15 @@ class NotificationController extends Controller
             // If there's a redirect link — validate to prevent open redirect
             $link = $_GET['redirect'] ?? null;
             if ($link) {
-                // Only allow internal URLs (starts with APP_URL or relative paths)
-                $isRelative = (strpos($link, '/') === 0 && strpos($link, '//') !== 0);
-                $isInternal = (strpos($link, APP_URL) === 0);
+                $parsedUrl = parse_url($link);
+                $appHost = parse_url(APP_URL, PHP_URL_HOST);
+                $linkHost = $parsedUrl['host'] ?? null;
+                $linkScheme = $parsedUrl['scheme'] ?? null;
                 
-                if ($isRelative || $isInternal) {
-                    // Append hash fragment if provided separately (urlencode destroys #)
+                $isValidHost = ($linkHost === $appHost && !empty($appHost));
+                $isValidRelative = empty($linkHost) && empty($linkScheme) && preg_match('#^/[a-zA-Z0-9]#', $link);
+                
+                if ($isValidHost || $isValidRelative) {
                     $hash = $_GET['hash'] ?? '';
                     if (!empty($hash) && preg_match('/^[a-zA-Z0-9_-]+$/', $hash)) {
                         $link .= '#' . $hash;
@@ -80,7 +83,6 @@ class NotificationController extends Controller
                     header('Location: ' . $link);
                     exit;
                 }
-                // If invalid redirect, fall through to notifications page
             }
         }
 

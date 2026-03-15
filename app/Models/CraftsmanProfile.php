@@ -36,13 +36,19 @@ class CraftsmanProfile extends Model
             $params['wilaya'] = $filters['wilaya'];
         }
 
-        if (!empty($filters['search'])) {
+        $searchQuery = $filters['search'] ?? '';
+        if (!empty($searchQuery)) {
+            $searchQuery = substr(trim($searchQuery), 0, 100);
+            $searchQuery = str_replace(['%', '_', '\\'], '', $searchQuery);
+        }
+
+        if (!empty($searchQuery)) {
             $sql .= " AND (u.first_name LIKE :search1
                            OR u.last_name  LIKE :search2
                            OR cp.bio       LIKE :search3)";
-            $params['search1'] = '%' . $filters['search'] . '%';
-            $params['search2'] = '%' . $filters['search'] . '%';
-            $params['search3'] = '%' . $filters['search'] . '%';
+            $params['search1'] = '%' . $searchQuery . '%';
+            $params['search2'] = '%' . $searchQuery . '%';
+            $params['search3'] = '%' . $searchQuery . '%';
         }
 
         // GROUP BY required because of the aggregate (AVG / COUNT)
@@ -93,13 +99,19 @@ class CraftsmanProfile extends Model
             $params['wilaya'] = $filters['wilaya'];
         }
 
-        if (!empty($filters['search'])) {
+        $searchQuery = $filters['search'] ?? '';
+        if (!empty($searchQuery)) {
+            $searchQuery = substr(trim($searchQuery), 0, 100);
+            $searchQuery = str_replace(['%', '_', '\\'], '', $searchQuery);
+        }
+
+        if (!empty($searchQuery)) {
             $sql .= " AND (u.first_name LIKE :search1
                            OR u.last_name  LIKE :search2
                            OR cp.bio       LIKE :search3)";
-            $params['search1'] = '%' . $filters['search'] . '%';
-            $params['search2'] = '%' . $filters['search'] . '%';
-            $params['search3'] = '%' . $filters['search'] . '%';
+            $params['search1'] = '%' . $searchQuery . '%';
+            $params['search2'] = '%' . $searchQuery . '%';
+            $params['search3'] = '%' . $searchQuery . '%';
         }
 
         $stmt = $this->db->prepare($sql);

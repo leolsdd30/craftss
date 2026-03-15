@@ -6,6 +6,7 @@ use App\Auth\Middleware;
 use App\Models\User;
 use App\Models\CraftsmanProfile;
 use App\Models\Notification;
+use App\Models\Stats;
 
 class AdminController extends Controller
 {
@@ -18,22 +19,8 @@ class AdminController extends Controller
 
         $db = \App\Database\Database::getInstance()->getConnection();
 
-        // Platform stats
-        $stats = [];
-        $stats['total_users'] = (int) $db->query("SELECT COUNT(*) FROM users")->fetchColumn();
-        $stats['homeowners'] = (int) $db->query("SELECT COUNT(*) FROM users WHERE role = 'homeowner'")->fetchColumn();
-        $stats['craftsmen'] = (int) $db->query("SELECT COUNT(*) FROM users WHERE role = 'craftsman'")->fetchColumn();
-        $stats['admins'] = (int) $db->query("SELECT COUNT(*) FROM users WHERE role = 'admin'")->fetchColumn();
-        $stats['total_bookings'] = (int) $db->query("SELECT COUNT(*) FROM requests_bookings")->fetchColumn();
-        $stats['active_bookings'] = (int) $db->query("SELECT COUNT(*) FROM requests_bookings WHERE status = 'hired'")->fetchColumn();
-        $stats['completed_bookings'] = (int) $db->query("SELECT COUNT(*) FROM requests_bookings WHERE status = 'completed'")->fetchColumn();
-        $stats['total_jobs'] = (int) $db->query("SELECT COUNT(*) FROM job_postings")->fetchColumn();
-        $stats['open_jobs'] = (int) $db->query("SELECT COUNT(*) FROM job_postings WHERE status = 'open'")->fetchColumn();
-        $stats['total_reviews'] = (int) $db->query("SELECT COUNT(*) FROM reviews")->fetchColumn();
-        $stats['avg_rating'] = round((float) $db->query("SELECT IFNULL(AVG(star_rating), 0) FROM reviews")->fetchColumn(), 1);
-        $stats['verified_craftsmen'] = (int) $db->query("SELECT COUNT(*) FROM craftsmen_profiles cp JOIN users u ON cp.user_id = u.id WHERE cp.is_verified = TRUE AND u.role = 'craftsman'")->fetchColumn();
-        $stats['pending_verification'] = (int) $db->query("SELECT COUNT(*) FROM craftsmen_profiles cp JOIN users u ON cp.user_id = u.id WHERE cp.is_verified = FALSE AND u.role = 'craftsman'")->fetchColumn();
-        $stats['total_messages'] = (int) $db->query("SELECT COUNT(*) FROM messages")->fetchColumn();
+        $statsModel = new Stats();
+        $stats = $statsModel->getDashboardMetrics();
 
         // Recent users
         $stmt = $db->query("SELECT id, first_name, last_name, email, role, is_active, created_at, username FROM users ORDER BY created_at DESC LIMIT 10");
@@ -60,6 +47,16 @@ class AdminController extends Controller
         $roleFilter = $_GET['role'] ?? '';
         $statusFilter = $_GET['status'] ?? '';
 
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        if ($page < 1) $page = 1;
+        $perPage = 15;
+        $offset = ($page - 1) * $perPage;
+
+        $countSql = "SELECT COUNT(u.id)
+                FROM users u
+                LEFT JOIN craftsmen_profiles cp ON u.id = cp.user_id
+                WHERE 1=1";
+        
         $sql = "SELECT u.id, u.first_name, u.last_name, u.email, u.role, u.is_active, u.created_at, u.username,
                        cp.service_category, cp.is_verified
                 FROM users u
@@ -67,23 +64,29 @@ class AdminController extends Controller
                 WHERE 1=1";
         $params = [];
 
+        $filters = "";
         if (!empty($search)) {
-            $sql .= " AND (u.first_name LIKE :s1 OR u.last_name LIKE :s2 OR u.email LIKE :s3)";
+            $filters .= " AND (u.first_name LIKE :s1 OR u.last_name LIKE :s2 OR u.email LIKE :s3)";
             $params['s1'] = '%' . $search . '%';
             $params['s2'] = '%' . $search . '%';
             $params['s3'] = '%' . $search . '%';
         }
         if (!empty($roleFilter)) {
-            $sql .= " AND u.role = :role";
+            $filters .= " AND u.role = :role";
             $params['role'] = $roleFilter;
         }
         if ($statusFilter === 'active') {
-            $sql .= " AND u.is_active = TRUE";
+            $filters .= " AND u.is_active = TRUE";
         } elseif ($statusFilter === 'inactive') {
-            $sql .= " AND u.is_active = FALSE";
+            $filters .= " AND u.is_active = FALSE";
         }
 
-        $sql .= " ORDER BY u.created_at DESC";
+        $countStmt = $db->prepare($countSql . $filters);
+        $countStmt->execute($params);
+        $totalUsers = (int) $countStmt->fetchColumn();
+        $totalPages = ceil($totalUsers / $perPage);
+
+        $sql .= $filters . " ORDER BY u.created_at DESC LIMIT $perPage OFFSET $offset";
 
         $stmt = $db->prepare($sql);
         $stmt->execute($params);
@@ -95,7 +98,10 @@ class AdminController extends Controller
             'users' => $users,
             'search' => $search,
             'roleFilter' => $roleFilter,
-            'statusFilter' => $statusFilter
+            'statusFilter' => $statusFilter,
+            'page' => $page,
+            'totalPages' => $totalPages,
+            'totalUsers' => $totalUsers
         ]);
     }
 
