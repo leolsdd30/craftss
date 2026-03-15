@@ -79,20 +79,40 @@ $slideshowUrls = array_map(fn($p) => [
                         Connect with top-rated, verified craftsmen in your area. From plumbing to carpentry,
                         get your home improvement done right with Crafts.
                     </p>
-                    <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                        <div class="rounded-md shadow">
-                            <a href="<?= APP_URL ?>/register"
-                               class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10 transition duration-150 ease-in-out">
-                                Get Started
-                            </a>
-                        </div>
-                        <div class="mt-3 sm:mt-0 sm:ml-3">
-                            <a href="<?= APP_URL ?>/search"
-                               class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10 transition duration-150 ease-in-out">
-                                Browse Craftsmen
-                            </a>
-                        </div>
-                    </div>
+                   <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+    <?php if (!isset($_SESSION['user_id'])): ?>
+        <div class="rounded-md shadow">
+            <a href="<?= APP_URL ?>/register" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10 transition duration-150">Get Started</a>
+        </div>
+        <div class="mt-3 sm:mt-0 sm:ml-3">
+            <a href="<?= APP_URL ?>/search" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10 transition duration-150">Browse Craftsmen</a>
+        </div>
+
+    <?php elseif ($_SESSION['role'] === 'homeowner'): ?>
+        <div class="rounded-md shadow">
+            <a href="<?= APP_URL ?>/search" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10 transition duration-150">Find a Craftsman</a>
+        </div>
+        <div class="mt-3 sm:mt-0 sm:ml-3">
+            <a href="<?= APP_URL ?>/jobs/create" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10 transition duration-150">Post a Job</a>
+        </div>
+
+    <?php elseif ($_SESSION['role'] === 'craftsman'): ?>
+        <div class="rounded-md shadow">
+            <a href="<?= APP_URL ?>/jobs" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10 transition duration-150">Browse Job Board</a>
+        </div>
+        <div class="mt-3 sm:mt-0 sm:ml-3">
+            <a href="<?= APP_URL ?>/craftsman/dashboard" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10 transition duration-150">My Dashboard</a>
+        </div>
+
+    <?php elseif ($_SESSION['role'] === 'admin'): ?>
+        <div class="rounded-md shadow">
+            <a href="<?= APP_URL ?>/admin/dashboard" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10 transition duration-150">Admin Dashboard</a>
+        </div>
+        <div class="mt-3 sm:mt-0 sm:ml-3">
+            <a href="<?= APP_URL ?>/admin/users" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10 transition duration-150">Manage Users</a>
+        </div>
+    <?php endif; ?>
+</div>
                 </div>
             </main>
         </div>
@@ -617,8 +637,11 @@ $slideshowUrls = array_map(fn($p) => [
     </script>
 <?php else: ?>
     <!-- Logged In CTA (Role-based) -->
-    <div class="bg-gray-900 py-16 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl mx-auto text-center">
+    <div class="bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="bg-gray-900 rounded-2xl py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 24px 24px;"></div>
+            <div class="relative z-10 max-w-3xl mx-auto text-center">
 
             <h2 class="text-3xl font-extrabold text-white sm:text-4xl">
                 Welcome back, <?= htmlspecialchars($_SESSION['first_name'] ?? $_SESSION['name'] ?? 'User') ?>!
@@ -661,6 +684,8 @@ $slideshowUrls = array_map(fn($p) => [
                        class="inline-flex items-center justify-center px-7 py-3 text-base font-semibold rounded-lg text-gray-900 bg-white hover:bg-gray-100 transition duration-150">
                         Go to Admin Dashboard
                     </a>
+                </div>
+                </div>
                 </div>
             <?php endif; ?>
 
