@@ -133,7 +133,8 @@
                             </div>
                         </div>
                         <div class="ml-4 flex flex-col items-end space-y-2">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                            <?php $listCatStyles = get_category_classes($job['service_category']); ?>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $listCatStyles['badge'] ?>">
                                 <?= htmlspecialchars($job['service_category']) ?>
                             </span>
                             <?php if (!empty($job['budget_range'])): ?>

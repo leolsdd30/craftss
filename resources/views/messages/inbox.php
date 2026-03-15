@@ -55,11 +55,17 @@
                     <div class="ml-4 flex-1 min-w-0">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2">
-                                <h3 class="text-sm font-bold <?= $isUnread ? 'text-gray-900' : 'text-gray-700' ?> truncate">
+                                <h3 class="text-sm font-bold <?= $isUnread ? 'text-gray-900' : 'text-gray-700' ?> truncate flex items-center gap-1">
                                     <?= htmlspecialchars($convo['first_name'] . ' ' . $convo['last_name']) ?>
+                                    <?php if (!empty($convo['is_verified'])): ?>
+                                    <svg class="h-4 w-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" title="Verified Craftsman">
+                                        <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                    <?php endif; ?>
                                 </h3>
                                 <?php if ($convo['role'] === 'craftsman' && !empty($convo['service_category'])): ?>
-                                <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700">
+                                <?php $convoCatStyles = get_category_classes($convo['service_category']); ?>
+                                <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <?= $convoCatStyles['badge'] ?>">
                                     <?= htmlspecialchars($convo['service_category']) ?>
                                 </span>
                                 <?php endif; ?>
@@ -140,11 +146,17 @@
 
                     <div class="ml-4 flex-1 min-w-0">
                         <div class="flex items-center space-x-2">
-                            <h3 class="text-sm font-bold text-gray-900 truncate">
+                            <h3 class="text-sm font-bold text-gray-900 truncate flex items-center gap-1">
                                 <?= htmlspecialchars($req['first_name'] . ' ' . $req['last_name']) ?>
+                                <?php if (!empty($req['is_verified'])): ?>
+                                <svg class="h-4 w-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" title="Verified Craftsman">
+                                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <?php endif; ?>
                             </h3>
                             <?php if ($req['role'] === 'craftsman' && !empty($req['service_category'])): ?>
-                            <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700">
+                            <?php $reqCatStyles = get_category_classes($req['service_category']); ?>
+                            <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <?= $reqCatStyles['badge'] ?>">
                                 <?= htmlspecialchars($req['service_category']) ?>
                             </span>
                             <?php elseif ($req['role'] === 'homeowner'): ?>

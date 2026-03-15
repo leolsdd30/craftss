@@ -122,7 +122,8 @@
                                 <div class="flex-1 min-w-0 pr-4">
                                     <h3 class="text-base font-bold text-gray-900 group-hover:text-indigo-600 transition-colors truncate"><?= htmlspecialchars($job['title']) ?></h3>
                                     <div class="mt-2 flex items-center flex-wrap gap-3 text-xs text-gray-500">
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-gray-50 border border-gray-200 text-gray-700 font-medium">
+                                        <?php $jobCatStyles = get_category_classes($job['service_category']); ?>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-md <?= $jobCatStyles['badge'] ?> font-medium">
                                             <?= htmlspecialchars($job['service_category']) ?>
                                         </span>
                                         <?php if (!empty($job['address'])): ?>
@@ -186,9 +187,16 @@
                                         <p class="text-xs text-gray-400"><?= date('M d, Y', strtotime($quote['quote_created_at'])) ?></p>
                                     </div>
                                     <div class="flex items-baseline gap-2 mt-2">
-                                        <span class="text-lg font-bold text-gray-900"><?= htmlspecialchars($quote['craftsman_first_name'] . ' ' . $quote['craftsman_last_name']) ?></span>
+                                        <span class="text-lg font-bold text-gray-900 flex items-center gap-1">
+                                            <?= htmlspecialchars($quote['craftsman_first_name'] . ' ' . $quote['craftsman_last_name']) ?>
+                                            <?php if (!empty($quote['craftsman_is_verified'])): ?>
+                                            <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" title="Verified Craftsman">
+                                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                            </svg>
+                                            <?php endif; ?>
+                                        </span>
                                         <span class="text-sm text-gray-500">quoted</span>
-                                        <span class="text-lg font-extrabold text-emerald-700 bg-emerald-50 px-2 rounded-md">$<?= number_format($quote['quoted_price'], 2) ?></span>
+                                        <span class="text-lg font-extrabold text-emerald-700 bg-emerald-50 px-2 rounded-md"><?= number_format($quote['quoted_price'], 2) ?> DZD</span>
                                     </div>
                                     <?php if (!empty($quote['cover_message'])): ?>
                                     <div class="mt-3 bg-gray-50 rounded-lg p-3 border border-gray-100">
@@ -208,7 +216,7 @@
                                 <form id="accept-quote-<?= $quote['quote_id'] ?>" action="<?= APP_URL ?>/jobs/accept-quote" method="POST" class="m-0">
                                     <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token'] ?? '') ?>">
                                     <input type="hidden" name="quote_id" value="<?= $quote['quote_id'] ?>">
-                                    <button type="button" onclick="showConfirmModal('accept-quote-<?= $quote['quote_id'] ?>', 'Accept this quote?', 'This will accept <?= htmlspecialchars($quote['craftsman_first_name']) ?>\'s quote of $<?= number_format($quote['quoted_price'], 2) ?> and reject all other quotes for this job.', 'accept')" class="inline-flex items-center px-4 py-2 text-sm font-bold rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition duration-150">
+                                    <button type="button" onclick="showConfirmModal('accept-quote-<?= $quote['quote_id'] ?>', 'Accept this quote?', 'This will accept <?= htmlspecialchars($quote['craftsman_first_name']) ?>\'s quote of <?= number_format($quote['quoted_price'], 2) ?> DZD and reject all other quotes for this job.', 'accept')" class="inline-flex items-center px-4 py-2 text-sm font-bold rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition duration-150">
                                         <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                         Accept Quote
                                     </button>
@@ -247,8 +255,13 @@
                         <div class="bg-white rounded-lg shadow-sm border <?= $booking['status'] === 'counter_offered' ? 'border-orange-200' : ($booking['status'] === 'pending_completion' ? 'border-purple-200' : ($booking['status'] === 'in_progress' ? 'border-blue-200' : 'border-gray-100')) ?> p-5">
                             <div class="flex items-start justify-between">
                                 <div class="flex-1 min-w-0">
-                                    <p class="text-base font-bold text-gray-900">
+                                    <p class="text-base font-bold text-gray-900 flex items-center gap-1">
                                         Booking with <?= htmlspecialchars($booking['first_name'] . ' ' . $booking['last_name']) ?>
+                                        <?php if (!empty($booking['is_verified'])): ?>
+                                        <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" title="Verified Craftsman">
+                                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        <?php endif; ?>
                                     </p>
                                     <p class="mt-1 text-sm text-gray-600 line-clamp-2"><?= htmlspecialchars($booking['description']) ?></p>
                                     <div class="mt-2 flex items-center flex-wrap gap-2 text-xs text-gray-500">
@@ -266,7 +279,7 @@
                                         </span>
                                         <?php if (!empty($booking['quoted_price'])): ?>
                                         <span class="flex items-center font-semibold text-green-600">
-                                            $<?= number_format($booking['quoted_price'], 2) ?>
+                                            <?= number_format($booking['quoted_price'], 2) ?> DZD
                                         </span>
                                         <?php endif; ?>
                                     </div>
@@ -371,12 +384,22 @@
                             </svg>
 
                             <div class="flex items-start space-x-4 relative z-10">
-                                <img src="<?= get_profile_picture_url($favorite['profile_picture'] ?? 'default.png', $favorite['first_name'], $favorite['last_name']) ?>" 
-                                     alt="<?= htmlspecialchars($favorite['first_name']) ?>" 
-                                     class="h-12 w-12 rounded-full object-cover shadow-sm border border-gray-100">
+                                    <img src="<?= get_profile_picture_url($favorite['profile_picture'] ?? 'default.png', $favorite['first_name'], $favorite['last_name']) ?>" 
+                                         alt="<?= htmlspecialchars($favorite['first_name']) ?>" 
+                                         class="h-12 w-12 rounded-full object-cover shadow-sm border border-gray-100">
                                 <div>
-                                    <h3 class="text-base font-bold text-gray-900"><?= htmlspecialchars($favorite['first_name'] . ' ' . $favorite['last_name']) ?></h3>
-                                    <p class="text-sm font-medium text-indigo-600"><?= htmlspecialchars($favorite['service_category'] ?? 'Professional') ?></p>
+                                    <h3 class="text-base font-bold text-gray-900 flex items-center gap-1">
+                                        <?= htmlspecialchars($favorite['first_name'] . ' ' . $favorite['last_name']) ?>
+                                        <?php if (!empty($favorite['is_verified'])): ?>
+                                        <svg class="h-4 w-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" title="Verified Craftsman">
+                                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        <?php endif; ?>
+                                    </h3>
+                                    <?php $favCatStyles = get_category_classes($favorite['service_category'] ?? 'General Handyman'); ?>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold <?= $favCatStyles['badge'] ?>">
+                                        <?= htmlspecialchars($favorite['service_category'] ?? 'Professional') ?>
+                                    </span>
                                     
                                     <div class="mt-1 flex items-center text-xs text-gray-500 space-x-3">
                                         <?php if (!empty($favorite['wilaya'])): ?>

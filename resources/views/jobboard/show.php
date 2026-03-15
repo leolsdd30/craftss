@@ -88,7 +88,8 @@
                     <div>
                         <dt class="text-sm font-medium text-gray-500">Category</dt>
                         <dd class="mt-1 text-sm text-gray-900">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                            <?php $showCatStyles = get_category_classes($job['service_category']); ?>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $showCatStyles['badge'] ?>">
                                 <?= htmlspecialchars($job['service_category']) ?>
                             </span>
                         </dd>
@@ -144,7 +145,7 @@
                     <input type="hidden" name="job_posting_id" value="<?= $job['id'] ?>">
 
                     <div>
-                        <label for="quoted_price" class="block text-sm font-medium text-gray-700">Your Price ($) <span class="text-red-500">*</span></label>
+                        <label for="quoted_price" class="block text-sm font-medium text-gray-700">Your Price (DZD) <span class="text-red-500">*</span></label>
                         <input type="number" name="quoted_price" id="quoted_price" step="0.01" min="1" required placeholder="e.g. 150.00"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2 border">
                     </div>
@@ -179,11 +180,18 @@
                     <div class="px-6 py-4">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-semibold text-gray-900"><?= htmlspecialchars($quote['first_name'] . ' ' . $quote['last_name']) ?></p>
+                                <p class="text-sm font-semibold text-gray-900 flex items-center gap-1">
+                                    <?= htmlspecialchars($quote['first_name'] . ' ' . $quote['last_name']) ?>
+                                    <?php if (!empty($quote['is_verified'])): ?>
+                                    <svg class="h-4 w-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" title="Verified Craftsman">
+                                        <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                    <?php endif; ?>
+                                </p>
                                 <p class="text-xs text-gray-500"><?= date('M d, Y', strtotime($quote['created_at'])) ?></p>
                             </div>
                             <div class="text-right">
-                                <p class="text-xl font-bold text-gray-900">$<?= number_format($quote['quoted_price'], 2) ?></p>
+                                <p class="text-xl font-bold text-gray-900"><?= number_format($quote['quoted_price'], 2) ?> DZD</p>
                                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium 
                                     <?= $quote['status'] === 'accepted' ? 'bg-green-100 text-green-800' : ($quote['status'] === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') ?>">
                                     <?= ucfirst($quote['status']) ?>
@@ -250,7 +258,7 @@
                     <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                         <h3 class="text-lg leading-6 font-medium text-gray-900">Accept Quote</h3>
                         <div class="mt-2 text-sm text-gray-500">
-                            <p>Are you sure you want to accept the quote from <span id="craftsmanNameAccept" class="font-bold"></span> for <span class="font-bold">$<span id="quotePriceAccept"></span></span>?</p>
+                            <p>Are you sure you want to accept the quote from <span id="craftsmanNameAccept" class="font-bold"></span> for <span class="font-bold"><span id="quotePriceAccept"></span> DZD</span>?</p>
                             <p class="mt-2 text-indigo-600 font-medium italic">Note: All other quotes will be automatically rejected and the job will be marked as assigned.</p>
                         </div>
                     </div>

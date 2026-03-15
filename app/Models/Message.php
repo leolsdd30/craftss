@@ -106,7 +106,7 @@ class Message extends Model
                     c.participant_id,
                     CASE WHEN c.initiator_id = :uid1 THEN c.participant_id ELSE c.initiator_id END AS other_user_id,
                     u.first_name, u.last_name, u.profile_picture, u.role,
-                    cp.service_category,
+                    cp.service_category, cp.is_verified,
                     lm.id as last_message_id,
                     lm.message_body as last_message,
                     lm.sender_id as last_sender_id,
@@ -151,7 +151,7 @@ class Message extends Model
                     c.participant_id,
                     c.initiator_id AS other_user_id,
                     u.first_name, u.last_name, u.profile_picture, u.role,
-                    cp.service_category,
+                    cp.service_category, cp.is_verified,
                     lm.id as last_message_id,
                     lm.message_body as last_message,
                     lm.sender_id as last_sender_id,
@@ -182,9 +182,10 @@ class Message extends Model
      */
     public function getMessagesByConversation($conversationId)
     {
-        $sql = "SELECT m.*, u.first_name, u.last_name, u.profile_picture
+        $sql = "SELECT m.*, u.first_name, u.last_name, u.profile_picture, cp.is_verified
                 FROM messages m
                 JOIN users u ON u.id = m.sender_id
+                LEFT JOIN craftsmen_profiles cp ON u.id = cp.user_id
                 WHERE m.conversation_id = :cid
                 ORDER BY m.created_at ASC";
         $stmt = $this->db->prepare($sql);

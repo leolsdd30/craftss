@@ -5,18 +5,7 @@ $activeFilterCount = (int)!empty($filters['category'])
                    + (int)!empty($filters['wilaya'])
                    + (int)!empty($filters['sort']);
 
-// Category → top-bar color map (defined once, used inside the card loop)
-$catColors = [
-    'Plumbing'         => 'bg-blue-500',
-    'Electrical'       => 'bg-yellow-500',
-    'Carpentry'        => 'bg-orange-500',
-    'Painting'         => 'bg-pink-500',
-    'Roofing'          => 'bg-stone-500',
-    'HVAC'             => 'bg-cyan-500',
-    'Tiling'           => 'bg-teal-500',
-    'Landscaping'      => 'bg-green-500',
-    'General Handyman' => 'bg-indigo-500',
-];
+// Categories and their colors are now centrally managed by get_category_classes helper
 ?>
 <div class="bg-gray-50 min-h-screen">
     <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
@@ -164,8 +153,8 @@ $catColors = [
             <div class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col overflow-hidden relative group">
 
                 <!-- Top color bar indicating service category -->
-                <?php $topBarColor = $catColors[$craft['service_category']] ?? 'bg-indigo-500'; ?>
-                <div class="h-1 <?= $topBarColor ?> w-full absolute top-0 left-0 z-10"></div>
+                <?php $catStyles = get_category_classes($craft['service_category']); ?>
+                <div class="h-1 <?= $catStyles['bg'] ?> w-full absolute top-0 left-0 z-10"></div>
 
                 <!-- Favorite heart — homeowners only -->
                 <?php if (isset($_SESSION['user_id']) && ($_SESSION['role'] ?? '') === 'homeowner'): ?>
@@ -191,26 +180,25 @@ $catColors = [
                     <!-- Avatar + Name row -->
                     <div class="flex items-start space-x-3 mb-4">
                         <div class="relative flex-shrink-0">
-                            <img class="h-14 w-14 rounded-full object-cover border-2 shadow-sm
-                                        <?= $craft['is_verified'] ? 'border-green-300' : 'border-gray-100' ?>"
+                            <img class="h-14 w-14 rounded-full object-cover border-2 shadow-sm border-gray-100"
                                  src="<?= get_profile_picture_url($craft['profile_picture'] ?? 'default.png', $craft['first_name'], $craft['last_name']) ?>"
                                  alt="<?= htmlspecialchars($craft['first_name']) ?>">
-                            <?php if ($craft['is_verified']): ?>
-                            <div class="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-sm">
-                                <svg class="h-3.5 w-3.5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812 3.066 3.066 0 00.723 1.745 3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                            </div>
-                            <?php endif; ?>
                         </div>
 
                         <div class="min-w-0 flex-1 pt-0.5">
-                            <h2 class="text-sm font-bold text-gray-900 leading-tight truncate">
+                            <h2 class="text-sm font-bold text-gray-900 leading-tight truncate flex items-center gap-1">
                                 <?= htmlspecialchars($craft['first_name'] . ' ' . $craft['last_name']) ?>
+                                <?php if ($craft['is_verified']): ?>
+                                <svg class="h-4 w-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" title="Verified Craftsman">
+                                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <?php endif; ?>
                             </h2>
-                            <p class="text-xs font-semibold text-indigo-600 uppercase tracking-wide mt-0.5">
-                                <?= htmlspecialchars($craft['service_category']) ?>
-                            </p>
+                            <div class="mt-1">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold uppercase tracking-wide <?= $catStyles['badge'] ?? 'bg-indigo-50 text-indigo-700' ?>">
+                                    <?= htmlspecialchars($craft['service_category']) ?>
+                                </span>
+                            </div>
                             <?php if (!empty($craft['wilaya'])): ?>
                             <p class="text-xs text-gray-400 mt-0.5 flex items-center">
                                 <svg class="h-3 w-3 mr-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
@@ -265,7 +253,7 @@ $catColors = [
                         <div>
                             <span class="text-xs text-gray-400 uppercase tracking-wider">Hourly</span>
                             <p class="font-bold text-gray-900 text-base leading-tight">
-                                $<?= number_format($craft['hourly_rate'], 2) ?>
+                                <?= number_format($craft['hourly_rate'], 2) ?> DZD
                             </p>
                         </div>
                         <?php if ($craft['is_verified']): ?>

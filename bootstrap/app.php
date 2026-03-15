@@ -84,3 +84,23 @@ if (!function_exists('get_profile_picture_url')) {
         return APP_URL . '/uploads/profile/' . htmlspecialchars($profilePicture);
     }
 }
+
+// Global helper for consistent category colors
+if (!function_exists('get_category_classes')) {
+    function get_category_classes($category)
+    {
+        $map = [
+            'Plumbing'         => ['bg' => 'bg-blue-500', 'text' => 'text-blue-600', 'badge' => 'bg-blue-50 text-blue-700 ring-blue-600/20'],
+            'Electrical'       => ['bg' => 'bg-yellow-500', 'text' => 'text-yellow-600', 'badge' => 'bg-yellow-50 text-yellow-700 ring-yellow-600/20'],
+            'Carpentry'        => ['bg' => 'bg-orange-500', 'text' => 'text-orange-600', 'badge' => 'bg-orange-50 text-orange-700 ring-orange-600/20'],
+            'Painting'         => ['bg' => 'bg-pink-500', 'text' => 'text-pink-600', 'badge' => 'bg-pink-50 text-pink-700 ring-pink-600/20'],
+            'Roofing'          => ['bg' => 'bg-stone-500', 'text' => 'text-stone-600', 'badge' => 'bg-stone-200 text-stone-700 ring-stone-600/20'],
+            'HVAC'             => ['bg' => 'bg-cyan-500', 'text' => 'text-cyan-600', 'badge' => 'bg-cyan-50 text-cyan-700 ring-cyan-600/20'],
+            'Tiling'           => ['bg' => 'bg-teal-500', 'text' => 'text-teal-600', 'badge' => 'bg-teal-50 text-teal-700 ring-teal-600/20'],
+            'Landscaping'      => ['bg' => 'bg-green-500', 'text' => 'text-green-600', 'badge' => 'bg-green-50 text-green-700 ring-green-600/20'],
+            'General Handyman' => ['bg' => 'bg-indigo-500', 'text' => 'text-indigo-600', 'badge' => 'bg-indigo-50 text-indigo-700 ring-indigo-600/20'],
+        ];
+        
+        return $map[$category] ?? ['bg' => 'bg-indigo-500', 'text' => 'text-indigo-600', 'badge' => 'bg-indigo-50 text-indigo-700 ring-indigo-600/20'];
+    }
+}

@@ -47,9 +47,10 @@ class Booking extends Model
     public function getBookingsForHomeowner($homeownerId)
     {
         $stmt = $this->db->prepare(
-            "SELECT rb.*, u.first_name, u.last_name, u.profile_picture, u.username
+            "SELECT rb.*, u.first_name, u.last_name, u.profile_picture, u.username, cp.is_verified
              FROM requests_bookings rb
              JOIN users u ON rb.craftsman_id = u.id
+             LEFT JOIN craftsmen_profiles cp ON u.id = cp.user_id
              WHERE rb.homeowner_id = :homeowner_id
              ORDER BY rb.created_at DESC"
         );

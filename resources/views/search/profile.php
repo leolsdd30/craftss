@@ -31,14 +31,19 @@
                             </svg>
                             <?php endif; ?>
                         </h1>
-                        <p class="text-sm font-semibold uppercase tracking-widest text-indigo-600 mt-1"><?= htmlspecialchars($profile['service_category']) ?></p>
+                        <?php $searchProfCatStyles = get_category_classes($profile['service_category']); ?>
+                        <div class="mt-1">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wide <?= $searchProfCatStyles['badge'] ?>">
+                                <?= htmlspecialchars($profile['service_category']) ?>
+                            </span>
+                        </div>
                         <p class="text-sm text-gray-500 mt-1">Member since <?= date('Y', strtotime($profile['created_at'])) ?></p>
                     </div>
 
                     <div class="space-y-4 mb-8 flex-grow">
                         <div class="bg-indigo-50 rounded-lg p-4 text-center border border-indigo-100 border-dashed">
                             <span class="block text-sm font-medium text-indigo-800">Hourly Rate</span>
-                            <span class="block text-3xl font-bold text-indigo-600">$<?= number_format($profile['hourly_rate'], 2) ?></span>
+                            <span class="block text-3xl font-bold text-indigo-600"><?= number_format($profile['hourly_rate'], 2) ?> DZD</span>
                         </div>
                         
                         <div class="flex items-center text-sm text-gray-600">

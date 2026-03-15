@@ -82,7 +82,7 @@
                 <!-- Budget Range -->
                 <div>
                     <label for="budget" class="block text-sm font-medium text-gray-700">Budget Range <span class="text-gray-400">(optional)</span></label>
-                    <input type="text" name="budget" id="budget" placeholder="e.g. $100 - $300"
+                    <input type="text" name="budget" id="budget" placeholder="e.g. 100 DZD - 300 DZD"
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2 border">
                     <p class="mt-1 text-xs text-gray-400">Providing a budget helps craftsmen give you more accurate quotes.</p>
                 </div>

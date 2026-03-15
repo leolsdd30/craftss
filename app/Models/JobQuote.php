@@ -44,9 +44,10 @@ class JobQuote extends Model
     public function getQuotesByJob($jobId)
     {
         $stmt = $this->db->prepare(
-            "SELECT q.*, u.first_name, u.last_name, u.email, u.username 
+            "SELECT q.*, u.first_name, u.last_name, u.email, u.username, cp.is_verified
              FROM job_quotes q
              JOIN users u ON q.craftsman_id = u.id
+             LEFT JOIN craftsmen_profiles cp ON u.id = cp.user_id
              WHERE q.job_posting_id = :job_id
              ORDER BY q.created_at DESC"
         );
@@ -81,10 +82,12 @@ class JobQuote extends Model
                     q.cover_message, q.status AS quote_status, q.created_at AS quote_created_at,
                     j.title AS job_title, j.service_category,
                     u.first_name AS craftsman_first_name, u.last_name AS craftsman_last_name, 
-                    u.profile_picture AS craftsman_picture, u.username AS craftsman_username, u.username AS craftsman_username
+                    u.profile_picture AS craftsman_picture, u.username AS craftsman_username,
+                    cp.is_verified AS craftsman_is_verified
              FROM job_quotes q
              JOIN job_postings j ON q.job_posting_id = j.id
              JOIN users u ON q.craftsman_id = u.id
+             LEFT JOIN craftsmen_profiles cp ON u.id = cp.user_id
              WHERE j.posted_by_user_id = :homeowner_id
              ORDER BY q.created_at DESC"
         );

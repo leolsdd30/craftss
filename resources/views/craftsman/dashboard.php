@@ -93,7 +93,7 @@
                         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col justify-between">
                             <svg class="h-6 w-6 text-green-600 mb-3 bg-green-50 rounded p-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             <p class="text-xs font-semibold text-gray-500 uppercase">Earnings</p>
-                            <p class="text-2xl font-bold text-gray-900">$<?= number_format($totalEarnings, 2) ?></p>
+                            <p class="text-2xl font-bold text-gray-900"><?= number_format($totalEarnings, 2) ?> DZD</p>
                         </div>
                         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col justify-between">
                             <svg class="h-6 w-6 text-indigo-600 mb-3 bg-indigo-50 rounded p-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
@@ -136,7 +136,7 @@
                                 <div class="flex-1 min-w-0">
                                     <h3 class="text-base font-bold text-gray-900 truncate"><?= htmlspecialchars($quote['title']) ?></h3>
                                     <div class="mt-1.5 flex items-center flex-wrap gap-2">
-                                        <span class="text-sm font-semibold text-green-700">My Bid: $<?= number_format($quote['quoted_price'], 2) ?></span>
+                                        <span class="text-sm font-semibold text-green-700">My Bid: <?= number_format($quote['quoted_price'], 2) ?> DZD</span>
                                         <span class="text-xs text-gray-400">·</span>
                                         <span class="text-xs text-gray-500"><?= date('M d, Y', strtotime($quote['created_at'])) ?></span>
                                     </div>
@@ -179,7 +179,7 @@
                                 <div class="flex-1 min-w-0">
                                     <h3 class="text-base font-bold text-gray-900 truncate"><?= htmlspecialchars($quote['title']) ?></h3>
                                     <div class="mt-1.5 flex items-center gap-2">
-                                        <span class="text-sm font-semibold text-green-700">Agreed: $<?= number_format($quote['quoted_price'], 2) ?></span>
+                                        <span class="text-sm font-semibold text-green-700">Agreed: <?= number_format($quote['quoted_price'], 2) ?> DZD</span>
                                     </div>
                                 </div>
                                 <span class="ml-3 px-2.5 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-green-100 text-green-800">
@@ -227,7 +227,7 @@
                                         </span>
                                         <?php if (!empty($booking['quoted_price'])): ?>
                                         <span class="flex items-center font-semibold text-green-600">
-                                            $<?= number_format($booking['quoted_price'], 2) ?>
+                                            <?= number_format($booking['quoted_price'], 2) ?> DZD
                                         </span>
                                         <?php endif; ?>
                                     </div>
@@ -413,7 +413,7 @@
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Your Price ($)</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Your Price (DZD)</label>
                                 <input type="number" name="counter_price" id="counter-price" step="0.01" min="0" 
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm border px-3 py-2" 
                                     placeholder="0.00" required>

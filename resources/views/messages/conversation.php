@@ -17,8 +17,13 @@
                          alt="<?= htmlspecialchars($otherUser['first_name']) ?>" 
                          class="h-11 w-11 rounded-full object-cover border-2 border-gray-100 shadow-sm">
                     <div>
-                        <h2 class="text-base font-bold text-gray-900">
+                        <h2 class="text-base font-bold text-gray-900 flex items-center gap-1">
                             <?= htmlspecialchars($otherUser['first_name'] . ' ' . $otherUser['last_name']) ?>
+                            <?php if (!empty($otherUser['is_verified'])): ?>
+                            <svg class="h-4 w-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" title="Verified Craftsman">
+                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <?php endif; ?>
                         </h2>
                         <p class="text-xs text-gray-500 font-medium capitalize"><?= htmlspecialchars($otherUser['role']) ?></p>
                     </div>
@@ -130,7 +135,14 @@
                     
                     <div class="<?= $isMe ? '' : 'ml-2.5' ?> max-w-[75%]">
                         <?php if ($showAvatar && !$isMe): ?>
-                        <p class="text-xs font-semibold text-gray-500 mb-1 ml-1"><?= htmlspecialchars($msg['first_name']) ?></p>
+                        <p class="text-xs font-semibold text-gray-500 mb-1 ml-1 flex items-center gap-1">
+                            <?= htmlspecialchars($msg['first_name']) ?>
+                            <?php if (!empty($msg['is_verified'])): ?>
+                            <svg class="h-3 w-3 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" title="Verified Craftsman">
+                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <?php endif; ?>
+                        </p>
                         <?php endif; ?>
                         <div class="<?= $isMe 
                             ? 'bg-indigo-600 text-white rounded-2xl rounded-br-md' 
@@ -317,7 +329,10 @@ setInterval(async function() {
                              alt="" class="h-8 w-8 rounded-full object-cover flex-shrink-0 mt-1 shadow-sm border border-gray-100"
                              onerror="this.src='${fallbackUrl}'">
                         <div class="ml-2.5 max-w-[75%]">
-                            <p class="text-xs font-semibold text-gray-500 mb-1 ml-1">${escapeHtml(msg.first_name)}</p>
+                            <p class="text-xs font-semibold text-gray-500 mb-1 ml-1 flex items-center gap-1">
+                                ${escapeHtml(msg.first_name)}
+                                ${msg.is_verified ? '<svg class="h-3 w-3 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" title="Verified Craftsman"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>' : ''}
+                            </p>
                             <div class="bg-gray-100 text-gray-800 rounded-2xl rounded-bl-md px-4 py-2.5 shadow-sm">
                                 <p class="text-sm leading-relaxed whitespace-pre-wrap">${escapeHtml(msg.message_body)}</p>
                             </div>

@@ -14,7 +14,14 @@
                  src="<?= get_profile_picture_url($craftsman['profile_picture'] ?? 'default.png', $craftsman['first_name'], $craftsman['last_name']) ?>" 
                  alt="<?= htmlspecialchars($craftsman['first_name']) ?>">
             <div>
-                <h2 class="text-lg font-bold text-gray-900"><?= htmlspecialchars($craftsman['first_name'] . ' ' . $craftsman['last_name']) ?></h2>
+                <h2 class="text-lg font-bold text-gray-900 flex items-center gap-1">
+                    <?= htmlspecialchars($craftsman['first_name'] . ' ' . $craftsman['last_name']) ?>
+                    <?php if (!empty($craftsman['is_verified'])): ?>
+                    <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" title="Verified Craftsman">
+                        <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <?php endif; ?>
+                </h2>
                 <?php if (!empty($craftsman['wilaya'])): ?>
                 <p class="text-sm text-gray-500 flex items-center">
                     <svg class="h-3.5 w-3.5 mr-1 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">

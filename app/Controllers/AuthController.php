@@ -49,6 +49,17 @@ class AuthController extends Controller
             $_SESSION['name'] = $user['first_name'];
             $_SESSION['username'] = $user['username'];
 
+            // Fetch is_verified for craftsman
+            if ($user['role'] === 'craftsman') {
+                $db = \App\Database\Database::getInstance()->getConnection();
+                $stmt = $db->prepare("SELECT is_verified FROM craftsmen_profiles WHERE user_id = :uid");
+                $stmt->execute(['uid' => $user['id']]);
+                $result = $stmt->fetchColumn();
+                $_SESSION['is_verified'] = $result ? true : false;
+            } else {
+                $_SESSION['is_verified'] = false;
+            }
+
             // Redirect to role-based dashboard
             if ($user['role'] === 'craftsman') {
                 header("Location: " . APP_URL . "/craftsman/dashboard");
