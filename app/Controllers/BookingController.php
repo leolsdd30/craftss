@@ -178,7 +178,7 @@ class BookingController extends Controller
         // Notify homeowner
         $notif = new Notification();
         $notif->send($booking['homeowner_id'], 'booking_counter', 'Counter-Offer Received', 
-            $_SESSION['first_name'] . ' has sent a counter-offer for your booking. Please review the changes.', 
+            $_SESSION['name'] . ' has sent a counter-offer for your booking. Please review the changes.', 
             APP_URL . '/homeowner/dashboard#bookings');
 
         header("Location: " . APP_URL . "/craftsman/dashboard?success=counter_sent#bookings");
@@ -213,7 +213,7 @@ class BookingController extends Controller
         // Notify craftsman
         $notif = new Notification();
         $notif->send($booking['craftsman_id'], 'counter_accepted', 'Counter-Offer Accepted!', 
-            $_SESSION['first_name'] . ' accepted your counter-offer. The job is now in progress!', 
+            $_SESSION['name'] . ' accepted your counter-offer. The job is now in progress!', 
             APP_URL . '/craftsman/dashboard#bookings');
 
         header("Location: " . APP_URL . "/homeowner/dashboard?success=counter_accepted#bookings");
@@ -248,7 +248,7 @@ class BookingController extends Controller
         // Notify craftsman
         $notif = new Notification();
         $notif->send($booking['craftsman_id'], 'counter_rejected', 'Counter-Offer Declined', 
-            $_SESSION['first_name'] . ' has declined your counter-offer. The booking has been cancelled.', 
+            $_SESSION['name'] . ' has declined your counter-offer. The booking has been cancelled.', 
             APP_URL . '/craftsman/dashboard#bookings');
 
         header("Location: " . APP_URL . "/homeowner/dashboard?success=counter_cancelled#bookings");
@@ -355,7 +355,7 @@ class BookingController extends Controller
         // Notify craftsman
         $notif = new Notification();
         $notif->send($booking['craftsman_id'], 'booking_completed', 'Job Confirmed Complete!', 
-            $_SESSION['first_name'] . ' has confirmed the work is done. Great job!', 
+            $_SESSION['name'] . ' has confirmed the work is done. Great job!', 
             APP_URL . '/craftsman/dashboard#bookings');
 
         header("Location: " . APP_URL . "/homeowner/dashboard?success=job_completed#bookings");

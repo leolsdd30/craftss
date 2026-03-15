@@ -181,8 +181,8 @@ class MessageController extends Controller
             'conversation_status' => $convo['status'],
             'message_data' => [
                 'sender_id' => $userId,
-                'first_name' => $_SESSION['first_name'] ?? '',
-                'last_name' => $_SESSION['last_name'] ?? '',
+                'first_name' => $_SESSION['name'] ?? '',
+                'last_name' => '',
                 'message_body' => htmlspecialchars($messageBody),
                 'created_at' => date('Y-m-d H:i:s')
             ]
