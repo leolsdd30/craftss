@@ -292,6 +292,30 @@ if (!empty($img) && strpos($img, 'http') !== 0) {
         });
     })();
 
+    // ── Desktop: Notifications dropdown ─────────────────────────────────────
+    function toggleNotifDropdown() {
+        const menu   = document.getElementById('notif-dropdown-menu');
+        const btn    = document.getElementById('notif-dropdown-btn');
+        const isOpen = !menu.classList.contains('hidden');
+
+        // Close profile dropdown if open to avoid overlap
+        const profileMenu = document.getElementById('profile-dropdown-menu');
+        if (profileMenu && !profileMenu.classList.contains('hidden')) {
+            toggleProfileDropdown();
+        }
+
+        if (isOpen) {
+            menu.classList.add('hidden');
+            btn.classList.remove('bg-indigo-50', 'text-indigo-600');
+        } else {
+            menu.classList.remove('hidden');
+            btn.classList.add('bg-indigo-50', 'text-indigo-600');
+            menu.style.animation = 'none';
+            menu.offsetHeight;
+            menu.style.animation = 'dropdownIn 0.15s ease-out';
+        }
+    }
+
     // ── Desktop: Profile dropdown ───────────────────────────────────────────
     function toggleProfileDropdown() {
         const menu    = document.getElementById('profile-dropdown-menu');
@@ -313,16 +337,30 @@ if (!empty($img) && strpos($img, 'http') !== 0) {
         }
     }
 
-    // Close profile dropdown on outside click
+    // Close dropdowns on outside click
     document.addEventListener('click', function(e) {
-        const wrapper = document.getElementById('profile-dropdown-wrapper');
-        if (wrapper && !wrapper.contains(e.target)) {
+        // Profile Dropdown
+        const profWrapper = document.getElementById('profile-dropdown-wrapper');
+        if (profWrapper && !profWrapper.contains(e.target)) {
             const menu    = document.getElementById('profile-dropdown-menu');
             const btn     = document.getElementById('profile-dropdown-btn');
             const chevron = document.getElementById('profile-dropdown-chevron');
-            if (menu)    menu.classList.add('hidden');
-            if (btn)     btn.setAttribute('aria-expanded', 'false');
-            if (chevron) chevron.style.transform = 'rotate(0deg)';
+            if (menu && !menu.classList.contains('hidden')) {
+                menu.classList.add('hidden');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Notification Dropdown
+        const notifWrapper = document.getElementById('notif-dropdown-wrapper');
+        if (notifWrapper && !notifWrapper.contains(e.target)) {
+            const notifMenu = document.getElementById('notif-dropdown-menu');
+            const notifBtn  = document.getElementById('notif-dropdown-btn');
+            if (notifMenu && !notifMenu.classList.contains('hidden')) {
+                notifMenu.classList.add('hidden');
+                notifBtn.classList.remove('bg-indigo-50', 'text-indigo-600');
+            }
         }
     });
 
@@ -408,6 +446,142 @@ if (!empty($img) && strpos($img, 'http') !== 0) {
             }
         }, { passive: true });
     })();
+
+    // ── Real-Time Polling Engine ────────────────────────────────────────────
+    <?php if (isset($_SESSION['user_id'])): ?>
+    (function() {
+        const fetchPollData = async () => {
+            try {
+                const response = await fetch('<?= APP_URL ?>/api/poll');
+                if (!response.ok) return;
+                const data = await response.json();
+                if (data.error) return;
+
+                // 1. Update Global Nav Badges
+                const msgBadge = document.getElementById('nav-unread-badge');
+                if (msgBadge) {
+                    if (data.unread_messages > 0) {
+                        msgBadge.textContent = data.unread_messages > 99 ? '99+' : data.unread_messages;
+                        msgBadge.classList.remove('hidden');
+                    } else {
+                        msgBadge.classList.add('hidden');
+                    }
+                }
+
+                const notifBadge = document.getElementById('nav-notif-badge');
+                if (notifBadge) {
+                    if (data.unread_notifications > 0) {
+                        notifBadge.textContent = data.unread_notifications > 99 ? '99+' : data.unread_notifications;
+                        notifBadge.classList.remove('hidden');
+                    } else {
+                        notifBadge.classList.add('hidden');
+                    }
+                }
+
+                // 2. Update Dashboard Tab Badges (if on dashboard)
+                if (data.dashboard) {
+                    // Homeowner mapping
+                    const hwMappings = {
+                        'tab-badge-pending-quotes': data.dashboard.pending_quotes,
+                        'tab-badge-open-jobs': data.dashboard.open_jobs,
+                        'tab-badge-active-bookings': data.dashboard.active_bookings,
+                        'tab-badge-saved': data.dashboard.saved
+                    };
+                    
+                    // Craftsman mapping
+                    const crMappings = {
+                        'tab-badge-pending-bids': data.dashboard.pending_bids,
+                        'tab-badge-active-jobs': data.dashboard.active_jobs,
+                        'tab-badge-pending-bookings': data.dashboard.pending_bookings,
+                        'tab-badge-sent-bookings': data.dashboard.sent_bookings,
+                        'tab-badge-saved': data.dashboard.saved
+                    };
+
+                    const mappings = data.role === 'homeowner' ? hwMappings : crMappings;
+                    
+                    for (const [id, value] of Object.entries(mappings)) {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            el.textContent = value;
+                            if (value > 0) {
+                                el.style.display = 'inline-flex';
+                            } else {
+                                el.style.display = 'none';
+                            }
+                        }
+                    }
+                }
+
+                // 3. Dropdown Population
+                const dropdownList = document.getElementById('notif-dropdown-list');
+                if (dropdownList && data.recent_notifications) {
+                    dropdownList.innerHTML = '';
+                    if (data.recent_notifications.length === 0) {
+                        dropdownList.innerHTML = '<div class="p-6 text-center text-sm text-gray-500">No new notifications</div>';
+                    } else {
+                        data.recent_notifications.forEach(notif => {
+                            let iconSvg = '';
+                            let bgColor = 'bg-gray-100';
+                            let iconColor = 'text-gray-500';
+                            
+                            switch(notif.type) {
+                                case 'quote_new': 
+                                    iconSvg = '<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'; 
+                                    bgColor = 'bg-yellow-100'; iconColor = 'text-yellow-600'; break;
+                                case 'quote_accepted':
+                                case 'booking_accepted':
+                                case 'counter_accepted':
+                                case 'booking_completed':
+                                    iconSvg = '<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'; 
+                                    bgColor = 'bg-green-100'; iconColor = 'text-green-600'; break;
+                                case 'booking_new': 
+                                    iconSvg = '<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>'; 
+                                    bgColor = 'bg-indigo-100'; iconColor = 'text-indigo-600'; break;
+                                case 'booking_counter':
+                                case 'booking_pending':
+                                    iconSvg = '<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'; 
+                                    bgColor = 'bg-orange-100'; iconColor = 'text-orange-600'; break;
+                                case 'quote_rejected':
+                                case 'booking_declined':
+                                case 'counter_rejected':
+                                    iconSvg = '<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>'; 
+                                    bgColor = 'bg-red-100'; iconColor = 'text-red-600'; break;
+                                case 'review_new':
+                                    iconSvg = '<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>';
+                                    bgColor = 'bg-yellow-100'; iconColor = 'text-yellow-600'; break;
+                                default:
+                                    iconSvg = '<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+                                    bgColor = 'bg-gray-100'; iconColor = 'text-gray-500'; break;
+                            }
+
+                            const isUnread = notif.is_read == 0;
+                            const unreadDot = isUnread ? `<span class="h-2 w-2 bg-indigo-600 rounded-full flex-shrink-0 mt-1.5"></span>` : ``;
+
+                            const safeLink = notif.link ? notif.link : '/notifications';
+                            dropdownList.innerHTML += `
+                                <a href="<?= APP_URL ?>/notifications/read?id=${notif.id}&redirect=${encodeURIComponent(safeLink)}" class="flex items-start gap-3 p-3 hover:bg-gray-50/80 transition-colors border-b border-gray-50/50 last:border-0 ${isUnread ? 'bg-indigo-50/30' : ''}">
+                                    <div class="h-8 w-8 rounded-full ${bgColor} flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <div class="${iconColor}">${iconSvg}</div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm text-gray-800 ${isUnread ? 'font-semibold' : 'font-medium'} leading-snug break-words">${notif.message.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
+                                        <span class="text-[10px] text-gray-500 font-medium uppercase tracking-wider block mt-1">${notif.time_ago}</span>
+                                    </div>
+                                    ${unreadDot}
+                                </a>
+                            `;
+                        });
+                    }
+                }
+
+            } catch(e) { console.error('Polling failed:', e); }
+        };
+
+        // Poll immediately, then every 15 seconds
+        fetchPollData();
+        setInterval(fetchPollData, 15000);
+    })();
+    <?php endif; ?>
     </script>
 </body>
 </html>

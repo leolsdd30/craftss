@@ -642,25 +642,19 @@ footer { display: none !important; }
             <button onclick="switchTab('quotes')" data-tab="quotes" class="dash-nav-item">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
                 My Quotes
-                <?php if ($pendingBids > 0): ?>
-                <span class="dash-nav-badge amber"><?= $pendingBids ?></span>
-                <?php endif; ?>
+                <span id="tab-badge-pending-bids" class="dash-nav-badge amber" style="<?= $pendingBids > 0 ? '' : 'display:none;' ?>"><?= $pendingBids ?></span>
             </button>
 
             <button onclick="switchTab('active')" data-tab="active" class="dash-nav-item">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 Active Jobs
-                <?php if ($activeBookings > 0): ?>
-                <span class="dash-nav-badge"><?= $activeBookings ?></span>
-                <?php endif; ?>
+                <span id="tab-badge-active-jobs" class="dash-nav-badge" style="<?= $activeBookings > 0 ? '' : 'display:none;' ?>"><?= $activeBookings ?></span>
             </button>
 
             <button onclick="switchTab('bookings')" data-tab="bookings" class="dash-nav-item">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 Bookings
-                <?php if ($pendingBookings > 0): ?>
-                <span class="dash-nav-badge red"><?= $pendingBookings ?></span>
-                <?php endif; ?>
+                <span id="tab-badge-pending-bookings" class="dash-nav-badge red" style="<?= $pendingBookings > 0 ? '' : 'display:none;' ?>"><?= $pendingBookings ?></span>
             </button>
 
             <button onclick="switchTab('reviews')" data-tab="reviews" class="dash-nav-item">
@@ -671,17 +665,15 @@ footer { display: none !important; }
             <button onclick="switchTab('sent-bookings')" data-tab="sent-bookings" class="dash-nav-item">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
                 Sent Bookings
-                <?php if (!empty($sentBookings)): ?>
-                <span class="dash-nav-badge"><?= count($sentBookings) ?></span>
-                <?php endif; ?>
+                <?php $sentBookingsCount = count($sentBookings??[]); ?>
+                <span id="tab-badge-sent-bookings" class="dash-nav-badge" style="<?= $sentBookingsCount > 0 ? '' : 'display:none;' ?>"><?= $sentBookingsCount ?></span>
             </button>
 
             <button onclick="switchTab('saved')" data-tab="saved" class="dash-nav-item">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                 Saved
-                <?php if (!empty($favorites)): ?>
-                <span class="dash-nav-badge pink"><?= count($favorites) ?></span>
-                <?php endif; ?>
+                <?php $favsCount = count($favorites??[]); ?>
+                <span id="tab-badge-saved" class="dash-nav-badge pink" style="<?= $favsCount > 0 ? '' : 'display:none;' ?>"><?= $favsCount ?></span>
             </button>
 
         </nav>
@@ -888,13 +880,46 @@ footer { display: none !important; }
             <?php $acceptedQuotes = array_filter($quotes??[], fn($q)=>$q['status']==='accepted'); ?>
             <?php if (!empty($acceptedQuotes)): ?>
             <?php foreach ($acceptedQuotes as $q): ?>
-            <a href="<?= APP_URL ?>/jobs/<?= $q['job_posting_id'] ?>" class="quote-card">
-                <div class="quote-card-top">
-                    <div><div class="quote-title"><?= htmlspecialchars($q['title']) ?></div>
-                    <div class="quote-meta"><span class="quote-price">Agreed: <?= number_format($q['quoted_price'],2) ?> DZD</span></div></div>
-                    <span class="sbadge blue">In Progress</span>
+            <?php 
+                $assocBk = null;
+                foreach ($bookings??[] as $bk) {
+                    if ($bk['job_posting_id'] == $q['job_posting_id']) {
+                        $assocBk = $bk;
+                        break;
+                    }
+                }
+            ?>
+            <div class="quote-card">
+                <div class="quote-card-top pb-3 <?= $assocBk && in_array($assocBk['status'], ['in_progress', 'pending_completion']) ? 'border-b border-gray-100/60' : '' ?>" style="cursor:pointer;" onclick="window.location.href='<?= APP_URL ?>/jobs/<?= $q['job_posting_id'] ?>'">
+                    <div>
+                        <div class="quote-title text-indigo-700 hover:text-indigo-900 transition-colors"><?= htmlspecialchars($q['title']) ?></div>
+                        <div class="quote-meta"><span class="quote-price">Agreed: <?= number_format($q['quoted_price'],2) ?> DZD</span></div>
+                    </div>
+                    <span class="sbadge <?= $assocBk && $assocBk['status']==='pending_completion' ? 'purple' : 'blue' ?>">
+                        <?= $assocBk && $assocBk['status']==='pending_completion' ? 'Completion Pending' : 'In Progress' ?>
+                    </span>
                 </div>
-            </a>
+                
+                <?php if ($assocBk): ?>
+                    <?php if ($assocBk['status'] === 'in_progress'): ?>
+                    <div class="booking-card-actions pt-3">
+                        <form id="active-complete-<?= $assocBk['id'] ?>" action="<?= APP_URL ?>/bookings/complete" method="POST">
+                            <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']??'') ?>">
+                            <input type="hidden" name="booking_id" value="<?= $assocBk['id'] ?>">
+                            <button type="button" onclick="showConfirmModal('active-complete-<?= $assocBk['id'] ?>','Mark as Complete?','The homeowner will confirm the work is done.','accept')" class="btn btn-blue">
+                                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Mark Complete
+                            </button>
+                        </form>
+                        <a href="<?= APP_URL ?>/profile/<?= $assocBk['username'] ?>" class="btn btn-indigo">Message Homeowner</a>
+                    </div>
+                    <?php elseif ($assocBk['status'] === 'pending_completion'): ?>
+                    <div class="booking-footer-banner purple mt-3">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Waiting for homeowner to confirm completion
+                    </div>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </div>
             <?php endforeach; ?>
             <?php else: ?>
             <div class="empty-state">

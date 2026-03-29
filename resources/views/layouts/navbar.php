@@ -183,24 +183,47 @@
                             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                             </svg>
-                            <?php if ($headerTotalBadge > 0): ?>
-                            <span id="nav-unread-badge" class="absolute -top-0.5 -right-0.5 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500 text-white min-w-[18px] leading-none ring-2 ring-white">
+                            <span id="nav-unread-badge" class="<?= $headerTotalBadge > 0 ? '' : 'hidden ' ?>absolute -top-0.5 -right-0.5 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500 text-white min-w-[18px] leading-none ring-2 ring-white">
                                 <?= $headerTotalBadge > 99 ? '99+' : $headerTotalBadge ?>
                             </span>
-                            <?php endif; ?>
                         </a>
 
-                        <!-- Notifications bell -->
-                        <a href="<?= APP_URL ?>/notifications" class="<?= $baseIconClass . ' ' . ($isNotifs ? $activeIconClass : $inactiveIconClass) ?>" title="Notifications">
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                            </svg>
-                            <?php if ($headerNotifCount > 0): ?>
-                            <span id="nav-notif-badge" class="absolute -top-0.5 -right-0.5 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500 text-white min-w-[18px] leading-none ring-2 ring-white">
-                                <?= $headerNotifCount > 99 ? '99+' : $headerNotifCount ?>
-                            </span>
-                            <?php endif; ?>
-                        </a>
+                        <!-- Notifications Dropdown -->
+                        <div class="relative" id="notif-dropdown-wrapper">
+                            <button id="notif-dropdown-btn" onclick="toggleNotifDropdown()" class="<?= $baseIconClass . ' ' . ($isNotifs ? $activeIconClass : $inactiveIconClass) ?>" title="Notifications">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                                </svg>
+                                <span id="nav-notif-badge" class="<?= $headerNotifCount > 0 ? '' : 'hidden ' ?>absolute -top-0.5 -right-0.5 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500 text-white min-w-[18px] leading-none ring-2 ring-white">
+                                    <?= $headerNotifCount > 99 ? '99+' : $headerNotifCount ?>
+                                </span>
+                            </button>
+                            
+                            <!-- Dropdown panel -->
+                            <div id="notif-dropdown-menu" class="hidden fixed left-2 right-2 top-[68px] sm:absolute sm:left-auto sm:top-auto sm:right-0 sm:mt-2 sm:w-96 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-100/50 py-1 z-[100] origin-top sm:origin-top-right overflow-hidden" style="animation: dropdownIn 0.15s ease-out;">
+                                <div class="px-4 py-3 border-b border-gray-100/50 flex justify-between items-center bg-gray-50/30">
+                                    <h3 class="font-bold text-gray-900">Notifications</h3>
+                                    <?php if ($headerNotifCount > 0): ?>
+                                    <form method="POST" action="<?= APP_URL ?>/notifications/mark-all-read" class="m-0 p-0 inline">
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                        <button type="submit" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors whitespace-nowrap">Mark all read</button>
+                                    </form>
+                                    <?php endif; ?>
+                                </div>
+                                
+                                <div id="notif-dropdown-list" class="max-h-[350px] overflow-y-auto w-full">
+                                    <!-- Populated by JS -->
+                                    <div class="p-8 flex flex-col items-center justify-center text-gray-400">
+                                        <svg class="h-8 w-8 mb-2 animate-spin text-indigo-200" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                        <span class="text-sm">Fetching...</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="border-t border-gray-100/50 p-1.5 bg-gray-50/50 backdrop-blur-md">
+                                    <a href="<?= APP_URL ?>/notifications" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition-colors uppercase tracking-wider block w-full py-2 text-center rounded-xl hover:bg-white">View All Activity</a>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Profile dropdown -->
                         <div class="relative" id="profile-dropdown-wrapper">

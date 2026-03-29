@@ -61,6 +61,7 @@ footer { display: none !important; }
 .dash-nav-badge.red    { background: #ef4444; }
 .dash-nav-badge.amber  { background: #f59e0b; }
 .dash-nav-badge.pink   { background: #ec4899; }
+.dash-nav-badge.blue   { background: #3b82f6; }
 
 .dash-sidebar-bottom {
     padding-top: 1rem; border-top: 1px solid #f3f0ff;
@@ -542,27 +543,28 @@ footer { display: none !important; }
             <button onclick="switchTab('jobs')" data-tab="jobs" class="dash-nav-item">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                 My Jobs
+                <?php $openJobsCount = count(array_filter($jobs??[], fn($j)=>$j['status']==='open')); ?>
+                <span id="tab-badge-open-jobs" class="dash-nav-badge indigo" style="<?= $openJobsCount > 0 ? '' : 'display:none;' ?>"><?= $openJobsCount ?></span>
             </button>
 
             <button onclick="switchTab('quotes')" data-tab="quotes" class="dash-nav-item">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
                 Incoming Quotes
-                <?php if ($pendingQuotesCount > 0): ?>
-                <span class="dash-nav-badge red"><?= $pendingQuotesCount ?></span>
-                <?php endif; ?>
+                <span id="tab-badge-pending-quotes" class="dash-nav-badge red" style="<?= $pendingQuotesCount > 0 ? '' : 'display:none;' ?>"><?= $pendingQuotesCount ?></span>
             </button>
 
             <button onclick="switchTab('bookings')" data-tab="bookings" class="dash-nav-item">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 Bookings
+                <?php $activeBookingsCount = count(array_filter($bookings??[], fn($b)=>in_array($b['status'], ['requested', 'in_progress', 'counter_offered']))); ?>
+                <span id="tab-badge-active-bookings" class="dash-nav-badge blue" style="<?= $activeBookingsCount > 0 ? '' : 'display:none;' ?>"><?= $activeBookingsCount ?></span>
             </button>
 
             <button onclick="switchTab('favorites')" data-tab="favorites" class="dash-nav-item">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                 Saved Craftsmen
-                <?php if (!empty($favorites)): ?>
-                <span class="dash-nav-badge pink"><?= count($favorites) ?></span>
-                <?php endif; ?>
+                <?php $favsCount = count($favorites??[]); ?>
+                <span id="tab-badge-saved" class="dash-nav-badge pink" style="<?= $favsCount > 0 ? '' : 'display:none;' ?>"><?= $favsCount ?></span>
             </button>
 
         </nav>

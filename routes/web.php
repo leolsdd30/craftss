@@ -15,6 +15,7 @@ use App\Controllers\NotificationController;
 use App\Controllers\AdminController;
 use App\Controllers\MessageController;
 use App\Controllers\PasswordResetController;
+use App\Controllers\ApiController;
 
 /**
  * Register all web routes here.
@@ -29,6 +30,9 @@ $router->get('/', [HomeController::class , 'index']);
 $router->get('/about', [HomeController::class , 'about']);
 $router->get('/contact', [HomeController::class , 'contact']);
 $router->get('/privacy', [HomeController::class , 'privacy']);
+
+// API Routes
+$router->get('/api/poll', [ApiController::class , 'poll']);
 
 // Public Search & Profile Routes
 $router->get('/search', [SearchController::class , 'index']);

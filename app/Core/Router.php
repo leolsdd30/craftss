@@ -44,6 +44,9 @@ class Router
      */
     public function dispatch($uri, $method)
     {
+        // Ensure the URI always has a leading slash for robust regex matching
+        $uri = '/' . ltrim($uri, '/');
+
         foreach ($this->routes as $route) {
             
             // 1. Convert our custom URL parameters like {id} or {username} into real Regex patterns
@@ -94,7 +97,9 @@ class Router
     protected function abort($code = 404)
     {
         if ($code === 404) {
-            throw new \App\Exceptions\NotFoundException("Route not found executing Router");
+            $uri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?? '';
+            $method = $_SERVER['REQUEST_METHOD'] ?? 'UNKNOWN';
+            throw new \App\Exceptions\NotFoundException("Route not found executing Router for [$method] $uri");
         }
         throw new \Exception("Aborted with code {$code}", $code);
     }
