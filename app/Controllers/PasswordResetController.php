@@ -53,33 +53,41 @@ class PasswordResetController extends Controller
         $mockResetUrl = null;
 
         if ($user) {
-            $resetModel = new PasswordReset();
+            $resetModel = new \App\Models\PasswordReset();
             $rawToken   = $resetModel->createToken($email);
 
-            $resetUrl   = APP_URL . '/reset-password?token=' . $rawToken;
-            $subject    = 'Reset your Crafts password';
+            $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+            $host = $_SERVER['HTTP_HOST'];
+            $resetUrl = $protocol . '://' . $host . APP_URL . '/reset-password?token=' . $rawToken;
+            
+            $subject    = 'Password Reset Request - CraftConnect';
             $body       = '
-                <p>Hi ' . htmlspecialchars($user['first_name']) . ',</p>
-                <p>We received a request to reset your password. Click the link below (valid for 1 hour):</p>
-                <p><a href="' . $resetUrl . '">' . $resetUrl . '</a></p>
-                <p>If you did not request this, you can safely ignore this email.</p>
-                <p>— The Crafts Team</p>
+            <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+                <h2 style="color: #4f46e5;">Hello ' . htmlspecialchars($user['first_name']) . ',</h2>
+                <p>We received a secure request to reset the password associated with your account on the Crafts Platform.</p>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="' . $resetUrl . '" style="display: inline-block; padding: 12px 24px; background-color: #4f46e5; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: bold;">Reset Your Password</a>
+                </div>
+
+                <p>This secure link will safely expire in 1 hour.</p>
+                
+                <p style="margin-top: 40px; font-size: 0.85em; color: #9ca3af;">
+                    If you did not initiate this request, no action is required and your account remains secure.
+                    <br><br>
+                    Regards,<br>
+                    <strong>The Crafts Platform Team</strong>
+                </p>
+            </div>
             ';
 
             Mailer::send($email, $subject, $body);
-
-            // MOCK: expose the link on screen so the flow can be tested
-            // without a real mailer. Remove $mockResetUrl once Resend is wired up.
-            if (($_ENV['APP_ENV'] ?? 'production') !== 'production') {
-                $mockResetUrl = $resetUrl;
-            }
         }
 
         $this->view('layouts/app', [
             'pageTitle'    => 'Forgot Password - Crafts',
             'contentView'  => 'auth/forgot-password',
-            'submitted'    => true,
-            'mockResetUrl' => $mockResetUrl ?? null,
+            'submitted'    => true
         ]);
     }
 

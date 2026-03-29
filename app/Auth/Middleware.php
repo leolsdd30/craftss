@@ -27,6 +27,9 @@ class Middleware
             header("Location: " . APP_URL . "/login?error=" . $msg);
             exit;
         }
+
+        // Keep session synced with DB for instant verification status updates (e.g. phpMyAdmin edits)
+        $_SESSION['email_verified_at'] = $user['email_verified_at'] ?? null;
     }
 
     /**
@@ -40,6 +43,20 @@ class Middleware
         if ($_SESSION['role'] !== $role) {
             http_response_code(403);
             require_once __DIR__ . '/../../resources/views/errors/403.php';
+            exit;
+        }
+    }
+
+    /**
+     * Ensures the user has verified their email address.
+     * Prevents unverified users from performing critical actions (posting, booking).
+     */
+    public static function requireEmailVerification()
+    {
+        self::requireLogin();
+
+        if (empty($_SESSION['email_verified_at'])) {
+            header("Location: " . APP_URL . "/verify-notice");
             exit;
         }
     }

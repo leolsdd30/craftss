@@ -32,6 +32,23 @@ if ($isCraftsman) {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- ============================================================ -->
+        <!-- NOTIFICATIONS / ALERTS -->
+        <!-- ============================================================ -->
+        <?php if (isset($_GET['success']) && $_GET['success'] === 'email_verified'): ?>
+        <div class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-800 px-6 py-4 rounded-2xl shadow-sm flex items-start gap-4 animate-fade-in-down">
+            <div class="flex-shrink-0 bg-emerald-100 p-2 rounded-full mt-0.5">
+                <svg class="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-lg font-extrabold text-emerald-900 mb-1">Email Successfully Verified! 🎉</h3>
+                <p class="text-emerald-700 font-medium">Your email address has been securely confirmed. Your account is now fully active, and you have complete access to post jobs, browse profiles, and manage bookings!</p>
+            </div>
+        </div>
+        <?php endif; ?>
+
+        <!-- ============================================================ -->
         <!-- PREMIUM HORIZONTAL HEADER -->
         <!-- ============================================================ -->
         <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden mb-8 relative">

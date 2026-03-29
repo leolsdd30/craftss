@@ -16,6 +16,7 @@ use App\Controllers\AdminController;
 use App\Controllers\MessageController;
 use App\Controllers\PasswordResetController;
 use App\Controllers\ApiController;
+use App\Controllers\EmailVerificationController;
 
 /**
  * Register all web routes here.
@@ -59,6 +60,11 @@ $router->get('/forgot-password', [PasswordResetController::class , 'showForgotFo
 $router->post('/forgot-password', [PasswordResetController::class , 'sendResetLink']);
 $router->get('/reset-password', [PasswordResetController::class , 'showResetForm']);
 $router->post('/reset-password', [PasswordResetController::class , 'processReset']);
+
+// Email Verification Routes
+$router->get('/verify-email', [EmailVerificationController::class , 'verify']);
+$router->get('/verify-notice', [EmailVerificationController::class , 'notice']);
+$router->post('/verify-resend', [EmailVerificationController::class , 'resend']);
 
 // Role-based Dashboards
 $router->get('/homeowner/dashboard', [HomeownerController::class , 'dashboard']);

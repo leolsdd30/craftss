@@ -52,6 +52,7 @@ class JobBoardController extends Controller
     public function create()
     {
         Middleware::requireLogin();
+        Middleware::requireEmailVerification();
 
         if (isset($_SESSION['role']) && $_SESSION['role'] !== 'homeowner') {
             header("Location: " . APP_URL . "/jobs");
@@ -70,6 +71,7 @@ class JobBoardController extends Controller
     public function store()
     {
         Middleware::requireLogin();
+        Middleware::requireEmailVerification();
         Middleware::verifyCsrfToken();
 
         if (isset($_SESSION['role']) && $_SESSION['role'] !== 'homeowner') {
@@ -364,6 +366,7 @@ class JobBoardController extends Controller
     public function submitQuote()
     {
         Middleware::requireRole('craftsman');
+        Middleware::requireEmailVerification();
         Middleware::verifyCsrfToken();
 
         $validator = new \App\Services\Validator();
@@ -431,6 +434,7 @@ class JobBoardController extends Controller
     public function acceptQuote()
     {
         Middleware::requireLogin();
+        Middleware::requireEmailVerification();
         Middleware::verifyCsrfToken();
 
         $quoteId = $_POST['quote_id'] ?? null;
@@ -480,6 +484,7 @@ class JobBoardController extends Controller
     public function rejectQuote()
     {
         Middleware::requireLogin();
+        Middleware::requireEmailVerification();
         Middleware::verifyCsrfToken();
 
         $quoteId = $_POST['quote_id'] ?? null;
@@ -523,6 +528,7 @@ class JobBoardController extends Controller
     public function deleteJob()
     {
         Middleware::requireLogin();
+        Middleware::requireEmailVerification();
         Middleware::verifyCsrfToken();
 
         $jobId = $_POST['job_id'] ?? null;

@@ -392,6 +392,7 @@ class ProfileController extends Controller
     public function publish()
     {
         Middleware::requireLogin();
+        Middleware::requireEmailVerification();
         Middleware::verifyCsrfToken();
         $id = $_SESSION['user_id'];
         $role = $_SESSION['role'] ?? '';

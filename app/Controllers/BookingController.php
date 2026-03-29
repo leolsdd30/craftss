@@ -17,6 +17,7 @@ class BookingController extends Controller
     public function create($username = null)
     {
         Middleware::requireLogin();
+        Middleware::requireEmailVerification();
  
         // Admins cannot create bookings
         if (($_SESSION['role'] ?? '') === 'admin') {
@@ -57,6 +58,7 @@ class BookingController extends Controller
     public function store()
     {
         Middleware::requireLogin();
+        Middleware::requireEmailVerification();
         Middleware::verifyCsrfToken();
  
         // Admins cannot submit bookings
@@ -135,6 +137,7 @@ class BookingController extends Controller
     public function accept()
     {
         Middleware::requireLogin();
+        Middleware::requireEmailVerification();
         Middleware::verifyCsrfToken();
 
         $bookingId = (int)($_POST['booking_id'] ?? 0);
@@ -174,6 +177,7 @@ class BookingController extends Controller
     public function counterOffer()
     {
         Middleware::requireLogin();
+        Middleware::requireEmailVerification();
         Middleware::verifyCsrfToken();
 
         $bookingId = (int)($_POST['booking_id'] ?? 0);
@@ -227,6 +231,7 @@ class BookingController extends Controller
     public function acceptCounter()
     {
         Middleware::requireLogin();
+        Middleware::requireEmailVerification();
         Middleware::verifyCsrfToken();
 
         $bookingId = $_POST['booking_id'] ?? null;
@@ -262,6 +267,7 @@ class BookingController extends Controller
     public function cancelCounter()
     {
         Middleware::requireLogin();
+        Middleware::requireEmailVerification();
         Middleware::verifyCsrfToken();
 
         $bookingId = $_POST['booking_id'] ?? null;
@@ -297,6 +303,7 @@ class BookingController extends Controller
     public function decline()
     {
         Middleware::requireLogin();
+        Middleware::requireEmailVerification();
         Middleware::verifyCsrfToken();
 
         $bookingId = $_POST['booking_id'] ?? null;
@@ -332,6 +339,7 @@ class BookingController extends Controller
     public function complete()
     {
         Middleware::requireLogin();
+        Middleware::requireEmailVerification();
         Middleware::verifyCsrfToken();
 
         $bookingId = $_POST['booking_id'] ?? null;
@@ -369,6 +377,7 @@ class BookingController extends Controller
     public function confirmCompletion()
     {
         Middleware::requireLogin();
+        Middleware::requireEmailVerification();
         Middleware::verifyCsrfToken();
 
         $bookingId = $_POST['booking_id'] ?? null;

@@ -42,6 +42,9 @@ class ApiController extends Controller
         foreach ($recentNotifs as &$n) {
             $n['time_ago'] = $this->timeAgo($n['created_at'] ?? '');
             $n['link'] = $n['link'] ?? '/notifications';
+            if (isset($n['message'])) {
+                $n['message'] = htmlspecialchars((string)$n['message'], ENT_QUOTES, 'UTF-8');
+            }
         }
         unset($n);
 
