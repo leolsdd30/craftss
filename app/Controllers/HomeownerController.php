@@ -47,11 +47,15 @@ class HomeownerController extends Controller
         $bookingModel = new Booking();
         $myBookings = $bookingModel->getBookingsForHomeowner($_SESSION['user_id']);
         
-        // Attach review check
-        $reviewModel = new \App\Models\Review();
+        // Attach review check (Optimized to remove N+1 Query Problem)
+        $db = \App\Database\Database::getInstance()->getConnection();
+        $stmt = $db->prepare("SELECT booking_id FROM reviews WHERE homeowner_id = :uid");
+        $stmt->execute(['uid' => $_SESSION['user_id']]);
+        $reviewedBookingIds = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+
         foreach ($myBookings as &$b) {
             if ($b['status'] === 'completed') {
-                $b['has_reviewed'] = $reviewModel->hasReviewed($_SESSION['user_id'], $b['craftsman_id'], $b['id']);
+                $b['has_reviewed'] = in_array($b['id'], $reviewedBookingIds);
             } else {
                 $b['has_reviewed'] = false;
             }

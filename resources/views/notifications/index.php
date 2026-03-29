@@ -293,7 +293,8 @@ async function markAllRead() {
         const res  = await fetch(appUrl + '/notifications/mark-all-read', {
             method: 'POST',
             credentials: 'same-origin',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+            body: JSON.stringify({ csrf_token: csrf })
         });
         const data = await res.json();
         if (data.success) window.location.reload();

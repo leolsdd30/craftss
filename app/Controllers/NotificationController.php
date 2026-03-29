@@ -33,14 +33,22 @@ class NotificationController extends Controller
     public function markAllRead()
     {
         Middleware::requireLogin();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $input = json_decode(file_get_contents('php://input'), true) ?? [];
+            $token = $input['csrf_token'] ?? ($_POST['csrf_token'] ?? '');
+            if (empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $token)) {
+                $this->json(['success' => false, 'message' => 'Invalid CSRF token.'], 403);
+                return;
+            }
+        }
+
         $userId = $_SESSION['user_id'];
 
         $notifModel = new Notification();
         $notifModel->markAllAsRead($userId);
 
-        header('Content-Type: application/json');
-        echo json_encode(['success' => true]);
-        exit;
+        $this->json(['success' => true]);
     }
 
     /**
@@ -49,8 +57,19 @@ class NotificationController extends Controller
     public function markRead()
     {
         Middleware::requireLogin();
+
+        $input = [];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $input = json_decode(file_get_contents('php://input'), true) ?? [];
+            $token = $input['csrf_token'] ?? ($_POST['csrf_token'] ?? '');
+            if (empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $token)) {
+                $this->json(['success' => false, 'message' => 'Invalid CSRF token.'], 403);
+                return;
+            }
+        }
+
         $userId = $_SESSION['user_id'];
-        $notifId = $_POST['notification_id'] ?? $_GET['id'] ?? null;
+        $notifId = (int)($_POST['notification_id'] ?? ($input['notification_id'] ?? ($_GET['id'] ?? 0)));
 
         if ($notifId) {
             $notifModel = new Notification();
@@ -59,9 +78,8 @@ class NotificationController extends Controller
             // If AJAX request
             if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
                 strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
-                header('Content-Type: application/json');
-                echo json_encode(['success' => true]);
-                exit;
+                $this->json(['success' => true]);
+                return;
             }
 
             // If there's a redirect link — validate to prevent open redirect
@@ -79,6 +97,11 @@ class NotificationController extends Controller
                     $hash = $_GET['hash'] ?? '';
                     if (!empty($hash) && preg_match('/^[a-zA-Z0-9_-]+$/', $hash)) {
                         $link .= '#' . $hash;
+                    }
+                    if ($isValidRelative) {
+                        if (empty(APP_URL) || strpos($link, APP_URL) !== 0) {
+                            $link = APP_URL . $link;
+                        }
                     }
                     header('Location: ' . $link);
                     exit;

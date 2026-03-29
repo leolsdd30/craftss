@@ -46,11 +46,11 @@ class AdminController extends Controller
 
         $db = \App\Database\Database::getInstance()->getConnection();
 
-        $search       = trim($_GET['search'] ?? '');
-        $roleFilter   = $_GET['role']   ?? '';
-        $statusFilter = $_GET['status'] ?? '';
-        $wilayaFilter = $_GET['wilaya'] ?? '';
-        $sortFilter   = $_GET['sort']   ?? 'date_desc';
+        $search       = trim((string)($_GET['search'] ?? ''));
+        $roleFilter   = (string)($_GET['role']   ?? '');
+        $statusFilter = (string)($_GET['status'] ?? '');
+        $wilayaFilter = (string)($_GET['wilaya'] ?? '');
+        $sortFilter   = (string)($_GET['sort']   ?? 'date_desc');
 
         $page    = max(1, (int) ($_GET['page'] ?? 1));
         $perPage = 15;
@@ -134,7 +134,7 @@ class AdminController extends Controller
         Middleware::requireAdmin();
         Middleware::verifyCsrfToken();
 
-        $userId = $_POST['user_id'] ?? null;
+        $userId = (int)($_POST['user_id'] ?? 0);
         if (!$userId || $userId == $_SESSION['user_id']) {
             header("Location: " . APP_URL . "/admin/users");
             exit;
@@ -166,11 +166,11 @@ class AdminController extends Controller
 
         $db = \App\Database\Database::getInstance()->getConnection();
 
-        $filter         = $_GET['filter']   ?? 'pending';
-        $search         = trim($_GET['search'] ?? '');
-        $wilayaFilter   = $_GET['wilaya']   ?? '';
-        $categoryFilter = $_GET['category'] ?? '';
-        $sortFilter     = $_GET['sort']     ?? 'date_desc';
+        $filter         = (string)($_GET['filter']   ?? 'pending');
+        $search         = trim((string)($_GET['search'] ?? ''));
+        $wilayaFilter   = (string)($_GET['wilaya']   ?? '');
+        $categoryFilter = (string)($_GET['category'] ?? '');
+        $sortFilter     = (string)($_GET['sort']     ?? 'date_desc');
 
         $page    = max(1, (int) ($_GET['page'] ?? 1));
         $perPage = 12;

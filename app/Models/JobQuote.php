@@ -140,6 +140,16 @@ class JobQuote extends Model
         $this->db->beginTransaction();
 
         try {
+            // Lock the job posting row to prevent race conditions (double accept)
+            $stmt = $this->db->prepare("SELECT id, status FROM job_postings WHERE id = :job_id FOR UPDATE");
+            $stmt->execute(['job_id' => $jobId]);
+            $jobLock = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$jobLock || $jobLock['status'] !== 'open') {
+                $this->db->rollBack();
+                return false;
+            }
+
             // 1. Set this quote to 'accepted'
             $stmt = $this->db->prepare(
                 "UPDATE job_quotes SET status = 'accepted' WHERE id = :id"

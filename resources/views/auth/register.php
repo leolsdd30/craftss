@@ -1,8 +1,9 @@
+<?php $hideFooter = true; ?>
 <!-- Register Page -->
 <div class="min-h-[calc(100vh-4rem)] bg-gray-50 flex">
 
     <!-- Left Panel — Branding -->
-    <div class="hidden lg:flex lg:w-1/2 bg-indigo-700 flex-col justify-between p-12 relative overflow-hidden lg:h-[calc(100vh-1rem)] lg:sticky ">
+    <div class="hidden lg:flex lg:w-1/2 bg-indigo-700 flex-col justify-between p-12 relative overflow-y-auto overflow-x-hidden lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16">
         <!-- Background decoration -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div class="absolute -top-24 -left-24 w-96 h-96 bg-indigo-600 rounded-full opacity-50"></div>
@@ -104,14 +105,14 @@
                     <div>
                         <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">First name</label>
                         <input id="first_name" name="first_name" type="text" required autocomplete="given-name"
-                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400
+                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400
                                    focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                             placeholder="Ahmed">
                     </div>
                     <div>
                         <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Last name</label>
                         <input id="last_name" name="last_name" type="text" required autocomplete="family-name"
-                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400
+                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400
                                    focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                             placeholder="Benali">
                     </div>
@@ -121,7 +122,7 @@
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
                     <input id="email" name="email" type="email" required autocomplete="email"
-                        class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400
+                        class="block w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400
                                focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                         placeholder="you@example.com">
                 </div>
@@ -131,7 +132,7 @@
                     <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
                     <div class="relative">
                         <input id="password" name="password" type="password" required autocomplete="new-password"
-                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400
+                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400
                                    focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition pr-11"
                             placeholder="At least 8 characters">
                         <button type="button" onclick="togglePassword('password', this)"
@@ -144,23 +145,16 @@
                     </div>
                 </div>
 
-                <!-- Confirm Password -->
-                <div>
-                    <label for="password_confirm" class="block text-sm font-medium text-gray-700 mb-1">Confirm password</label>
-                    <div class="relative">
-                        <input id="password_confirm" name="password_confirm" type="password" required autocomplete="new-password"
-                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400
-                                   focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition pr-11"
-                            placeholder="Repeat your password">
-                        <button type="button" onclick="togglePassword('password_confirm', this)"
-                            class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-600 transition">
-                            <svg class="h-4 w-4 eye-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                <!-- Password Rules -->
+                <div class="-mt-3 mb-2 px-1">
+                    <ul class="space-y-1.5" id="pw-rules">
+                        <li id="rule-length" class="flex items-center space-x-2 text-xs text-gray-500 font-medium transition-colors duration-200">
+                            <svg class="h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                             </svg>
-                        </button>
-                    </div>
-                    <p id="pw-match-msg" class="mt-1 text-xs hidden"></p>
+                            <span>At least 8 characters minimum</span>
+                        </li>
+                    </ul>
                 </div>
 
                 <!-- Account Type -->
@@ -194,7 +188,7 @@
 
                 <!-- Submit -->
                 <button type="submit" id="submit-btn"
-                    class="w-full flex justify-center items-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    class="w-full flex justify-center items-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Create account
                     <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
@@ -243,40 +237,33 @@ document.querySelectorAll('.role-option input[type="radio"]').forEach(function(r
     });
 });
 
-// Password match validation
-var pwField = document.getElementById('password');
-var pwConfirm = document.getElementById('password_confirm');
-var pwMsg = document.getElementById('pw-match-msg');
-var submitBtn = document.getElementById('submit-btn');
+// Password real-time rules validation
+var pwField    = document.getElementById('password');
+var ruleLength = document.getElementById('rule-length');
 
-function checkPasswordMatch() {
-    if (pwConfirm.value === '') {
-        pwMsg.classList.add('hidden');
-        return;
-    }
-    pwMsg.classList.remove('hidden');
-    if (pwField.value === pwConfirm.value) {
-        pwMsg.textContent = '✓ Passwords match';
-        pwMsg.className = 'mt-1 text-xs text-green-600';
-        pwConfirm.classList.remove('border-red-400');
-        pwConfirm.classList.add('border-green-400');
+pwField.addEventListener('input', function() {
+    var val = pwField.value;
+
+    // Check minimum length (8 chars based on AuthController limits)
+    if (val.length >= 8) {
+        ruleLength.classList.remove('text-gray-500');
+        ruleLength.classList.add('text-green-600');
     } else {
-        pwMsg.textContent = '✗ Passwords do not match';
-        pwMsg.className = 'mt-1 text-xs text-red-500';
-        pwConfirm.classList.remove('border-green-400');
-        pwConfirm.classList.add('border-red-400');
+        ruleLength.classList.remove('text-green-600');
+        ruleLength.classList.add('text-gray-500');
     }
-}
+});
 
-pwConfirm.addEventListener('input', checkPasswordMatch);
-pwField.addEventListener('input', checkPasswordMatch);
-
-// Prevent submit if passwords don't match
+// Prevent submit if password incomplete
 document.getElementById('register-form').addEventListener('submit', function(e) {
-    if (pwField.value !== pwConfirm.value) {
+    if (pwField.value.length < 8) {
         e.preventDefault();
-        checkPasswordMatch();
-        pwConfirm.focus();
+        pwField.focus();
+        pwField.classList.remove('border-gray-300');
+        pwField.classList.add('border-red-400');
+    } else {
+        pwField.classList.remove('border-red-400');
+        pwField.classList.add('border-gray-300');
     }
 });
 </script>

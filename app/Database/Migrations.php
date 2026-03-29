@@ -26,6 +26,8 @@ class Migrations
                     last_name VARCHAR(100) NOT NULL,
                     email VARCHAR(255) UNIQUE NOT NULL,
                     password_hash VARCHAR(255) NOT NULL,
+                    username VARCHAR(100) UNIQUE NULL,
+                    username_updated_at TIMESTAMP NULL,
                     role ENUM('homeowner', 'craftsman', 'admin') DEFAULT 'homeowner',
                     phone_number VARCHAR(20) NULL,
                     wilaya VARCHAR(100) NULL,
@@ -43,6 +45,7 @@ class Migrations
                     service_category VARCHAR(100) NOT NULL,
                     hourly_rate DECIMAL(10, 2) NOT NULL,
                     is_verified BOOLEAN DEFAULT FALSE,
+                    is_published BOOLEAN DEFAULT TRUE,
                     portfolio_images JSON NULL,
                     latitude DECIMAL(10, 8) NULL,
                     longitude DECIMAL(11, 8) NULL,
@@ -89,10 +92,14 @@ class Migrations
                     craftsman_id INT NOT NULL,
                     job_posting_id INT NULL,
                     description TEXT NOT NULL,
+                    counter_description TEXT NULL,
                     address TEXT NOT NULL, 
                     scheduled_date DATETIME NOT NULL,
                     quoted_price DECIMAL(10, 2) NULL,
-                    status ENUM('requested', 'quoted', 'hired', 'completed', 'cancelled') DEFAULT 'requested',
+                    counter_price DECIMAL(10, 2) NULL,
+                    counter_date DATETIME NULL,
+                    counter_note TEXT NULL,
+                    status ENUM('requested', 'quoted', 'counter_offered', 'hired', 'in_progress', 'pending_completion', 'completed', 'cancelled') DEFAULT 'requested',
                     completion_date DATETIME NULL, 
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -102,16 +109,38 @@ class Migrations
                 );
             ",
 
+            "Conversations Table" => "
+                CREATE TABLE IF NOT EXISTS conversations (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    initiator_id INT NOT NULL,
+                    participant_id INT NOT NULL,
+                    status ENUM('pending', 'accepted', 'declined') DEFAULT 'pending',
+                    is_pinned_by_initiator BOOLEAN DEFAULT FALSE,
+                    is_pinned_by_participant BOOLEAN DEFAULT FALSE,
+                    is_muted_by_initiator BOOLEAN DEFAULT FALSE,
+                    is_muted_by_participant BOOLEAN DEFAULT FALSE,
+                    folder_for_initiator ENUM('primary', 'general') DEFAULT 'primary',
+                    folder_for_participant ENUM('primary', 'general') DEFAULT 'primary',
+                    deleted_by_initiator BOOLEAN DEFAULT FALSE,
+                    deleted_by_participant BOOLEAN DEFAULT FALSE,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    UNIQUE(initiator_id, participant_id),
+                    FOREIGN KEY (initiator_id) REFERENCES users(id) ON DELETE CASCADE,
+                    FOREIGN KEY (participant_id) REFERENCES users(id) ON DELETE CASCADE
+                );
+            ",
+
             "Messages Table" => "
                 CREATE TABLE IF NOT EXISTS messages (
                     id INT AUTO_INCREMENT PRIMARY KEY,
-                    booking_id INT NOT NULL,
+                    conversation_id INT NOT NULL,
                     sender_id INT NOT NULL,
                     receiver_id INT NOT NULL,
                     message_body TEXT NOT NULL,
                     is_read BOOLEAN DEFAULT FALSE,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (booking_id) REFERENCES requests_bookings(id) ON DELETE CASCADE,
+                    FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE,
                     FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
                     FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
                 );
@@ -168,6 +197,43 @@ class Migrations
                     FOREIGN KEY (homeowner_id) REFERENCES users(id) ON DELETE CASCADE,
                     FOREIGN KEY (craftsman_id) REFERENCES users(id) ON DELETE CASCADE
                 );
+            ",
+
+            "Favorites Table" => "
+                CREATE TABLE IF NOT EXISTS favorites (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    homeowner_id INT NOT NULL,
+                    craftsman_id INT NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    UNIQUE(homeowner_id, craftsman_id),
+                    FOREIGN KEY (homeowner_id) REFERENCES users(id) ON DELETE CASCADE,
+                    FOREIGN KEY (craftsman_id) REFERENCES users(id) ON DELETE CASCADE
+                );
+            ",
+
+            "Notifications Table" => "
+                CREATE TABLE IF NOT EXISTS notifications (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    user_id INT NOT NULL,
+                    type VARCHAR(50) NOT NULL,
+                    title VARCHAR(255) NOT NULL,
+                    message TEXT NOT NULL,
+                    link VARCHAR(500) NULL,
+                    is_read BOOLEAN DEFAULT FALSE,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+                );
+            ",
+
+            "Password Resets Table" => "
+                CREATE TABLE IF NOT EXISTS password_resets (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    email VARCHAR(255) NOT NULL,
+                    token VARCHAR(255) NOT NULL,
+                    expires_at DATETIME NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    INDEX(email)
+                );
             "
         ];
 
@@ -190,7 +256,7 @@ class Migrations
 
         // Reverse order of creation to avoid foreign key constraint failures
         $tables = [
-            'reviews', 'disputes', 'transactions', 'invoices', 'messages', 'requests_bookings', 'job_quotes', 'job_postings', 'craftsmen_profiles', 'users'
+            'password_resets', 'notifications', 'favorites', 'reviews', 'disputes', 'transactions', 'invoices', 'messages', 'conversations', 'requests_bookings', 'job_quotes', 'job_postings', 'craftsmen_profiles', 'users'
         ];
 
         // Disable foreign key checks temporarily to make dropping tables cleaner

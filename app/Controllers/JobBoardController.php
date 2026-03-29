@@ -77,20 +77,28 @@ class JobBoardController extends Controller
             exit;
         }
 
-        $title       = $_POST['title']       ?? '';
-        $category    = $_POST['category']    ?? '';
-        $description = $_POST['description'] ?? '';
-        $address     = $_POST['address']     ?? '';
-        $budget      = $_POST['budget']      ?? null;
+        $validator = new \App\Services\Validator();
+        $isValid = $validator->validate($_POST, [
+            'title'       => 'required|min:5|max:100',
+            'category'    => 'required',
+            'description' => 'required|min:15',
+            'address'     => 'required'
+        ]);
 
-        if (empty($title) || empty($category) || empty($description) || empty($address)) {
+        if (!$isValid) {
             $this->view('layouts/app', [
                 'pageTitle'   => 'Post a Job - Crafts',
                 'contentView' => 'jobboard/create',
-                'error'       => 'Please fill in all required fields.'
+                'error'       => $validator->getFirstError()
             ]);
             return;
         }
+        
+        $title       = trim($_POST['title']);
+        $category    = trim($_POST['category']);
+        $description = trim($_POST['description']);
+        $address     = trim($_POST['address']);
+        $budget      = isset($_POST['budget']) ? trim($_POST['budget']) : null;
 
         $jobModel = new JobPosting();
         $success = $jobModel->create([
@@ -131,16 +139,14 @@ class JobBoardController extends Controller
         }
 
         if (!$id || $id === 'show') {
-            echo "Job not found.";
-            exit;
+            throw new \App\Exceptions\NotFoundException();
         }
 
         $jobModel = new JobPosting();
         $job      = $jobModel->findById($id);
 
         if (!$job) {
-            echo "Job not found.";
-            exit;
+            throw new \App\Exceptions\NotFoundException();
         }
 
         $quoteModel = new JobQuote();
@@ -158,10 +164,16 @@ class JobBoardController extends Controller
             }
         }
 
-        $ogTitle  = htmlspecialchars($job['title']) . ' - Crafts Job Board';
-        $metaDesc = "View the job '{$job['title']}' in the {$job['service_category']} category. " .
-                    ($job['budget_range'] ? "Budget: {$job['budget_range']} DZD. " : "") .
-                    "Location: {$job['address']}. Apply now on Crafts.";
+        $ogTitle    = htmlspecialchars($job['title']) . ' - Crafts Job Board';
+        
+        $safeTitle  = htmlspecialchars($job['title']);
+        $safeCat    = htmlspecialchars($job['service_category']);
+        $safeBudget = htmlspecialchars((string)($job['budget_range'] ?? ''));
+        $safeLoc    = htmlspecialchars($job['address']);
+
+        $metaDesc = "View the job '{$safeTitle}' in the {$safeCat} category. " .
+                    ($safeBudget ? "Budget: {$safeBudget} DZD. " : "") .
+                    "Location: {$safeLoc}. Apply now on Crafts.";
 
         $this->view('layouts/app', [
             'pageTitle'       => $job['title'] . ' - Crafts',
@@ -184,14 +196,21 @@ class JobBoardController extends Controller
         Middleware::requireRole('craftsman');
         Middleware::verifyCsrfToken();
 
-        $jobId   = $_POST['job_posting_id'] ?? null;
-        $price   = $_POST['quoted_price']   ?? '';
-        $message = $_POST['cover_message']  ?? '';
-
-        if (!$jobId || empty($price)) {
-            header("Location: " . APP_URL . "/jobs/" . $jobId . "?error=price_required");
+        $validator = new \App\Services\Validator();
+        if (!$validator->validate($_POST, [
+            'job_posting_id' => 'required',
+            'quoted_price'   => 'required|numeric',
+            'cover_message'  => 'max:2000'
+        ])) {
+            $jobId = $_POST['job_posting_id'] ?? '';
+            $errorMsg = urlencode($validator->getFirstError());
+            header("Location: " . APP_URL . "/jobs/" . $jobId . "?error=" . $errorMsg);
             exit;
         }
+
+        $jobId   = $_POST['job_posting_id'];
+        $price   = $_POST['quoted_price'];
+        $message = trim($_POST['cover_message']);
 
         $jobModel = new JobPosting();
         $job      = $jobModel->findById($jobId);
@@ -221,6 +240,7 @@ class JobBoardController extends Controller
 
         if ($success) {
             $notif = new Notification();
+            
             $notif->send(
                 $job['posted_by_user_id'],
                 'quote_new',
@@ -259,7 +279,7 @@ class JobBoardController extends Controller
         $jobModel = new JobPosting();
         $job      = $jobModel->findById($quote['job_posting_id']);
         if (!$job || $job['posted_by_user_id'] != $_SESSION['user_id']) {
-            echo "Access Denied: You can only accept quotes on your own jobs.";
+            header("Location: " . APP_URL . "/homeowner/dashboard?error=access_denied#quotes");
             exit;
         }
 
@@ -308,7 +328,7 @@ class JobBoardController extends Controller
         $jobModel = new JobPosting();
         $job      = $jobModel->findById($quote['job_posting_id']);
         if (!$job || $job['posted_by_user_id'] != $_SESSION['user_id']) {
-            echo "Access Denied: You can only reject quotes on your own jobs.";
+            header("Location: " . APP_URL . "/homeowner/dashboard?error=access_denied#quotes");
             exit;
         }
 

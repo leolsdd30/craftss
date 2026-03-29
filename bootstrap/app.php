@@ -1,8 +1,10 @@
 <?php
 
 // Strictly require PHP types where possible
-declare(strict_types = 1)
-;
+declare(strict_types = 1);
+
+// Force the timezone to Algeria so live servers display the correct time
+date_default_timezone_set('Africa/Algiers');
 
 // Register a basic autoloader matching PSR-4 standards
 // so we don't have to require() every file manually.
@@ -48,6 +50,24 @@ function loadEnv($path)
 }
 
 loadEnv(BASE_PATH . '/.env');
+
+// ── Security: Error Reporting ──
+// Hide errors from the screen in production to prevent leaking sensitive paths/credentials
+// but keep them enabled internally so our custom Exception/Error handler can log them.
+ini_set('display_errors', '0');
+ini_set('display_startup_errors', '0');
+error_reporting(E_ALL);
+
+// ── Security: Session Hardening ──
+// Prevent JavaScript from accessing the session cookie (XSS protection)
+// and restrict cross-site sharing (CSRF protection supplement)
+session_set_cookie_params([
+    'lifetime' => 86400 * 7, // 1 week
+    'path' => '/',
+    'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on', // Only send over HTTPS if active
+    'httponly' => true,      // Prevent JS access
+    'samesite' => 'Lax'      // Prevent cross-site tracking/attacks
+]);
 
 // Start the session globally here so all controllers have access to $_SESSION
 session_start();
@@ -104,3 +124,69 @@ if (!function_exists('get_category_classes')) {
         return $map[$category] ?? ['bg' => 'bg-indigo-500', 'text' => 'text-indigo-600', 'badge' => 'bg-indigo-50 text-indigo-700 ring-indigo-600/20'];
     }
 }
+
+// Global helper for formatting job timestamps
+if (!function_exists('job_time_ago')) {
+    function job_time_ago($datetime) {
+        $diff = time() - strtotime($datetime);
+        if      ($diff < 60)     return 'Just now';
+        elseif  ($diff < 3600)   return floor($diff / 60) . 'm ago';
+        elseif  ($diff < 86400)  return floor($diff / 3600) . 'h ago';
+        elseif  ($diff < 604800) return floor($diff / 86400) . 'd ago';
+        else                     return date('M d', strtotime($datetime));
+    }
+}
+
+// Global helper for building paginated, filtered job URLs
+if (!function_exists('build_job_url')) {
+    function build_job_url($p, $filters) {
+        $q = array_filter([
+            'q'        => $filters['search']   ?? '',
+            'category' => $filters['category'] ?? '',
+            'wilaya'   => $filters['wilaya']   ?? '',
+            'sort'     => $filters['sort']     ?? '',
+            'page'     => $p > 1 ? $p : '',
+        ]);
+        return APP_URL . '/jobs' . (!empty($q) ? '?' . http_build_query($q) : '');
+    }
+}
+
+// Global helper for timestamp formatting in message requests
+if (!function_exists('req_time_ago')) {
+    function req_time_ago($datetime) {
+        if (!$datetime) return '';
+        $diff = time() - strtotime($datetime);
+        if ($diff < 60)     return 'Just now';
+        if ($diff < 3600)   return floor($diff / 60) . 'm ago';
+        if ($diff < 86400)  return floor($diff / 3600) . 'h ago';
+        if ($diff < 604800) return floor($diff / 86400) . 'd ago';
+        return date('M j', strtotime($datetime));
+    }
+}
+
+// Global helper for day grouping in message conversations
+if (!function_exists('format_message_date')) {
+    function format_message_date($dt) {
+        $diff = time() - strtotime($dt);
+        if ($diff < 86400)  return 'Today';
+        if ($diff < 172800) return 'Yesterday';
+        if ($diff < 604800) return date('l', strtotime($dt));
+        return date('M j, Y', strtotime($dt));
+    }
+}
+
+// Global hook to catch native PHP Warnings & Notices and elevate them to Exceptions
+if (($_ENV['APP_ENV'] ?? 'production') !== 'production') {
+    set_error_handler(function ($severity, $message, $file, $line) {
+        if (!(error_reporting() & $severity)) {
+            return; // Exclude errors suppressed via @
+        }
+        throw new \ErrorException($message, 0, $severity, $file, $line);
+    });
+}
+
+// Global hook intercepting any uncaught Exception, wiring it up directly to our Handler
+set_exception_handler(function ($exception) {
+    \App\Exceptions\Handler::handle($exception);
+});
+

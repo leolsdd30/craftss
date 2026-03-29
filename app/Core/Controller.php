@@ -5,44 +5,47 @@ class Controller
 {
 
     /**
-     * Renders a view file and extracts data to make variables available.
+     * Renders a view template and safely passes PHP variables into it.
      * 
      * @param string $view e.g. "public/home" or "auth/login"
-     * @param array $data Data to extract into the view
+     * @param array $data Associative array of data to pass into the view
      */
     protected function view(string $view, array $data = [])
     {
-        // Extract array keys to variables (e.g., ['name' => 'John'] becomes $name)
+        // extract() takes an associative array and creates local variables.
+        // Example: ['username' => 'Ahmed'] becomes $username = 'Ahmed';
+        // This allows our view templates (like home.php) to use $username directly.
         extract($data);
 
         $path = BASE_PATH . "/resources/views/{$view}.php";
 
         if (file_exists($path)) {
             require $path;
-        }
-        else {
-            die("View not found: " . $path);
+        } else {
+            throw new \Exception("View not found: " . $path);
         }
     }
 
     /**
-     * Simple redirect helper
+     * Simple HTTP redirect helper.
+     * Instantly stops script execution and tells the browser to navigate away.
      *
-     * @param string $path The URI to redirect to
+     * @param string $path The absolute URI to redirect to
      */
     protected function redirect(string $path)
     {
         header("Location: {$path}");
-        exit();
+        exit(); // Crucial: prevents any remaining code below from executing
     }
 
     /**
-     * Return JSON data, useful for AJAX/API endpoints
+     * Helper to return standard JSON responses.
+     * Used primarily for all AJAX endpoints (like sending messages, marking notifications, etc.)
      */
     protected function json($data, $statusCode = 200)
     {
         http_response_code($statusCode);
-        header('Content-Type: application/json');
+        header('Content-Type: application/json'); // Tells the browser to parse the response as JSON
         echo json_encode($data);
         exit();
     }

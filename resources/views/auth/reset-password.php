@@ -1,3 +1,4 @@
+<?php $hideFooter = true; ?>
 <!-- Reset Password Page -->
 <div class="min-h-[calc(100vh-4rem)] bg-gray-50 flex">
 
@@ -117,7 +118,7 @@
                     <label for="password" class="block text-sm font-medium text-gray-700 mb-1">New password</label>
                     <div class="relative">
                         <input id="password" name="password" type="password" required autocomplete="new-password"
-                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400
+                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400
                                    focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition pr-11"
                             placeholder="At least 8 characters">
                         <button type="button" onclick="togglePassword('password', this)"
@@ -137,7 +138,7 @@
                     <label for="password_confirm" class="block text-sm font-medium text-gray-700 mb-1">Confirm new password</label>
                     <div class="relative">
                         <input id="password_confirm" name="password_confirm" type="password" required autocomplete="new-password"
-                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400
+                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400
                                    focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition pr-11"
                             placeholder="Repeat your password">
                         <button type="button" onclick="togglePassword('password_confirm', this)"
@@ -153,7 +154,7 @@
                 </div>
 
                 <button type="submit" id="submit-btn"
-                    class="w-full flex justify-center items-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    class="w-full flex justify-center items-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Reset Password
                     <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>

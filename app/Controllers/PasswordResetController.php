@@ -34,16 +34,16 @@ class PasswordResetController extends Controller
     {
         Middleware::verifyCsrfToken();
 
-        $email = trim($_POST['email'] ?? '');
-
-        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $validator = new \App\Services\Validator();
+        if (!$validator->validate($_POST, ['email' => 'required|email'])) {
             $this->view('layouts/app', [
                 'pageTitle'   => 'Forgot Password - Crafts',
                 'contentView' => 'auth/forgot-password',
-                'error'       => 'Please enter a valid email address.',
+                'error'       => $validator->getFirstError(),
             ]);
             return;
         }
+        $email = trim($_POST['email']);
 
         $userModel = new User();
         $user      = $userModel->findByEmail($email);
@@ -70,14 +70,16 @@ class PasswordResetController extends Controller
 
             // MOCK: expose the link on screen so the flow can be tested
             // without a real mailer. Remove $mockResetUrl once Resend is wired up.
-            $mockResetUrl = $resetUrl;
+            if (($_ENV['APP_ENV'] ?? 'production') !== 'production') {
+                $mockResetUrl = $resetUrl;
+            }
         }
 
         $this->view('layouts/app', [
             'pageTitle'    => 'Forgot Password - Crafts',
             'contentView'  => 'auth/forgot-password',
             'submitted'    => true,
-            'mockResetUrl' => $mockResetUrl,
+            'mockResetUrl' => $mockResetUrl ?? null,
         ]);
     }
 
@@ -134,33 +136,19 @@ class PasswordResetController extends Controller
         $record     = $resetModel->findValidToken($rawToken);
 
         if (!$record) {
-            $this->view('layouts/app', [
-                'pageTitle'   => 'Reset Password - Crafts',
-                'contentView' => 'auth/reset-password',
-                'token'       => $rawToken,
-                'error'       => 'This reset link is invalid or has expired. Please request a new one.',
-            ]);
+            $this->renderResetError($rawToken, 'This reset link is invalid or has expired. Please request a new one.');
             return;
         }
 
         // Validate passwords
-        if (empty($password) || strlen($password) < 8) {
-            $this->view('layouts/app', [
-                'pageTitle'   => 'Reset Password - Crafts',
-                'contentView' => 'auth/reset-password',
-                'token'       => $rawToken,
-                'error'       => 'Password must be at least 8 characters.',
-            ]);
+        $validator = new \App\Services\Validator();
+        if (!$validator->validate($_POST, ['password' => 'required|min:8'])) {
+            $this->renderResetError($rawToken, $validator->getFirstError());
             return;
         }
 
         if ($password !== $passwordConfirm) {
-            $this->view('layouts/app', [
-                'pageTitle'   => 'Reset Password - Crafts',
-                'contentView' => 'auth/reset-password',
-                'token'       => $rawToken,
-                'error'       => 'Passwords do not match.',
-            ]);
+            $this->renderResetError($rawToken, 'Passwords do not match.');
             return;
         }
 
@@ -177,5 +165,18 @@ class PasswordResetController extends Controller
 
         // Redirect to login with success message
         $this->redirect(APP_URL . '/login?success=password_reset');
+    }
+
+    /**
+     * Helper to render the reset form with an error message (DRY)
+     */
+    private function renderResetError($token, $errorMsg)
+    {
+        $this->view('layouts/app', [
+            'pageTitle'   => 'Reset Password - Crafts',
+            'contentView' => 'auth/reset-password',
+            'token'       => $token,
+            'error'       => $errorMsg,
+        ]);
     }
 }

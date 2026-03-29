@@ -1,14 +1,4 @@
 <?php
-/* ─── helpers ─────────────────────────────────────────── */
-function reqTimeAgo($datetime) {
-    if (!$datetime) return '';
-    $diff = time() - strtotime($datetime);
-    if ($diff < 60)     return 'Just now';
-    if ($diff < 3600)   return floor($diff / 60) . 'm ago';
-    if ($diff < 86400)  return floor($diff / 3600) . 'h ago';
-    if ($diff < 604800) return floor($diff / 86400) . 'd ago';
-    return date('M j', strtotime($datetime));
-}
 $csrfToken = $_SESSION['csrf_token'] ?? '';
 ?>
 
@@ -177,7 +167,7 @@ body footer  { display: none !important; }
                 </svg>
                 <?php endif; ?>
               </div>
-              <span class="text-[11px] text-gray-400 flex-shrink-0"><?= reqTimeAgo($req['last_message_at']) ?></span>
+              <span class="text-[11px] text-gray-400 flex-shrink-0"><?= req_time_ago($req['last_message_at']) ?></span>
             </div>
             <p class="text-xs text-gray-500 truncate mt-0.5"><?= e(mb_substr($req['last_message'] ?? '', 0, 55)) ?></p>
           </div>
@@ -273,13 +263,7 @@ body footer  { display: none !important; }
         foreach ($previewMsgs as $msg):
             $isMe     = ($msg['sender_id'] == $_SESSION['user_id']);
             $time     = date('g:i A', strtotime($msg['created_at']));
-            $dateLabel = (function($dt) {
-                $diff = time() - strtotime($dt);
-                if ($diff < 86400)  return 'Today';
-                if ($diff < 172800) return 'Yesterday';
-                if ($diff < 604800) return date('l', strtotime($dt));
-                return date('M j, Y', strtotime($dt));
-            })($msg['created_at']);
+            $dateLabel = format_message_date($msg['created_at']);
             if ($dateLabel !== $prevDate):
                 $prevDate = $dateLabel;
         ?>

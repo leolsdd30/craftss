@@ -11,37 +11,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // Pull live stats from the DB for the stats bar on the home page.
-        // Uses the singleton PDO connection — same pattern as AdminController.
-        $db = \App\Database\Database::getInstance()->getConnection();
-
-        $stats = [];
-
-        // Total published craftsmen
-        $stats['craftsmen'] = (int) $db->query(
-            "SELECT COUNT(*) FROM craftsmen_profiles cp
-             JOIN users u ON cp.user_id = u.id
-             WHERE u.is_active = TRUE AND u.role = 'craftsman' AND cp.is_published = TRUE"
-        )->fetchColumn();
-
-        // Number of distinct wilayas that have at least one active published craftsman
-        $stats['wilayas'] = (int) $db->query(
-            "SELECT COUNT(DISTINCT u.wilaya) FROM craftsmen_profiles cp
-             JOIN users u ON cp.user_id = u.id
-             WHERE u.is_active = TRUE AND u.role = 'craftsman'
-             AND cp.is_published = TRUE AND u.wilaya IS NOT NULL AND u.wilaya != ''"
-        )->fetchColumn();
-
-        // Total completed bookings
-        $stats['completed_bookings'] = (int) $db->query(
-            "SELECT COUNT(*) FROM requests_bookings WHERE status = 'completed'"
-        )->fetchColumn();
-
-        // Average star rating across all reviews (rounded to 1 decimal)
-        $stats['avg_rating'] = round(
-            (float) $db->query("SELECT IFNULL(AVG(star_rating), 0) FROM reviews")->fetchColumn(),
-            1
-        );
+        $stats = $this->getPlatformStats();
 
         $this->view('layouts/app', [
             'pageTitle'       => 'Welcome to Crafts',
@@ -59,30 +29,7 @@ class HomeController extends Controller
      */
     public function about()
     {
-        $db = \App\Database\Database::getInstance()->getConnection();
-
-        $stats = [];
-        $stats['craftsmen'] = (int) $db->query(
-            "SELECT COUNT(*) FROM craftsmen_profiles cp
-             JOIN users u ON cp.user_id = u.id
-             WHERE u.is_active = TRUE AND u.role = 'craftsman' AND cp.is_published = TRUE"
-        )->fetchColumn();
-
-        $stats['wilayas'] = (int) $db->query(
-            "SELECT COUNT(DISTINCT u.wilaya) FROM craftsmen_profiles cp
-             JOIN users u ON cp.user_id = u.id
-             WHERE u.is_active = TRUE AND u.role = 'craftsman'
-             AND cp.is_published = TRUE AND u.wilaya IS NOT NULL AND u.wilaya != ''"
-        )->fetchColumn();
-
-        $stats['completed_bookings'] = (int) $db->query(
-            "SELECT COUNT(*) FROM requests_bookings WHERE status = 'completed'"
-        )->fetchColumn();
-
-        $stats['avg_rating'] = round(
-            (float) $db->query("SELECT IFNULL(AVG(star_rating), 0) FROM reviews")->fetchColumn(),
-            1
-        );
+        $stats = $this->getPlatformStats();
 
         $this->view('layouts/app', [
             'pageTitle'       => 'About Us - Crafts',
@@ -114,5 +61,38 @@ class HomeController extends Controller
             'pageTitle'       => 'Privacy Policy - Crafts',
             'contentView'     => 'public/privacy',
         ]);
+    }
+
+    /**
+     * Shared helper to fetch live platform statistics (DRY).
+     */
+    private function getPlatformStats()
+    {
+        $db = \App\Database\Database::getInstance()->getConnection();
+
+        $stats = [];
+        $stats['craftsmen'] = (int) $db->query(
+            "SELECT COUNT(*) FROM craftsmen_profiles cp
+             JOIN users u ON cp.user_id = u.id
+             WHERE u.is_active = TRUE AND u.role = 'craftsman' AND cp.is_published = TRUE"
+        )->fetchColumn();
+
+        $stats['wilayas'] = (int) $db->query(
+            "SELECT COUNT(DISTINCT u.wilaya) FROM craftsmen_profiles cp
+             JOIN users u ON cp.user_id = u.id
+             WHERE u.is_active = TRUE AND u.role = 'craftsman'
+             AND cp.is_published = TRUE AND u.wilaya IS NOT NULL AND u.wilaya != ''"
+        )->fetchColumn();
+
+        $stats['completed_bookings'] = (int) $db->query(
+            "SELECT COUNT(*) FROM requests_bookings WHERE status = 'completed'"
+        )->fetchColumn();
+
+        $stats['avg_rating'] = round(
+            (float) $db->query("SELECT IFNULL(AVG(star_rating), 0) FROM reviews")->fetchColumn(),
+            1
+        );
+
+        return $stats;
     }
 }

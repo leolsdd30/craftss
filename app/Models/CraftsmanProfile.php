@@ -160,12 +160,13 @@ class CraftsmanProfile extends Model
                     SET service_category = :category,
                         hourly_rate      = :rate,
                         bio              = :bio,
-                        portfolio_images = :images
+                        portfolio_images = :images,
+                        json_metadata    = :json_metadata
                     WHERE user_id = :user_id";
         } else {
             $sql = "INSERT INTO craftsmen_profiles
-                        (user_id, service_category, hourly_rate, bio, portfolio_images)
-                    VALUES (:user_id, :category, :rate, :bio, :images)";
+                        (user_id, service_category, hourly_rate, bio, portfolio_images, json_metadata)
+                    VALUES (:user_id, :category, :rate, :bio, :images, :json_metadata)";
         }
 
         $stmt = $this->db->prepare($sql);
@@ -177,6 +178,7 @@ class CraftsmanProfile extends Model
             'images'   => isset($data['portfolio_images'])
                             ? json_encode($data['portfolio_images'])
                             : null,
+            'json_metadata' => $data['json_metadata'] ?? null,
         ]);
     }
 }

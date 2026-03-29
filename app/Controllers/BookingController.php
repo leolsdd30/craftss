@@ -33,7 +33,7 @@ class BookingController extends Controller
         $craftsman = $userModel->findByUsername($username);
  
         if (!$craftsman || $craftsman['role'] !== 'craftsman') {
-            echo "Craftsman not found.";
+            header("Location: " . APP_URL . "/search");
             exit;
         }
  
@@ -65,20 +65,25 @@ class BookingController extends Controller
             exit;
         }
  
-        $craftsmanId   = $_POST['craftsman_id']   ?? null;
-        $description   = trim($_POST['description']   ?? '');
-        $address       = trim($_POST['address']       ?? '');
-        $scheduledDate = $_POST['scheduled_date']     ?? '';
- 
-        if (empty($craftsmanId) || empty($description) || empty($address) || empty($scheduledDate)) {
-            $userModel = new User();
-            $craftsman = $userModel->findById($craftsmanId);
- 
+        $craftsmanId   = (int)($_POST['craftsman_id'] ?? 0);
+        $description   = trim((string)($_POST['description'] ?? ''));
+        $address       = trim((string)($_POST['address'] ?? ''));
+        $scheduledDate = trim((string)($_POST['scheduled_date'] ?? ''));
+
+        $userModel = new User();
+        $craftsman = $userModel->findById($craftsmanId);
+
+        if (!$craftsman || $craftsman['role'] !== 'craftsman') {
+            header("Location: " . APP_URL . "/search");
+            exit;
+        }
+
+        if (empty($description) || empty($address) || empty($scheduledDate) || !strtotime($scheduledDate)) {
             $this->view('layouts/app', [
                 'pageTitle'   => 'Request Booking - Crafts',
                 'contentView' => 'bookings/create',
                 'craftsman'   => $craftsman,
-                'error'       => 'Please fill in all required fields.'
+                'error'       => 'Please provide valid information for all required fields.'
             ]);
             return;
         }
@@ -133,7 +138,7 @@ class BookingController extends Controller
         Middleware::requireLogin();
         Middleware::verifyCsrfToken();
 
-        $bookingId = $_POST['booking_id'] ?? null;
+        $bookingId = (int)($_POST['booking_id'] ?? 0);
 
         if (!$bookingId) {
             header("Location: " . APP_URL . "/craftsman/dashboard");
@@ -143,8 +148,8 @@ class BookingController extends Controller
         $bookingModel = new Booking();
         $booking = $bookingModel->findById($bookingId);
 
-        if (!$booking || (int)$booking['craftsman_id'] !== (int)$_SESSION['user_id']) {
-            echo "Access Denied.";
+        if (!$booking || (int)$booking['craftsman_id'] !== (int)$_SESSION['user_id'] || $booking['status'] !== 'requested') {
+            header("Location: " . APP_URL . "/craftsman/dashboard?error=access_denied");
             exit;
         }
 
@@ -172,13 +177,13 @@ class BookingController extends Controller
         Middleware::requireLogin();
         Middleware::verifyCsrfToken();
 
-        $bookingId = $_POST['booking_id'] ?? null;
-        $counterDescription = trim($_POST['counter_description'] ?? '');
-        $counterPrice = $_POST['counter_price'] ?? null;
-        $counterDate = $_POST['counter_date'] ?? '';
-        $counterNote = trim($_POST['counter_note'] ?? '');
+        $bookingId = (int)($_POST['booking_id'] ?? 0);
+        $counterDescription = trim((string)($_POST['counter_description'] ?? ''));
+        $counterPrice = (float)($_POST['counter_price'] ?? 0);
+        $counterDate = trim((string)($_POST['counter_date'] ?? ''));
+        $counterNote = trim((string)($_POST['counter_note'] ?? ''));
 
-        if (!$bookingId || empty($counterDescription) || empty($counterPrice) || empty($counterDate)) {
+        if (!$bookingId || empty($counterDescription) || $counterPrice <= 0 || empty($counterDate) || !strtotime($counterDate)) {
             header("Location: " . APP_URL . "/craftsman/dashboard?error=missing_fields");
             exit;
         }
@@ -187,7 +192,7 @@ class BookingController extends Controller
         $booking = $bookingModel->findById($bookingId);
 
         if (!$booking || (int)$booking['craftsman_id'] !== (int)$_SESSION['user_id'] || $booking['status'] !== 'requested') {
-            echo "Access Denied.";
+            header("Location: " . APP_URL . "/craftsman/dashboard?error=access_denied");
             exit;
         }
 
@@ -231,7 +236,7 @@ class BookingController extends Controller
         $booking = $bookingModel->findById($bookingId);
 
         if (!$booking || (int)$booking['homeowner_id'] !== (int)$_SESSION['user_id'] || $booking['status'] !== 'counter_offered') {
-            echo "Access Denied.";
+            header("Location: " . APP_URL . "/homeowner/dashboard?error=access_denied");
             exit;
         }
 
@@ -266,7 +271,7 @@ class BookingController extends Controller
         $booking = $bookingModel->findById($bookingId);
 
         if (!$booking || (int)$booking['homeowner_id'] !== (int)$_SESSION['user_id'] || $booking['status'] !== 'counter_offered') {
-            echo "Access Denied.";
+            header("Location: " . APP_URL . "/homeowner/dashboard?error=access_denied");
             exit;
         }
 
@@ -300,8 +305,8 @@ class BookingController extends Controller
         $bookingModel = new Booking();
         $booking = $bookingModel->findById($bookingId);
 
-        if (!$booking || (int)$booking['craftsman_id'] !== (int)$_SESSION['user_id']) {
-            echo "Access Denied.";
+        if (!$booking || (int)$booking['craftsman_id'] !== (int)$_SESSION['user_id'] || $booking['status'] !== 'requested') {
+            header("Location: " . APP_URL . "/craftsman/dashboard?error=access_denied");
             exit;
         }
 
@@ -335,8 +340,8 @@ class BookingController extends Controller
         $bookingModel = new Booking();
         $booking = $bookingModel->findById($bookingId);
 
-        if (!$booking || (int)$booking['craftsman_id'] !== (int)$_SESSION['user_id']) {
-            echo "Access Denied.";
+        if (!$booking || (int)$booking['craftsman_id'] !== (int)$_SESSION['user_id'] || $booking['status'] !== 'in_progress') {
+            header("Location: " . APP_URL . "/craftsman/dashboard?error=access_denied");
             exit;
         }
 
@@ -373,7 +378,7 @@ class BookingController extends Controller
         $booking = $bookingModel->findById($bookingId);
 
         if (!$booking || (int)$booking['homeowner_id'] !== (int)$_SESSION['user_id'] || $booking['status'] !== 'pending_completion') {
-            echo "Access Denied.";
+            header("Location: " . APP_URL . "/homeowner/dashboard?error=access_denied");
             exit;
         }
 

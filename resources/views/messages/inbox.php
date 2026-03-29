@@ -554,7 +554,7 @@ async function send(){
   }
   inp.value=''; inp.style.height='auto';
   try{
-    const r=await fetch(A+'/messages/send',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({receiver_id:oUid,message:body})});
+    const r=await fetch(A+'/messages/send',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({receiver_id:oUid,message:body,csrf_token:TK})});
     const d=await r.json();
     if(!d.success)alert(d.message||'Failed to send.');
     updatePreview(oUid,body,'You');

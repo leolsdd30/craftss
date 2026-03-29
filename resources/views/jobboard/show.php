@@ -50,7 +50,8 @@ else                     $timeAgo = date('M d, Y', strtotime($job['created_at'])
                         case 'price_required':  echo 'Please enter your price.'; break;
                         case 'own_job':         echo 'You cannot submit a quote on your own job.'; break;
                         case 'already_quoted':  echo 'You have already submitted a quote for this job.'; break;
-                        default: echo 'Something went wrong. Please try again.';
+                        case 'submit_failed':   echo 'Something went wrong. Please try again.'; break;
+                        default: echo htmlspecialchars($_GET['error']);
                     }
                 ?>
             </p>

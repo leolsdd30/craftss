@@ -46,13 +46,18 @@ class AuthController extends Controller
             return;
         }
 
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
-
-        if (empty($email) || empty($password)) {
-            $this->showLoginForm("Email and password are required.");
+        $validator = new \App\Services\Validator();
+        if (!$validator->validate($_POST, [
+            'email'    => 'required|email',
+            'password' => 'required'
+        ])) {
+            $_SESSION[$limitKey]['count']++;
+            $this->showLoginForm($validator->getFirstError());
             return;
         }
+
+        $email = trim($_POST['email']);
+        $password = $_POST['password']; // Passwords shouldn't be trimmed
 
         $userModel = new User();
         $user = $userModel->findByEmail($email);
@@ -65,6 +70,9 @@ class AuthController extends Controller
             }
 
             unset($_SESSION[$limitKey]);
+
+            // Prevent session fixation attack (Issue #14)
+            session_regenerate_id(true);
 
             // Success! Session is already started globally in app.php
             $_SESSION['user_id'] = $user['id'];
@@ -139,21 +147,28 @@ class AuthController extends Controller
         }
         $_SESSION[$limitKey]['count']++;
 
-        $firstName = $_POST['first_name'] ?? '';
-        $lastName = $_POST['last_name'] ?? '';
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
-        $role = $_POST['role'] ?? 'homeowner';
-
-        $passwordConfirm = $_POST['password_confirm'] ?? '';
-
-        if (empty($firstName) || empty($lastName) || empty($email) || empty($password)) {
-            $this->showRegisterForm("All fields are required.");
+        $validator = new \App\Services\Validator();
+        if (!$validator->validate($_POST, [
+            'first_name' => 'required|min:2|max:50',
+            'last_name'  => 'required|min:2|max:50',
+            'email'      => 'required|email|max:100',
+            'password'   => 'required|min:8',
+            'role'       => 'required'
+        ])) {
+            $this->showRegisterForm($validator->getFirstError());
             return;
         }
 
-        if ($password !== $passwordConfirm) {
-            $this->showRegisterForm("Passwords do not match.");
+
+        $firstName = trim($_POST['first_name']);
+        $lastName  = trim($_POST['last_name']);
+        $email     = trim($_POST['email']);
+        $password  = $_POST['password'];
+        $role      = trim($_POST['role']);
+
+        // Prevent role spoofing attacks (Issue #7)
+        if (!in_array($role, ['homeowner', 'craftsman'])) {
+            $this->showRegisterForm("Invalid role selected.");
             return;
         }
 
@@ -177,12 +192,16 @@ class AuthController extends Controller
         if ($success) {
             unset($_SESSION[$limitKey]);
 
+            // Prevent session fixation attack (Issue #14)
+            session_regenerate_id(true);
+
             // Automatically log them in after registration
             $user = $userModel->findByEmail($email);
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['role'] = $user['role'];
             $_SESSION['name'] = $user['first_name'];
             $_SESSION['username'] = $user['username'];
+            $_SESSION['is_verified'] = false; // Ensure verification session drops cleanly
 
             // Redirect new user to their dashboard
             if ($user['role'] === 'craftsman') {

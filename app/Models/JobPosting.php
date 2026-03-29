@@ -45,9 +45,14 @@ class JobPosting extends Model
         }
 
         if (!empty($filters['search'])) {
-            $sql .= " AND (j.title LIKE :search1 OR j.description LIKE :search2)";
-            $params['search1'] = '%' . $filters['search'] . '%';
-            $params['search2'] = '%' . $filters['search'] . '%';
+            $searchQuery = substr(trim($filters['search']), 0, 100);
+            $searchQuery = str_replace(['%', '_', '\\'], '', $searchQuery);
+            
+            if (!empty($searchQuery)) {
+                $sql .= " AND (j.title LIKE :search1 OR j.description LIKE :search2)";
+                $params['search1'] = '%' . $searchQuery . '%';
+                $params['search2'] = '%' . $searchQuery . '%';
+            }
         }
 
         return [$sql, $params];

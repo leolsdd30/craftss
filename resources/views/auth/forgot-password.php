@@ -1,4 +1,4 @@
-<!-- Forgot Password Page -->
+<?php $hideFooter = true; ?><!-- Forgot Password Page -->
 <div class="min-h-[calc(100vh-4rem)] bg-gray-50 flex">
 
     <!-- Left Panel — Branding -->
@@ -96,7 +96,7 @@
                     </div>
                     <p class="text-xs text-amber-700 mb-3">No email was sent. In production this link would arrive in the user's inbox. Click it to test the reset flow:</p>
                     <a href="<?= e($mockResetUrl) ?>"
-                       class="block w-full text-center px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold rounded-lg transition duration-150">
+                       class="block w-full text-center px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold rounded-xl transition duration-150">
                         Open Reset Link →
                     </a>
                 </div>
@@ -135,14 +135,14 @@
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
                     <input id="email" name="email" type="email" autocomplete="email" required
-                        class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400
+                        class="block w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400
                                focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                         placeholder="you@example.com"
                         value="<?= e($_POST['email'] ?? '') ?>">
                 </div>
 
                 <button type="submit"
-                    class="w-full flex justify-center items-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    class="w-full flex justify-center items-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Send Reset Link
                     <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>

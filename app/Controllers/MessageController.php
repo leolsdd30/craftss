@@ -59,8 +59,8 @@ class MessageController extends Controller
             'conversation_id' => $conversationId,
             'user'            => [
                 'id'              => (int)$other['id'],
-                'first_name'      => $other['first_name'],
-                'last_name'       => $other['last_name'],
+                'first_name'      => htmlspecialchars($other['first_name'], ENT_QUOTES, 'UTF-8'),
+                'last_name'       => htmlspecialchars($other['last_name'], ENT_QUOTES, 'UTF-8'),
                 'username'        => $other['username'] ?? '',
                 'role'            => $other['role'],
                 'profile_picture' => $other['profile_picture'] ?? '',
@@ -126,13 +126,21 @@ class MessageController extends Controller
         ]);
         $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        // Resolve profile picture URLs
+        // Resolve profile picture URLs and Escape output for XSS prevention
         foreach ($rows as &$row) {
             $row['pic_url'] = get_profile_picture_url(
                 $row['profile_picture'] ?? 'default.png',
                 $row['first_name'],
                 $row['last_name']
             );
+            $row['first_name'] = htmlspecialchars((string)$row['first_name'], ENT_QUOTES, 'UTF-8');
+            $row['last_name'] = htmlspecialchars((string)$row['last_name'], ENT_QUOTES, 'UTF-8');
+            $row['username'] = htmlspecialchars((string)($row['username'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $row['role'] = htmlspecialchars((string)($row['role'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $row['service_category'] = htmlspecialchars((string)($row['service_category'] ?? ''), ENT_QUOTES, 'UTF-8');
+            if (isset($row['last_message'])) {
+                $row['last_message'] = htmlspecialchars((string)$row['last_message'], ENT_QUOTES, 'UTF-8');
+            }
         }
         unset($row);
 
@@ -292,14 +300,14 @@ class MessageController extends Controller
     public function send()
     {
         Middleware::requireLogin();
+        $input = $this->validateAjaxCsrf();
+        if ($input === false) return;
         $userId   = $_SESSION['user_id'];
-        $inputRaw = file_get_contents('php://input');
-        $input    = $inputRaw ? json_decode($inputRaw, true) : null;
 
-        $receiverId  = is_array($input) ? ($input['receiver_id'] ?? null) : ($_POST['receiver_id'] ?? null);
-        $messageBody = trim(is_array($input) ? ($input['message'] ?? '') : ($_POST['message'] ?? ''));
+        $receiverId  = $input['receiver_id'] ?? ($_POST['receiver_id'] ?? null);
+        $messageBody = trim((string)($input['message'] ?? ($_POST['message'] ?? '')));
 
-        if (!$receiverId || empty($messageBody)) {
+        if (!$receiverId || empty($messageBody) || mb_strlen($messageBody, 'UTF-8') > 5000) {
             $this->json(['success' => false, 'message' => 'Missing required fields.'], 400);
             return;
         }
@@ -369,13 +377,16 @@ class MessageController extends Controller
         $stmt->execute(['cid' => $convo['id'], 'last_id' => $lastId]);
         $newMessages = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        // Resolve profile picture URL for every message using the same helper as PHP views
+        // Resolve profile picture URL and Escape everything against XSS payloads
         foreach ($newMessages as &$msg) {
             $msg['pic_url'] = get_profile_picture_url(
                 $msg['profile_picture'] ?? 'default.png',
                 $msg['first_name'],
                 $msg['last_name']
             );
+            $msg['first_name'] = htmlspecialchars($msg['first_name'], ENT_QUOTES, 'UTF-8');
+            $msg['last_name'] = htmlspecialchars($msg['last_name'], ENT_QUOTES, 'UTF-8');
+            $msg['message_body'] = htmlspecialchars($msg['message_body'], ENT_QUOTES, 'UTF-8');
         }
         unset($msg);
 
@@ -404,10 +415,10 @@ class MessageController extends Controller
     public function acceptRequest()
     {
         Middleware::requireLogin();
+        $input = $this->validateAjaxCsrf();
+        if ($input === false) return;
         $userId   = $_SESSION['user_id'];
-        $inputRaw = file_get_contents('php://input');
-        $input    = $inputRaw ? json_decode($inputRaw, true) : null;
-        $otherUserId = is_array($input) ? ($input['user_id'] ?? null) : ($_POST['user_id'] ?? null);
+        $otherUserId = $input['user_id'] ?? ($_POST['user_id'] ?? null);
 
         if (!$otherUserId) {
             $this->json(['success' => false, 'message' => 'Missing user ID.'], 400);
@@ -437,10 +448,10 @@ class MessageController extends Controller
     public function declineRequest()
     {
         Middleware::requireLogin();
+        $input = $this->validateAjaxCsrf();
+        if ($input === false) return;
         $userId   = $_SESSION['user_id'];
-        $inputRaw = file_get_contents('php://input');
-        $input    = $inputRaw ? json_decode($inputRaw, true) : null;
-        $otherUserId = is_array($input) ? ($input['user_id'] ?? null) : ($_POST['user_id'] ?? null);
+        $otherUserId = $input['user_id'] ?? ($_POST['user_id'] ?? null);
 
         if (!$otherUserId) {
             $this->json(['success' => false, 'message' => 'Missing user ID.'], 400);
@@ -465,21 +476,14 @@ class MessageController extends Controller
     public function pin()
     {
         Middleware::requireLogin();
+        $input = $this->validateAjaxCsrf();
+        if ($input === false) return;
+
         $userId   = $_SESSION['user_id'];
-        $inputRaw = file_get_contents('php://input');
-        $input    = $inputRaw ? json_decode($inputRaw, true) : null;
-        $convoId  = is_array($input) ? ($input['conversation_id'] ?? null) : ($_POST['conversation_id'] ?? null);
+        $convoId  = $input['conversation_id'] ?? ($_POST['conversation_id'] ?? null);
 
-        if (!$convoId) {
-            $this->json(['success' => false], 400);
-            return;
-        }
-
-        $messageModel = new Message();
-        if (!$messageModel->isParticipant($convoId, $userId)) {
-            $this->json(['success' => false], 403);
-            return;
-        }
+        $messageModel = $this->getValidConversation($convoId, $userId);
+        if ($messageModel === false) return;
 
         $messageModel->togglePin($convoId, $userId);
 
@@ -497,21 +501,14 @@ class MessageController extends Controller
     public function mute()
     {
         Middleware::requireLogin();
+        $input = $this->validateAjaxCsrf();
+        if ($input === false) return;
+
         $userId   = $_SESSION['user_id'];
-        $inputRaw = file_get_contents('php://input');
-        $input    = $inputRaw ? json_decode($inputRaw, true) : null;
-        $convoId  = is_array($input) ? ($input['conversation_id'] ?? null) : ($_POST['conversation_id'] ?? null);
+        $convoId  = $input['conversation_id'] ?? ($_POST['conversation_id'] ?? null);
 
-        if (!$convoId) {
-            $this->json(['success' => false], 400);
-            return;
-        }
-
-        $messageModel = new Message();
-        if (!$messageModel->isParticipant($convoId, $userId)) {
-            $this->json(['success' => false], 403);
-            return;
-        }
+        $messageModel = $this->getValidConversation($convoId, $userId);
+        if ($messageModel === false) return;
 
         $messageModel->toggleMute($convoId, $userId);
 
@@ -529,21 +526,14 @@ class MessageController extends Controller
     public function delete()
     {
         Middleware::requireLogin();
+        $input = $this->validateAjaxCsrf();
+        if ($input === false) return;
+
         $userId   = $_SESSION['user_id'];
-        $inputRaw = file_get_contents('php://input');
-        $input    = $inputRaw ? json_decode($inputRaw, true) : null;
-        $convoId  = is_array($input) ? ($input['conversation_id'] ?? null) : ($_POST['conversation_id'] ?? null);
+        $convoId  = $input['conversation_id'] ?? ($_POST['conversation_id'] ?? null);
 
-        if (!$convoId) {
-            $this->json(['success' => false], 400);
-            return;
-        }
-
-        $messageModel = new Message();
-        if (!$messageModel->isParticipant($convoId, $userId)) {
-            $this->json(['success' => false], 403);
-            return;
-        }
+        $messageModel = $this->getValidConversation($convoId, $userId);
+        if ($messageModel === false) return;
 
         $messageModel->softDeleteForUser($convoId, $userId);
         $this->json(['success' => true]);
@@ -555,21 +545,14 @@ class MessageController extends Controller
     public function markRead()
     {
         Middleware::requireLogin();
+        $input = $this->validateAjaxCsrf();
+        if ($input === false) return;
+
         $userId   = $_SESSION['user_id'];
-        $inputRaw = file_get_contents('php://input');
-        $input    = $inputRaw ? json_decode($inputRaw, true) : null;
-        $convoId  = is_array($input) ? ($input['conversation_id'] ?? null) : ($_POST['conversation_id'] ?? null);
+        $convoId  = $input['conversation_id'] ?? ($_POST['conversation_id'] ?? null);
 
-        if (!$convoId) {
-            $this->json(['success' => false], 400);
-            return;
-        }
-
-        $messageModel = new Message();
-        if (!$messageModel->isParticipant($convoId, $userId)) {
-            $this->json(['success' => false], 403);
-            return;
-        }
+        $messageModel = $this->getValidConversation($convoId, $userId);
+        if ($messageModel === false) return;
 
         $messageModel->markConversationRead($convoId, $userId);
         $this->json(['success' => true]);
@@ -581,22 +564,15 @@ class MessageController extends Controller
     public function setFolder()
     {
         Middleware::requireLogin();
+        $input = $this->validateAjaxCsrf();
+        if ($input === false) return;
+
         $userId   = $_SESSION['user_id'];
-        $inputRaw = file_get_contents('php://input');
-        $input    = $inputRaw ? json_decode($inputRaw, true) : null;
-        $convoId  = is_array($input) ? ($input['conversation_id'] ?? null) : ($_POST['conversation_id'] ?? null);
-        $folder   = is_array($input) ? ($input['folder'] ?? 'primary') : ($_POST['folder'] ?? 'primary');
+        $convoId  = $input['conversation_id'] ?? ($_POST['conversation_id'] ?? null);
+        $folder   = $input['folder'] ?? ($_POST['folder'] ?? 'primary');
 
-        if (!$convoId) {
-            $this->json(['success' => false], 400);
-            return;
-        }
-
-        $messageModel = new Message();
-        if (!$messageModel->isParticipant($convoId, $userId)) {
-            $this->json(['success' => false], 403);
-            return;
-        }
+        $messageModel = $this->getValidConversation($convoId, $userId);
+        if ($messageModel === false) return;
 
         $messageModel->setFolder($convoId, $userId, $folder);
         $this->json(['success' => true, 'folder' => $folder]);
@@ -608,10 +584,11 @@ class MessageController extends Controller
     public function deleteSingleMessage()
     {
         Middleware::requireLogin();
+        $input = $this->validateAjaxCsrf();
+        if ($input === false) return;
+
         $userId   = $_SESSION['user_id'];
-        $inputRaw = file_get_contents('php://input');
-        $input    = $inputRaw ? json_decode($inputRaw, true) : null;
-        $msgId    = is_array($input) ? ($input['message_id'] ?? null) : ($_POST['message_id'] ?? null);
+        $msgId    = $input['message_id'] ?? ($_POST['message_id'] ?? null);
 
         if (!$msgId) {
             $this->json(['success' => false, 'message' => 'Missing message ID.'], 400);
@@ -626,5 +603,41 @@ class MessageController extends Controller
         } else {
             $this->json(['success' => false, 'message' => 'Failed to delete message.']);
         }
+    }
+
+    /**
+     * Centralized CSRF and AJAX JSON decoding helper (DRY).
+     */
+    private function validateAjaxCsrf()
+    {
+        $inputRaw = file_get_contents('php://input');
+        $input    = $inputRaw ? json_decode($inputRaw, true) : [];
+        $token    = $input['csrf_token'] ?? ($_POST['csrf_token'] ?? '');
+
+        if (empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $token)) {
+            $this->json(['success' => false, 'message' => 'Invalid CSRF token.'], 403);
+            return false;
+        }
+
+        return sizeof($input) > 0 ? $input : $_POST;
+    }
+
+    /**
+     * Centralized conversation authorization check (DRY).
+     */
+    private function getValidConversation($convoId, $userId)
+    {
+        if (!$convoId) {
+            $this->json(['success' => false, 'message' => 'Missing conversation ID.'], 400);
+            return false;
+        }
+
+        $messageModel = new Message();
+        if (!$messageModel->isParticipant($convoId, $userId)) {
+            $this->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+            return false;
+        }
+
+        return $messageModel;
     }
 }

@@ -81,7 +81,7 @@ $router->post('/bookings/cancel-counter', [BookingController::class , 'cancelCou
 $router->post('/bookings/confirm-completion', [BookingController::class , 'confirmCompletion']);
 
 // Review Routes
-$router->get('/reviews/create', [ReviewController::class , 'create']);
+$router->get('/reviews/create/{bookingId}', [ReviewController::class , 'create']);
 $router->post('/reviews/create', [ReviewController::class , 'store']);
 
 // Favorite Routes
@@ -121,6 +121,7 @@ $router->post('/messages/folder', [MessageController::class , 'setFolder']);
 $router->get('/notifications', [NotificationController::class , 'index']);
 $router->post('/notifications/mark-all-read', [NotificationController::class , 'markAllRead']);
 $router->get('/notifications/read', [NotificationController::class , 'markRead']);
+$router->post('/notifications/read', [NotificationController::class , 'markRead']);
 $router->get('/notifications/unread-count', [NotificationController::class , 'unreadCount']);
 $router->post('/notifications/delete',     [NotificationController::class, 'delete']);
 $router->post('/notifications/delete-all', [NotificationController::class, 'deleteAll']);

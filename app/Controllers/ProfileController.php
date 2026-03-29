@@ -40,15 +40,7 @@ class ProfileController extends Controller
         }
 
         if (!$user) {
-            // Show the proper styled 404 page instead of raw text
-            http_response_code(404);
-            $viewPath = BASE_PATH . '/resources/views/errors/404.php';
-            if (file_exists($viewPath)) {
-                require $viewPath;
-            } else {
-                echo "404 - User Not Found";
-            }
-            exit;
+            throw new \App\Exceptions\NotFoundException();
         }
 
         // We use the internal $id for related queries
@@ -76,11 +68,28 @@ class ProfileController extends Controller
         $reviews = [];
         $rating = ['avg_rating' => 0, 'total_reviews' => 0];
         $isFavorite = false;
+        $totalCompletedJobs = 0;
+        $showTotalJobs = true;
 
         if ($user['role'] === 'craftsman') {
             $reviewModel = new Review();
             $reviews = $reviewModel->getReviewsForCraftsman($id);
             $rating = $reviewModel->getCraftsmanRating($id);
+
+            // Fetch Total Jobs
+            $bookingModel = new \App\Models\Booking();
+            if (!empty($craftsmanDetails['json_metadata'])) {
+                $meta = json_decode($craftsmanDetails['json_metadata'], true);
+                if (isset($meta['show_total_jobs'])) {
+                    $showTotalJobs = (bool)$meta['show_total_jobs'];
+                }
+            }
+
+            // If the user themselves is viewing, or the setting is public
+            $isOwnProfile = isset($_SESSION['user_id']) && $_SESSION['user_id'] == $id;
+            if ($showTotalJobs || $isOwnProfile) {
+                $totalCompletedJobs = $bookingModel->countCompletedForCraftsman($id);
+            }
 
             if (isset($_SESSION['user_id']) && $_SESSION['user_id'] != $id && ($_SESSION['role'] ?? '') !== 'admin') {
                 $favoriteModel = new Favorite();
@@ -89,13 +98,13 @@ class ProfileController extends Controller
         }
 
         // Prepare SEO Tags
-        $fullName = $user['first_name'] . ' ' . $user['last_name'];
+        $fullName = htmlspecialchars($user['first_name'] . ' ' . $user['last_name']);
         $ogTitle = $fullName . ' - Profile on Crafts';
         $metaDesc = "View the profile of {$fullName} on Crafts.";
 
         if ($user['role'] === 'craftsman') {
-            $service = $craftsmanDetails['service_category'] ?? 'Professional';
-            $loc = !empty($user['wilaya']) ? " in {$user['wilaya']}" : "";
+            $service = htmlspecialchars($craftsmanDetails['service_category'] ?? 'Professional');
+            $loc = !empty($user['wilaya']) ? " in " . htmlspecialchars($user['wilaya']) : "";
             $metaDesc = "Hire {$fullName}, a skilled {$service}{$loc} on Crafts. Read reviews and view their portfolio.";
         }
 
@@ -109,6 +118,8 @@ class ProfileController extends Controller
             'reviews' => $reviews,
             'rating' => $rating,
             'isFavorite' => $isFavorite,
+            'totalCompletedJobs' => $totalCompletedJobs,
+            'showTotalJobs' => $showTotalJobs,
             'metaDescription' => $metaDesc,
             'ogTitle' => $ogTitle,
             'ogDescription' => $metaDesc,
@@ -123,6 +134,7 @@ class ProfileController extends Controller
     {
         Middleware::requireLogin();
         $id = $_SESSION['user_id'];
+        $error = $_GET['error'] ?? null;
 
         $userModel = new User();
         $user = $userModel->findById($id);
@@ -137,7 +149,8 @@ class ProfileController extends Controller
             'pageTitle' => 'Edit Profile - Crafts',
             'contentView' => 'profile/edit',
             'user' => $user,
-            'craftsmanDetails' => $craftsmanDetails
+            'craftsmanDetails' => $craftsmanDetails,
+            'error' => $error
         ]);
     }
 
@@ -150,10 +163,21 @@ class ProfileController extends Controller
         Middleware::verifyCsrfToken();
         $id = $_SESSION['user_id'];
 
-        $firstName = trim($_POST['first_name'] ?? '');
-        $lastName = trim($_POST['last_name'] ?? '');
-        $phone = trim($_POST['phone_number'] ?? '');
-        $wilaya = trim($_POST['wilaya'] ?? '');
+        $validator = new \App\Services\Validator();
+        if (!$validator->validate($_POST, [
+            'first_name'   => 'required|min:2|max:50',
+            'last_name'    => 'required|min:2|max:50'
+            // Disabled strict requirements for phone & wilaya to allow partial profile saving
+        ])) {
+            $errorMsg = urlencode($validator->getFirstError());
+            header("Location: " . APP_URL . "/profile/edit?error=" . $errorMsg);
+            exit;
+        }
+
+        $firstName = trim($_POST['first_name']);
+        $lastName = trim($_POST['last_name']);
+        $phone = trim($_POST['phone_number']);
+        $wilaya = trim($_POST['wilaya']);
         $username = trim($_POST['username'] ?? '');
 
         // Handle basic User table updates
@@ -198,7 +222,15 @@ class ProfileController extends Controller
             'id' => $id
         ];
 
-        $userModel->executeQuery($sql, array_merge($params, $usernameParams));
+        try {
+            $userModel->executeQuery($sql, array_merge($params, $usernameParams));
+        } catch (\PDOException $e) {
+            if ($e->getCode() == 23000) { // Integrity constraint violation (Duplicate entry)
+                header("Location: " . APP_URL . "/profile/edit?error=" . urlencode("Username is already taken."));
+                exit;
+            }
+            throw $e;
+        }
 
         // Handle Profile Picture Removal
         if (isset($_POST['remove_picture']) && $_POST['remove_picture'] == '1') {
@@ -220,7 +252,8 @@ class ProfileController extends Controller
 
             $maxFileSize = 5 * 1024 * 1024;
             if ($_FILES['profile_picture']['size'] > $maxFileSize) {
-                // File too large — silently skip
+                header("Location: " . APP_URL . "/profile/edit?error=" . urlencode("Profile picture exceeds the 5MB limit."));
+                exit;
             }
             elseif (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
                 $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
@@ -232,7 +265,7 @@ class ProfileController extends Controller
                     $newName = time() . '_' . uniqid() . '.' . $ext;
                     $uploadDir = BASE_PATH . '/public/uploads/profile/';
                     if (!is_dir($uploadDir)) {
-                        mkdir($uploadDir, 0777, true);
+                        mkdir($uploadDir, 0755, true);
                     }
 
                     if (move_uploaded_file($tmpName, $uploadDir . $newName)) {
@@ -255,14 +288,21 @@ class ProfileController extends Controller
                 'bio' => $_POST['bio'] ?? ''
             ];
 
+            // --- Metadata updates ---
+            $existing = $craftsmanModel->findByUserId($id);
+            $meta = [];
+            if ($existing && !empty($existing['json_metadata'])) {
+                $meta = json_decode($existing['json_metadata'], true) ?: [];
+            }
+            $meta['show_total_jobs'] = isset($_POST['show_total_jobs']) && $_POST['show_total_jobs'] == '1';
+            $data['json_metadata'] = json_encode($meta);
+
             // --- Portfolio Image Management ---
             $uploadDir = BASE_PATH . '/public/uploads/portfolio/';
             if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
+                mkdir($uploadDir, 0755, true);
             }
 
-            $existing = $craftsmanModel->findByUserId($id);
-            $oldImages = [];
             if ($existing && !empty($existing['portfolio_images'])) {
                 $oldImages = json_decode($existing['portfolio_images'], true) ?: [];
             }
@@ -289,7 +329,11 @@ class ProfileController extends Controller
                         $origName = basename($_FILES['portfolio_images']['name'][$i]);
                         $ext = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
 
-                        if (in_array($ext, $allowedExts) && $_FILES['portfolio_images']['size'][$i] <= 5 * 1024 * 1024) {
+                        if ($_FILES['portfolio_images']['size'][$i] > 5 * 1024 * 1024) {
+                            header("Location: " . APP_URL . "/profile/edit?error=" . urlencode("One or more portfolio images exceed the 5MB limit."));
+                            exit;
+                        }
+                        if (in_array($ext, $allowedExts)) {
                             $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
                             $finfo = new \finfo(FILEINFO_MIME_TYPE);
                             $detectedMime = $finfo->file($tmpName);
@@ -311,6 +355,28 @@ class ProfileController extends Controller
         }
 
         $user = $userModel->findById($id);
+
+        if ($user['role'] === 'craftsman') {
+            // Re-fetch to get the newly updated state
+            $craftsmanDetails = $craftsmanModel->findByUserId($id);
+            
+            if (!empty($craftsmanDetails['is_published'])) {
+                $missingFields = empty($user['first_name']) || 
+                                 empty($user['last_name']) || 
+                                 empty($user['phone_number']) || 
+                                 empty($user['wilaya']) ||
+                                 empty($craftsmanDetails['service_category']) ||
+                                 empty($craftsmanDetails['bio']) ||
+                                 !isset($craftsmanDetails['hourly_rate']) || $craftsmanDetails['hourly_rate'] <= 0;
+                
+                if ($missingFields) {
+                    $craftsmanModel->setPublishStatus($id, 0);
+                    header('Location: ' . APP_URL . '/profile/' . $user['username'] . '?info=unpublished');
+                    exit;
+                }
+            }
+        }
+
         header('Location: ' . APP_URL . '/profile/' . $user['username']);
         exit;
     }
@@ -321,6 +387,7 @@ class ProfileController extends Controller
     public function publish()
     {
         Middleware::requireLogin();
+        Middleware::verifyCsrfToken();
         $id = $_SESSION['user_id'];
         $role = $_SESSION['role'] ?? '';
 
@@ -338,10 +405,32 @@ class ProfileController extends Controller
         if ($status == 1) {
             $craftsmanDetails = $craftsmanModel->findByUserId($id);
 
-            if (empty($craftsmanDetails['id']) || empty($user['wilaya']) || empty($user['phone_number'])) {
+            // Core required fields to publish a profile
+            if (empty($user['first_name']) || 
+                empty($user['last_name']) || 
+                empty($user['phone_number']) || 
+                empty($user['wilaya']) ||
+                empty($craftsmanDetails['service_category']) ||
+                empty($craftsmanDetails['bio']) ||
+                !isset($craftsmanDetails['hourly_rate']) || $craftsmanDetails['hourly_rate'] <= 0
+            ) {
                 header('Location: ' . APP_URL . '/profile/' . ($user['username'] ?? $id) . '?error=incomplete');
                 exit;
             }
+
+            // Optional: Uncomment to force Profile Picture and Portfolio before publishing
+            /*
+            if (empty($user['profile_picture']) || $user['profile_picture'] === 'default.png') {
+                header('Location: ' . APP_URL . '/profile/' . ($user['username'] ?? $id) . '?error=incomplete');
+                exit;
+            }
+            
+            $portfolio = json_decode($craftsmanDetails['portfolio_images'], true);
+            if (empty($portfolio)) {
+                header('Location: ' . APP_URL . '/profile/' . ($user['username'] ?? $id) . '?error=incomplete');
+                exit;
+            }
+            */
         }
 
         $craftsmanModel->setPublishStatus($id, $status);

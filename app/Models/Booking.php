@@ -31,7 +31,7 @@ class Booking extends Model
     public function getBookingsForCraftsman($craftsmanId)
     {
         $stmt = $this->db->prepare(
-            "SELECT rb.*, u.first_name, u.last_name, u.profile_picture, u.username, u.email, u.username
+            "SELECT rb.*, u.first_name, u.last_name, u.profile_picture, u.username, u.email
              FROM requests_bookings rb
              JOIN users u ON rb.homeowner_id = u.id
              WHERE rb.craftsman_id = :craftsman_id
@@ -180,6 +180,17 @@ class Booking extends Model
             "SELECT COUNT(*) FROM requests_bookings WHERE homeowner_id = :id AND status IN ('requested', 'quoted', 'counter_offered')"
         );
         $stmt->execute(['id' => $homeownerId]);
+        return $stmt->fetchColumn();
+    }
+    /**
+     * Count completed booking requests for a craftsman.
+     */
+    public function countCompletedForCraftsman($craftsmanId)
+    {
+        $stmt = $this->db->prepare(
+            "SELECT COUNT(*) FROM requests_bookings WHERE craftsman_id = :id AND status = 'completed'"
+        );
+        $stmt->execute(['id' => $craftsmanId]);
         return $stmt->fetchColumn();
     }
 }

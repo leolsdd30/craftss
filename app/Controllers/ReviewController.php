@@ -12,14 +12,12 @@ class ReviewController extends Controller
     /**
      * Show the review form for a completed booking.
      */
-    public function create()
+    public function create($bookingId = null)
     {
         Middleware::requireLogin();
         
         // We only allow homeowners to write reviews now
         Middleware::requireRole('homeowner');
-
-        $bookingId = $_GET['booking_id'] ?? null;
 
         if (!$bookingId) {
             header("Location: " . APP_URL . "/homeowner/dashboard");
@@ -42,16 +40,8 @@ class ReviewController extends Controller
             exit;
         }
 
-        // Load craftsman user info for the UI
-        $userModel = new User();
-        $craftsman = $userModel->findById($booking['craftsman_id']);
-
-        $this->view('layouts/app', [
-            'pageTitle' => 'Write a Review - Crafts',
-            'contentView' => 'reviews/create',
-            'craftsman' => $craftsman,
-            'bookingId' => $bookingId
-        ]);
+        // Load UI
+        $this->renderReviewForm($booking['craftsman_id'], $bookingId);
     }
 
     /**
@@ -80,17 +70,17 @@ class ReviewController extends Controller
             exit;
         }
 
-        if ($starRating < 1 || $starRating > 5) {
-            $userModel = new User();
-            $craftsman = $userModel->findById($booking['craftsman_id']);
+        $validator = new \App\Services\Validator();
+        if (!$validator->validate($_POST, [
+            'star_rating' => 'required',
+            'comment'     => 'required|min:5|max:1500'
+        ])) {
+            $this->renderReviewForm($booking['craftsman_id'], $bookingId, $validator->getFirstError());
+            return;
+        }
 
-            $this->view('layouts/app', [
-                'pageTitle' => 'Write a Review - Crafts',
-                'contentView' => 'reviews/create',
-                'craftsman' => $craftsman,
-                'bookingId' => $bookingId,
-                'error' => 'Please select a star rating (1-5).'
-            ]);
+        if ($starRating < 1 || $starRating > 5) {
+            $this->renderReviewForm($booking['craftsman_id'], $bookingId, 'Please select a star rating (1-5).');
             return;
         }
 
@@ -113,6 +103,7 @@ class ReviewController extends Controller
         if ($success) {
             // Notify the craftsman about the new review
             $notif = new Notification();
+            
             $notif->send($booking['craftsman_id'], 'review_new', 'New Review Received', 
                 $_SESSION['name'] . ' left you a ' . $starRating . '-star review!', 
                 APP_URL . '/craftsman/dashboard#reviews');
@@ -122,5 +113,22 @@ class ReviewController extends Controller
             header("Location: " . APP_URL . "/homeowner/dashboard?error=review_failed#bookings");
         }
         exit;
+    }
+
+    /**
+     * Helper method to render the review form and avoid code duplication.
+     */
+    private function renderReviewForm($craftsmanId, $bookingId, $error = null)
+    {
+        $userModel = new \App\Models\User();
+        $craftsman = $userModel->findById($craftsmanId);
+
+        $this->view('layouts/app', [
+            'pageTitle'   => 'Write a Review - Crafts',
+            'contentView' => 'reviews/create',
+            'craftsman'   => $craftsman,
+            'bookingId'   => $bookingId,
+            'error'       => $error
+        ]);
     }
 }

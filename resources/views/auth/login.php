@@ -1,8 +1,9 @@
+<?php $hideFooter = true; ?>
 <!-- Login Page -->
 <div class="min-h-[calc(100vh-4rem)] bg-gray-50 flex">
 
     <!-- Left Panel — Branding -->
-    <div class="hidden lg:flex lg:w-1/2 bg-indigo-700 flex-col justify-between p-12 relative overflow-hidden lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16">
+    <div class="hidden lg:flex lg:w-1/2 bg-indigo-700 flex-col justify-between p-12 relative overflow-y-auto overflow-x-hidden lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16">
         <!-- Background decoration -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div class="absolute -top-24 -left-24 w-96 h-96 bg-indigo-600 rounded-full opacity-50"></div>
@@ -105,7 +106,7 @@
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
                     <input id="email" name="email" type="email" autocomplete="email" required
-                        class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400
+                        class="block w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400
                                focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                         placeholder="you@example.com">
                 </div>
@@ -115,7 +116,7 @@
                     <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
                     <div class="relative">
                         <input id="password" name="password" type="password" autocomplete="current-password" required
-                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400
+                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400
                                    focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition pr-11"
                             placeholder="••••••••">
                         <button type="button" onclick="togglePassword('password', this)"
@@ -137,7 +138,7 @@
 </div>
                 <!-- Submit -->
                 <button type="submit"
-                    class="w-full flex justify-center items-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    class="w-full flex justify-center items-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Sign in
                     <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>

@@ -1,10 +1,21 @@
 <!-- Edit Profile Page -->
 <?php
+$hideFooter = true;
+
 $existingImages = [];
 if (!empty($craftsmanDetails['portfolio_images'])) {
     $existingImages = json_decode($craftsmanDetails['portfolio_images'], true) ?: [];
 }
+
 $isCraftsman  = $user['role'] === 'craftsman';
+
+$showTotalJobs = true;
+if ($isCraftsman && !empty($craftsmanDetails['json_metadata'])) {
+    $meta = json_decode($craftsmanDetails['json_metadata'], true);
+    if (isset($meta['show_total_jobs'])) {
+        $showTotalJobs = (bool)$meta['show_total_jobs'];
+    }
+}
 
 $wilayas = [
     "01 - Adrar","02 - Chlef","03 - Laghouat","04 - Oum El Bouaghi","05 - Batna","06 - Béjaïa","07 - Biskra","08 - Béchar","09 - Blida","10 - Bouira",
@@ -30,182 +41,144 @@ if (!empty($user['username_updated_at'])) {
 }
 ?>
 
-<div class="bg-gray-50 min-h-screen pb-16">
+<div class="bg-gray-50 min-h-screen pt-8 pb-28">
 
-    <!-- Cover banner -->
-    <div class="h-36 w-full bg-gradient-to-r from-indigo-700 to-indigo-500 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-20"
-             style="background-image:radial-gradient(#fff 1px,transparent 1px);background-size:20px 20px;"></div>
-    </div>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-10">
-
-        <!-- Back link -->
-        <a href="<?= APP_URL ?>/profile/<?= e($user['username']) ?>"
-           class="inline-flex items-center text-sm font-medium text-white hover:text-indigo-100 transition mb-5 drop-shadow group">
-            <svg class="mr-1.5 h-4 w-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-            </svg>
-            Back to Profile
-        </a>
+        <!-- Header area with Back link -->
+        <div class="flex items-center justify-between mb-6">
+            <a href="<?= APP_URL ?>/profile/<?= e($user['username']) ?>"
+               class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-indigo-600 transition group">
+                <svg class="mr-1.5 h-4 w-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Back to Profile
+            </a>
+            <h1 class="text-xl font-bold text-gray-900 hidden sm:block">Edit Profile</h1>
+        </div>
 
         <form action="<?= APP_URL ?>/profile/edit" method="POST" enctype="multipart/form-data" id="edit-form">
         <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']) ?>">
 
         <!-- ════════════════════════════════════════════════════════════
-             TWO-COLUMN LAYOUT
+             FLEX / GRID LAYOUT
         ════════════════════════════════════════════════════════════ -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        <div class="flex flex-col lg:grid lg:grid-cols-3 gap-6 items-start">
 
-            <!-- ══ LEFT COLUMN (1/3) ══════════════════════════════════ -->
-            <div class="space-y-5">
+            <!-- 1. PROFILE PICTURE CARD (Mobile: Order 1, Desktop: Col 1 Row 1) -->
+            <div class="order-1 lg:order-none lg:col-span-1 lg:col-start-1 lg:row-start-1 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="p-5">
+                    <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center">
+                        <svg class="h-3.5 w-3.5 mr-1.5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        Profile Picture
+                    </h2>
 
-                <!-- Profile Picture card -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="h-1 w-full bg-indigo-600"></div>
-                    <div class="p-5">
-                        <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Profile Picture</h2>
-
-                        <!-- Avatar preview -->
-                        <div class="flex flex-col items-center mb-4">
-                            <div class="relative w-24 h-24 rounded-full overflow-hidden bg-gray-100 ring-4 ring-indigo-50 border border-gray-200 shadow-sm mb-3">
-                                <img id="profile-preview"
-                                     src="<?= get_profile_picture_url($user['profile_picture'] ?? 'default.png', $user['first_name'], $user['last_name']) ?>"
-                                     alt="Profile" class="object-cover w-full h-full">
+                    <div class="flex items-center gap-4 sm:flex-col sm:items-center">
+                        <!-- Avatar -->
+                        <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-gray-100 ring-4 ring-indigo-50 border border-gray-200 shadow-sm mb-0 sm:mb-3 flex-shrink-0">
+                            <img id="profile-preview"
+                                 src="<?= get_profile_picture_url($user['profile_picture'] ?? 'default.png', $user['first_name'], $user['last_name']) ?>"
+                                 alt="Profile" class="object-cover w-full h-full">
+                        </div>
+                        
+                        <!-- Details / Buttons -->
+                        <div class="flex-grow w-full">
+                            <!-- Mobile text next to avatar -->
+                            <div class="sm:hidden mb-2.5">
+                                <p class="text-sm font-bold text-gray-900"><?= e($user['first_name'] . ' ' . $user['last_name']) ?></p>
+                                <p class="text-xs text-gray-400 mt-0.5 capitalize"><?= e($user['role']) ?></p>
                             </div>
-                            <p class="text-sm font-bold text-gray-900"><?= e($user['first_name'] . ' ' . $user['last_name']) ?></p>
-                            <p class="text-xs text-gray-400 mt-0.5 capitalize"><?= e($user['role']) ?></p>
-                        </div>
-
-                        <!-- Upload controls -->
-                        <input type="file" name="profile_picture" id="profile-upload" class="sr-only"
-                               accept="image/png,image/jpeg,image/gif,image/webp" onchange="previewImage(event)">
-                        <button type="button" onclick="document.getElementById('profile-upload').click()"
-                            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition">
-                            <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
-                            </svg>
-                            Change Photo
-                        </button>
-                        <p id="file-name" class="mt-1.5 text-xs text-center text-gray-400">JPG, PNG, GIF or WebP · max 5MB</p>
-
-                        <?php if (!empty($user['profile_picture']) && $user['profile_picture'] !== 'default.png'): ?>
-                        <input type="checkbox" name="remove_picture" id="remove_picture" value="1" class="hidden">
-                        <button type="button" id="remove-btn" onclick="removePhoto()"
-                            class="mt-2 w-full text-xs font-medium text-red-500 hover:text-red-700 transition text-center">
-                            Remove Photo
-                        </button>
-                        <?php endif; ?>
-                    </div>
-                </div>
-
-                <?php if ($isCraftsman): ?>
-                <!-- Portfolio card (craftsman only) -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="h-1 w-full bg-indigo-600"></div>
-                    <div class="p-5">
-                        <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Portfolio</h2>
-                        <p class="text-xs text-gray-400 mb-4">Up to 10 images · JPG PNG GIF WebP · 5MB each</p>
-
-                        <!-- Existing images -->
-                        <?php if (!empty($existingImages)): ?>
-                        <div class="mb-4">
-                            <p class="text-xs font-medium text-gray-500 mb-2">
-                                Current (<span id="portfolio-count"><?= count($existingImages) ?></span>) — hover to remove
-                            </p>
-                            <div class="grid grid-cols-3 gap-2" id="existing-portfolio">
-                                <?php foreach ($existingImages as $index => $img): ?>
-                                <div class="relative group rounded-xl overflow-hidden border border-gray-200 aspect-square"
-                                     id="portfolio-item-<?= $index ?>">
-                                    <!-- Click image opens lightbox -->
-                                    <img src="<?= APP_URL ?>/uploads/portfolio/<?= e($img) ?>"
-                                         alt="Portfolio"
-                                         class="w-full h-full object-cover cursor-zoom-in"
-                                         onclick="openEditLightbox('<?= APP_URL ?>/uploads/portfolio/<?= e($img) ?>', 'existing')">
-                                    <!-- X button top-right -->
-                                    <button type="button" onclick="event.stopPropagation(); removePortfolioImage(<?= $index ?>, '<?= e($img) ?>')"
-                                        class="absolute top-1.5 right-1.5 z-10 bg-red-500 hover:bg-red-600 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs font-bold shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                                        ×
-                                    </button>
-                                    <input type="hidden" name="existing_images[]" value="<?= e($img) ?>" id="input-portfolio-<?= $index ?>">
-                                </div>
-                                <?php endforeach; ?>
+                            
+                            <!-- Desktop text below avatar -->
+                            <div class="hidden sm:block text-center mb-4">
+                                <p class="text-sm font-bold text-gray-900"><?= e($user['first_name'] . ' ' . $user['last_name']) ?></p>
+                                <p class="text-xs text-gray-400 mt-0.5 capitalize"><?= e($user['role']) ?></p>
                             </div>
-                        </div>
-                        <?php endif; ?>
 
-                        <!-- Upload new -->
-                        <input type="file" name="portfolio_images[]" id="portfolio-upload" multiple
-                               accept="image/png,image/jpeg,image/gif,image/webp" class="hidden">
-                        <input type="file" id="portfolio-picker" multiple
-                               accept="image/png,image/jpeg,image/gif,image/webp"
-                               class="hidden" onchange="addNewPortfolioFiles(this)">
-                        <div class="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center hover:border-indigo-300 transition cursor-pointer"
-                             id="portfolio-dropzone"
-                             onclick="document.getElementById('portfolio-picker').click()">
-                            <svg class="mx-auto h-8 w-8 text-gray-300 mb-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                            </svg>
-                            <p class="text-xs font-medium text-gray-500" id="dropzone-text">Click to add images</p>
-                        </div>
+                            <!-- Upload controls -->
+                            <input type="file" name="profile_picture" id="profile-upload" class="sr-only"
+                                   accept="image/png,image/jpeg,image/gif,image/webp" onchange="previewImage(event)">
+                            <button type="button" onclick="document.getElementById('profile-upload').click()"
+                                class="w-full flex items-center justify-center gap-2 px-4 py-2 sm:py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition">
+                                <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                                </svg>
+                                Change Photo
+                            </button>
+                            <p id="file-name" class="mt-1.5 text-[10px] sm:text-xs text-center text-gray-400">JPG, PNG, GIF or WebP · max 5MB</p>
 
-                        <!-- New image previews -->
-                        <div id="portfolio-new-previews" class="grid grid-cols-3 gap-2 mt-3 hidden"></div>
+                            <?php if (!empty($user['profile_picture']) && $user['profile_picture'] !== 'default.png'): ?>
+                            <input type="checkbox" name="remove_picture" id="remove_picture" value="1" class="hidden">
+                            <button type="button" id="remove-btn" onclick="removePhoto()"
+                                class="mt-2 w-full text-xs font-medium text-red-500 hover:text-red-700 transition text-center">
+                                Remove Photo
+                            </button>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
-                <?php endif; ?>
+            </div>
 
-            </div><!-- end left col -->
+            <!-- 2. PERSONAL INFORMATION (Mobile: Order 2, Desktop: Col 2-3 Row 1) -->
+            <div class="order-2 lg:order-none lg:col-span-2 lg:col-start-2 lg:row-start-1 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center">
+                    <svg class="h-3.5 w-3.5 mr-1.5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    Personal Information
+                </h2>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
-            <!-- ══ RIGHT COLUMN (2/3) ═════════════════════════════════ -->
-            <div class="lg:col-span-2 space-y-5">
-
-                <!-- Personal Information -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Personal Information</h2>
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-
-                        <div>
-                            <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                            <input type="text" name="first_name" id="first_name" required
-                                   value="<?= e($user['first_name']) ?>"
-                                   class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                        </div>
-
-                        <div>
-                            <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                            <input type="text" name="last_name" id="last_name" required
-                                   value="<?= e($user['last_name']) ?>"
-                                   class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                        </div>
-
-                        <div>
-                            <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                            <input type="tel" name="phone_number" id="phone_number"
-                                   value="<?= e($user['phone_number'] ?? '') ?>"
-                                   placeholder="e.g. 0555 123 456"
-                                   class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                        </div>
-
-                        <div>
-                            <label for="wilaya" class="block text-sm font-medium text-gray-700 mb-1">Wilaya</label>
-                            <select name="wilaya" id="wilaya"
-                                    class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                                <option value="">— Select Wilaya —</option>
-                                <?php foreach ($wilayas as $w): ?>
-                                <option value="<?= e($w) ?>" <?= ($user['wilaya'] ?? '') === $w ? 'selected' : '' ?>><?= e($w) ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Username -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Username</h2>
                     <div>
-                        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">
+                        <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                        <input type="text" name="first_name" id="first_name" required
+                               value="<?= e($user['first_name']) ?>"
+                               class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                    </div>
+
+                    <div>
+                        <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                        <input type="text" name="last_name" id="last_name" required
+                               value="<?= e($user['last_name']) ?>"
+                               class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                    </div>
+
+                    <div>
+                        <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                            Phone Number
+                            <?php if ($isCraftsman && empty($user['phone_number'])): ?>
+                            <span class="text-[10px] text-amber-500 font-bold ml-2 inline-flex items-center bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 uppercase tracking-widest">
+                                <svg class="w-3 h-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                Publish req.
+                            </span>
+                            <?php endif; ?>
+                        </label>
+                        <input type="tel" name="phone_number" id="phone_number"
+                               value="<?= e($user['phone_number'] ?? '') ?>"
+                               placeholder="e.g. 0555 123 456"
+                               class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                    </div>
+
+                    <div>
+                        <label for="wilaya" class="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                            Wilaya
+                            <?php if ($isCraftsman && empty($user['wilaya'])): ?>
+                            <span class="text-[10px] text-amber-500 font-bold ml-2 inline-flex items-center bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 uppercase tracking-widest">
+                                <svg class="w-3 h-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                Publish req.
+                            </span>
+                            <?php endif; ?>
+                        </label>
+                        <select name="wilaya" id="wilaya"
+                                class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            <option value="">— Select Wilaya —</option>
+                            <?php foreach ($wilayas as $w): ?>
+                            <option value="<?= e($w) ?>" <?= ($user['wilaya'] ?? '') === $w ? 'selected' : '' ?>><?= e($w) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <!-- Merged Username -->
+                    <div class="sm:col-span-2 pt-5 border-t border-gray-100 mt-2">
+                        <label for="username" class="block text-sm font-bold text-gray-900 mb-1">
                             Public Username
                             <span class="text-gray-400 font-normal ml-1 text-xs">— appears in your profile URL</span>
                         </label>
@@ -230,80 +203,170 @@ if (!empty($user['username_updated_at'])) {
                         <p class="mt-1 text-xs text-gray-400">Must start with a letter · min 3 chars · letters, numbers, _ and - only</p>
                         <?php endif; ?>
                     </div>
+
                 </div>
+            </div>
 
-                <?php if ($isCraftsman): ?>
-                <!-- Professional Details (craftsman only) -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Professional Details</h2>
-                    <div class="space-y-4">
+            <!-- 3. PROFESSIONAL DETAILS (Mobile: Order 3, Desktop: Col 2-3 Row 2) -->
+            <?php if ($isCraftsman): ?>
+            <div class="order-3 lg:order-none lg:col-span-2 lg:col-start-2 lg:row-start-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center">
+                    <svg class="h-3.5 w-3.5 mr-1.5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    Professional Details
+                </h2>
+                <div class="space-y-4">
 
-                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <div>
-                                <label for="service_category" class="block text-sm font-medium text-gray-700 mb-1">Service Category</label>
-                                <select name="service_category" id="service_category"
-                                        class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                                    <?php
-                                    $selectedCat = $craftsmanDetails['service_category'] ?? 'General Handyman';
-                                    foreach ($categories as $cat):
-                                    ?>
-                                    <option value="<?= e($cat) ?>" <?= $cat === $selectedCat ? 'selected' : '' ?>><?= e($cat) ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="hourly_rate" class="block text-sm font-medium text-gray-700 mb-1">Hourly Rate</label>
-                                <div class="relative">
-                                    <input type="number" name="hourly_rate" id="hourly_rate"
-                                           step="0.01" min="0"
-                                           value="<?= e($craftsmanDetails['hourly_rate'] ?? '0.00') ?>"
-                                           class="block w-full px-4 py-2.5 pr-14 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                        <span class="text-gray-400 text-sm font-medium">DZD</span>
-                                    </div>
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div>
+                            <label for="service_category" class="block text-sm font-medium text-gray-700 mb-1">Service Category</label>
+                            <select name="service_category" id="service_category"
+                                    class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                <?php
+                                $selectedCat = $craftsmanDetails['service_category'] ?? 'General Handyman';
+                                foreach ($categories as $cat):
+                                ?>
+                                <option value="<?= e($cat) ?>" <?= $cat === $selectedCat ? 'selected' : '' ?>><?= e($cat) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="hourly_rate" class="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                                Hourly Rate
+                                <?php if (!isset($craftsmanDetails['hourly_rate']) || $craftsmanDetails['hourly_rate'] <= 0): ?>
+                                <span class="text-[10px] text-amber-500 font-bold ml-2 inline-flex items-center bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 uppercase tracking-widest">
+                                    <svg class="w-3 h-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                    Publish req.
+                                </span>
+                                <?php endif; ?>
+                            </label>
+                            <div class="relative">
+                                <input type="number" name="hourly_rate" id="hourly_rate"
+                                       step="0.01" min="0"
+                                       value="<?= e($craftsmanDetails['hourly_rate'] ?? '0.00') ?>"
+                                       class="block w-full px-4 py-2.5 pr-14 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                    <span class="text-gray-400 text-sm font-medium">DZD</span>
                                 </div>
                             </div>
                         </div>
-
-                        <div>
-                            <label for="bio" class="block text-sm font-medium text-gray-700 mb-1">
-                                Professional Bio
-                                <span class="text-gray-400 font-normal ml-1 text-xs">(optional)</span>
-                            </label>
-                            <textarea id="bio" name="bio" rows="5"
-                                      maxlength="500"
-                                      placeholder="Describe your experience, skills, and what makes you stand out..."
-                                      class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition resize-none"
-                                      oninput="document.getElementById('bio-count').textContent=this.value.length"
-                            ><?= e($craftsmanDetails['bio'] ?? '') ?></textarea>
-                            <p class="mt-1 text-xs text-gray-400 text-right">
-                                <span id="bio-count"><?= strlen($craftsmanDetails['bio'] ?? '') ?></span>/500
-                            </p>
-                        </div>
-
                     </div>
+
+                    <div>
+                        <label for="bio" class="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                            Professional Bio
+                            <?php if (empty($craftsmanDetails['bio'])): ?>
+                            <span class="text-[10px] text-amber-500 font-bold ml-2 inline-flex items-center bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 uppercase tracking-widest">
+                                <svg class="w-3 h-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                Publish req.
+                            </span>
+                            <?php else: ?>
+                            <span class="text-gray-400 font-normal ml-1 text-xs">(optional)</span>
+                            <?php endif; ?>
+                        </label>
+                        <textarea id="bio" name="bio" rows="5"
+                                  maxlength="500"
+                                  placeholder="Describe your experience, skills, and what makes you stand out..."
+                                  class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition resize-none"
+                                  oninput="document.getElementById('bio-count').textContent=this.value.length"
+                        ><?= e($craftsmanDetails['bio'] ?? '') ?></textarea>
+                        <p class="mt-1 text-xs text-gray-400 text-right">
+                            <span id="bio-count"><?= strlen($craftsmanDetails['bio'] ?? '') ?></span>/500
+                        </p>
+                    </div>
+                    
+                    <!-- Total Jobs Privacy Toggle -->
+                    <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-900">Show Total Completed Jobs</h4>
+                            <p class="text-xs text-gray-500 mt-0.5">Display the number of jobs you've finished on your profile card.</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="show_total_jobs" value="1" class="sr-only peer" <?= $showTotalJobs ? 'checked' : '' ?>>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                        </label>
+                    </div>
+
                 </div>
-                <?php endif; ?>
+            </div>
+            <?php endif; ?>
 
+            <!-- 4. PORTFOLIO (Mobile: Order 4, Desktop: Col 1 Row 2) -->
+            <?php if ($isCraftsman): ?>
+            <div class="order-4 lg:order-none lg:col-span-1 lg:col-start-1 lg:row-start-2 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="p-5">
+                    <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1 flex items-center">
+                        <svg class="h-3.5 w-3.5 mr-1.5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        Portfolio
+                    </h2>
+                    <p class="text-xs text-gray-400 mb-4">Up to 10 images · JPG PNG GIF WebP · 5MB each</p>
 
-                <!-- Save / Cancel -->
-                <div class="flex items-center justify-between gap-4 pb-4">
-                    <a href="<?= APP_URL ?>/profile/<?= e($user['username']) ?>"
-                       class="px-5 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition">
-                        Cancel
-                    </a>
-                    <button type="submit"
-                        class="inline-flex items-center gap-2 px-8 py-2.5 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                    <!-- Existing images -->
+                    <?php if (!empty($existingImages)): ?>
+                    <div class="mb-4">
+                        <p class="text-xs font-medium text-gray-500 mb-2">
+                            Current (<span id="portfolio-count"><?= count($existingImages) ?></span>) — hover to remove
+                        </p>
+                        <div class="grid grid-cols-3 gap-2" id="existing-portfolio">
+                            <?php foreach ($existingImages as $index => $img): ?>
+                            <div class="relative group rounded-xl overflow-hidden border border-gray-200 aspect-square"
+                                 id="portfolio-item-<?= $index ?>">
+                                <!-- Click image opens lightbox -->
+                                <img src="<?= APP_URL ?>/uploads/portfolio/<?= e($img) ?>"
+                                     alt="Portfolio"
+                                     class="w-full h-full object-cover cursor-zoom-in"
+                                     onclick="openEditLightbox('<?= APP_URL ?>/uploads/portfolio/<?= e($img) ?>', 'existing')">
+                                <!-- X button top-right -->
+                                <button type="button" onclick="event.stopPropagation(); removePortfolioImage(<?= $index ?>, '<?= e($img) ?>')"
+                                    class="absolute top-1.5 right-1.5 z-10 bg-red-500 hover:bg-red-600 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs font-bold shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                                    ×
+                                </button>
+                                <input type="hidden" name="existing_images[]" value="<?= e($img) ?>" id="input-portfolio-<?= $index ?>">
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+
+                    <!-- Upload new -->
+                    <input type="file" name="portfolio_images[]" id="portfolio-upload" multiple
+                           accept="image/png,image/jpeg,image/gif,image/webp" class="hidden">
+                    <input type="file" id="portfolio-picker" multiple
+                           accept="image/png,image/jpeg,image/gif,image/webp"
+                           class="hidden" onchange="addNewPortfolioFiles(this)">
+                    <div class="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center hover:border-indigo-300 transition cursor-pointer"
+                         id="portfolio-dropzone"
+                         onclick="document.getElementById('portfolio-picker').click()">
+                        <svg class="mx-auto h-8 w-8 text-gray-300 mb-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
-                        Save Changes
-                    </button>
-                </div>
+                        <p class="text-xs font-medium text-gray-500" id="dropzone-text">Click to add images</p>
+                    </div>
 
-            </div><!-- end right col -->
+                    <!-- New image previews -->
+                    <div id="portfolio-new-previews" class="grid grid-cols-3 gap-2 mt-3 hidden"></div>
+                </div>
+            </div>
+            <?php endif; ?>
+
         </div><!-- end grid -->
         </form>
+
+        <!-- Sticky Save Bar -->
+        <div class="fixed bottom-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-lg border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+                <a href="<?= APP_URL ?>/profile/<?= e($user['username']) ?>"
+                   class="px-5 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition">
+                    Cancel
+                </a>
+                <button type="submit" form="edit-form"
+                    class="inline-flex items-center gap-2 px-8 py-2.5 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    Save Changes
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 

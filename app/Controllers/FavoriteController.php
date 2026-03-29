@@ -22,29 +22,21 @@ class FavoriteController extends Controller
         // Proper CSRF protection for AJAX
         $token = $input['csrf_token'] ?? $_POST['csrf_token'] ?? '';
         if (empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $token)) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'message' => 'CSRF Token Validation Failed.']);
-            exit;
+            $this->json(['success' => false, 'message' => 'CSRF Token Validation Failed.'], 403);
+            return;
         }
 
-        $craftsmanId = null;
-        if (is_array($input) && isset($input['craftsman_id'])) {
-            $craftsmanId = $input['craftsman_id'];
-        } else {
-            $craftsmanId = $_POST['craftsman_id'] ?? null;
-        }
+        $craftsmanId = (int) ($input['craftsman_id'] ?? $_POST['craftsman_id'] ?? 0);
 
         if (!$craftsmanId) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'message' => 'Invalid craftsman ID.']);
-            exit;
+            $this->json(['success' => false, 'message' => 'Invalid craftsman ID.'], 400);
+            return;
         }
 
         // Cannot favorite yourself
-        if ((int)$craftsmanId === (int)$_SESSION['user_id']) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'message' => 'You cannot save yourself.']);
-            exit;
+        if ($craftsmanId === (int)$_SESSION['user_id']) {
+            $this->json(['success' => false, 'message' => 'You cannot save yourself.'], 400);
+            return;
         }
 
         $favoriteModel = new Favorite();
@@ -60,12 +52,10 @@ class FavoriteController extends Controller
             $newState = true;
         }
 
-        header('Content-Type: application/json');
         if ($success) {
-            echo json_encode(['success' => true, 'action' => $action, 'is_favorite' => $newState]);
+            $this->json(['success' => true, 'action' => $action, 'is_favorite' => $newState]);
         } else {
-            echo json_encode(['success' => false, 'message' => 'Database error occurred.']);
+            $this->json(['success' => false, 'message' => 'Database error occurred.'], 500);
         }
-        exit;
     }
 }

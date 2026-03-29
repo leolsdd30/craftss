@@ -4,20 +4,34 @@ namespace App\Auth;
 class Middleware
 {
     /**
-     * Ensure the user is logged in. If not, redirect to the login page.
+     * Ensures the user is authenticated. 
+     * Acts as the primary security gate for protected routes.
      */
     public static function requireLogin()
     {
+        // 1. Check if the session exists
         if (!isset($_SESSION['user_id'])) {
             header("Location: " . APP_URL . "/login");
+            exit;
+        }
+
+        // 2. Active Session Validation (Instant-Ban Protection)
+        // Ensure the user's account wasn't suspended or deleted by an admin while they were actively logged in.
+        // Without this real-time check, a banned user would stay logged in until their cookie naturally expired.
+        $userModel = new \App\Models\User();
+        $user = $userModel->findById($_SESSION['user_id']);
+        
+        if (!$user || empty($user['is_active'])) {
+            session_destroy(); // Instantly kill the hijacker's or banned user's session
+            $msg = urlencode("Your account has been suspended or deleted.");
+            header("Location: " . APP_URL . "/login?error=" . $msg);
             exit;
         }
     }
 
     /**
-     * Ensure the user is logged in AND has a specific role.
-     * 
-     * @param string $role The required role (e.g., 'homeowner' or 'craftsman')
+     * Ensures the user is logged in AND possesses a specific role.
+     * Used for separating Craftsman-only and Homeowner-only actions.
      */
     public static function requireRole($role)
     {
@@ -31,7 +45,8 @@ class Middleware
     }
 
     /**
-     * Ensure an admin is logged in
+     * Ensures an admin is logged in. 
+     * Protects the /admin dashboard and user-management endpoints.
      */
     public static function requireAdmin()
     {
@@ -45,15 +60,21 @@ class Middleware
     }
 
     /**
-     * Verify a CSRF token from the POST request
+     * Verifies the CSRF token on every POST request.
+     * Prevents Cross-Site Request Forgery attacks where a malicious website
+     * tries to trick the user's browser into submitting forms on our behalf.
      */
     public static function verifyCsrfToken()
     {
         $token = $_POST['csrf_token'] ?? '';
 
+        // hash_equals() is critical here: it compares strings in "constant time".
+        // This prevents "Timing Attacks" where hackers guess the token character-by-character
+        // based on how many milliseconds the server takes to reject it.
         if (empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $token)) {
-            // Alternatively, redirect to an error page or back with an error flash.
-            die("Access Denied: CSRF Token Validation Failed. Please go back and try again.");
+            http_response_code(403);
+            require_once __DIR__ . '/../../resources/views/errors/403.php';
+            exit;
         }
         return true;
     }
