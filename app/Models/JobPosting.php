@@ -9,6 +9,14 @@ class JobPosting extends Model
     /**
      * Create a new job posting.
      */
+    /**
+     * Maximum images allowed per job (easy to change).
+     */
+    const MAX_JOB_IMAGES = 3;
+
+    /**
+     * Create a new job posting. Returns the new job ID or false.
+     */
     public function create($data)
     {
         $stmt = $this->db->prepare(
@@ -16,13 +24,29 @@ class JobPosting extends Model
              VALUES (:posted_by, :category, :title, :description, :address, :budget)"
         );
 
-        return $stmt->execute([
+        $success = $stmt->execute([
             'posted_by'   => $data['posted_by_user_id'],
             'category'    => $data['service_category'],
             'title'       => $data['title'],
             'description' => $data['description'],
             'address'     => $data['address'],
             'budget'      => $data['budget_range'] ?? null
+        ]);
+
+        return $success ? (int) $this->db->lastInsertId() : false;
+    }
+
+    /**
+     * Update the images JSON column for a given job.
+     */
+    public function updateImages($jobId, array $paths)
+    {
+        $stmt = $this->db->prepare(
+            "UPDATE job_postings SET images = :images WHERE id = :id"
+        );
+        return $stmt->execute([
+            'images' => json_encode(array_values($paths)),
+            'id'     => $jobId
         ]);
     }
 
@@ -121,5 +145,53 @@ class JobPosting extends Model
         );
         $stmt->execute(['user_id' => $userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Update an existing job posting.
+     */
+    public function updateJob($jobId, $userId, $data)
+    {
+        $sql = "UPDATE job_postings 
+                SET title = :title, 
+                    description = :description, 
+                    service_category = :service_category, 
+                    address = :address, 
+                    budget_range = :budget_range";
+        
+        $params = [
+            'id' => $jobId,
+            'user_id' => $userId,
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'service_category' => $data['service_category'],
+            'address' => $data['address'] ?? null,
+            'budget_range' => $data['budget_range'] ?? null
+        ];
+
+        // Only update images if the array key exists in $data
+        if (array_key_exists('images', $data)) {
+            $sql .= ", images = :images";
+            $params['images'] = is_array($data['images']) ? json_encode($data['images']) : $data['images'];
+        }
+
+        $sql .= " WHERE id = :id AND posted_by_user_id = :user_id AND status = 'open'";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->rowCount() > 0;
+    }
+
+    /**
+     * Cancel/delete a job posting (sets status to 'cancelled').
+     */
+    public function cancelJob($jobId, $userId)
+    {
+        $stmt = $this->db->prepare(
+            "UPDATE job_postings SET status = 'cancelled' 
+             WHERE id = :id AND posted_by_user_id = :user_id AND status = 'open'"
+        );
+        $stmt->execute(['id' => $jobId, 'user_id' => $userId]);
+        return $stmt->rowCount() > 0;
     }
 }

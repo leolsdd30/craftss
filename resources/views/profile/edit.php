@@ -317,7 +317,7 @@ if (!empty($user['username_updated_at'])) {
                                      onclick="openEditLightbox('<?= APP_URL ?>/uploads/portfolio/<?= e($img) ?>', 'existing')">
                                 <!-- X button top-right -->
                                 <button type="button" onclick="event.stopPropagation(); removePortfolioImage(<?= $index ?>, '<?= e($img) ?>')"
-                                    class="absolute top-1.5 right-1.5 z-10 bg-red-500 hover:bg-red-600 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs font-bold shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                                    class="absolute top-1.5 right-1.5 z-10 bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs font-bold shadow-lg transition-colors">
                                     ×
                                 </button>
                                 <input type="hidden" name="existing_images[]" value="<?= e($img) ?>" id="input-portfolio-<?= $index ?>">
@@ -494,7 +494,7 @@ function renderNewPreviews() {
             // X button
             var xBtn = document.createElement('button');
             xBtn.type = 'button';
-            xBtn.className = 'absolute top-1.5 right-1.5 z-10 bg-red-500 hover:bg-red-600 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs font-bold shadow-lg opacity-0 group-hover:opacity-100 transition-opacity';
+            xBtn.className = 'absolute top-1.5 right-1.5 z-10 bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs font-bold shadow-lg transition-colors';
             xBtn.innerHTML = '×';
             xBtn.addEventListener('click', function(ev) { ev.stopPropagation(); removeNewPortfolioFile(i); });
             wrapper.appendChild(xBtn);

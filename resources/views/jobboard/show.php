@@ -13,6 +13,7 @@ elseif ($diff < 86400)   $timeAgo = floor($diff / 3600) . 'h ago';
 elseif ($diff < 604800)  $timeAgo = floor($diff / 86400) . 'd ago';
 elseif ($diff < 2592000) $timeAgo = floor($diff / 604800) . 'w ago';
 else                     $timeAgo = date('M d, Y', strtotime($job['created_at']));
+$hideFooter = true;
 ?>
 
 <div class="min-h-screen bg-gray-50 py-8">
@@ -113,6 +114,77 @@ else                     $timeAgo = date('M d, Y', strtotime($job['created_at'])
                         <?= htmlspecialchars($job['description']) ?>
                     </div>
                 </div>
+
+                <!-- Image Gallery -->
+                <?php
+                    $jobImages = [];
+                    if (!empty($job['images'])) {
+                        $decoded = is_string($job['images']) ? json_decode($job['images'], true) : $job['images'];
+                        if (is_array($decoded)) $jobImages = $decoded;
+                    }
+                ?>
+                <?php if (!empty($jobImages)): ?>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                            <svg class="h-5 w-5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            Photos
+                        </h2>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100"><?= count($jobImages) ?> photo<?= count($jobImages) !== 1 ? 's' : '' ?></span>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+                        <?php foreach ($jobImages as $index => $img): ?>
+                        <div class="relative rounded-xl overflow-hidden bg-gray-100 cursor-pointer group shadow-sm hover:shadow-lg transition-all duration-300 <?= $index === 0 ? 'col-span-2 row-span-2 aspect-[4/3] sm:aspect-auto' : 'aspect-square min-h-[120px]' ?>"
+                             onclick="openLightbox(<?= $index ?>)">
+                            <img src="<?= APP_URL . '/' . htmlspecialchars($img) ?>"
+                                 alt="Job photo <?= $index + 1 ?>"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <!-- Premium Hover Overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                <div class="bg-white/20 backdrop-blur-md p-3 rounded-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 ring-1 ring-white/30 hidden sm:block">
+                                    <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+                <!-- Lightbox -->
+                <div id="portfolio-lightbox" class="fixed inset-0 z-[60] hidden">
+                    <div class="fixed inset-0 bg-black bg-opacity-95 backdrop-blur-sm" onclick="closeLightbox()"></div>
+                    <div class="fixed inset-0 flex items-center justify-center p-4">
+                        <button onclick="closeLightbox()" class="absolute top-4 right-4 z-[70] text-white hover:text-gray-300 transition p-2 bg-white/10 rounded-full hover:bg-white/20">
+                            <svg class="h-6 w-6 sm:h-7 sm:w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                        <div class="absolute top-4 left-4 z-[70] text-white text-xs sm:text-sm font-medium bg-white/10 px-3 py-1.5 rounded-full">
+                            <span id="lightbox-counter"></span>
+                        </div>
+                        <?php if (count($jobImages) > 1): ?>
+                        <button onclick="event.stopPropagation(); lbNav(-1)" class="absolute left-2 sm:left-6 z-[70] text-white p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 transition backdrop-blur-sm">
+                            <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                        </button>
+                        <?php endif; ?>
+                        <div class="relative flex min-h-0 min-w-0" onclick="event.stopPropagation()">
+                            <img id="lightbox-image" src="" alt="Portfolio" class="max-h-[85vh] max-w-[90vw] object-contain rounded-lg shadow-2xl origin-center transition-opacity duration-300">
+                        </div>
+                        <?php if (count($jobImages) > 1): ?>
+                        <button onclick="event.stopPropagation(); lbNav(1)" class="absolute right-2 sm:right-6 z-[70] text-white p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 transition backdrop-blur-sm">
+                            <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
 
                 <!-- HOMEOWNER: Quotes received -->
                 <?php if ($isOwner): ?>
@@ -331,13 +403,28 @@ else                     $timeAgo = date('M d, Y', strtotime($job['created_at'])
                 </div>
                 <?php endif; ?>
 
-                <!-- Owner: link to dashboard -->
+                <!-- Owner: Action Buttons -->
                 <?php if ($isOwner): ?>
-                <a href="<?= APP_URL ?>/homeowner/dashboard#jobs"
-                   class="w-full inline-flex items-center justify-center px-4 py-3 border border-gray-200 text-sm font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 transition duration-150">
-                    <svg class="mr-2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/></svg>
-                    Manage in Dashboard
-                </a>
+                <div class="space-y-3">
+                    <a href="<?= APP_URL ?>/homeowner/dashboard#jobs"
+                       class="w-full inline-flex items-center justify-center px-4 py-3 border border-gray-200 text-sm font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 transition duration-150 shadow-sm">
+                        <svg class="mr-2 h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                        </svg>
+                        Manage in Dashboard
+                    </a>
+                    
+                    <?php if ($job['status'] === 'open'): ?>
+                    <div class="grid grid-cols-2 gap-3">
+                        <a href="<?= APP_URL ?>/jobs/edit/<?= $job['id'] ?>?source=job_view" class="inline-flex items-center justify-center px-4 py-2 border border-amber-200 text-sm font-semibold rounded-xl text-amber-700 bg-amber-50 hover:bg-amber-100 transition duration-150">
+                            Edit Job
+                        </a>
+                        <button onclick="openDeleteModal()" class="inline-flex items-center justify-center px-4 py-2 border border-red-200 text-sm font-semibold rounded-xl text-red-700 bg-red-50 hover:bg-red-100 transition duration-150">
+                            Cancel Job
+                        </button>
+                    </div>
+                    <?php endif; ?>
+                </div>
                 <?php endif; ?>
 
             </div><!-- end sidebar -->
@@ -469,6 +556,32 @@ else                     $timeAgo = date('M d, Y', strtotime($job['created_at'])
 </div>
 <?php endif; ?>
 
+<!-- DELETE JOB MODAL -->
+<?php if ($isOwner && $job['status'] === 'open'): ?>
+<div id="deleteModal" class="fixed inset-0 z-50" style="display:none;">
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-60" onclick="closeDeleteModal()"></div>
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <div class="flex items-center mb-4">
+                <div class="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center mr-3">
+                    <svg class="h-6 w-6 text-red-600" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900">Cancel Job Post</h3>
+            </div>
+            <p class="text-sm text-gray-600 mb-6">Are you sure you want to cancel this job? It will be removed from the public job board and no new craftsmen will be able to submit quotes. This cannot be undone.</p>
+            <div class="flex justify-end gap-3">
+                <button onclick="closeDeleteModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition">Nevermind</button>
+                <form method="POST" action="<?= APP_URL ?>/jobs/delete" class="inline">
+                    <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token'] ?? '') ?>">
+                    <input type="hidden" name="job_id" value="<?= $job['id'] ?>">
+                    <button type="submit" class="px-4 py-2 text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg transition">Yes, Cancel Job</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
 <script>
 function openQuoteModal() {
     document.getElementById('quote-modal').style.display = 'block';
@@ -500,13 +613,76 @@ function closeRejectModal() {
     document.getElementById('rejectModal').style.display = 'none';
     document.body.style.overflow = '';
 }
+function openDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+function closeDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'none';
+    document.body.style.overflow = '';
+}
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeQuoteModal();
         <?php if ($isOwner): ?>
         closeAcceptModal();
         closeRejectModal();
+        if (typeof closeDeleteModal === 'function') closeDeleteModal();
+        <?php endif; ?>
+        <?php if (!empty($jobImages)): ?>
+        closeLightbox();
         <?php endif; ?>
     }
+    <?php if (!empty($jobImages) && count($jobImages) > 1): ?>
+    if (e.key === 'ArrowLeft')  lbNav(-1);
+    if (e.key === 'ArrowRight') lbNav(1);
+    <?php endif; ?>
 });
+
+<?php if (!empty($jobImages)): ?>
+/* Gallery Lightbox */
+const portfolioImages = <?= json_encode(array_map(fn($p) => APP_URL . '/' . $p, $jobImages)) ?>;
+let currentLightboxIndex = 0;
+
+function openLightbox(index) {
+    currentLightboxIndex = index;
+    const lightbox = document.getElementById('portfolio-lightbox');
+    const image = document.getElementById('lightbox-image');
+    const counter = document.getElementById('lightbox-counter');
+    
+    // Set image with a slight fade effect
+    image.style.opacity = '0';
+    image.src = portfolioImages[index];
+    image.onload = () => { image.style.opacity = '1'; };
+    
+    if (counter && portfolioImages.length > 1) {
+        counter.textContent = `${index + 1} / ${portfolioImages.length}`;
+    } else if (counter) {
+        counter.style.display = 'none';
+    }
+    
+    lightbox.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    document.getElementById('portfolio-lightbox').classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+function lbNav(direction) {
+    currentLightboxIndex = (currentLightboxIndex + direction + portfolioImages.length) % portfolioImages.length;
+    
+    const image = document.getElementById('lightbox-image');
+    image.style.opacity = '0';
+    
+    setTimeout(() => {
+        image.src = portfolioImages[currentLightboxIndex];
+        image.onload = () => { image.style.opacity = '1'; };
+        
+        const counter = document.getElementById('lightbox-counter');
+        if (counter) counter.textContent = `${currentLightboxIndex + 1} / ${portfolioImages.length}`;
+    }, 150);
+}
+<?php endif; ?>
 </script>

@@ -219,6 +219,34 @@ $activeFilterCount = (int)!empty($selectedCat)
                 <div onclick="window.location='<?= APP_URL ?>/jobs/<?= $job['id'] ?>'"
                    class="group flex flex-col bg-white rounded-2xl shadow-sm border border-gray-200 hover:shadow-md hover:border-indigo-200 hover:-translate-y-0.5 transition-all duration-200 overflow-hidden cursor-pointer">
 
+                    <?php
+                        $cardImages = [];
+                        if (!empty($job['images'])) {
+                            $decoded = is_string($job['images']) ? json_decode($job['images'], true) : $job['images'];
+                            if (is_array($decoded)) $cardImages = $decoded;
+                        }
+                    ?>
+                    <?php if (!empty($cardImages)): ?>
+                    <div class="relative h-40 overflow-hidden">
+                        <img src="<?= APP_URL . '/' . htmlspecialchars($cardImages[0]) ?>" alt="<?= htmlspecialchars($job['title']) ?>"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <?php if (count($cardImages) > 1): ?>
+                        <span class="absolute bottom-2 right-2 bg-black/60 text-white text-xs font-bold px-2 py-0.5 rounded-lg backdrop-blur-sm">
+                            <svg class="inline w-3 h-3 mr-0.5 -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            <?= count($cardImages) ?>
+                        </span>
+                        <?php endif; ?>
+                    </div>
+                    <?php else: ?>
+                    <!-- Aesthetic Placeholder for Jobs without Photos -->
+                    <div class="relative h-40 overflow-hidden bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center">
+                        <svg class="h-10 w-10 text-indigo-200/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 22V12h6v10" />
+                        </svg>
+                    </div>
+                    <?php endif; ?>
+
                     <div class="p-6 flex flex-col gap-3 flex-1">
 
                         <!-- Title + message icon -->

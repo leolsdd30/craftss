@@ -64,10 +64,13 @@ $router->get('/craftsman/dashboard', [CraftsmanController::class , 'dashboard'])
 $router->get('/jobs', [JobBoardController::class , 'index']);
 $router->get('/jobs/create', [JobBoardController::class , 'create']);
 $router->post('/jobs/create', [JobBoardController::class , 'store']);
+$router->get('/jobs/edit/{id}', [JobBoardController::class , 'edit']);
+$router->post('/jobs/edit/{id}', [JobBoardController::class , 'update']);
 $router->get('/jobs/{id}', [JobBoardController::class , 'show']);
 $router->post('/jobs/quote', [JobBoardController::class , 'submitQuote']);
 $router->post('/jobs/accept-quote', [JobBoardController::class , 'acceptQuote']);
 $router->post('/jobs/reject-quote', [JobBoardController::class , 'rejectQuote']);
+$router->post('/jobs/delete', [JobBoardController::class , 'deleteJob']);
 
 // Booking Routes
 $router->get('/bookings/create/{username}', [BookingController::class , 'create']);

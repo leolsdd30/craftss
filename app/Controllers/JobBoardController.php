@@ -101,7 +101,7 @@ class JobBoardController extends Controller
         $budget      = isset($_POST['budget']) ? trim($_POST['budget']) : null;
 
         $jobModel = new JobPosting();
-        $success = $jobModel->create([
+        $jobId = $jobModel->create([
             'posted_by_user_id' => $_SESSION['user_id'],
             'service_category'  => $category,
             'title'             => $title,
@@ -110,7 +110,12 @@ class JobBoardController extends Controller
             'budget_range'      => $budget
         ]);
 
-        if ($success) {
+        if ($jobId) {
+            // Handle image uploads
+            if (!empty($_FILES['images']['name'][0])) {
+                $this->processJobImages($jobId, $jobModel);
+            }
+
             $dashboard = $_SESSION['role'] === 'craftsman' ? '/craftsman/dashboard' : '/homeowner/dashboard';
             header("Location: " . APP_URL . $dashboard . "?success=job_posted");
             exit;
@@ -121,6 +126,171 @@ class JobBoardController extends Controller
                 'error'       => 'Failed to post the job. Please try again.'
             ]);
         }
+    }
+
+    /**
+     * Show the form to edit an existing job.
+     */
+    public function edit($id)
+    {
+        Middleware::requireLogin();
+        Middleware::requireRole('homeowner');
+
+        $jobModel = new JobPosting();
+        $job = $jobModel->findById($id);
+
+        if (!$job || $job['posted_by_user_id'] != $_SESSION['user_id']) {
+            throw new \App\Exceptions\NotFoundException();
+        }
+
+        if ($job['status'] !== 'open') {
+            $_SESSION['error'] = 'You can only edit jobs that are currently open.';
+            header("Location: " . APP_URL . "/homeowner/dashboard");
+            exit;
+        }
+
+        $this->view('layouts/app', [
+            'pageTitle'   => 'Edit Job - Crafts',
+            'contentView' => 'jobboard/edit',
+            'job'         => $job
+        ]);
+    }
+
+    /**
+     * Process the job edit submission.
+     */
+    public function update($id)
+    {
+        Middleware::requireLogin();
+        Middleware::verifyCsrfToken();
+        Middleware::requireRole('homeowner');
+
+        $jobModel = new JobPosting();
+        $job = $jobModel->findById($id);
+
+        if (!$job || $job['posted_by_user_id'] != $_SESSION['user_id']) {
+            throw new \App\Exceptions\NotFoundException();
+        }
+        if ($job['status'] !== 'open') {
+            $_SESSION['error'] = 'You can only edit jobs that are currently open.';
+            header("Location: " . APP_URL . "/homeowner/dashboard");
+            exit;
+        }
+
+        $validator = new \App\Services\Validator();
+        $isValid = $validator->validate($_POST, [
+            'title'       => 'required|min:5|max:100',
+            'category'    => 'required',
+            'description' => 'required|min:15',
+            'address'     => 'required'
+        ]);
+
+        if (!$isValid) {
+            $this->view('layouts/app', [
+                'pageTitle'   => 'Edit Job - Crafts',
+                'contentView' => 'jobboard/edit',
+                'job'         => $job,
+                'error'       => $validator->getFirstError()
+            ]);
+            return;
+        }
+        
+        $title       = trim($_POST['title']);
+        $category    = trim($_POST['category']);
+        $description = trim($_POST['description']);
+        $address     = trim($_POST['address']);
+        $budget      = isset($_POST['budget']) ? trim($_POST['budget']) : null;
+        
+        // Handle images logic
+        $currentImages = [];
+        if (!empty($job['images'])) {
+            $decoded = is_string($job['images']) ? json_decode($job['images'], true) : $job['images'];
+            if (is_array($decoded)) $currentImages = $decoded;
+        }
+
+        $imagesToDelete = $_POST['delete_images'] ?? [];
+        $remainingImages = [];
+        $publicDir = dirname($_SERVER['SCRIPT_FILENAME']);
+
+        foreach ($currentImages as $img) {
+            if (in_array($img, $imagesToDelete)) {
+                // Delete file from disk
+                $filePath = $publicDir . '/' . ltrim($img, '/');
+                if (file_exists($filePath)) {
+                    @unlink($filePath);
+                }
+            } else {
+                $remainingImages[] = $img;
+            }
+        }
+
+        // Apply textual updates
+        $updateSuccess = $jobModel->updateJob($id, $_SESSION['user_id'], [
+            'title'             => $title,
+            'description'       => $description,
+            'service_category'  => $category,
+            'address'           => $address,
+            'budget_range'      => $budget
+        ]);
+
+        // Process images (merges remaining with new uploads and saves to DB)
+        $this->processJobImages($id, $jobModel, $remainingImages);
+
+        $source = $_POST['source'] ?? 'dashboard';
+        if ($source === 'job_view') {
+            header("Location: " . APP_URL . "/jobs/" . $id . "?success=job_updated");
+        } else {
+            header("Location: " . APP_URL . "/homeowner/dashboard?success=job_updated#jobs");
+        }
+        exit;
+    }
+
+    /**
+     * Process and save uploaded job images into per-job folder.
+     */
+    private function processJobImages($jobId, JobPosting $jobModel, $existingImages = [])
+    {
+        $maxImages    = JobPosting::MAX_JOB_IMAGES;
+        $maxSize      = 2 * 1024 * 1024; // 2 MB
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        $allowedExts  = ['jpg', 'jpeg', 'png', 'webp'];
+
+        $publicDir = dirname($_SERVER['SCRIPT_FILENAME']); // points to /project/public
+        $uploadDir = $publicDir . '/uploads/jobs/' . $jobId . '/';
+
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+
+        $savedPaths = $existingImages; // Start with the ones we kept
+        
+        if (isset($_FILES['images']) && !empty($_FILES['images']['name'][0])) {
+            $files = $_FILES['images'];
+            $count = count($files['name']);
+            
+            for ($i = 0; $i < $count; $i++) {
+                if (count($savedPaths) >= $maxImages) break; // Don't exceed max config limit
+                if ($files['error'][$i] !== UPLOAD_ERR_OK) continue;
+                if ($files['size'][$i] > $maxSize) continue;
+
+                $mime = mime_content_type($files['tmp_name'][$i]);
+                if (!in_array($mime, $allowedTypes)) continue;
+
+                $ext = strtolower(pathinfo($files['name'][$i], PATHINFO_EXTENSION));
+                if (!in_array($ext, $allowedExts)) continue;
+
+                $filename = 'img_' . ($i + 1) . '_' . time() . '.' . $ext;
+                $destPath = $uploadDir . $filename;
+
+                if (move_uploaded_file($files['tmp_name'][$i], $destPath)) {
+                    $savedPaths[] = 'uploads/jobs/' . $jobId . '/' . $filename;
+                }
+            }
+        }
+
+        // We update images if there were ANY changes (even just deletions)
+        // If we only deleted, savedPaths is just existingImages, so it overwrites with the new state.
+        $jobModel->updateImages($jobId, $savedPaths);
     }
 
     /**
@@ -344,6 +514,31 @@ class JobBoardController extends Controller
         );
 
         header("Location: " . APP_URL . "/homeowner/dashboard?success=quote_rejected#quotes");
+        exit;
+    }
+
+    /**
+     * Homeowner cancels/removes their own job posting.
+     */
+    public function deleteJob()
+    {
+        Middleware::requireLogin();
+        Middleware::verifyCsrfToken();
+
+        $jobId = $_POST['job_id'] ?? null;
+        if (!$jobId) {
+            header("Location: " . APP_URL . "/homeowner/dashboard#jobs");
+            exit;
+        }
+
+        $jobModel = new JobPosting();
+        $success = $jobModel->cancelJob($jobId, $_SESSION['user_id']);
+
+        if ($success) {
+            header("Location: " . APP_URL . "/homeowner/dashboard?success=job_cancelled#jobs");
+        } else {
+            header("Location: " . APP_URL . "/homeowner/dashboard?error=cancel_failed#jobs");
+        }
         exit;
     }
 }

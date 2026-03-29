@@ -4,6 +4,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'homeowner') {
     header("Location: " . APP_URL . "/jobs");
     exit;
 }
+$hideFooter = true;
 
 $wilayas = [
     "01 - Adrar","02 - Chlef","03 - Laghouat","04 - Oum El Bouaghi","05 - Batna",
@@ -33,7 +34,7 @@ $categories = [
 ];
 ?>
 
-<div class="bg-gray-50 min-h-screen py-8">
+<div class="bg-gray-50 min-h-screen py-8 pb-32">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Header -->
@@ -63,7 +64,7 @@ $categories = [
 
             <!-- ════ FORM (2/3) ══════════════════════════════ -->
             <div class="lg:col-span-2 space-y-6">
-            <form action="<?= APP_URL ?>/jobs/create" method="POST" id="job-form">
+            <form action="<?= APP_URL ?>/jobs/create" method="POST" id="job-form" enctype="multipart/form-data">
                 <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token'] ?? '') ?>">
                 <input type="hidden" name="category" id="category-input" value="<?= e($_POST['category'] ?? '') ?>">
 
@@ -149,16 +150,16 @@ $categories = [
                                     data-default-icon="<?= $defaultIconClass ?>"
                                     data-default-text="<?= $defaultTextClass ?>"
                                     onclick="selectCategory(this)"
-                                    class="category-btn flex items-center gap-3 p-3 rounded-xl border transition-all duration-200 text-left
+                                    class="category-btn flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1.5 sm:gap-3 p-3 rounded-xl border transition-all duration-200 text-center sm:text-left
                                            <?= $isSelected ? $activeBtnClass : $defaultBtnClass ?>">
                                 
-                                <div class="cat-icon h-9 w-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors
+                                <div class="cat-icon h-8 w-8 sm:h-9 sm:w-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors
                                             <?= $isSelected ? $activeIconClass : $defaultIconClass ?>">
                                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="<?= $catData['icon'] ?>"/>
                                     </svg>
                                 </div>
-                                <span class="cat-label text-sm font-semibold tracking-tight <?= $isSelected ? $activeTextClass : $defaultTextClass ?>">
+                                <span class="cat-label text-xs sm:text-sm font-semibold tracking-tight leading-tight <?= $isSelected ? $activeTextClass : $defaultTextClass ?>">
                                     <?= e($catName) ?>
                                 </span>
                             </button>
@@ -232,21 +233,35 @@ $categories = [
                     </div>
                 </div>
 
-                <!-- Submit Button Area -->
-                <div class="mt-8 flex flex-col-reverse sm:flex-row items-center justify-end gap-3 pt-2">
-                    <a href="<?= APP_URL ?>/jobs"
-                       class="w-full sm:w-auto px-6 py-2.5 text-sm font-semibold text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl transition-colors text-center shadow-sm">
-                        Cancel
-                    </a>
-                    <button type="submit"
-                            class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-8 py-2.5
-                                   bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-sm font-bold tracking-wide
-                                   rounded-xl shadow-md shadow-indigo-200 hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-                        </svg>
-                        Publish Job Post
-                    </button>
+                <!-- ── 4: Photos ───────────────────────────────── -->
+                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mt-6">
+                    <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
+                        <div class="h-7 w-7 rounded-lg bg-indigo-600 flex items-center justify-center flex-shrink-0 shadow-sm shadow-indigo-200">
+                            <span class="text-white text-xs font-bold">4</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-gray-900">Photos <span class="text-gray-400 font-normal ml-1 text-xs">(optional)</span></p>
+                            <p class="text-xs text-gray-500">Photos help craftsmen understand your project better. Max 3 images.</p>
+                        </div>
+                    </div>
+                    <div class="px-6 py-5">
+                        <!-- Drop Zone -->
+                        <div id="drop-zone" class="relative border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer transition-colors hover:border-indigo-400 hover:bg-indigo-50/30"
+                             onclick="document.getElementById('file-input').click()">
+                            <input type="file" name="images[]" id="file-input" multiple accept="image/jpeg,image/png,image/webp" class="hidden" onchange="handleFiles(this.files)">
+                            <svg class="mx-auto h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <p class="mt-2 text-sm font-semibold text-gray-700">Click to upload or drag & drop</p>
+                            <p class="mt-1 text-xs text-gray-500">JPG, PNG, or WebP • Max 2 MB each • Up to 3 images</p>
+                        </div>
+                        <!-- Image Previews -->
+                        <div id="image-previews" class="mt-4 grid grid-cols-3 gap-3" style="display:none"></div>
+                        <div id="image-error" class="hidden mt-3 text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-4 py-2 flex items-center gap-2">
+                            <svg class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                            <span id="image-error-text"></span>
+                        </div>
+                    </div>
                 </div>
 
             </form>
@@ -302,9 +317,52 @@ $categories = [
             </div>
         </div><!-- end grid -->
     </div>
+
+    <!-- Sticky Save Bar -->
+    <div class="fixed bottom-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-lg border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+            <a href="<?= APP_URL ?>/jobs"
+               class="px-5 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition">
+                Cancel
+            </a>
+            <button type="submit" form="job-form"
+                class="inline-flex items-center gap-2 px-8 py-2.5 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                </svg>
+                Publish Job Post
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" class="fixed inset-0 z-[60] hidden">
+    <div class="fixed inset-0 bg-black bg-opacity-95 backdrop-blur-sm" onclick="closeLightbox()"></div>
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 z-[70] text-white hover:text-gray-300 transition p-2 bg-white/10 rounded-full hover:bg-white/20">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+        <img id="lightbox-img" src="" class="max-h-[85vh] max-w-[90vw] object-contain rounded-lg shadow-2xl relative z-[60]">
+    </div>
 </div>
 
 <script>
+function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+    document.getElementById('lightbox').classList.add('hidden');
+    document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+});
+
 function selectCategory(btn) {
     const catName = btn.getAttribute('data-name');
     document.getElementById('category-input').value = catName;
@@ -313,19 +371,19 @@ function selectCategory(btn) {
     // Reset all buttons to default classes
     document.querySelectorAll('.category-btn').forEach(function(b) {
         // remove active, add default
-        b.className = 'category-btn flex items-center gap-3 p-3 rounded-xl border transition-all duration-200 text-left ' + b.getAttribute('data-default-btn');
+        b.className = 'category-btn flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1.5 sm:gap-3 p-3 rounded-xl border transition-all duration-200 text-center sm:text-left ' + b.getAttribute('data-default-btn');
         const icon = b.querySelector('.cat-icon');
         const label = b.querySelector('.cat-label');
-        if (icon)  icon.className = 'cat-icon h-9 w-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ' + b.getAttribute('data-default-icon');
-        if (label) label.className = 'cat-label text-sm font-semibold tracking-tight ' + b.getAttribute('data-default-text');
+        if (icon)  icon.className = 'cat-icon h-8 w-8 sm:h-9 sm:w-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ' + b.getAttribute('data-default-icon');
+        if (label) label.className = 'cat-label text-xs sm:text-sm font-semibold tracking-tight leading-tight ' + b.getAttribute('data-default-text');
     });
 
     // Apply active classes to clicked button
-    btn.className = 'category-btn flex items-center gap-3 p-3 rounded-xl border transition-all duration-200 text-left ' + btn.getAttribute('data-active-btn');
+    btn.className = 'category-btn flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1.5 sm:gap-3 p-3 rounded-xl border transition-all duration-200 text-center sm:text-left ' + btn.getAttribute('data-active-btn');
     const icon = btn.querySelector('.cat-icon');
     const label = btn.querySelector('.cat-label');
-    if (icon)  icon.className = 'cat-icon h-9 w-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ' + btn.getAttribute('data-active-icon');
-    if (label) label.className = 'cat-label text-sm font-semibold tracking-tight ' + btn.getAttribute('data-active-text');
+    if (icon)  icon.className = 'cat-icon h-8 w-8 sm:h-9 sm:w-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ' + btn.getAttribute('data-active-icon');
+    if (label) label.className = 'cat-label text-xs sm:text-sm font-semibold tracking-tight leading-tight ' + btn.getAttribute('data-active-text');
 }
 
 document.getElementById('job-form').addEventListener('submit', function(e) {
@@ -343,4 +401,80 @@ document.getElementById('job-form').addEventListener('submit', function(e) {
         grid.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 });
+
+/* Image upload preview */
+const MAX_IMAGES = 3;
+const MAX_SIZE = 2 * 1024 * 1024;
+let selectedFiles = [];
+
+function handleFiles(fileList) {
+    const errEl = document.getElementById('image-error');
+    const errText = document.getElementById('image-error-text');
+    errEl.classList.add('hidden');
+
+    for (let f of fileList) {
+        if (selectedFiles.length >= MAX_IMAGES) {
+            errText.textContent = 'Maximum ' + MAX_IMAGES + ' images allowed.';
+            errEl.classList.remove('hidden');
+            break;
+        }
+        if (!['image/jpeg','image/png','image/webp'].includes(f.type)) {
+            errText.textContent = '"' + f.name + '" is not a supported format (JPG, PNG, WebP only).';
+            errEl.classList.remove('hidden');
+            continue;
+        }
+        if (f.size > MAX_SIZE) {
+            errText.textContent = '"' + f.name + '" is too large (max 2 MB).';
+            errEl.classList.remove('hidden');
+            continue;
+        }
+        selectedFiles.push(f);
+    }
+    renderPreviews();
+    syncFileInput();
+}
+
+function removeImage(idx) {
+    selectedFiles.splice(idx, 1);
+    renderPreviews();
+    syncFileInput();
+}
+
+function renderPreviews() {
+    const container = document.getElementById('image-previews');
+    container.innerHTML = '';
+    if (selectedFiles.length === 0) { container.style.display = 'none'; return; }
+    container.style.display = 'grid';
+
+    selectedFiles.forEach((file, idx) => {
+        const div = document.createElement('div');
+        div.className = 'relative group rounded-xl overflow-hidden border border-gray-200 aspect-square bg-gray-100';
+        const img = document.createElement('img');
+        img.className = 'w-full h-full object-cover cursor-zoom-in';
+        const objectUrl = URL.createObjectURL(file);
+        img.src = objectUrl;
+        img.onclick = () => openLightbox(objectUrl);
+        
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'absolute top-1.5 right-1.5 h-6 w-6 rounded-full bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 text-white flex items-center justify-center shadow-lg transition-colors';
+        btn.innerHTML = '<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>';
+        btn.onclick = () => removeImage(idx);
+        div.appendChild(img);
+        div.appendChild(btn);
+        container.appendChild(div);
+    });
+}
+
+function syncFileInput() {
+    const dt = new DataTransfer();
+    selectedFiles.forEach(f => dt.items.add(f));
+    document.getElementById('file-input').files = dt.files;
+}
+
+/* Drag and drop */
+const dropZone = document.getElementById('drop-zone');
+['dragenter','dragover'].forEach(ev => dropZone.addEventListener(ev, e => { e.preventDefault(); dropZone.classList.add('border-indigo-500','bg-indigo-50'); }));
+['dragleave','drop'].forEach(ev => dropZone.addEventListener(ev, e => { e.preventDefault(); dropZone.classList.remove('border-indigo-500','bg-indigo-50'); }));
+dropZone.addEventListener('drop', e => { handleFiles(e.dataTransfer.files); });
 </script>
