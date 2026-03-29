@@ -78,12 +78,17 @@ class BookingController extends Controller
             exit;
         }
 
-        if (empty($description) || empty($address) || empty($scheduledDate) || !strtotime($scheduledDate)) {
+        $validator = new \App\Services\Validator();
+        if (!$validator->validate($_POST, [
+            'description'    => 'required|min:10',
+            'address'        => 'required',
+            'scheduled_date' => 'required|date',
+        ])) {
             $this->view('layouts/app', [
                 'pageTitle'   => 'Request Booking - Crafts',
                 'contentView' => 'bookings/create',
                 'craftsman'   => $craftsman,
-                'error'       => 'Please provide valid information for all required fields.'
+                'error'       => $validator->getFirstError()
             ]);
             return;
         }
@@ -98,9 +103,6 @@ class BookingController extends Controller
         ]);
  
         if ($success) {
-            $userModel = new User();
-            $craftsman = $userModel->findById($craftsmanId);
- 
             // Notify craftsman
             $notif = new Notification();
             $notif->send(
@@ -118,9 +120,6 @@ class BookingController extends Controller
             header("Location: " . APP_URL . $dashboard . "?success=booking_requested");
             exit;
         } else {
-            $userModel = new User();
-            $craftsman = $userModel->findById($craftsmanId);
- 
             $this->view('layouts/app', [
                 'pageTitle'   => 'Request Booking - Crafts',
                 'contentView' => 'bookings/create',
@@ -183,7 +182,12 @@ class BookingController extends Controller
         $counterDate = trim((string)($_POST['counter_date'] ?? ''));
         $counterNote = trim((string)($_POST['counter_note'] ?? ''));
 
-        if (!$bookingId || empty($counterDescription) || $counterPrice <= 0 || empty($counterDate) || !strtotime($counterDate)) {
+        $validator = new \App\Services\Validator();
+        if (!$bookingId || !$validator->validate($_POST, [
+            'counter_description' => 'required|min:10',
+            'counter_price'       => 'required|numeric',
+            'counter_date'        => 'required|date',
+        ])) {
             header("Location: " . APP_URL . "/craftsman/dashboard?error=missing_fields");
             exit;
         }

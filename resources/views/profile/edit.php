@@ -307,14 +307,18 @@ if (!empty($user['username_updated_at'])) {
                             Current (<span id="portfolio-count"><?= count($existingImages) ?></span>) — hover to remove
                         </p>
                         <div class="grid grid-cols-3 gap-2" id="existing-portfolio">
-                            <?php foreach ($existingImages as $index => $img): ?>
+                            <?php foreach ($existingImages as $index => $img): 
+                                  $imgUrl = strpos($img, '/') !== false 
+                                      ? APP_URL . '/uploads/' . ltrim(htmlspecialchars($img), '/')
+                                      : APP_URL . '/uploads/portfolio/' . htmlspecialchars($img);
+                            ?>
                             <div class="relative group rounded-xl overflow-hidden border border-gray-200 aspect-square"
                                  id="portfolio-item-<?= $index ?>">
                                 <!-- Click image opens lightbox -->
-                                <img src="<?= APP_URL ?>/uploads/portfolio/<?= e($img) ?>"
+                                <img src="<?= $imgUrl ?>"
                                      alt="Portfolio"
                                      class="w-full h-full object-cover cursor-zoom-in"
-                                     onclick="openEditLightbox('<?= APP_URL ?>/uploads/portfolio/<?= e($img) ?>', 'existing')">
+                                     onclick="openEditLightbox('<?= $imgUrl ?>', 'existing')">
                                 <!-- X button top-right -->
                                 <button type="button" onclick="event.stopPropagation(); removePortfolioImage(<?= $index ?>, '<?= e($img) ?>')"
                                     class="absolute top-1.5 right-1.5 z-10 bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs font-bold shadow-lg transition-colors">

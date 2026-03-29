@@ -53,6 +53,31 @@ class Validator
                             $this->addError($field, "The " . ucfirst($field) . " must be a numeric value.");
                         }
                         break;
+                    case 'in':
+                        $allowed = explode(',', $param);
+                        if ($valueStr !== '' && !in_array($valueStr, $allowed)) {
+                            $this->addError($field, "The " . ucfirst($field) . " must be one of: " . str_replace(',', ', ', $param) . ".");
+                        }
+                        break;
+                    case 'confirmed':
+                        $confirmValue = trim((string)($data[$field . '_confirmation'] ?? ''));
+                        if ($valueStr !== $confirmValue) {
+                            $this->addError($field, "The " . ucfirst($field) . " confirmation does not match.");
+                        }
+                        break;
+                    case 'date':
+                        if ($valueStr !== '' && strtotime($valueStr) === false) {
+                            $this->addError($field, "The " . ucfirst($field) . " must be a valid date.");
+                        }
+                        break;
+                    case 'after':
+                        if ($valueStr !== '' && strtotime($valueStr) !== false) {
+                            $compareDate = ($param === 'today') ? strtotime('today') : strtotime($param);
+                            if (strtotime($valueStr) <= $compareDate) {
+                                $this->addError($field, "The " . ucfirst($field) . " must be a date after " . $param . ".");
+                            }
+                        }
+                        break;
                 }
             }
         }

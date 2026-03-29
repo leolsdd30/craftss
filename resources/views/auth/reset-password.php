@@ -1,9 +1,9 @@
 <?php $hideFooter = true; ?>
 <!-- Reset Password Page -->
-<div class="min-h-[calc(100vh-4rem)] bg-gray-50 flex">
+<div class="min-h-[calc(100dvh-4rem)] bg-gray-50 flex">
 
     <!-- Left Panel — Branding -->
-    <div class="hidden lg:flex lg:w-1/2 bg-indigo-700 flex-col justify-between p-12 relative overflow-hidden lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16">
+    <div class="hidden lg:flex lg:w-1/2 bg-indigo-700 flex-col justify-between p-12 relative overflow-hidden lg:h-[calc(100dvh-4rem)] lg:sticky lg:top-16">
         <!-- Background decoration -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div class="absolute -top-24 -left-24 w-96 h-96 bg-indigo-600 rounded-full opacity-50"></div>
@@ -80,7 +80,7 @@
     </div>
 
     <!-- Right Panel — Form -->
-    <div class="w-full lg:w-1/2 flex items-center justify-center px-6 py-12 sm:px-12">
+    <div class="w-full lg:w-1/2 min-h-[calc(100dvh-4rem)] flex items-center justify-center px-6 py-12 sm:px-12">
         <div class="w-full max-w-md">
 
             <!-- Mobile logo -->

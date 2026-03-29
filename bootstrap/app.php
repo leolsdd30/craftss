@@ -101,6 +101,10 @@ if (!function_exists('get_profile_picture_url')) {
             return $profilePicture;
         }
 
+        if (strpos($profilePicture, '/') !== false) {
+            return APP_URL . '/uploads/' . ltrim($profilePicture, '/');
+        }
+
         return APP_URL . '/uploads/profile/' . htmlspecialchars($profilePicture);
     }
 }

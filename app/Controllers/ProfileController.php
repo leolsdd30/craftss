@@ -238,7 +238,9 @@ class ProfileController extends Controller
                 'id' => $id
             ]);
             if (!empty($user['profile_picture']) && $user['profile_picture'] !== 'default.png') {
-                $oldFile = BASE_PATH . '/public/uploads/profile/' . $user['profile_picture'];
+                $oldFile = strpos($user['profile_picture'], '/') !== false 
+                    ? BASE_PATH . '/public/uploads/' . ltrim($user['profile_picture'], '/')
+                    : BASE_PATH . '/public/uploads/profile/' . $user['profile_picture'];
                 if (file_exists($oldFile)) {
                     unlink($oldFile);
                 }
@@ -263,14 +265,15 @@ class ProfileController extends Controller
 
                 if (in_array($detectedMime, $allowedMimes) && $imageInfo !== false) {
                     $newName = time() . '_' . uniqid() . '.' . $ext;
-                    $uploadDir = BASE_PATH . '/public/uploads/profile/';
+                    $uploadDir = BASE_PATH . '/public/uploads/users/' . $id . '/profile/';
                     if (!is_dir($uploadDir)) {
                         mkdir($uploadDir, 0755, true);
                     }
 
                     if (move_uploaded_file($tmpName, $uploadDir . $newName)) {
+                        $savedPath = 'users/' . $id . '/profile/' . $newName;
                         $userModel->executeQuery("UPDATE users SET profile_picture = :pic WHERE id = :id", [
-                            'pic' => $newName,
+                            'pic' => $savedPath,
                             'id' => $id
                         ]);
                     }
@@ -298,7 +301,7 @@ class ProfileController extends Controller
             $data['json_metadata'] = json_encode($meta);
 
             // --- Portfolio Image Management ---
-            $uploadDir = BASE_PATH . '/public/uploads/portfolio/';
+            $uploadDir = BASE_PATH . '/public/uploads/users/' . $id . '/portfolio/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0755, true);
             }
@@ -311,7 +314,9 @@ class ProfileController extends Controller
 
             foreach ($oldImages as $oldImg) {
                 if (!in_array($oldImg, $keptImages)) {
-                    $filePath = $uploadDir . $oldImg;
+                    $filePath = strpos($oldImg, '/') !== false 
+                        ? BASE_PATH . '/public/uploads/' . ltrim($oldImg, '/')
+                        : BASE_PATH . '/public/uploads/portfolio/' . $oldImg;
                     if (file_exists($filePath)) {
                         unlink($filePath);
                     }
@@ -342,7 +347,7 @@ class ProfileController extends Controller
                             if (in_array($detectedMime, $allowedMimes) && $imageInfo !== false) {
                                 $newName = time() . '_' . uniqid() . '_' . $i . '.' . $ext;
                                 if (move_uploaded_file($tmpName, $uploadDir . $newName)) {
-                                    $newImages[] = $newName;
+                                    $newImages[] = 'users/' . $id . '/portfolio/' . $newName;
                                 }
                             }
                         }

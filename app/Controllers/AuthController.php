@@ -153,7 +153,7 @@ class AuthController extends Controller
             'last_name'  => 'required|min:2|max:50',
             'email'      => 'required|email|max:100',
             'password'   => 'required|min:8',
-            'role'       => 'required'
+            'role'       => 'required|in:homeowner,craftsman'
         ])) {
             $this->showRegisterForm($validator->getFirstError());
             return;
@@ -165,12 +165,6 @@ class AuthController extends Controller
         $email     = trim($_POST['email']);
         $password  = $_POST['password'];
         $role      = trim($_POST['role']);
-
-        // Prevent role spoofing attacks (Issue #7)
-        if (!in_array($role, ['homeowner', 'craftsman'])) {
-            $this->showRegisterForm("Invalid role selected.");
-            return;
-        }
 
         $userModel = new User();
 

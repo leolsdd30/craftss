@@ -39,7 +39,10 @@ if ($isCraftsman) {
             <?php 
             $coverStyle = '';
             if ($isCraftsman && !empty($images) && isset($images[0])) {
-                $coverStyle = 'background-image: url(' . APP_URL . '/uploads/portfolio/' . htmlspecialchars($images[0]) . '); background-size: cover; background-position: center;';
+                $coverUrl = strpos($images[0], '/') !== false 
+                    ? APP_URL . '/uploads/' . ltrim(htmlspecialchars($images[0]), '/')
+                    : APP_URL . '/uploads/portfolio/' . htmlspecialchars($images[0]);
+                $coverStyle = 'background-image: url(' . $coverUrl . '); background-size: cover; background-position: center;';
             } 
             ?>
             <div class="h-32 sm:h-56 w-full relative overflow-hidden <?= empty($coverStyle) ? ($isCraftsman ? 'bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600' : 'bg-gradient-to-r from-gray-600 via-gray-500 to-gray-400') : '' ?>" style="<?= $coverStyle ?>">
@@ -434,10 +437,14 @@ if ($isCraftsman) {
 
                     <?php if (!empty($images)): ?>
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-                        <?php foreach ($images as $index => $img): ?>
+                        <?php foreach ($images as $index => $img): 
+                              $imgUrl = strpos($img, '/') !== false 
+                                  ? APP_URL . '/uploads/' . ltrim(htmlspecialchars($img), '/')
+                                  : APP_URL . '/uploads/portfolio/' . htmlspecialchars($img);
+                        ?>
                         <div class="relative rounded-xl overflow-hidden bg-gray-100 cursor-pointer group shadow-sm hover:shadow-lg transition-all duration-300 <?= $index === 0 ? 'col-span-2 row-span-2 aspect-[4/3] sm:aspect-auto' : 'aspect-square' ?>"
                              onclick="openLightbox(<?= $index ?>)">
-                            <img src="<?= APP_URL ?>/uploads/portfolio/<?= htmlspecialchars($img) ?>"
+                            <img src="<?= $imgUrl ?>"
                                  alt="Portfolio <?= $index + 1 ?>"
                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             <!-- Premium Hover Overlay -->
@@ -779,7 +786,8 @@ function lightboxNext() {
 }
 function updateLightbox() {
     var img = document.getElementById('lightbox-image');
-    img.src = '<?= APP_URL ?>/uploads/portfolio/' + portfolioImages[lightboxIndex];
+    var path = portfolioImages[lightboxIndex];
+    img.src = path.indexOf('/') !== -1 ? '<?= APP_URL ?>/uploads/' + path : '<?= APP_URL ?>/uploads/portfolio/' + path;
     document.getElementById('lightbox-counter').textContent = (lightboxIndex + 1) + ' / ' + portfolioImages.length;
 }
 document.addEventListener('keydown', function(e) {
