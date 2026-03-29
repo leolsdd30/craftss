@@ -585,6 +585,44 @@ footer { display: none !important; }
 .mob-dash-quick.primary:hover { background: #4338ca; }
 .mob-dash-quick.secondary { background: #f5f3ff; color: #4f46e5; }
 .mob-dash-quick.secondary:hover { background: #ede9fe; }
+
+/* ── Filter Dropdown ──────────────────────────────────────── */
+.dash-tab-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+.dash-tab-header h2 {
+    font-size: 1.15rem; font-weight: 800; color: #1f2937; letter-spacing: -0.01em;
+}
+.filter-dropdown { position: relative; display: inline-block; }
+.filter-btn {
+    display: flex; align-items: center; gap: 0.45rem;
+    padding: 0.45rem 0.85rem; background: white; border: 1px solid #e5e7eb;
+    border-radius: 99px; font-size: 0.78rem; font-weight: 700; color: #4b5563;
+    cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.15s;
+}
+.filter-btn:hover { background: #f9fafb; border-color: #d1d5db; color: #111827; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+.filter-btn svg { width: 14px; height: 14px; color: #9ca3af; }
+.filter-menu {
+    position: absolute; top: calc(100% + 0.5rem); right: 0;
+    width: 230px; background: white; border: 1px solid #e5e7eb;
+    border-radius: 1rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+    z-index: 50; padding: 0.5rem; display: none;
+    transform-origin: top right;
+}
+.filter-menu.open { display: block; animation: filterFadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes filterFadeIn { from { opacity: 0; transform: scale(0.95) translateY(-5px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+.filter-opt {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.5rem 0.75rem; border-radius: 0.5rem;
+    font-size: 0.78rem; font-weight: 600; color: #4b5563;
+    cursor: pointer; transition: background 0.15s;
+    background: none; border: none; width: 100%; text-align: left;
+}
+.filter-opt:hover { background: #f3f4f6; color: #111827; }
+.filter-opt-left { display: flex; align-items: center; gap: 0.55rem; }
+.filter-opt-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.filter-opt-count { background: #f3f4f6; color: #6b7280; font-size: 0.65rem; font-weight: 800; padding: 0.1rem 0.4rem; border-radius: 99px; }
 </style>
 
 <div class="dash-shell">
@@ -778,60 +816,61 @@ footer { display: none !important; }
         <!-- ── MY QUOTES ────────────────────────────── -->
         <div id="tab-quotes" class="dash-tab">
             <?php
-            $qPending  = array_filter($quotes??[], fn($q)=>$q['status']==='pending');
-            $qAccepted = array_filter($quotes??[], fn($q)=>$q['status']==='accepted');
-            $qRejected = array_filter($quotes??[], fn($q)=>$q['status']==='rejected');
+            $qGroups = [
+                ['label'=>'Pending',      'color'=>'#f59e0b', 'key'=>'pending',  'items'=>array_filter($quotes??[], fn($q)=>$q['status']==='pending')],
+                ['label'=>'Won',          'color'=>'#22c55e', 'key'=>'accepted', 'items'=>array_filter($quotes??[], fn($q)=>$q['status']==='accepted')],
+                ['label'=>'Not Selected', 'color'=>'#9ca3af', 'key'=>'rejected', 'items'=>array_filter($quotes??[], fn($q)=>$q['status']==='rejected')],
+            ];
             ?>
+            <div class="dash-tab-header">
+                <h2>My Quotes</h2>
+                <div class="filter-dropdown">
+                    <button class="filter-btn" type="button" onclick="toggleFilter('filter-craft-quotes')">
+                        <div class="filter-opt-dot" style="display:none"></div>
+                        <span class="lbl">Filter: All</span>
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div id="filter-craft-quotes" class="filter-menu">
+                        <button type="button" class="filter-opt" onclick="applyDashFilter('tab-quotes', 'all', '', 'All Quotes')">
+                            <div class="filter-opt-left">
+                                <span style="font-weight:700">All Quotes</span>
+                            </div>
+                            <span class="filter-opt-count"><?= count($quotes??[]) ?></span>
+                        </button>
+                        <?php foreach($qGroups as $g): if(empty($g['items'])) continue; ?>
+                        <button type="button" class="filter-opt" onclick="applyDashFilter('tab-quotes', '<?= $g['key'] ?>', '<?= $g['color'] ?>', '<?= $g['label'] ?>')">
+                            <div class="filter-opt-left">
+                                <div class="filter-opt-dot" style="background:<?= $g['color'] ?>"></div>
+                                <span><?= $g['label'] ?></span>
+                            </div>
+                            <span class="filter-opt-count"><?= count($g['items']) ?></span>
+                        </button>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+
             <?php if (!empty($quotes)): ?>
-
-            <?php if (!empty($qPending)): ?>
-            <div class="group-header">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;color:#f59e0b"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                <span class="label">Pending</span><span class="count"><?= count($qPending) ?></span>
+            <?php foreach ($qGroups as $grp): if (empty($grp['items'])) continue; ?>
+            <div class="group-header" data-status="<?= $grp['key'] ?>">
+                <?php if($grp['key']==='pending'): ?><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;color:#f59e0b"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <?php elseif($grp['key']==='accepted'): ?><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;color:#22c55e"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <?php else: ?><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;color:#9ca3af"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg><?php endif; ?>
+                <span class="label"><?= $grp['label'] ?></span><span class="count"><?= count($grp['items']) ?></span>
             </div>
-            <?php foreach ($qPending as $q): ?>
-            <a href="<?= APP_URL ?>/jobs/<?= $q['job_posting_id'] ?>" class="quote-card">
+            <?php foreach ($grp['items'] as $q): ?>
+            <a href="<?= APP_URL ?>/jobs/<?= $q['job_posting_id'] ?>" class="quote-card <?= $grp['key']==='rejected'?'rejected':'' ?>">
                 <div class="quote-card-top">
                     <div><div class="quote-title"><?= htmlspecialchars($q['title']) ?></div>
-                    <div class="quote-meta"><span class="quote-price"><?= number_format($q['quoted_price'],2) ?> DZD</span><span class="quote-date">· <?= date('M d, Y', strtotime($q['created_at'])) ?></span></div></div>
-                    <span class="sbadge yellow">Pending</span>
+                    <div class="quote-meta"><span class="quote-price"><?= number_format($q['quoted_price'],2) ?> DZD</span><?php if($grp['key']==='pending'): ?><span class="quote-date">· <?= date('M d, Y', strtotime($q['created_at'])) ?></span><?php endif; ?></div></div>
+                    <?php if($grp['key']==='pending'): ?><span class="sbadge yellow">Pending</span>
+                    <?php elseif($grp['key']==='accepted'): ?><span class="sbadge green">Won ✓</span>
+                    <?php else: ?><span class="sbadge gray">Not Selected</span><?php endif; ?>
                 </div>
-                <?php if (!empty($q['cover_message'])): ?><div class="quote-msg">"<?= htmlspecialchars($q['cover_message']) ?>"</div><?php endif; ?>
+                <?php if ($grp['key']==='pending' && !empty($q['cover_message'])): ?><div class="quote-msg">"<?= htmlspecialchars($q['cover_message']) ?>"</div><?php endif; ?>
             </a>
             <?php endforeach; ?>
-            <?php endif; ?>
-
-            <?php if (!empty($qAccepted)): ?>
-            <div class="group-header">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;color:#22c55e"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                <span class="label">Won</span><span class="count"><?= count($qAccepted) ?></span>
-            </div>
-            <?php foreach ($qAccepted as $q): ?>
-            <a href="<?= APP_URL ?>/jobs/<?= $q['job_posting_id'] ?>" class="quote-card">
-                <div class="quote-card-top">
-                    <div><div class="quote-title"><?= htmlspecialchars($q['title']) ?></div>
-                    <div class="quote-meta"><span class="quote-price"><?= number_format($q['quoted_price'],2) ?> DZD</span></div></div>
-                    <span class="sbadge green">Won ✓</span>
-                </div>
-            </a>
             <?php endforeach; ?>
-            <?php endif; ?>
-
-            <?php if (!empty($qRejected)): ?>
-            <div class="group-header">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;color:#9ca3af"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                <span class="label">Not Selected</span><span class="count"><?= count($qRejected) ?></span>
-            </div>
-            <?php foreach ($qRejected as $q): ?>
-            <a href="<?= APP_URL ?>/jobs/<?= $q['job_posting_id'] ?>" class="quote-card rejected">
-                <div class="quote-card-top">
-                    <div><div class="quote-title"><?= htmlspecialchars($q['title']) ?></div>
-                    <div class="quote-meta"><span class="quote-price"><?= number_format($q['quoted_price'],2) ?> DZD</span></div></div>
-                    <span class="sbadge gray">Not Selected</span>
-                </div>
-            </a>
-            <?php endforeach; ?>
-            <?php endif; ?>
 
             <?php else: ?>
             <div class="empty-state">
@@ -874,17 +913,45 @@ footer { display: none !important; }
             $labelMap = ['requested'=>'Requested','counter_offered'=>'Counter Sent','in_progress'=>'In Progress','pending_completion'=>'Awaiting Confirm','completed'=>'Completed','cancelled'=>'Cancelled'];
 
             $bGroups = [
-                ['label'=>'Needs Response',       'color'=>'#f59e0b', 'items'=> array_filter($bookings, fn($b)=>$b['status']==='requested')],
-                ['label'=>'Counter Sent',          'color'=>'#ea580c', 'items'=> array_filter($bookings, fn($b)=>$b['status']==='counter_offered')],
-                ['label'=>'In Progress',           'color'=>'#6366f1', 'items'=> array_filter($bookings, fn($b)=>$b['status']==='in_progress')],
-                ['label'=>'Awaiting Confirmation', 'color'=>'#a855f7', 'items'=> array_filter($bookings, fn($b)=>$b['status']==='pending_completion')],
-                ['label'=>'Completed',             'color'=>'#22c55e', 'items'=> array_filter($bookings, fn($b)=>$b['status']==='completed')],
-                ['label'=>'Cancelled',             'color'=>'#9ca3af', 'items'=> array_filter($bookings, fn($b)=>$b['status']==='cancelled')],
+                ['label'=>'Needs Response',       'color'=>'#f59e0b', 'key'=>'req',      'items'=> array_filter($bookings, fn($b)=>$b['status']==='requested')],
+                ['label'=>'Counter Sent',         'color'=>'#ea580c', 'key'=>'counter',  'items'=> array_filter($bookings, fn($b)=>$b['status']==='counter_offered')],
+                ['label'=>'In Progress',          'color'=>'#6366f1', 'key'=>'prog',     'items'=> array_filter($bookings, fn($b)=>$b['status']==='in_progress')],
+                ['label'=>'Awaiting Confirmation','color'=>'#a855f7', 'key'=>'pendingc', 'items'=> array_filter($bookings, fn($b)=>$b['status']==='pending_completion')],
+                ['label'=>'Completed',            'color'=>'#22c55e', 'key'=>'comp',     'items'=> array_filter($bookings, fn($b)=>$b['status']==='completed')],
+                ['label'=>'Cancelled',            'color'=>'#9ca3af', 'key'=>'canc',     'items'=> array_filter($bookings, fn($b)=>$b['status']==='cancelled')],
             ];
             ?>
+            <div class="dash-tab-header">
+                <h2>Bookings</h2>
+                <div class="filter-dropdown">
+                    <button class="filter-btn" type="button" onclick="toggleFilter('filter-craft-bookings')">
+                        <div class="filter-opt-dot" style="display:none"></div>
+                        <span class="lbl">Filter: All</span>
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div id="filter-craft-bookings" class="filter-menu">
+                        <button type="button" class="filter-opt" onclick="applyDashFilter('tab-bookings', 'all', '', 'All Bookings')">
+                            <div class="filter-opt-left">
+                                <span style="font-weight:700">All Bookings</span>
+                            </div>
+                            <span class="filter-opt-count"><?= count($bookings) ?></span>
+                        </button>
+                        <?php foreach($bGroups as $g): if(empty($g['items'])) continue; ?>
+                        <button type="button" class="filter-opt" onclick="applyDashFilter('tab-bookings', '<?= $g['key'] ?>', '<?= $g['color'] ?>', '<?= $g['label'] ?>')">
+                            <div class="filter-opt-left">
+                                <div class="filter-opt-dot" style="background:<?= $g['color'] ?>"></div>
+                                <span><?= $g['label'] ?></span>
+                            </div>
+                            <span class="filter-opt-count"><?= count($g['items']) ?></span>
+                        </button>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+
             <?php if (!empty($bookings)): ?>
             <?php foreach ($bGroups as $grp): if(empty($grp['items'])) continue; ?>
-            <div class="group-header">
+            <div class="group-header" data-status="<?= $grp['key'] ?>">
                 <svg viewBox="0 0 8 8" style="width:8px;height:8px;flex-shrink:0"><circle cx="4" cy="4" r="4" fill="<?= $grp['color'] ?>"/></svg>
                 <span class="label"><?= $grp['label'] ?></span><span class="count"><?= count($grp['items']) ?></span>
             </div>
@@ -1542,4 +1609,47 @@ switchTab = function(tab) {
     }, { passive: true });
 })();
 
+/* Dropdown Filters */
+function toggleFilter(menuId) {
+    const menus = document.querySelectorAll('.filter-menu');
+    menus.forEach(m => { if (m.id !== menuId) m.classList.remove('open'); });
+    document.getElementById(menuId).classList.toggle('open');
+}
+
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.filter-dropdown')) {
+        document.querySelectorAll('.filter-menu').forEach(m => m.classList.remove('open'));
+    }
+});
+
+function applyDashFilter(tabId, statusKey, color, label) {
+    document.querySelectorAll('.filter-menu').forEach(m => m.classList.remove('open'));
+    
+    // Update button visual
+    const btnLbl = document.querySelector(`#${tabId} .filter-btn .lbl`);
+    const btnDot = document.querySelector(`#${tabId} .filter-btn .filter-opt-dot`);
+    if(btnLbl) btnLbl.textContent = 'Filter: ' + label;
+    if(btnDot) {
+        if(statusKey === 'all') { btnDot.style.display = 'none'; }
+        else { btnDot.style.display = 'block'; btnDot.style.background = color; }
+    }
+
+    // Toggle items
+    const headers = document.querySelectorAll(`#${tabId} .group-header`);
+    headers.forEach(h => {
+        const itemStatus = h.getAttribute('data-status');
+        const show = (statusKey === 'all' || statusKey === itemStatus);
+        
+        h.style.display = show ? 'flex' : 'none';
+        
+        // Find sibling cards
+        let el = h;
+        while (el.nextElementSibling && !el.nextElementSibling.classList.contains('group-header') && !el.nextElementSibling.classList.contains('empty-state')) {
+            el = el.nextElementSibling;
+            if (el.classList.contains('quote-card') || el.classList.contains('booking-card') || el.classList.contains('job-card')) {
+                el.style.display = show ? '' : 'none';
+            }
+        }
+    });
+}
 </script>
