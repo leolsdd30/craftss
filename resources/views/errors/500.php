@@ -20,24 +20,34 @@ if (defined('APP_URL')) {
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
     </style>
+    <script>
+        tailwind.config = { darkMode: 'class' }
+    </script>
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen px-4">
+<body class="bg-gray-50 dark:bg-gray-900 flex items-center justify-center min-h-screen px-4 transition-colors">
     <div class="text-center max-w-lg">
         <!-- Large 500 Number -->
         <div class="relative inline-block mb-6">
-            <span class="text-[10rem] font-extrabold leading-none text-red-100 select-none">500</span>
+            <span class="text-[10rem] font-extrabold leading-none text-red-100 dark:text-red-900/30 select-none">500</span>
             <div class="absolute inset-0 flex items-center justify-center">
-                <svg class="w-24 h-24 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <svg class="w-24 h-24 text-red-400 dark:text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
             </div>
         </div>
 
-        <h1 class="text-3xl font-bold text-gray-900 mb-3">Something Went Wrong</h1>
-        <p class="text-gray-500 mb-8 text-lg">We're experiencing a temporary issue. Please try again in a moment.</p>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-3">Something Went Wrong</h1>
+        <p class="text-gray-500 dark:text-gray-400 mb-8 text-lg">We're experiencing a temporary issue. Please try again in a moment.</p>
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a href="javascript:location.reload()" class="inline-flex items-center px-5 py-2.5 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 transition duration-150 shadow-sm">
+            <a href="javascript:location.reload()" class="inline-flex items-center px-5 py-2.5 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-150 shadow-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                 Try Again
             </a>
@@ -47,7 +57,7 @@ if (defined('APP_URL')) {
             </a>
         </div>
 
-        <p class="mt-10 text-xs text-gray-400">&copy; <?= date('Y') ?> Crafts. All rights reserved.</p>
+        <p class="mt-10 text-xs text-gray-400 dark:text-gray-500">&copy; <?= date('Y') ?> Crafts. All rights reserved.</p>
     </div>
 </body>
 </html>

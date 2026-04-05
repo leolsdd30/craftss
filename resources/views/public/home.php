@@ -369,12 +369,12 @@ function switchHowTab(tab) {
     document.getElementById('hiw-' + tab).classList.remove('hidden');
     ['homeowner', 'craftsman'].forEach(function(t) {
         var btn = document.getElementById('tab-' + t + '-btn');
-        btn.classList.remove('bg-white', 'text-gray-900', 'shadow');
-        btn.classList.add('text-gray-500');
+        btn.classList.remove('bg-white', 'text-gray-900', 'shadow', 'dark:bg-gray-600', 'dark:text-gray-100');
+        btn.classList.add('text-gray-500', 'dark:text-gray-400');
     });
     var activeBtn = document.getElementById('tab-' + tab + '-btn');
-    activeBtn.classList.add('bg-white', 'text-gray-900', 'shadow');
-    activeBtn.classList.remove('text-gray-500');
+    activeBtn.classList.add('bg-white', 'text-gray-900', 'shadow', 'dark:bg-gray-600', 'dark:text-gray-100');
+    activeBtn.classList.remove('text-gray-500', 'dark:text-gray-400');
 }
 
 function switchCtaTab(tab) {

@@ -1,6 +1,6 @@
 <?php $hideFooter = true; ?>
 <!-- Register Page -->
-<div class="min-h-[calc(100dvh-4rem)] bg-gray-50 flex">
+<div class="min-h-[calc(100dvh-4rem)] bg-gray-50 dark:bg-gray-900 flex transition-colors">
 
     <!-- Left Panel — Branding -->
     <div class="hidden lg:flex lg:w-1/2 bg-indigo-700 flex-col justify-between p-12 relative overflow-y-auto overflow-x-hidden lg:h-[calc(100dvh-4rem)] lg:sticky lg:top-16">
@@ -74,13 +74,13 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
                         </svg>
                     </div>
-                    <span class="text-xl font-extrabold text-gray-900">Crafts</span>
+                    <span class="text-xl font-extrabold text-gray-900 dark:text-white">Crafts</span>
                 </a>
             </div>
 
             <div class="mb-8">
-                <h1 class="text-3xl font-extrabold text-gray-900">Create your account</h1>
-                <p class="mt-2 text-sm text-gray-500">
+                <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white">Create your account</h1>
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                     Already have an account?
                     <a href="<?= APP_URL ?>/login" class="font-semibold text-indigo-600 hover:text-indigo-500 transition">
                         Sign in
@@ -89,7 +89,7 @@
             </div>
 
             <?php if (!empty($error)): ?>
-            <div class="mb-6 flex items-start space-x-3 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div class="mb-6 flex items-start space-x-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
                 <svg class="h-5 w-5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
@@ -103,16 +103,16 @@
                 <!-- First & Last Name -->
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">First name</label>
+                        <label for="first_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">First name</label>
                         <input id="first_name" name="first_name" type="text" required autocomplete="given-name"
-                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400
+                            class="block w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                    focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                             placeholder="Ahmed">
                     </div>
                     <div>
-                        <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Last name</label>
+                        <label for="last_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Last name</label>
                         <input id="last_name" name="last_name" type="text" required autocomplete="family-name"
-                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400
+                            class="block w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                    focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                             placeholder="Benali">
                     </div>
@@ -120,23 +120,23 @@
 
                 <!-- Email -->
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email address</label>
                     <input id="email" name="email" type="email" required autocomplete="email"
-                        class="block w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400
+                        class="block w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                         placeholder="you@example.com">
                 </div>
 
                 <!-- Password -->
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
                     <div class="relative">
                         <input id="password" name="password" type="password" required autocomplete="new-password"
-                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400
+                            class="block w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                    focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition pr-11"
                             placeholder="At least 8 characters">
                         <button type="button" onclick="togglePassword('password', this)"
-                            class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-600 transition">
+                            class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
                             <svg class="h-4 w-4 eye-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -148,7 +148,7 @@
                 <!-- Password Rules -->
                 <div class="-mt-3 mb-2 px-1">
                     <ul class="space-y-1.5" id="pw-rules">
-                        <li id="rule-length" class="flex items-center space-x-2 text-xs text-gray-500 font-medium transition-colors duration-200">
+                        <li id="rule-length" class="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400 font-medium transition-colors duration-200">
                             <svg class="h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                             </svg>
@@ -159,28 +159,28 @@
 
                 <!-- Account Type -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">I am a...</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">I am a...</label>
                     <div class="grid grid-cols-2 gap-3">
                         <!-- Homeowner option -->
                         <label class="role-option relative cursor-pointer">
                             <input type="radio" name="role" value="homeowner" class="sr-only" checked>
-                            <div class="role-card flex flex-col items-center p-4 rounded-xl border-2 border-indigo-500 bg-indigo-50 transition-all">
-                                <svg class="h-7 w-7 text-indigo-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <div class="role-card flex flex-col items-center p-4 rounded-xl border-2 border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30 transition-all">
+                                <svg class="h-7 w-7 text-indigo-600 dark:text-indigo-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                                 </svg>
-                                <span class="text-sm font-semibold text-gray-900">Homeowner</span>
-                                <span class="text-xs text-gray-500 mt-0.5 text-center">I need work done</span>
+                                <span class="text-sm font-semibold text-gray-900 dark:text-white">Homeowner</span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 text-center">I need work done</span>
                             </div>
                         </label>
                         <!-- Craftsman option -->
                         <label class="role-option relative cursor-pointer">
                             <input type="radio" name="role" value="craftsman" class="sr-only">
-                            <div class="role-card flex flex-col items-center p-4 rounded-xl border-2 border-gray-200 bg-white hover:border-indigo-300 transition-all">
-                                <svg class="h-7 w-7 text-gray-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <div class="role-card flex flex-col items-center p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-indigo-300 dark:hover:border-indigo-500 transition-all">
+                                <svg class="h-7 w-7 text-gray-500 dark:text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                                 </svg>
-                                <span class="text-sm font-semibold text-gray-900">Craftsman</span>
-                                <span class="text-xs text-gray-500 mt-0.5 text-center">I want to find work</span>
+                                <span class="text-sm font-semibold text-gray-900 dark:text-white">Craftsman</span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 text-center">I want to find work</span>
                             </div>
                         </label>
                     </div>
@@ -188,7 +188,7 @@
 
                 <!-- Submit -->
                 <button type="submit" id="submit-btn"
-                    class="w-full flex justify-center items-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    class="w-full flex justify-center items-center px-4 py-2.5 bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 text-white text-sm font-semibold rounded-xl shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-indigo-500">
                     Create account
                     <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
@@ -196,7 +196,7 @@
                 </button>
             </form>
 
-            <p class="mt-8 text-center text-xs text-gray-400">
+            <p class="mt-8 text-center text-xs text-gray-400 dark:text-gray-500">
                 By creating an account you agree to our
                 <a href="#" class="underline hover:text-gray-600">Terms of Service</a>
                 and
@@ -224,16 +224,16 @@ function togglePassword(fieldId, btn) {
 document.querySelectorAll('.role-option input[type="radio"]').forEach(function(radio) {
     radio.addEventListener('change', function() {
         document.querySelectorAll('.role-option .role-card').forEach(function(card) {
-            card.classList.remove('border-indigo-500', 'bg-indigo-50');
-            card.classList.add('border-gray-200', 'bg-white');
-            card.querySelector('svg').classList.remove('text-indigo-600');
-            card.querySelector('svg').classList.add('text-gray-500');
+            card.classList.remove('border-indigo-500', 'bg-indigo-50', 'dark:bg-indigo-900/30');
+            card.classList.add('border-gray-200', 'dark:border-gray-700', 'bg-white', 'dark:bg-gray-800');
+            card.querySelector('svg').classList.remove('text-indigo-600', 'dark:text-indigo-400');
+            card.querySelector('svg').classList.add('text-gray-500', 'dark:text-gray-400');
         });
         var selected = this.closest('.role-option').querySelector('.role-card');
-        selected.classList.add('border-indigo-500', 'bg-indigo-50');
-        selected.classList.remove('border-gray-200', 'bg-white');
-        selected.querySelector('svg').classList.add('text-indigo-600');
-        selected.querySelector('svg').classList.remove('text-gray-500');
+        selected.classList.add('border-indigo-500', 'bg-indigo-50', 'dark:bg-indigo-900/30');
+        selected.classList.remove('border-gray-200', 'dark:border-gray-700', 'bg-white', 'dark:bg-gray-800');
+        selected.querySelector('svg').classList.add('text-indigo-600', 'dark:text-indigo-400');
+        selected.querySelector('svg').classList.remove('text-gray-500', 'dark:text-gray-400');
     });
 });
 
@@ -246,11 +246,11 @@ pwField.addEventListener('input', function() {
 
     // Check minimum length (8 chars based on AuthController limits)
     if (val.length >= 8) {
-        ruleLength.classList.remove('text-gray-500');
-        ruleLength.classList.add('text-green-600');
+        ruleLength.classList.remove('text-gray-500', 'dark:text-gray-400');
+        ruleLength.classList.add('text-green-600', 'dark:text-green-500');
     } else {
-        ruleLength.classList.remove('text-green-600');
-        ruleLength.classList.add('text-gray-500');
+        ruleLength.classList.remove('text-green-600', 'dark:text-green-500');
+        ruleLength.classList.add('text-gray-500', 'dark:text-gray-400');
     }
 });
 
@@ -259,11 +259,11 @@ document.getElementById('register-form').addEventListener('submit', function(e) 
     if (pwField.value.length < 8) {
         e.preventDefault();
         pwField.focus();
-        pwField.classList.remove('border-gray-300');
-        pwField.classList.add('border-red-400');
+        pwField.classList.remove('border-gray-300', 'dark:border-gray-600');
+        pwField.classList.add('border-red-400', 'dark:border-red-500');
     } else {
-        pwField.classList.remove('border-red-400');
-        pwField.classList.add('border-gray-300');
+        pwField.classList.remove('border-red-400', 'dark:border-red-500');
+        pwField.classList.add('border-gray-300', 'dark:border-gray-600');
     }
 });
 </script>

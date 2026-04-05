@@ -41,20 +41,20 @@ if (!empty($user['username_updated_at'])) {
 }
 ?>
 
-<div class="bg-gray-50 min-h-screen pt-8 pb-28">
+<div class="bg-gray-50 dark:bg-gray-900 min-h-screen pt-8 pb-28">
 
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Header area with Back link -->
         <div class="flex items-center justify-between mb-6">
             <a href="<?= APP_URL ?>/profile/<?= e($user['username']) ?>"
-               class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-indigo-600 transition group">
+               class="inline-flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition group">
                 <svg class="mr-1.5 h-4 w-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                 </svg>
                 Back to Profile
             </a>
-            <h1 class="text-xl font-bold text-gray-900 hidden sm:block">Edit Profile</h1>
+            <h1 class="text-xl font-bold text-gray-900 dark:text-white hidden sm:block">Edit Profile</h1>
         </div>
 
         <form action="<?= APP_URL ?>/profile/edit" method="POST" enctype="multipart/form-data" id="edit-form">
@@ -66,16 +66,16 @@ if (!empty($user['username_updated_at'])) {
         <div class="flex flex-col lg:grid lg:grid-cols-3 gap-6 items-start">
 
             <!-- 1. PROFILE PICTURE CARD (Mobile: Order 1, Desktop: Col 1 Row 1) -->
-            <div class="order-1 lg:order-none lg:col-span-1 lg:col-start-1 lg:row-start-1 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="order-1 lg:order-none lg:col-span-1 lg:col-start-1 lg:row-start-1 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
                 <div class="p-5">
-                    <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center">
-                        <svg class="h-3.5 w-3.5 mr-1.5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <h2 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-4 flex items-center">
+                        <svg class="h-3.5 w-3.5 mr-1.5 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         Profile Picture
                     </h2>
 
                     <div class="flex items-center gap-4 sm:flex-col sm:items-center">
                         <!-- Avatar -->
-                        <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-gray-100 ring-4 ring-indigo-50 border border-gray-200 shadow-sm mb-0 sm:mb-3 flex-shrink-0">
+                        <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-700 ring-4 ring-indigo-50 dark:ring-indigo-900/30 border border-gray-200 dark:border-gray-600 shadow-sm mb-0 sm:mb-3 flex-shrink-0">
                             <img id="profile-preview"
                                  src="<?= get_profile_picture_url($user['profile_picture'] ?? 'default.png', $user['first_name'], $user['last_name']) ?>"
                                  alt="Profile" class="object-cover w-full h-full">
@@ -85,21 +85,21 @@ if (!empty($user['username_updated_at'])) {
                         <div class="flex-grow w-full">
                             <!-- Mobile text next to avatar -->
                             <div class="sm:hidden mb-2.5">
-                                <p class="text-sm font-bold text-gray-900"><?= e($user['first_name'] . ' ' . $user['last_name']) ?></p>
-                                <p class="text-xs text-gray-400 mt-0.5 capitalize"><?= e($user['role']) ?></p>
+                                <p class="text-sm font-bold text-gray-900 dark:text-white"><?= e($user['first_name'] . ' ' . $user['last_name']) ?></p>
+                                <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 capitalize"><?= e($user['role']) ?></p>
                             </div>
                             
                             <!-- Desktop text below avatar -->
                             <div class="hidden sm:block text-center mb-4">
-                                <p class="text-sm font-bold text-gray-900"><?= e($user['first_name'] . ' ' . $user['last_name']) ?></p>
-                                <p class="text-xs text-gray-400 mt-0.5 capitalize"><?= e($user['role']) ?></p>
+                                <p class="text-sm font-bold text-gray-900 dark:text-white"><?= e($user['first_name'] . ' ' . $user['last_name']) ?></p>
+                                <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 capitalize"><?= e($user['role']) ?></p>
                             </div>
 
                             <!-- Upload controls -->
                             <input type="file" name="profile_picture" id="profile-upload" class="sr-only"
                                    accept="image/png,image/jpeg,image/gif,image/webp" onchange="previewImage(event)">
                             <button type="button" onclick="document.getElementById('profile-upload').click()"
-                                class="w-full flex items-center justify-center gap-2 px-4 py-2 sm:py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition">
+                                class="w-full flex items-center justify-center gap-2 px-4 py-2 sm:py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition">
                                 <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
                                 </svg>
@@ -120,29 +120,29 @@ if (!empty($user['username_updated_at'])) {
             </div>
 
             <!-- 2. PERSONAL INFORMATION (Mobile: Order 2, Desktop: Col 2-3 Row 1) -->
-            <div class="order-2 lg:order-none lg:col-span-2 lg:col-start-2 lg:row-start-1 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center">
-                    <svg class="h-3.5 w-3.5 mr-1.5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            <div class="order-2 lg:order-none lg:col-span-2 lg:col-start-2 lg:row-start-1 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+                <h2 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-4 flex items-center">
+                    <svg class="h-3.5 w-3.5 mr-1.5 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                     Personal Information
                 </h2>
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
                     <div>
-                        <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                        <label for="first_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">First Name</label>
                         <input type="text" name="first_name" id="first_name" required
                                value="<?= e($user['first_name']) ?>"
-                               class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                               class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                     </div>
 
                     <div>
-                        <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                        <label for="last_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Last Name</label>
                         <input type="text" name="last_name" id="last_name" required
                                value="<?= e($user['last_name']) ?>"
-                               class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                               class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                     </div>
 
                     <div>
-                        <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                        <label for="phone_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center">
                             Phone Number
                             <?php if ($isCraftsman && empty($user['phone_number'])): ?>
                             <span class="text-[10px] text-amber-500 font-bold ml-2 inline-flex items-center bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 uppercase tracking-widest">
@@ -154,11 +154,11 @@ if (!empty($user['username_updated_at'])) {
                         <input type="tel" name="phone_number" id="phone_number"
                                value="<?= e($user['phone_number'] ?? '') ?>"
                                placeholder="e.g. 0555 123 456"
-                               class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                               class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                     </div>
 
                     <div>
-                        <label for="wilaya" class="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                        <label for="wilaya" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center">
                             Wilaya
                             <?php if ($isCraftsman && empty($user['wilaya'])): ?>
                             <span class="text-[10px] text-amber-500 font-bold ml-2 inline-flex items-center bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 uppercase tracking-widest">
@@ -168,7 +168,7 @@ if (!empty($user['username_updated_at'])) {
                             <?php endif; ?>
                         </label>
                         <select name="wilaya" id="wilaya"
-                                class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                             <option value="">— Select Wilaya —</option>
                             <?php foreach ($wilayas as $w): ?>
                             <option value="<?= e($w) ?>" <?= ($user['wilaya'] ?? '') === $w ? 'selected' : '' ?>><?= e($w) ?></option>
@@ -177,14 +177,14 @@ if (!empty($user['username_updated_at'])) {
                     </div>
 
                     <!-- Merged Username -->
-                    <div class="sm:col-span-2 pt-5 border-t border-gray-100 mt-2">
-                        <label for="username" class="block text-sm font-bold text-gray-900 mb-1">
+                    <div class="sm:col-span-2 pt-5 border-t border-gray-100 dark:border-gray-700 mt-2">
+                        <label for="username" class="block text-sm font-bold text-gray-900 dark:text-white mb-1">
                             Public Username
-                            <span class="text-gray-400 font-normal ml-1 text-xs">— appears in your profile URL</span>
+                            <span class="text-gray-400 dark:text-gray-500 font-normal ml-1 text-xs">— appears in your profile URL</span>
                         </label>
                         <?php if (!$canEditUsername): ?>
                         <input type="text" value="<?= e($user['username'] ?? '') ?>" disabled
-                               class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 text-gray-500 cursor-not-allowed">
+                               class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed">
                         <p class="mt-1.5 text-xs text-amber-600 flex items-center gap-1">
                             <svg class="h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
@@ -197,10 +197,10 @@ if (!empty($user['username_updated_at'])) {
                             <input type="text" name="username" id="username"
                                    value="<?= e($user['username'] ?? '') ?>"
                                    placeholder="your_username"
-                                   class="block w-full pl-8 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                   class="block w-full pl-8 pr-4 py-2.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                         </div>
                         <div id="username-feedback" class="mt-1.5 text-xs font-medium flex items-center transition-all duration-200"></div>
-                        <p class="mt-1 text-xs text-gray-400">Must start with a letter · min 3 chars · letters, numbers, _ and - only</p>
+                        <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">Must start with a letter · min 3 chars · letters, numbers, _ and - only</p>
                         <?php endif; ?>
                     </div>
 
@@ -209,9 +209,9 @@ if (!empty($user['username_updated_at'])) {
 
             <!-- 3. PROFESSIONAL DETAILS (Mobile: Order 3, Desktop: Col 2-3 Row 2) -->
             <?php if ($isCraftsman): ?>
-            <div class="order-3 lg:order-none lg:col-span-2 lg:col-start-2 lg:row-start-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center">
-                    <svg class="h-3.5 w-3.5 mr-1.5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            <div class="order-3 lg:order-none lg:col-span-2 lg:col-start-2 lg:row-start-2 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+                <h2 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-4 flex items-center">
+                    <svg class="h-3.5 w-3.5 mr-1.5 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                     Professional Details
                 </h2>
                 <div class="space-y-4">
@@ -220,7 +220,7 @@ if (!empty($user['username_updated_at'])) {
                         <div>
                             <label for="service_category" class="block text-sm font-medium text-gray-700 mb-1">Service Category</label>
                             <select name="service_category" id="service_category"
-                                    class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                    class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                                 <?php
                                 $selectedCat = $craftsmanDetails['service_category'] ?? 'General Handyman';
                                 foreach ($categories as $cat):
@@ -243,9 +243,9 @@ if (!empty($user['username_updated_at'])) {
                                 <input type="number" name="hourly_rate" id="hourly_rate"
                                        step="0.01" min="0"
                                        value="<?= e($craftsmanDetails['hourly_rate'] ?? '0.00') ?>"
-                                       class="block w-full px-4 py-2.5 pr-14 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                       class="block w-full px-4 py-2.5 pr-14 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                    <span class="text-gray-400 text-sm font-medium">DZD</span>
+                                    <span class="text-gray-400 dark:text-gray-500 text-sm font-medium">DZD</span>
                                 </div>
                             </div>
                         </div>
@@ -266,7 +266,7 @@ if (!empty($user['username_updated_at'])) {
                         <textarea id="bio" name="bio" rows="5"
                                   maxlength="500"
                                   placeholder="Describe your experience, skills, and what makes you stand out..."
-                                  class="block w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition resize-none"
+                                  class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition resize-none"
                                   oninput="document.getElementById('bio-count').textContent=this.value.length"
                         ><?= e($craftsmanDetails['bio'] ?? '') ?></textarea>
                         <p class="mt-1 text-xs text-gray-400 text-right">
@@ -275,14 +275,14 @@ if (!empty($user['username_updated_at'])) {
                     </div>
                     
                     <!-- Total Jobs Privacy Toggle -->
-                    <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
+                    <div class="pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
                         <div>
-                            <h4 class="text-sm font-bold text-gray-900">Show Total Completed Jobs</h4>
-                            <p class="text-xs text-gray-500 mt-0.5">Display the number of jobs you've finished on your profile card.</p>
+                            <h4 class="text-sm font-bold text-gray-900 dark:text-white">Show Total Completed Jobs</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Display the number of jobs you've finished on your profile card.</p>
                         </div>
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" name="show_total_jobs" value="1" class="sr-only peer" <?= $showTotalJobs ? 'checked' : '' ?>>
-                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                            <div class="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 dark:after:border-gray-500 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                         </label>
                     </div>
 
@@ -292,10 +292,10 @@ if (!empty($user['username_updated_at'])) {
 
             <!-- 4. PORTFOLIO (Mobile: Order 4, Desktop: Col 1 Row 2) -->
             <?php if ($isCraftsman): ?>
-            <div class="order-4 lg:order-none lg:col-span-1 lg:col-start-1 lg:row-start-2 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="order-4 lg:order-none lg:col-span-1 lg:col-start-1 lg:row-start-2 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
                 <div class="p-5">
-                    <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1 flex items-center">
-                        <svg class="h-3.5 w-3.5 mr-1.5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <h2 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1 flex items-center">
+                        <svg class="h-3.5 w-3.5 mr-1.5 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         Portfolio
                     </h2>
                     <p class="text-xs text-gray-400 mb-4">Up to 10 images · JPG PNG GIF WebP · 5MB each</p>
@@ -312,7 +312,7 @@ if (!empty($user['username_updated_at'])) {
                                       ? APP_URL . '/uploads/' . ltrim(htmlspecialchars($img), '/')
                                       : APP_URL . '/uploads/portfolio/' . htmlspecialchars($img);
                             ?>
-                            <div class="relative group rounded-xl overflow-hidden border border-gray-200 aspect-square"
+                            <div class="relative group rounded-xl overflow-hidden border border-gray-200 dark:border-gray-600 aspect-square"
                                  id="portfolio-item-<?= $index ?>">
                                 <!-- Click image opens lightbox -->
                                 <img src="<?= $imgUrl ?>"
@@ -337,13 +337,13 @@ if (!empty($user['username_updated_at'])) {
                     <input type="file" id="portfolio-picker" multiple
                            accept="image/png,image/jpeg,image/gif,image/webp"
                            class="hidden" onchange="addNewPortfolioFiles(this)">
-                    <div class="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center hover:border-indigo-300 transition cursor-pointer"
+                    <div class="border-2 border-dashed border-gray-200 dark:border-gray-600 rounded-xl p-4 text-center hover:border-indigo-300 dark:hover:border-indigo-500 transition cursor-pointer"
                          id="portfolio-dropzone"
                          onclick="document.getElementById('portfolio-picker').click()">
-                        <svg class="mx-auto h-8 w-8 text-gray-300 mb-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="mx-auto h-8 w-8 text-gray-300 dark:text-gray-500 mb-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
-                        <p class="text-xs font-medium text-gray-500" id="dropzone-text">Click to add images</p>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400" id="dropzone-text">Click to add images</p>
                     </div>
 
                     <!-- New image previews -->
@@ -356,10 +356,10 @@ if (!empty($user['username_updated_at'])) {
         </form>
 
         <!-- Sticky Save Bar -->
-        <div class="fixed bottom-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-lg border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+        <div class="fixed bottom-0 left-0 right-0 z-40 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-t border-gray-200 dark:border-gray-700 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
                 <a href="<?= APP_URL ?>/profile/<?= e($user['username']) ?>"
-                   class="px-5 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition">
+                   class="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition">
                     Cancel
                 </a>
                 <button type="submit" form="edit-form"

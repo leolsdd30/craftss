@@ -1,5 +1,6 @@
 <!-- Request Booking Page -->
 <?php
+$hideFooter = true;
 $db = \App\Database\Database::getInstance()->getConnection();
 $stmt = $db->prepare("
     SELECT cp.service_category, cp.hourly_rate, cp.is_verified,
@@ -252,26 +253,61 @@ if ($postDate) {
 .dtp-btn-text.filled { color: #111827; font-weight: 600; }
 .dtp-btn-chevron { color: #9ca3af; flex-shrink: 0; transition: transform .2s; }
 .dtp-trigger-btn.open .dtp-btn-chevron { transform: rotate(180deg); }
+
+/* ─── DARK MODE SUPPORTS ──────────────────────────────────── */
+html.dark .dtp-popup { background: #1f2937; border-color: #374151; box-shadow: 0 16px 48px rgba(0,0,0,.5); }
+html.dark .dp-header { background: #4338ca; }
+html.dark .dp-nav-btn { background: rgba(255,255,255,.1); }
+html.dark .dp-nav-btn:hover { background: rgba(255,255,255,.2); }
+html.dark .dp-day { color: #d1d5db; }
+html.dark .dp-day:hover:not(.disabled):not(.other-month) { background: #374151; color: #a5b4fc; }
+html.dark .dp-day.today { border-color: #4f46e5; color: #a5b4fc; }
+html.dark .dp-day.disabled { color: #4b5563; }
+html.dark .dp-day.other-month { color: #374151; }
+html.dark .dp-month-btn { background: #374151; border-color: #4b5563; color: #d1d5db; }
+html.dark .dp-month-btn:hover { background: #4b5563; border-color: #6366f1; color: #a5b4fc; }
+html.dark .dp-month-btn.active { background: #4f46e5; border-color: #4f46e5; color: #ffffff; }
+html.dark .dp-footer { border-color: #374151; }
+html.dark .dp-footer-text.empty { color: #6b7280; }
+html.dark .tp-header { background: #4338ca; }
+html.dark .tp-col::-webkit-scrollbar-track { background: #1f2937; }
+html.dark .tp-col::-webkit-scrollbar-thumb { background: #4b5563; }
+html.dark .tp-col::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+html.dark .tp-col + .tp-col { border-color: #374151; }
+html.dark .tp-col-labels { border-color: #374151; }
+html.dark .tp-col-label { background: #111827; color: #9ca3af; }
+html.dark .tp-col-label + .tp-col-label { border-color: #374151; }
+html.dark .tp-item { color: #d1d5db; }
+html.dark .tp-item:hover { background: #374151; color: #a5b4fc; }
+html.dark .tp-item.selected { background: #6366f1; color: #ffffff; font-weight: 700; }
+html.dark .tp-footer { border-color: #374151; }
+html.dark .tp-footer-text.empty { color: #6b7280; }
+html.dark .dtp-trigger-btn { background: #1f2937; border-color: #374151; }
+html.dark .dtp-trigger-btn:hover { border-color: #4f46e5; }
+html.dark .dtp-trigger-btn.open { background: #111827; border-color: #4f46e5; }
+html.dark .dtp-btn-text { color: #9ca3af; }
+html.dark .dtp-btn-text.filled { color: #f3f4f6; }
+html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,.15); }
 </style>
 
-<div class="bg-gray-50 min-h-screen py-8">
+<div class="bg-gray-50 dark:bg-gray-900 min-h-screen py-8">
 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
     <!-- Header -->
     <div class="mb-8">
         <a href="<?= APP_URL ?>/profile/<?= e($craftsman['username']) ?>"
-           class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-indigo-600 transition mb-4 group">
+           class="inline-flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition mb-4 group">
             <svg class="mr-1.5 h-4 w-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
             </svg>
             Back to Profile
         </a>
-        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Request a Booking</h1>
-        <p class="mt-2 text-sm text-gray-500">Fill in the details — the craftsman will review and respond to your request.</p>
+        <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">Request a Booking</h1>
+        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Fill in the details — the craftsman will review and respond to your request.</p>
     </div>
 
     <?php if (!empty($error)): ?>
-    <div class="mb-6 flex items-start gap-3 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+    <div class="mb-6 flex items-start gap-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/30 text-red-700 dark:text-red-400 px-4 py-3 rounded-xl text-sm">
         <svg class="h-5 w-5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
@@ -290,27 +326,27 @@ if ($postDate) {
             <input type="hidden" name="address"        id="address_combined"     value="<?= e($postAddress) ?>">
 
             <!-- 1 · Description -->
-            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 flex items-center gap-3">
                     <div class="h-7 w-7 rounded-lg bg-indigo-600 flex items-center justify-center flex-shrink-0 shadow-sm shadow-indigo-200">
                         <span class="text-white text-xs font-bold">1</span>
                     </div>
                     <div>
-                        <p class="text-sm font-bold text-gray-900">Job Details</p>
-                        <p class="text-xs text-gray-500">Be specific — the more detail, the better the craftsman can prepare.</p>
+                        <p class="text-sm font-bold text-gray-900 dark:text-white">Job Details</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Be specific — the more detail, the better the craftsman can prepare.</p>
                     </div>
                 </div>
                 <div class="px-6 py-5">
-                    <label for="description" class="block text-sm font-semibold text-gray-700 mb-1.5 pt-1">
-                        Job Description <span class="text-red-500">*</span>
+                    <label for="description" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 pt-1">
+                        Job Description <span class="text-red-500 dark:text-red-400">*</span>
                     </label>
                     <textarea id="description" name="description" rows="5" required maxlength="1000"
                         placeholder="e.g. I need to fix a leaking pipe under the kitchen sink. The water has been dripping for 2 days..."
-                        class="block w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400
-                               focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none leading-relaxed"
+                        class="block w-full px-4 py-3 bg-gray-50/50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
+                               focus:bg-white dark:focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none leading-relaxed"
                         oninput="document.getElementById('desc-count').textContent=this.value.length"
                     ><?= e($postDesc) ?></textarea>
-                    <div class="mt-1.5 flex justify-between items-center text-xs text-gray-500">
+                    <div class="mt-1.5 flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
                         <span>Provide specific details about the issue.</span>
                         <div><span id="desc-count" class="font-medium"><?= strlen($postDesc) ?></span>/1000</div>
                     </div>
@@ -318,33 +354,33 @@ if ($postDate) {
             </div>
 
             <!-- 2 · Location -->
-            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mt-6">
-                <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden mt-6">
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 flex items-center gap-3">
                     <div class="h-7 w-7 rounded-lg bg-indigo-600 flex items-center justify-center flex-shrink-0 shadow-sm shadow-indigo-200">
                         <span class="text-white text-xs font-bold">2</span>
                     </div>
                     <div>
-                        <p class="text-sm font-bold text-gray-900">Job Location</p>
-                        <p class="text-xs text-gray-500">Where should the craftsman come to?</p>
+                        <p class="text-sm font-bold text-gray-900 dark:text-white">Job Location</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Where should the craftsman come to?</p>
                     </div>
                 </div>
                 <div class="px-6 py-5">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <!-- Wilaya -->
                         <div>
-                            <label for="wilaya_select" class="block text-sm font-semibold text-gray-700 mb-1.5 pt-1">
-                                Wilaya <span class="text-red-500">*</span>
+                            <label for="wilaya_select" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 pt-1">
+                                Wilaya <span class="text-red-500 dark:text-red-400">*</span>
                             </label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                                    <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <svg class="h-4 w-4 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                     </svg>
                                 </div>
                                 <select id="wilaya_select" required
-                                    class="block w-full pl-10 pr-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-sm text-gray-900
-                                           focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
+                                    class="block w-full pl-10 pr-4 py-2.5 bg-gray-50/50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white
+                                           focus:bg-white dark:focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
                                     <option value="">— Select Wilaya —</option>
                                     <?php foreach ($wilayas as $w): ?>
                                     <option value="<?= e($w) ?>" <?= $savedWilaya === $w ? 'selected' : '' ?>><?= e($w) ?></option>
@@ -355,41 +391,41 @@ if ($postDate) {
 
                         <!-- Street -->
                         <div>
-                            <label for="street_address" class="block text-sm font-semibold text-gray-700 mb-1.5 pt-1">
-                                Street Address <span class="text-red-500">*</span>
+                            <label for="street_address" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 pt-1">
+                                Street Address <span class="text-red-500 dark:text-red-400">*</span>
                             </label>
                             <input id="street_address" type="text" required
                                 placeholder="e.g. 12 Rue des Frères, Cité des Pins"
                                 value="<?= e($savedStreet) ?>"
-                                class="block w-full px-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400
-                                       focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
+                                class="block w-full px-4 py-2.5 bg-gray-50/50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
+                                       focus:bg-white dark:focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- 3 · Schedule -->
-            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mt-6">
-                <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden mt-6">
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 flex items-center gap-3">
                     <div class="h-7 w-7 rounded-lg bg-indigo-600 flex items-center justify-center flex-shrink-0 shadow-sm shadow-indigo-200">
                         <span class="text-white text-xs font-bold">3</span>
                     </div>
                     <div>
-                        <p class="text-sm font-bold text-gray-900">Preferred Schedule</p>
-                        <p class="text-xs text-gray-500">Pick a date and time — the craftsman may suggest an alternative.</p>
+                        <p class="text-sm font-bold text-gray-900 dark:text-white">Preferred Schedule</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Pick a date and time — the craftsman may suggest an alternative.</p>
                     </div>
                 </div>
                 <div class="px-6 py-5">
 
-                    <label class="block text-sm font-semibold text-gray-700 mb-1.5 pt-1">
-                        Date &amp; Time <span class="text-red-500">*</span>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 pt-1">
+                        Date &amp; Time <span class="text-red-500 dark:text-red-400">*</span>
                     </label>
 
                     <!-- Two buttons side by side -->
                     <div class="flex gap-3 relative z-[//1]">
 
                         <!-- Date trigger -->
-                        <button type="button" id="dp-trigger" class="dtp-trigger-btn bg-gray-50/50 focus:bg-white hover:bg-gray-50 border-gray-200 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" aria-expanded="false">
+                        <button type="button" id="dp-trigger" class="dtp-trigger-btn bg-gray-50/50 dark:bg-gray-700/30 focus:bg-white dark:focus:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" aria-expanded="false">
                             <svg class="dtp-btn-icon h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
@@ -400,7 +436,7 @@ if ($postDate) {
                         </button>
 
                         <!-- Time trigger -->
-                        <button type="button" id="tp-trigger" class="dtp-trigger-btn bg-gray-50/50 focus:bg-white hover:bg-gray-50 border-gray-200 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" style="max-width:140px;flex:0 0 140px" aria-expanded="false">
+                        <button type="button" id="tp-trigger" class="dtp-trigger-btn bg-gray-50/50 dark:bg-gray-700/30 focus:bg-white dark:focus:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" style="max-width:140px;flex:0 0 140px" aria-expanded="false">
                             <svg class="dtp-btn-icon h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
@@ -454,11 +490,11 @@ if ($postDate) {
                         </div>
                     </div>
 
-                    <div class="mt-3 flex items-start gap-2 bg-amber-50 px-3 py-2 rounded-lg border border-amber-100">
+                    <div class="mt-3 flex items-start gap-2 bg-amber-50 dark:bg-amber-900/30 px-3 py-2 rounded-lg border border-amber-100 dark:border-amber-700/50">
                         <svg class="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        <p class="text-xs text-amber-800 leading-tight">This is a preferred schedule. The craftsman may suggest an alternative based on their availability.</p>
+                        <p class="text-xs text-amber-800 dark:text-amber-200 leading-tight">This is a preferred schedule. The craftsman may suggest an alternative based on their availability.</p>
                     </div>
                 </div>
             </div>
@@ -466,13 +502,13 @@ if ($postDate) {
             <!-- Submit -->
             <div class="mt-8 flex flex-col-reverse sm:flex-row items-center justify-end gap-3 pt-2">
                 <a href="<?= APP_URL ?>/profile/<?= e($craftsman['username']) ?>"
-                   class="w-full sm:w-auto px-6 py-2.5 text-sm font-semibold text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl transition-colors text-center shadow-sm">
+                   class="w-full sm:w-auto px-6 py-2.5 text-sm font-semibold text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl transition-colors text-center shadow-sm">
                     Cancel
                 </a>
                 <button type="submit"
                         class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-8 py-2.5
-                               bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-sm font-bold tracking-wide
-                               rounded-xl shadow-md shadow-indigo-200 hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                               bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 active:bg-indigo-800 dark:active:bg-indigo-700 text-white text-sm font-bold tracking-wide
+                               rounded-xl shadow-md shadow-indigo-200 dark:shadow-indigo-900/30 hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-indigo-500">
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
                     </svg>
@@ -486,30 +522,30 @@ if ($postDate) {
         <!-- ══ RIGHT: SIDEBAR (1 col) ══════════════════════════════ -->
         <div class="space-y-5 order-last">
             <!-- Craftsman card -->
-            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-                <div class="h-1.5 w-full bg-indigo-500"></div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+                <div class="h-1.5 w-full bg-indigo-500 dark:bg-indigo-600"></div>
                 <div class="p-6">
                     <div class="flex items-center gap-2.5 mb-5">
-                        <div class="h-6 w-6 rounded flex items-center justify-center bg-indigo-50">
-                            <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <div class="h-6 w-6 rounded flex items-center justify-center bg-indigo-50 dark:bg-indigo-900/30">
+                            <svg class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                             </svg>
                         </div>
-                        <h2 class="text-xs font-bold text-gray-800 tracking-wider uppercase">You're booking</h2>
+                        <h2 class="text-xs font-bold text-gray-800 dark:text-gray-200 tracking-wider uppercase">You're booking</h2>
                     </div>
                 
                     <div class="flex items-center gap-3 mb-5">
-                        <img class="h-14 w-14 rounded-full object-cover ring-2 ring-indigo-50 shadow-sm flex-shrink-0"
+                        <img class="h-14 w-14 rounded-full object-cover ring-2 ring-indigo-50 dark:ring-indigo-900 shadow-sm flex-shrink-0"
                              src="<?= get_profile_picture_url($craftsman['profile_picture'] ?? 'default.png', $craftsman['first_name'], $craftsman['last_name']) ?>"
                              alt="<?= e($craftsman['first_name']) ?>">
                         <div class="min-w-0">
                             <!-- Name + verified badge inline -->
                             <div class="flex items-center gap-1.5 flex-wrap">
-                                <h3 class="font-bold text-gray-900 text-base leading-tight">
+                                <h3 class="font-bold text-gray-900 dark:text-white text-base leading-tight">
                                     <?= e($craftsman['first_name'] . ' ' . $craftsman['last_name']) ?>
                                 </h3>
                                 <?php if ($isVerified): ?>
-                                <svg style="width:1.05rem;height:1.05rem" class="text-blue-500 flex-shrink-0"
+                                <svg style="width:1.05rem;height:1.05rem" class="text-blue-500 dark:text-blue-400 flex-shrink-0"
                                      viewBox="0 0 20 20" fill="currentColor" title="Verified Craftsman">
                                     <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                                 </svg>
@@ -522,7 +558,7 @@ if ($postDate) {
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3 mb-5">
-                        <div class="bg-gray-50/50 rounded-xl p-3 text-center border border-gray-100">
+                        <div class="bg-gray-50/50 dark:bg-gray-700/30 rounded-xl p-3 text-center border border-gray-100 dark:border-gray-700">
                             <div class="flex items-center justify-center gap-0.5 mb-1">
                                 <?php for ($i=1;$i<=5;$i++): ?>
                                 <svg class="h-3 w-3 <?= $i<=round($avgRating)?'text-amber-400':'text-gray-200' ?>" viewBox="0 0 20 20" fill="currentColor">
@@ -530,41 +566,41 @@ if ($postDate) {
                                 </svg>
                                 <?php endfor; ?>
                             </div>
-                            <p class="text-sm font-bold text-gray-900"><?= $avgRating>0?number_format($avgRating,1):'—' ?></p>
-                            <p class="text-xs text-gray-400"><?= $totalReviews ?> review<?= $totalReviews!==1?'s':'' ?></p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white"><?= $avgRating>0?number_format($avgRating,1):'—' ?></p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500"><?= $totalReviews ?> review<?= $totalReviews!==1?'s':'' ?></p>
                         </div>
-                        <div class="bg-gray-50/50 rounded-xl p-3 text-center border border-gray-100">
-                            <p class="text-xs text-gray-400 mb-1">Hourly Rate</p>
-                            <p class="text-sm font-bold text-indigo-600"><?= number_format($hourlyRate,0) ?></p>
-                            <p class="text-xs text-gray-400">DZD / hr</p>
+                        <div class="bg-gray-50/50 dark:bg-gray-700/30 rounded-xl p-3 text-center border border-gray-100 dark:border-gray-700">
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mb-1">Hourly Rate</p>
+                            <p class="text-sm font-bold text-indigo-600 dark:text-indigo-400"><?= number_format($hourlyRate,0) ?></p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500">DZD / hr</p>
                         </div>
                     </div>
                     <?php if (!empty($craftsman['wilaya'])): ?>
-                    <div class="flex items-center gap-2 text-xs font-semibold text-gray-500 mb-5 pb-5 border-b border-gray-100">
-                        <svg class="h-4 w-4 text-gray-400 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <div class="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 mb-5 pb-5 border-b border-gray-100 dark:border-gray-700">
+                        <svg class="h-4 w-4 text-gray-400 dark:text-gray-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                         </svg>
                         <?= e(preg_replace('/^\d{2}\s-\s/','',$craftsman['wilaya'])) ?>
                     </div>
                     <?php endif; ?>
                     <a href="<?= APP_URL ?>/profile/<?= e($craftsman['username']) ?>"
-                       class="flex items-center justify-center w-full py-2.5 text-xs font-bold text-indigo-600
-                              bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors border border-indigo-100">
+                       class="flex items-center justify-center w-full py-2.5 text-xs font-bold text-indigo-600 dark:text-indigo-400
+                              bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-xl transition-colors border border-indigo-100 dark:border-indigo-800">
                         View Full Profile →
                     </a>
                 </div>
             </div>
 
             <!-- How it works -->
-            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-                <div class="h-1.5 w-full bg-emerald-500"></div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+                <div class="h-1.5 w-full bg-emerald-500 dark:bg-emerald-600"></div>
                 <div class="p-6">
                     <div class="flex items-center gap-2.5 mb-5">
-                        <div class="h-6 w-6 rounded flex items-center justify-center bg-emerald-50">
-                            <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <div class="h-6 w-6 rounded flex items-center justify-center bg-emerald-50 dark:bg-emerald-900/30">
+                            <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                         </div>
-                        <h2 class="text-xs font-bold text-gray-800 tracking-wider uppercase">How It Works</h2>
+                        <h2 class="text-xs font-bold text-gray-800 dark:text-gray-200 tracking-wider uppercase">How It Works</h2>
                     </div>
                     <div class="space-y-5">
                         <?php foreach([
@@ -573,12 +609,12 @@ if ($postDate) {
                             ['3','Job gets done',         'Track progress and confirm on completion.'],
                         ] as [$n,$t,$d]): ?>
                         <div class="flex items-start gap-3.5">
-                            <div class="h-8 w-8 rounded flex items-center justify-center flex-shrink-0 bg-emerald-50">
-                                <span class="text-emerald-600 text-sm font-bold"><?= $n ?></span>
+                            <div class="h-8 w-8 rounded flex items-center justify-center flex-shrink-0 bg-emerald-50 dark:bg-emerald-900/30">
+                                <span class="text-emerald-600 dark:text-emerald-400 text-sm font-bold"><?= $n ?></span>
                             </div>
                             <div>
-                                <p class="text-sm font-bold text-gray-800"><?= $t ?></p>
-                                <p class="text-xs text-gray-500 mt-1 leading-relaxed"><?= $d ?></p>
+                                <p class="text-sm font-bold text-gray-800 dark:text-gray-200"><?= $t ?></p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed"><?= $d ?></p>
                             </div>
                         </div>
                         <?php endforeach; ?>

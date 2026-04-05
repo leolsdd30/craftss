@@ -20,21 +20,31 @@ if (defined('APP_URL')) {
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
     </style>
+    <script>
+        tailwind.config = { darkMode: 'class' }
+    </script>
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen px-4">
+<body class="bg-gray-50 dark:bg-gray-900 flex items-center justify-center min-h-screen px-4 transition-colors">
     <div class="text-center max-w-lg">
         <!-- Large 404 Number -->
         <div class="relative inline-block mb-6">
-            <span class="text-[10rem] font-extrabold leading-none text-indigo-100 select-none">404</span>
+            <span class="text-[10rem] font-extrabold leading-none text-indigo-100 dark:text-indigo-900/30 select-none">404</span>
             <div class="absolute inset-0 flex items-center justify-center">
-                <svg class="w-24 h-24 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <svg class="w-24 h-24 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </div>
         </div>
 
-        <h1 class="text-3xl font-bold text-gray-900 mb-3">Page Not Found</h1>
-        <p class="text-gray-500 mb-8 text-lg">Sorry, the page you're looking for doesn't exist or has been moved.</p>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-3">Page Not Found</h1>
+        <p class="text-gray-500 dark:text-gray-400 mb-8 text-lg">Sorry, the page you're looking for doesn't exist or has been moved.</p>
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
             <a href="<?= htmlspecialchars($homeUrl) ?>" class="inline-flex items-center px-5 py-2.5 text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 shadow-sm">
@@ -43,7 +53,7 @@ if (defined('APP_URL')) {
             </a>
         </div>
 
-        <p class="mt-10 text-xs text-gray-400">&copy; <?= date('Y') ?> Crafts. All rights reserved.</p>
+        <p class="mt-10 text-xs text-gray-400 dark:text-gray-500">&copy; <?= date('Y') ?> Crafts. All rights reserved.</p>
     </div>
 </body>
 </html>

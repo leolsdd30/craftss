@@ -1,5 +1,5 @@
 <?php $hideFooter = true; ?><!-- Forgot Password Page -->
-<div class="min-h-[calc(100dvh-4rem)] bg-gray-50 flex">
+<div class="min-h-[calc(100dvh-4rem)] bg-gray-50 dark:bg-gray-900 flex transition-colors">
 
     <!-- Left Panel — Branding -->
     <div class="hidden lg:flex lg:w-1/2 bg-indigo-700 flex-col justify-between p-12 relative overflow-hidden lg:h-[calc(100dvh-4rem)] lg:sticky lg:top-16">
@@ -68,7 +68,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
                         </svg>
                     </div>
-                    <span class="text-xl font-extrabold text-gray-900">Crafts</span>
+                    <span class="text-xl font-extrabold text-gray-900 dark:text-white">Crafts</span>
                 </a>
             </div>
 
@@ -80,23 +80,23 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                     </svg>
                 </div>
-                <h1 class="text-2xl font-extrabold text-gray-900 mb-2">Check your email</h1>
-                <p class="text-sm text-gray-500 mb-8">
+                <h1 class="text-2xl font-extrabold text-gray-900 dark:text-white mb-2">Check your email</h1>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-8">
                     If that email address is registered with Crafts, a password reset link has been sent to it.
                 </p>
 
                 <?php if (!empty($mockResetUrl)): ?>
                 <!-- MOCK BLOCK — remove once Resend is wired up -->
-                <div class="mb-6 bg-amber-50 border border-amber-200 rounded-xl p-5 text-left">
+                <div class="mb-6 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-xl p-5 text-left">
                     <div class="flex items-center space-x-2 mb-3">
                         <svg class="h-5 w-5 text-amber-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        <p class="text-xs font-bold text-amber-700 uppercase tracking-wide">Development Mode</p>
+                        <p class="text-xs font-bold text-amber-700 dark:text-amber-500 uppercase tracking-wide">Development Mode</p>
                     </div>
-                    <p class="text-xs text-amber-700 mb-3">No email was sent. In production this link would arrive in the user's inbox. Click it to test the reset flow:</p>
+                    <p class="text-xs text-amber-700 dark:text-amber-500 mb-3">No email was sent. In production this link would arrive in the user's inbox. Click it to test the reset flow:</p>
                     <a href="<?= e($mockResetUrl) ?>"
-                       class="block w-full text-center px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold rounded-xl transition duration-150">
+                       class="block w-full text-center px-4 py-2.5 bg-amber-500 dark:bg-amber-600 hover:bg-amber-600 dark:hover:bg-amber-700 text-white text-sm font-semibold rounded-xl transition duration-150">
                         Open Reset Link →
                     </a>
                 </div>
@@ -114,14 +114,14 @@
             <?php else: ?>
             <!-- ── FORM STATE ───────────────────────────────────────── -->
             <div class="mb-8">
-                <h1 class="text-3xl font-extrabold text-gray-900">Forgot password?</h1>
-                <p class="mt-2 text-sm text-gray-500">
+                <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white">Forgot password?</h1>
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                     Enter your email and we'll send you a reset link.
                 </p>
             </div>
 
             <?php if (!empty($error)): ?>
-            <div class="mb-6 flex items-start space-x-3 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div class="mb-6 flex items-start space-x-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
                 <svg class="h-5 w-5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
@@ -133,16 +133,16 @@
                 <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token'] ?? '') ?>">
 
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email address</label>
                     <input id="email" name="email" type="email" autocomplete="email" required
-                        class="block w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400
+                        class="block w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                         placeholder="you@example.com"
                         value="<?= e($_POST['email'] ?? '') ?>">
                 </div>
 
                 <button type="submit"
-                    class="w-full flex justify-center items-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    class="w-full flex justify-center items-center px-4 py-2.5 bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 text-white text-sm font-semibold rounded-xl shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-indigo-500">
                     Send Reset Link
                     <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
@@ -150,7 +150,7 @@
                 </button>
             </form>
 
-            <p class="mt-8 text-center text-sm text-gray-500">
+            <p class="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
                 Remembered it?
                 <a href="<?= APP_URL ?>/login" class="font-semibold text-indigo-600 hover:text-indigo-500 transition">
                     Back to Sign In

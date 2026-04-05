@@ -1,6 +1,6 @@
 <?php $hideFooter = true; ?>
 <!-- Login Page -->
-<div class="min-h-[calc(100dvh-4rem)] bg-gray-50 flex">
+<div class="min-h-[calc(100dvh-4rem)] bg-gray-50 dark:bg-gray-900 flex transition-colors">
 
     <!-- Left Panel — Branding -->
     <div class="hidden lg:flex lg:w-1/2 bg-indigo-700 flex-col justify-between p-12 relative overflow-y-auto overflow-x-hidden lg:h-[calc(100dvh-4rem)] lg:sticky lg:top-16">
@@ -76,13 +76,13 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
                         </svg>
                     </div>
-                    <span class="text-xl font-extrabold text-gray-900">Crafts</span>
+                    <span class="text-xl font-extrabold text-gray-900 dark:text-white">Crafts</span>
                 </a>
             </div>
 
             <div class="mb-8">
-                <h1 class="text-3xl font-extrabold text-gray-900">Welcome back</h1>
-                <p class="mt-2 text-sm text-gray-500">
+                <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white">Welcome back</h1>
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                     Don't have an account?
                     <a href="<?= APP_URL ?>/register" class="font-semibold text-indigo-600 hover:text-indigo-500 transition">
                         Sign up for free
@@ -91,7 +91,7 @@
             </div>
 
             <?php if (!empty($error)): ?>
-            <div class="mb-6 flex items-start space-x-3 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div class="mb-6 flex items-start space-x-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
                 <svg class="h-5 w-5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
@@ -104,23 +104,23 @@
 
                 <!-- Email -->
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email address</label>
                     <input id="email" name="email" type="email" autocomplete="email" required
-                        class="block w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400
+                        class="block w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                         placeholder="you@example.com">
                 </div>
 
                 <!-- Password -->
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
                     <div class="relative">
                         <input id="password" name="password" type="password" autocomplete="current-password" required
-                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400
+                            class="block w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                    focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition pr-11"
                             placeholder="••••••••">
                         <button type="button" onclick="togglePassword('password', this)"
-                            class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-600 transition">
+                            class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
                             <svg class="h-4 w-4 eye-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -138,7 +138,7 @@
 </div>
                 <!-- Submit -->
                 <button type="submit"
-                    class="w-full flex justify-center items-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    class="w-full flex justify-center items-center px-4 py-2.5 bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 text-white text-sm font-semibold rounded-xl shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-indigo-500">
                     Sign in
                     <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
@@ -146,7 +146,7 @@
                 </button>
             </form>
 
-            <p class="mt-8 text-center text-xs text-gray-400">
+            <p class="mt-8 text-center text-xs text-gray-400 dark:text-gray-500">
                 By signing in you agree to our
                 <a href="#" class="underline hover:text-gray-600">Terms of Service</a>
                 and
