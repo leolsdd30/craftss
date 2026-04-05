@@ -24,15 +24,15 @@
     $isNotifs    = strpos($route, '/notifications') === 0;
 
     $baseIconClass     = "relative p-2 transition-colors duration-200 rounded-lg";
-    $activeIconClass   = "text-indigo-600 bg-indigo-50";
-    $inactiveIconClass = "text-gray-400 hover:text-indigo-600 hover:bg-indigo-50";
+    $activeIconClass   = "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30";
+    $inactiveIconClass = "text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-gray-700";
 ?>
-    <nav class="bg-white shadow sticky top-0 z-40">
+    <nav class="bg-white dark:bg-gray-800 shadow dark:shadow-gray-900/50 sticky top-0 z-40 transition-colors duration-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="relative flex items-center h-16">
 
                 <!-- ── MOBILE: Hamburger — left of logo, mobile only ── -->
-                <button id="mob-menu-btn" class="flex sm:hidden mr-3" onclick="openDrawer()" aria-label="Open menu">
+                <button id="mob-menu-btn" class="flex sm:hidden mr-3 text-gray-600 dark:text-gray-300" onclick="openDrawer()" aria-label="Open menu">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
@@ -46,7 +46,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
                             </svg>
                         </div>
-                        <span class="text-xl font-extrabold text-gray-900 group-hover:text-indigo-600 transition-colors duration-200">Crafts</span>
+                        <span class="text-xl font-extrabold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-200">Crafts</span>
                     </a>
                 </div>
 
@@ -71,7 +71,7 @@
                             </svg>
                         </button>
                         <div id="services-dropdown-menu"
-                             class="absolute left-0 mt-2 w-[480px] bg-white rounded-2xl shadow-xl border border-gray-100 p-4 z-50">
+                             class="absolute left-0 mt-2 w-[480px] bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-gray-900/60 border border-gray-100 dark:border-gray-700 p-4 z-50">
                             <div class="grid grid-cols-5 gap-1">
                                 <a href="<?= APP_URL ?>/search?category=Plumbing" class="services-item group">
                                     <div class="services-icon bg-blue-100 text-blue-600 group-hover:bg-blue-200">
@@ -128,8 +128,8 @@
                                     <span class="services-label text-indigo-700">Handyman</span>
                                 </a>
                             </div>
-                            <div class="mt-3 pt-3 border-t border-gray-100 flex justify-center">
-                                <a href="<?= APP_URL ?>/search" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">
+                            <div class="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 flex justify-center">
+                                <a href="<?= APP_URL ?>/search" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors">
                                     View all craftsmen →
                                 </a>
                             </div>
@@ -176,14 +176,26 @@
                         </a>
                         <?php endif; ?>
 
-                        <span class="hidden sm:block text-gray-200 text-lg font-light px-1">|</span>
+                        <span class="hidden sm:block text-gray-200 dark:text-gray-600 text-lg font-light px-1">|</span>
+
+                        <!-- Dark Mode Toggle -->
+                        <button onclick="toggleDarkMode()" class="hidden sm:block relative p-2 transition-colors duration-200 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-gray-700 dark:hover:text-indigo-400" title="Toggle Dark Mode" id="dark-mode-toggle">
+                            <!-- Sun icon (visible in LIGHT mode — you are in light theme) -->
+                            <svg class="h-5 w-5 block dark:hidden text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <!-- Moon icon (visible in DARK mode — you are in dark theme) -->
+                            <svg class="h-5 w-5 hidden dark:block text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                            </svg>
+                        </button>
 
                         <!-- Messages icon -->
                         <a href="<?= APP_URL ?>/messages" class="<?= $baseIconClass . ' ' . ($isMessages ? $activeIconClass : $inactiveIconClass) ?>" title="Messages">
                             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                             </svg>
-                            <span id="nav-unread-badge" class="<?= $headerTotalBadge > 0 ? '' : 'hidden ' ?>absolute -top-0.5 -right-0.5 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500 text-white min-w-[18px] leading-none ring-2 ring-white">
+                            <span id="nav-unread-badge" class="<?= $headerTotalBadge > 0 ? '' : 'hidden ' ?>absolute -top-0.5 -right-0.5 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500 text-white min-w-[18px] leading-none ring-2 ring-white dark:ring-gray-800">
                                 <?= $headerTotalBadge > 99 ? '99+' : $headerTotalBadge ?>
                             </span>
                         </a>
@@ -194,15 +206,15 @@
                                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
                                 </svg>
-                                <span id="nav-notif-badge" class="<?= $headerNotifCount > 0 ? '' : 'hidden ' ?>absolute -top-0.5 -right-0.5 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500 text-white min-w-[18px] leading-none ring-2 ring-white">
+                                <span id="nav-notif-badge" class="<?= $headerNotifCount > 0 ? '' : 'hidden ' ?>absolute -top-0.5 -right-0.5 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500 text-white min-w-[18px] leading-none ring-2 ring-white dark:ring-gray-800">
                                     <?= $headerNotifCount > 99 ? '99+' : $headerNotifCount ?>
                                 </span>
                             </button>
                             
                             <!-- Dropdown panel -->
-                            <div id="notif-dropdown-menu" class="hidden fixed left-2 right-2 top-[68px] sm:absolute sm:left-auto sm:top-auto sm:right-0 sm:mt-2 sm:w-96 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-100/50 py-1 z-[100] origin-top sm:origin-top-right overflow-hidden" style="animation: dropdownIn 0.15s ease-out;">
-                                <div class="px-4 py-3 border-b border-gray-100/50 flex justify-between items-center bg-gray-50/30">
-                                    <h3 class="font-bold text-gray-900">Notifications</h3>
+                            <div id="notif-dropdown-menu" class="hidden fixed left-2 right-2 top-[68px] sm:absolute sm:left-auto sm:top-auto sm:right-0 sm:mt-2 sm:w-96 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl shadow-2xl dark:shadow-gray-900/60 border border-gray-100/50 dark:border-gray-700/50 py-1 z-[100] origin-top sm:origin-top-right overflow-hidden" style="animation: dropdownIn 0.15s ease-out;">
+                                <div class="px-4 py-3 border-b border-gray-100/50 dark:border-gray-700/50 flex justify-between items-center bg-gray-50/30 dark:bg-gray-700/30">
+                                    <h3 class="font-bold text-gray-900 dark:text-gray-100">Notifications</h3>
                                     <?php if ($headerNotifCount > 0): ?>
                                     <form method="POST" action="<?= APP_URL ?>/notifications/mark-all-read" class="m-0 p-0 inline">
                                         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
@@ -219,8 +231,8 @@
                                     </div>
                                 </div>
                                 
-                                <div class="border-t border-gray-100/50 p-1.5 bg-gray-50/50 backdrop-blur-md">
-                                    <a href="<?= APP_URL ?>/notifications" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition-colors uppercase tracking-wider block w-full py-2 text-center rounded-xl hover:bg-white">View All Activity</a>
+                                <div class="border-t border-gray-100/50 dark:border-gray-700/50 p-1.5 bg-gray-50/50 dark:bg-gray-700/50 backdrop-blur-md">
+                                    <a href="<?= APP_URL ?>/notifications" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors uppercase tracking-wider block w-full py-2 text-center rounded-xl hover:bg-white dark:hover:bg-gray-700">View All Activity</a>
                                 </div>
                             </div>
                         </div>
@@ -228,13 +240,13 @@
                         <!-- Profile dropdown -->
                         <div class="relative" id="profile-dropdown-wrapper">
                             <button id="profile-dropdown-btn" onclick="toggleProfileDropdown()"
-                                class="flex items-center gap-2 hover:bg-gray-50 p-1.5 pr-2 rounded-full transition-colors duration-200 border border-transparent hover:border-gray-200 focus:outline-none"
+                                class="flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-gray-700 p-1.5 pr-2 rounded-full transition-colors duration-200 border border-transparent hover:border-gray-200 dark:hover:border-gray-600 focus:outline-none"
                                 aria-haspopup="true" aria-expanded="false">
                                 <?php if ($headerPicUrl): ?>
-                                <img src="<?= $headerPicUrl ?>" alt="Profile" class="w-8 h-8 rounded-full object-cover border border-gray-200 flex-shrink-0">
+                                <img src="<?= $headerPicUrl ?>" alt="Profile" class="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-600 flex-shrink-0">
                                 <?php endif; ?>
                                 <!-- Name + role badge: hidden on small screens to save space -->
-                                <span class="hidden sm:flex items-center gap-1 text-sm font-semibold text-gray-700">
+                                <span class="hidden sm:flex items-center gap-1 text-sm font-semibold text-gray-700 dark:text-gray-200">
                                     <?= htmlspecialchars($_SESSION['name']) ?>
                                     <?php if (!empty($_SESSION['is_verified'])): ?>
                                     <svg class="h-4 w-4 text-blue-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
@@ -242,26 +254,26 @@
                                     </svg>
                                     <?php endif; ?>
                                 </span>
-                                <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <?= $_SESSION['role'] === 'craftsman' ? 'bg-indigo-100 text-indigo-800' : ($_SESSION['role'] === 'admin' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800') ?> capitalize">
+                                <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <?= $_SESSION['role'] === 'craftsman' ? 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300' : ($_SESSION['role'] === 'admin' ? 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300' : 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300') ?> capitalize">
                                     <?= htmlspecialchars($_SESSION['role']) ?>
                                 </span>
-                                <svg id="profile-dropdown-chevron" class="h-4 w-4 text-gray-400 transition-transform duration-200 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                <svg id="profile-dropdown-chevron" class="h-4 w-4 text-gray-400 dark:text-gray-500 transition-transform duration-200 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
                                 </svg>
                             </button>
 
                             <!-- Dropdown menu -->
                             <div id="profile-dropdown-menu"
-                                 class="hidden absolute right-0 mt-2 w-60 bg-white rounded-xl shadow-lg border border-gray-100 py-1.5 z-50 origin-top-right"
+                                 class="hidden absolute right-0 mt-2 w-60 bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/60 border border-gray-100 dark:border-gray-700 py-1.5 z-50 origin-top-right"
                                  style="animation: dropdownIn 0.15s ease-out; max-width: calc(100vw - 1rem);">
                                 <!-- Header -->
-                                <div class="px-4 py-3 border-b border-gray-100">
+                                <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
                                     <div class="flex items-center space-x-3">
                                         <?php if ($headerPicUrl): ?>
-                                        <img src="<?= $headerPicUrl ?>" alt="Profile" class="w-10 h-10 rounded-full object-cover border border-gray-200 flex-shrink-0">
+                                        <img src="<?= $headerPicUrl ?>" alt="Profile" class="w-10 h-10 rounded-full object-cover border border-gray-200 dark:border-gray-600 flex-shrink-0">
                                         <?php endif; ?>
                                         <div class="min-w-0">
-                                            <p class="text-sm font-bold text-gray-900 truncate flex items-center gap-1">
+                                            <p class="text-sm font-bold text-gray-900 dark:text-gray-100 truncate flex items-center gap-1">
                                                 <?= htmlspecialchars($_SESSION['name']) ?>
                                                 <?php if (!empty($_SESSION['is_verified'])): ?>
                                                 <svg class="h-3.5 w-3.5 text-blue-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
@@ -269,12 +281,12 @@
                                                 </svg>
                                                 <?php endif; ?>
                                             </p>
-                                            <p class="text-xs text-gray-400 truncate capitalize"><?= htmlspecialchars($_SESSION['role']) ?></p>
+                                            <p class="text-xs text-gray-400 dark:text-gray-500 truncate capitalize"><?= htmlspecialchars($_SESSION['role']) ?></p>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Section 1: Common -->
-                                <div class="py-1.5 border-b border-gray-100">
+                                <div class="py-1.5 border-b border-gray-100 dark:border-gray-700">
                                     <a href="<?= APP_URL ?>/profile/<?= htmlspecialchars($_SESSION['username'] ?? '') ?>" class="dropdown-item">
                                         <svg class="dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                                         View Profile
@@ -283,19 +295,19 @@
                                         <svg class="dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
                                         Messages
                                         <?php if ($headerTotalBadge > 0): ?>
-                                        <span class="dropdown-badge bg-indigo-100 text-indigo-700"><?= $headerTotalBadge > 99 ? '99+' : $headerTotalBadge ?></span>
+                                        <span class="dropdown-badge bg-indigo-100 text-indigo-700 dark:bg-indigo-500 dark:text-white"><?= $headerTotalBadge > 99 ? '99+' : $headerTotalBadge ?></span>
                                         <?php endif; ?>
                                     </a>
                                     <a href="<?= APP_URL ?>/notifications" class="dropdown-item">
                                         <svg class="dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
                                         Notifications
                                         <?php if ($headerNotifCount > 0): ?>
-                                        <span class="dropdown-badge bg-red-100 text-red-600"><?= $headerNotifCount > 99 ? '99+' : $headerNotifCount ?></span>
+                                        <span class="dropdown-badge bg-red-100 text-red-600 dark:bg-red-500 dark:text-white"><?= $headerNotifCount > 99 ? '99+' : $headerNotifCount ?></span>
                                         <?php endif; ?>
                                     </a>
                                 </div>
                                 <!-- Section 2: Role links -->
-                                <div class="py-1.5 border-b border-gray-100">
+                                <div class="py-1.5 border-b border-gray-100 dark:border-gray-700">
                                     <?php if ($_SESSION['role'] === 'homeowner'): ?>
                                         <a href="<?= APP_URL ?>/homeowner/dashboard#bookings" class="dropdown-item">
                                             <svg class="dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
@@ -345,7 +357,7 @@
                                 <div class="py-1.5">
                                     <form method="POST" action="<?= APP_URL ?>/logout">
                                         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-                                        <button type="submit" class="dropdown-item w-full text-left text-red-600 hover:bg-red-50 hover:text-red-700">
+                                        <button type="submit" class="dropdown-item w-full text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-700 dark:hover:text-red-300">
                                             <svg class="dropdown-icon text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                                             Log Out
                                         </button>
@@ -357,6 +369,19 @@
 
 
                     <?php else: ?>
+                        <!-- Dark Mode Toggle (Guest) -->
+                        <button onclick="toggleDarkMode()" class="hidden sm:block relative p-2 transition-colors duration-200 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-gray-700 dark:hover:text-indigo-400" title="Toggle Dark Mode" id="guest-dark-mode-toggle">
+                            <!-- Sun icon -->
+                            <svg class="h-5 w-5 block dark:hidden text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <!-- Moon icon -->
+                            <svg class="h-5 w-5 hidden dark:block text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                            </svg>
+                        </button>
+                        <span class="hidden sm:block text-gray-200 dark:text-gray-600 text-lg font-light px-1">|</span>
+
                         <!-- Guest desktop: Log in pill + Sign up button -->
                         <a href="<?= APP_URL ?>/login" class="hidden sm:inline-flex nav-pill nav-pill-inactive">Log in</a>
                         <a href="<?= APP_URL ?>/register" class="hidden sm:inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200">Sign up</a>

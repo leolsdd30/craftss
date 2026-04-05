@@ -40,24 +40,24 @@ if (!empty($job['images'])) {
 }
 ?>
 
-<div class="bg-gray-50 min-h-screen py-8 pb-32">
+<div class="bg-gray-50 dark:bg-gray-900 min-h-screen py-8 pb-32 transition-colors">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Header -->
         <div class="mb-8">
             <a href="<?= APP_URL ?>/homeowner/dashboard"
-               class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-indigo-600 transition mb-4 group">
+               class="inline-flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition mb-4 group">
                 <svg class="mr-1.5 h-4 w-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                 </svg>
                 Back to Dashboard
             </a>
-            <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Edit Job</h1>
-            <p class="mt-2 text-sm text-gray-500">Update your job details to attract the right craftsmen.</p>
+            <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">Edit Job</h1>
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Update your job details to attract the right craftsmen.</p>
         </div>
 
         <?php if (!empty($error)): ?>
-        <div class="mb-6 flex items-start gap-3 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+        <div class="mb-6 flex items-start gap-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 text-red-700 dark:text-red-400 px-4 py-3 rounded-xl text-sm">
             <svg class="h-5 w-5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
@@ -76,41 +76,41 @@ if (!empty($job['images'])) {
                 <input type="hidden" name="category" id="category-input" value="<?= e($_POST['category'] ?? $job['service_category'] ?? '') ?>">
 
                 <!-- ── 1: Title + Description ───────────────────── -->
-                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
-                        <div class="h-7 w-7 rounded-lg bg-indigo-600 flex items-center justify-center flex-shrink-0 shadow-sm shadow-indigo-200">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden transition-colors">
+                    <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 flex items-center gap-3">
+                        <div class="h-7 w-7 rounded-lg bg-indigo-600 dark:bg-indigo-500 flex items-center justify-center flex-shrink-0 shadow-sm shadow-indigo-200 dark:shadow-indigo-900/20">
                             <span class="text-white text-xs font-bold">1</span>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-gray-900">Job Details</p>
-                            <p class="text-xs text-gray-500">Give your job a clear title and detailed description.</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white">Job Details</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Give your job a clear title and detailed description.</p>
                         </div>
                     </div>
                     <div class="px-6 py-5 space-y-5">
 
                         <div>
-                            <label for="title" class="block text-sm font-semibold text-gray-700 mb-1.5 pt-1">
+                            <label for="title" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 pt-1">
                                 Job Title <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="title" id="title" required maxlength="100"
                                    placeholder="e.g. Fix leaking kitchen faucet"
                                    value="<?= e($_POST['title'] ?? $job['title'] ?? '') ?>"
-                                   class="block w-full px-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400
-                                          focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
-                            <p class="mt-1.5 text-xs text-gray-500">A clear title gets more relevant quotes.</p>
+                                   class="block w-full px-4 py-2.5 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
+                                          focus:bg-white dark:focus:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
+                            <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">A clear title gets more relevant quotes.</p>
                         </div>
 
                         <div>
-                            <label for="description" class="block text-sm font-semibold text-gray-700 mb-1.5">
+                            <label for="description" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
                                 Description <span class="text-red-500">*</span>
                             </label>
                             <textarea name="description" id="description" rows="6" required maxlength="2000"
                                       placeholder="Describe the work in detail — materials needed, size of the area, urgency, any specific requirements..."
-                                      class="block w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400
-                                             focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none leading-relaxed"
+                                      class="block w-full px-4 py-3 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
+                                             focus:bg-white dark:focus:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none leading-relaxed"
                                       oninput="document.getElementById('desc-count').textContent=this.value.length"
                             ><?= e($_POST['description'] ?? $job['description'] ?? '') ?></textarea>
-                            <div class="mt-1.5 flex justify-between items-center text-xs text-gray-500">
+                            <div class="mt-1.5 flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
                                 <span>Be as descriptive as possible.</span>
                                 <div><span id="desc-count" class="font-medium"><?= strlen($_POST['description'] ?? $job['description'] ?? '') ?></span>/2000</div>
                             </div>
@@ -120,14 +120,14 @@ if (!empty($job['images'])) {
                 </div>
 
                 <!-- ── 2: Category picker ────────────────────────── -->
-                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mt-6">
-                    <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
-                        <div class="h-7 w-7 rounded-lg bg-indigo-600 flex items-center justify-center flex-shrink-0 shadow-sm shadow-indigo-200">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden mt-6 transition-colors">
+                    <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 flex items-center gap-3">
+                        <div class="h-7 w-7 rounded-lg bg-indigo-600 dark:bg-indigo-500 flex items-center justify-center flex-shrink-0 shadow-sm shadow-indigo-200 dark:shadow-indigo-900/20">
                             <span class="text-white text-xs font-bold">2</span>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-gray-900">Service Category <span class="text-red-500">*</span></p>
-                            <p class="text-xs text-gray-500">Pick the category that best matches your job.</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white">Service Category <span class="text-red-500">*</span></p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Pick the category that best matches your job.</p>
                         </div>
                     </div>
                     <div class="px-6 py-5">
@@ -140,13 +140,13 @@ if (!empty($job['images'])) {
                                 preg_match('/text-([a-z]+)-[0-9]+/', $colors['text'], $matches);
                                 $colorName = $matches[1] ?? 'indigo';
                                 
-                                $activeBtnClass = "bg-{$colorName}-50 border-{$colorName}-300 ring-1 ring-{$colorName}-500/50";
-                                $activeIconClass = "bg-white text-{$colorName}-600 shadow-sm shadow-{$colorName}-100";
-                                $activeTextClass = "text-{$colorName}-800";
+                                $activeBtnClass = "bg-{$colorName}-50 dark:bg-{$colorName}-900/20 border-{$colorName}-300 dark:border-{$colorName}-700/50 ring-1 ring-{$colorName}-500/50 dark:ring-{$colorName}-500/30";
+                                $activeIconClass = "bg-white dark:bg-{$colorName}-900/40 text-{$colorName}-600 dark:text-{$colorName}-400 shadow-sm shadow-{$colorName}-100 dark:shadow-none";
+                                $activeTextClass = "text-{$colorName}-800 dark:text-{$colorName}-300";
                                 
-                                $defaultBtnClass = "bg-white border-gray-200 hover:border-gray-300 hover:bg-gray-50 hover:shadow-sm";
-                                $defaultIconClass = "bg-gray-100 text-gray-500";
-                                $defaultTextClass = "text-gray-700";
+                                $defaultBtnClass = "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 hover:shadow-sm";
+                                $defaultIconClass = "bg-gray-100 dark:bg-gray-900/50 text-gray-500 dark:text-gray-400";
+                                $defaultTextClass = "text-gray-700 dark:text-gray-300";
                             ?>
                             <button type="button"
                                     data-name="<?= e($catName) ?>"
@@ -172,7 +172,7 @@ if (!empty($job['images'])) {
                             </button>
                             <?php endforeach; ?>
                         </div>
-                        <div id="category-error" class="hidden mt-3 text-sm font-medium text-red-600 bg-red-50 border border-red-100 rounded-lg px-4 py-2.5 flex items-center gap-2">
+                        <div id="category-error" class="hidden mt-3 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/50 rounded-lg px-4 py-2.5 flex items-center gap-2">
                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                             Please select a service category to proceed.
                         </div>
@@ -180,14 +180,14 @@ if (!empty($job['images'])) {
                 </div>
 
                 <!-- ── 3: Location + Budget ──────────────────────── -->
-                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mt-6">
-                    <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
-                        <div class="h-7 w-7 rounded-lg bg-indigo-600 flex items-center justify-center flex-shrink-0 shadow-sm shadow-indigo-200">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden mt-6 transition-colors">
+                    <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 flex items-center gap-3">
+                        <div class="h-7 w-7 rounded-lg bg-indigo-600 dark:bg-indigo-500 flex items-center justify-center flex-shrink-0 shadow-sm shadow-indigo-200 dark:shadow-indigo-900/20">
                             <span class="text-white text-xs font-bold">3</span>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-gray-900">Location &amp; Budget</p>
-                            <p class="text-xs text-gray-500">Where is the job and what's your expected budget?</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white">Location &amp; Budget</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Where is the job and what's your expected budget?</p>
                         </div>
                     </div>
                     <div class="px-6 py-5">
@@ -195,19 +195,19 @@ if (!empty($job['images'])) {
 
                             <!-- Wilaya -->
                             <div>
-                                <label for="address" class="block text-sm font-semibold text-gray-700 mb-1.5 pt-1">
+                                <label for="address" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 pt-1">
                                     Wilaya <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                                        <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <svg class="h-4 w-4 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                         </svg>
                                     </div>
                                     <select name="address" id="address" required
-                                            class="block w-full pl-10 pr-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-sm text-gray-900
-                                                   focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
+                                            class="block w-full pl-10 pr-4 py-2.5 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white
+                                                   focus:bg-white dark:focus:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
                                         <option value="">— Select your Wilaya —</option>
                                         <?php 
                                         $currentWilaya = $_POST['address'] ?? $job['address'] ?? '';
@@ -222,18 +222,18 @@ if (!empty($job['images'])) {
 
                             <!-- Budget -->
                             <div>
-                                <label for="budget" class="block text-sm font-semibold text-gray-700 mb-1.5 pt-1">
+                                <label for="budget" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 pt-1">
                                     Budget
-                                    <span class="text-gray-400 font-normal ml-1 text-xs">(optional)</span>
+                                    <span class="text-gray-400 dark:text-gray-500 font-normal ml-1 text-xs">(optional)</span>
                                 </label>
                                 <div class="relative">
                                     <input type="text" name="budget" id="budget"
                                            placeholder="e.g. 5000 – 10000"
                                            value="<?= e($_POST['budget'] ?? $job['budget_range'] ?? '') ?>"
-                                           class="block w-full px-4 py-2.5 pr-14 bg-gray-50/50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400
-                                                  focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
-                                    <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none border-l border-gray-200 my-1.5 pl-3">
-                                        <span class="text-xs font-bold text-gray-400">DZD</span>
+                                           class="block w-full px-4 py-2.5 pr-14 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
+                                                  focus:bg-white dark:focus:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
+                                    <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none border-l border-gray-200 dark:border-gray-600 my-1.5 pl-3">
+                                        <span class="text-xs font-bold text-gray-400 dark:text-gray-500">DZD</span>
                                     </div>
                                 </div>
                             </div>
@@ -243,30 +243,30 @@ if (!empty($job['images'])) {
                 </div>
 
                 <!-- ── 4: Photos ───────────────────────────────── -->
-                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mt-6">
-                    <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
-                        <div class="h-7 w-7 rounded-lg bg-indigo-600 flex items-center justify-center flex-shrink-0 shadow-sm shadow-indigo-200">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden mt-6 transition-colors">
+                    <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 flex items-center gap-3">
+                        <div class="h-7 w-7 rounded-lg bg-indigo-600 dark:bg-indigo-500 flex items-center justify-center flex-shrink-0 shadow-sm shadow-indigo-200 dark:shadow-indigo-900/20">
                             <span class="text-white text-xs font-bold">4</span>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-gray-900">Photos <span class="text-gray-400 font-normal ml-1 text-xs">(optional)</span></p>
-                            <p class="text-xs text-gray-500">Photos help craftsmen understand your project better. Max 3 images.</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white">Photos <span class="text-gray-400 dark:text-gray-500 font-normal ml-1 text-xs">(optional)</span></p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Photos help craftsmen understand your project better. Max 3 images.</p>
                         </div>
                     </div>
                     <div class="px-6 py-5">
                         <!-- Drop Zone -->
-                        <div id="drop-zone" class="relative border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer transition-colors hover:border-indigo-400 hover:bg-indigo-50/30"
+                        <div id="drop-zone" class="relative border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-6 text-center cursor-pointer transition-colors hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50/30 dark:hover:bg-indigo-900/30"
                              onclick="document.getElementById('file-input').click()">
                             <input type="file" name="images[]" id="file-input" multiple accept="image/jpeg,image/png,image/webp" class="hidden" onchange="handleFiles(this.files)">
-                            <svg class="mx-auto h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <svg class="mx-auto h-10 w-10 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
-                            <p class="mt-2 text-sm font-semibold text-gray-700">Click to upload or drag & drop</p>
-                            <p class="mt-1 text-xs text-gray-500">JPG, PNG, or WebP • Max 2 MB each • Up to 3 images combined</p>
+                            <p class="mt-2 text-sm font-semibold text-gray-700 dark:text-gray-300">Click to upload or drag & drop</p>
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">JPG, PNG, or WebP • Max 2 MB each • Up to 3 images combined</p>
                         </div>
                         <!-- Image Previews -->
                         <div id="image-previews" class="mt-4 grid grid-cols-3 gap-3" style="display:none"></div>
-                        <div id="image-error" class="hidden mt-3 text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-4 py-2 flex items-center gap-2">
+                        <div id="image-error" class="hidden mt-3 text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/50 rounded-lg px-4 py-2 flex items-center gap-2">
                             <svg class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                             <span id="image-error-text"></span>
                         </div>
@@ -280,37 +280,37 @@ if (!empty($job['images'])) {
             <div class="space-y-5 order-last">
 
                 <!-- Tips card -->
-                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden transition-colors">
                     <div class="h-1.5 w-full bg-indigo-500"></div>
                     <div class="p-6">
                         <div class="flex items-center gap-2.5 mb-5">
-                            <div class="h-6 w-6 rounded flex items-center justify-center bg-indigo-50">
-                                <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                            <div class="h-6 w-6 rounded flex items-center justify-center bg-indigo-50 dark:bg-indigo-900/40">
+                                <svg class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                             </div>
-                            <h2 class="text-xs font-bold text-gray-800 tracking-wider uppercase">Editing Tips</h2>
+                            <h2 class="text-xs font-bold text-gray-800 dark:text-gray-200 tracking-wider uppercase">Editing Tips</h2>
                         </div>
                         
                         <div class="space-y-5">
                             <div class="flex items-start gap-3.5">
-                                <div class="h-8 w-8 shrink-0 rounded flex items-center justify-center bg-amber-50">
+                                <div class="h-8 w-8 shrink-0 rounded flex items-center justify-center bg-amber-50 dark:bg-amber-900/20">
                                     <svg class="h-4 w-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-sm font-bold text-gray-800">Clear Edits</p>
-                                    <p class="text-xs text-gray-500 mt-1 leading-relaxed">Updating your job will instantly reflect on the public job board for all craftsmen to see.</p>
+                                    <p class="text-sm font-bold text-gray-800 dark:text-gray-200">Clear Edits</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">Updating your job will instantly reflect on the public job board for all craftsmen to see.</p>
                                 </div>
                             </div>
                             <div class="flex items-start gap-3.5">
-                                <div class="h-8 w-8 shrink-0 rounded flex items-center justify-center bg-emerald-50">
+                                <div class="h-8 w-8 shrink-0 rounded flex items-center justify-center bg-emerald-50 dark:bg-emerald-900/20">
                                     <svg class="h-4 w-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-sm font-bold text-gray-800">Photo Limits</p>
-                                    <p class="text-xs text-gray-500 mt-1 leading-relaxed">You can have a maximum of 3 photos combined. Delete an existing photo first to add a new one.</p>
+                                    <p class="text-sm font-bold text-gray-800 dark:text-gray-200">Photo Limits</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">You can have a maximum of 3 photos combined. Delete an existing photo first to add a new one.</p>
                                 </div>
                             </div>
                         </div>
@@ -322,14 +322,14 @@ if (!empty($job['images'])) {
     </div>
 
     <!-- Sticky Save Bar -->
-    <div class="fixed bottom-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-lg border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+    <div class="fixed bottom-0 left-0 right-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-t border-gray-200 dark:border-gray-800 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.4)] transition-colors">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
             <?php 
                 $source = $_GET['source'] ?? 'dashboard';
                 $cancelUrl = $source === 'job_view' ? APP_URL . "/jobs/" . $job['id'] : APP_URL . "/homeowner/dashboard#jobs";
             ?>
             <a href="<?= $cancelUrl ?>"
-               class="px-5 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition">
+               class="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                 Cancel
             </a>
             <button type="submit" form="job-form"
@@ -345,7 +345,7 @@ if (!empty($job['images'])) {
 
 <!-- Lightbox -->
 <div id="lightbox" class="fixed inset-0 z-[60] hidden">
-    <div class="fixed inset-0 bg-black bg-opacity-95 backdrop-blur-sm" onclick="closeLightbox()"></div>
+    <div class="fixed inset-0 bg-black/95 backdrop-blur-sm" onclick="closeLightbox()"></div>
     <div class="fixed inset-0 flex items-center justify-center p-4">
         <button onclick="closeLightbox()" class="absolute top-4 right-4 z-[70] text-white hover:text-gray-300 transition p-2 bg-white/10 rounded-full hover:bg-white/20">
             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -425,8 +425,8 @@ function handleFiles(fileList) {
             
             // Highlight the drop zone
             const dropZone = document.getElementById('drop-zone');
-            dropZone.classList.add('border-red-400', 'bg-red-50');
-            setTimeout(() => dropZone.classList.remove('border-red-400', 'bg-red-50'), 600);
+            dropZone.classList.add('border-red-400', 'bg-red-50', 'dark:border-red-500', 'dark:bg-red-900/20');
+            setTimeout(() => dropZone.classList.remove('border-red-400', 'bg-red-50', 'dark:border-red-500', 'dark:bg-red-900/20'), 600);
             
             break;
         }
@@ -487,7 +487,7 @@ function renderPreviews() {
     // Render Existing Images
     existingImages.forEach((imgSrc) => {
         const div = document.createElement('div');
-        div.className = 'relative group rounded-xl overflow-hidden border border-gray-200 aspect-square bg-gray-100 shadow-sm';
+        div.className = 'relative group rounded-xl overflow-hidden border border-gray-200 dark:border-gray-600 aspect-square bg-gray-100 dark:bg-gray-800 shadow-sm';
         
         const img = document.createElement('img');
         img.className = 'w-full h-full object-cover cursor-zoom-in';
@@ -512,10 +512,9 @@ function renderPreviews() {
         container.appendChild(div);
     });
 
-    // Render Newly Uploaded Files
     selectedFiles.forEach((file, idx) => {
         const div = document.createElement('div');
-        div.className = 'relative group rounded-xl overflow-hidden border border-green-400 aspect-square bg-green-50 shadow-sm';
+        div.className = 'relative group rounded-xl overflow-hidden border border-green-400 dark:border-green-500/50 aspect-square bg-green-50 dark:bg-green-900/20 shadow-sm';
         
         const img = document.createElement('img');
         img.className = 'w-full h-full object-cover cursor-zoom-in p-0.5 rounded-[11px]';
@@ -549,8 +548,14 @@ function syncFileInput() {
 
 /* Drag and drop */
 const dropZone = document.getElementById('drop-zone');
-['dragenter','dragover'].forEach(ev => dropZone.addEventListener(ev, e => { e.preventDefault(); dropZone.classList.add('border-indigo-500','bg-indigo-50'); }));
-['dragleave','drop'].forEach(ev => dropZone.addEventListener(ev, e => { e.preventDefault(); dropZone.classList.remove('border-indigo-500','bg-indigo-50'); }));
+['dragenter','dragover'].forEach(ev => dropZone.addEventListener(ev, e => { 
+    e.preventDefault(); 
+    dropZone.classList.add('border-indigo-500','bg-indigo-50', 'dark:border-indigo-500', 'dark:bg-indigo-900/30'); 
+}));
+['dragleave','drop'].forEach(ev => dropZone.addEventListener(ev, e => { 
+    e.preventDefault(); 
+    dropZone.classList.remove('border-indigo-500','bg-indigo-50', 'dark:border-indigo-500', 'dark:bg-indigo-900/30'); 
+}));
 dropZone.addEventListener('drop', e => { handleFiles(e.dataTransfer.files); });
 
 // Initial render to show existing files immediately

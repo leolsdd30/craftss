@@ -114,18 +114,18 @@ if (!function_exists('get_category_classes')) {
     function get_category_classes($category)
     {
         $map = [
-            'Plumbing'         => ['bg' => 'bg-blue-500', 'text' => 'text-blue-600', 'badge' => 'bg-blue-50 text-blue-700 ring-blue-600/20'],
-            'Electrical'       => ['bg' => 'bg-yellow-500', 'text' => 'text-yellow-600', 'badge' => 'bg-yellow-50 text-yellow-700 ring-yellow-600/20'],
-            'Carpentry'        => ['bg' => 'bg-orange-500', 'text' => 'text-orange-600', 'badge' => 'bg-orange-50 text-orange-700 ring-orange-600/20'],
-            'Painting'         => ['bg' => 'bg-pink-500', 'text' => 'text-pink-600', 'badge' => 'bg-pink-50 text-pink-700 ring-pink-600/20'],
-            'Roofing'          => ['bg' => 'bg-stone-500', 'text' => 'text-stone-600', 'badge' => 'bg-stone-200 text-stone-700 ring-stone-600/20'],
-            'HVAC'             => ['bg' => 'bg-cyan-500', 'text' => 'text-cyan-600', 'badge' => 'bg-cyan-50 text-cyan-700 ring-cyan-600/20'],
-            'Tiling'           => ['bg' => 'bg-teal-500', 'text' => 'text-teal-600', 'badge' => 'bg-teal-50 text-teal-700 ring-teal-600/20'],
-            'Landscaping'      => ['bg' => 'bg-green-500', 'text' => 'text-green-600', 'badge' => 'bg-green-50 text-green-700 ring-green-600/20'],
-            'General Handyman' => ['bg' => 'bg-indigo-500', 'text' => 'text-indigo-600', 'badge' => 'bg-indigo-50 text-indigo-700 ring-indigo-600/20'],
+            'Plumbing'         => ['bg' => 'bg-blue-500', 'text' => 'text-blue-600', 'badge' => 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 ring-blue-600/20 dark:ring-blue-400/20', 'ring' => 'ring-blue-100 dark:ring-blue-900'],
+            'Electrical'       => ['bg' => 'bg-yellow-500', 'text' => 'text-yellow-600', 'badge' => 'bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 ring-yellow-600/20 dark:ring-yellow-400/20', 'ring' => 'ring-yellow-100 dark:ring-yellow-900'],
+            'Carpentry'        => ['bg' => 'bg-orange-500', 'text' => 'text-orange-600', 'badge' => 'bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 ring-orange-600/20 dark:ring-orange-400/20', 'ring' => 'ring-orange-100 dark:ring-orange-900'],
+            'Painting'         => ['bg' => 'bg-pink-500', 'text' => 'text-pink-600', 'badge' => 'bg-pink-50 dark:bg-pink-900/30 text-pink-700 dark:text-pink-400 ring-pink-600/20 dark:ring-pink-400/20', 'ring' => 'ring-pink-100 dark:ring-pink-900'],
+            'Roofing'          => ['bg' => 'bg-stone-500', 'text' => 'text-stone-600', 'badge' => 'bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-400 ring-stone-600/20 dark:ring-stone-400/20', 'ring' => 'ring-stone-200 dark:ring-stone-700'],
+            'HVAC'             => ['bg' => 'bg-cyan-500', 'text' => 'text-cyan-600', 'badge' => 'bg-cyan-50 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-400 ring-cyan-600/20 dark:ring-cyan-400/20', 'ring' => 'ring-cyan-100 dark:ring-cyan-900'],
+            'Tiling'           => ['bg' => 'bg-teal-500', 'text' => 'text-teal-600', 'badge' => 'bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 ring-teal-600/20 dark:ring-teal-400/20', 'ring' => 'ring-teal-100 dark:ring-teal-900'],
+            'Landscaping'      => ['bg' => 'bg-green-500', 'text' => 'text-green-600', 'badge' => 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 ring-green-600/20 dark:ring-green-400/20', 'ring' => 'ring-green-100 dark:ring-green-900'],
+            'General Handyman' => ['bg' => 'bg-indigo-500', 'text' => 'text-indigo-600', 'badge' => 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 ring-indigo-600/20 dark:ring-indigo-400/20', 'ring' => 'ring-indigo-100 dark:ring-indigo-900'],
         ];
         
-        return $map[$category] ?? ['bg' => 'bg-indigo-500', 'text' => 'text-indigo-600', 'badge' => 'bg-indigo-50 text-indigo-700 ring-indigo-600/20'];
+        return $map[$category] ?? ['bg' => 'bg-indigo-500', 'text' => 'text-indigo-600', 'badge' => 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 ring-indigo-600/20 dark:ring-indigo-400/20', 'ring' => 'ring-indigo-100 dark:ring-indigo-900'];
     }
 }
 

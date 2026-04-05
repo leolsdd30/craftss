@@ -14,7 +14,7 @@
         <!-- Drawer header — X on the left (same muscle memory as hamburger),
              Crafts logo+name to the right of it -->
         <div class="mob-header">
-            <button onclick="closeDrawer()" class="p-2 -ml-1 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition flex-shrink-0" aria-label="Close menu">
+            <button onclick="closeDrawer()" class="p-2 -ml-1 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-gray-200 transition flex-shrink-0" aria-label="Close menu">
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
@@ -25,18 +25,18 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/>
                     </svg>
                 </div>
-                <span class="text-base font-extrabold text-gray-900">Crafts</span>
+                <span class="text-base font-extrabold text-gray-900 dark:text-white">Crafts</span>
             </a>
         </div>
 
         <!-- ── Logged-in user: avatar strip ──────────────────── -->
         <?php if (isset($_SESSION['user_id'])): ?>
-        <div class="flex items-center gap-3 px-5 py-4 bg-gray-50 border-b border-gray-100">
+        <div class="flex items-center gap-3 px-5 py-4 bg-gray-50 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
             <?php if (!empty($headerPicUrl)): ?>
-            <img src="<?= $headerPicUrl ?>" alt="Profile" class="w-11 h-11 rounded-full object-cover border-2 border-white shadow-sm flex-shrink-0">
+            <img src="<?= $headerPicUrl ?>" alt="Profile" class="w-11 h-11 rounded-full object-cover border-2 border-white dark:border-gray-600 shadow-sm flex-shrink-0">
             <?php endif; ?>
             <div class="min-w-0">
-                <p class="text-sm font-bold text-gray-900 truncate flex items-center gap-1">
+                <p class="text-sm font-bold text-gray-900 dark:text-gray-100 truncate flex items-center gap-1">
                     <?= htmlspecialchars($_SESSION['name']) ?>
                     <?php if (!empty($_SESSION['is_verified'])): ?>
                     <svg class="h-3.5 w-3.5 text-blue-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
@@ -101,6 +101,25 @@
             <?php endforeach; ?>
         </div>
 
+        <!-- ── Dark mode toggle ──────────────────────────────── -->
+        <div class="mob-divider"></div>
+        <button type="button" onclick="event.preventDefault(); toggleDarkMode();" class="mob-link w-full text-left">
+            <!-- Sun icon (light mode) -->
+            <svg class="mob-link-icon block dark:hidden text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <!-- Moon icon (dark mode) -->
+            <svg class="mob-link-icon hidden dark:block text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+            <span>Dark Mode</span>
+            
+            <!-- Sliding Toggle UI (pushes right) -->
+            <div class="ml-auto relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-gray-200 dark:bg-indigo-600 shadow-inner">
+                <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out translate-x-0 dark:translate-x-5"></span>
+            </div>
+        </button>
+
         <!-- ── Dashboard link (logged-in only) — below services, above footer -->
         <?php if (isset($_SESSION['user_id'])): ?>
         <div class="mob-divider"></div>
@@ -139,7 +158,7 @@
             <?php else: ?>
             <div class="mob-auth-area">
                 <a href="<?= APP_URL ?>/login"
-                   class="flex items-center justify-center px-4 py-3 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 transition"
+                   class="flex items-center justify-center px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
                    onclick="closeDrawerFast()">
                     Log in
                 </a>

@@ -59,8 +59,8 @@ class MessageController extends Controller
             'conversation_id' => $conversationId,
             'user'            => [
                 'id'              => (int)$other['id'],
-                'first_name'      => htmlspecialchars($other['first_name'], ENT_QUOTES, 'UTF-8'),
-                'last_name'       => htmlspecialchars($other['last_name'], ENT_QUOTES, 'UTF-8'),
+                'first_name'      => $other['first_name'],
+                'last_name'       => $other['last_name'],
                 'username'        => $other['username'] ?? '',
                 'role'            => $other['role'],
                 'profile_picture' => $other['profile_picture'] ?? '',
@@ -126,21 +126,13 @@ class MessageController extends Controller
         ]);
         $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        // Resolve profile picture URLs and Escape output for XSS prevention
+        // Resolve profile picture URLs
         foreach ($rows as &$row) {
             $row['pic_url'] = get_profile_picture_url(
                 $row['profile_picture'] ?? 'default.png',
                 $row['first_name'],
                 $row['last_name']
             );
-            $row['first_name'] = htmlspecialchars((string)$row['first_name'], ENT_QUOTES, 'UTF-8');
-            $row['last_name'] = htmlspecialchars((string)$row['last_name'], ENT_QUOTES, 'UTF-8');
-            $row['username'] = htmlspecialchars((string)($row['username'] ?? ''), ENT_QUOTES, 'UTF-8');
-            $row['role'] = htmlspecialchars((string)($row['role'] ?? ''), ENT_QUOTES, 'UTF-8');
-            $row['service_category'] = htmlspecialchars((string)($row['service_category'] ?? ''), ENT_QUOTES, 'UTF-8');
-            if (isset($row['last_message'])) {
-                $row['last_message'] = htmlspecialchars((string)$row['last_message'], ENT_QUOTES, 'UTF-8');
-            }
         }
         unset($row);
 
@@ -377,16 +369,13 @@ class MessageController extends Controller
         $stmt->execute(['cid' => $convo['id'], 'last_id' => $lastId]);
         $newMessages = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        // Resolve profile picture URL and Escape everything against XSS payloads
+        // Resolve profile picture URL
         foreach ($newMessages as &$msg) {
             $msg['pic_url'] = get_profile_picture_url(
                 $msg['profile_picture'] ?? 'default.png',
                 $msg['first_name'],
                 $msg['last_name']
             );
-            $msg['first_name'] = htmlspecialchars($msg['first_name'], ENT_QUOTES, 'UTF-8');
-            $msg['last_name'] = htmlspecialchars($msg['last_name'], ENT_QUOTES, 'UTF-8');
-            $msg['message_body'] = htmlspecialchars($msg['message_body'], ENT_QUOTES, 'UTF-8');
         }
         unset($msg);
 

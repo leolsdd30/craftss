@@ -100,6 +100,28 @@ body footer  { display: none !important; }
     padding: 32px;
     text-align: center;
 }
+
+/* ── DARK MODE OVERRIDES ──────────────────────────────────── */
+html.dark #requests-page { background: #111827; }
+html.dark #req-list-panel { background: #1f2937; border-color: #374151; }
+html.dark #req-preview-panel { background: #111827; }
+html.dark #req-action-bar { background: #1f2937; border-color: #374151; }
+html.dark .req-bubble { background: #374151; border-color: #4b5563; color: #f3f4f6; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+html.dark .req-card:hover, html.dark .req-card.active { background: #374151; }
+html.dark .bg-white { background: #1f2937 !important; }
+html.dark .border-gray-100 { border-color: #374151 !important; }
+html.dark .border-gray-200 { border-color: #4b5563 !important; }
+html.dark .text-gray-900, html.dark .text-gray-800 { color: #f3f4f6 !important; }
+html.dark .text-gray-600 { color: #d1d5db !important; }
+html.dark .text-gray-500 { color: #9ca3af !important; }
+html.dark .bg-amber-50, html.dark .bg-amber-100 { background: rgba(217,119,6,0.2) !important; color: #fef3c7 !important; }
+html.dark .border-amber-200 { border-color: #d97706 !important; }
+html.dark .text-amber-700, html.dark .text-amber-600, html.dark .text-amber-500 { color: #fcd34d !important; }
+html.dark .bg-indigo-50 { background: #312e81 !important; }
+html.dark .text-amber-300 { color: #f59e0b !important; }
+html.dark .bg-gray-200 { background: #374151 !important; }
+html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important; }
+
 </style>
 
 <div id="requests-page">
@@ -111,7 +133,7 @@ body footer  { display: none !important; }
     <div class="px-4 pt-5 pb-4 border-b border-gray-100 flex-shrink-0">
       <div class="flex items-center gap-3 mb-1">
         <a href="<?= APP_URL ?>/messages"
-           class="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition flex-shrink-0" title="Back to messages">
+           class="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 dark:hover:text-indigo-300 rounded-lg transition flex-shrink-0" title="Back to messages">
           <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
           </svg>
@@ -226,7 +248,7 @@ body footer  { display: none !important; }
     <!-- Header -->
     <div class="flex items-center gap-3 px-5 py-3 bg-white border-b border-gray-100 flex-shrink-0">
       <!-- Mobile back -->
-      <button class="md:hidden p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 transition" onclick="closeMobileReq()">
+      <button class="md:hidden p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition" onclick="closeMobileReq()">
         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
         </svg>
@@ -244,7 +266,7 @@ body footer  { display: none !important; }
       </div>
       <!-- View profile -->
       <a href="<?= APP_URL ?>/profile/<?= e($previewUser['username'] ?? '') ?>"
-         class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition flex-shrink-0" title="View profile">
+         class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 dark:hover:text-indigo-300 rounded-lg transition flex-shrink-0" title="View profile">
         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
         </svg>
@@ -305,11 +327,11 @@ body footer  { display: none !important; }
         <p class="text-xs text-gray-400 mt-0.5">Once accepted you can reply and the conversation moves to your inbox.</p>
       </div>
       <button onclick="doAccept(<?= (int)$previewUser['other_user_id'] ?>, '<?= e(addslashes($previewUser['username'])) ?>')"
-              class="px-5 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition shadow-sm flex-shrink-0">
+              class="px-5 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 transition shadow-sm flex-shrink-0">
         Accept
       </button>
       <button onclick="promptDecline(<?= (int)$previewUser['other_user_id'] ?>, '<?= e(addslashes($previewUser['first_name'])) ?>')"
-              class="px-5 py-2.5 bg-white border border-gray-200 text-gray-600 text-sm font-semibold rounded-xl hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition flex-shrink-0">
+              class="px-5 py-2.5 bg-red-100 text-red-800 text-sm font-bold rounded-xl hover:bg-red-600 hover:text-white dark:bg-red-700 dark:text-white dark:hover:bg-red-600 transition flex-shrink-0">
         Decline
       </button>
     </div>
@@ -339,23 +361,23 @@ body footer  { display: none !important; }
   <div class="fixed inset-0 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 relative z-10">
       <div class="flex items-start gap-3 mb-5">
-        <div class="h-10 w-10 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-          <svg class="h-5 w-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <div class="h-10 w-10 bg-amber-100 dark:bg-amber-900/60 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+          <svg class="h-5 w-5 text-amber-500 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
           </svg>
         </div>
         <div>
-          <p class="font-bold text-gray-900 text-base">Decline request?</p>
-          <p class="text-sm text-gray-500 mt-1" id="decline-msg-text">This will remove the request. The sender won't be notified.</p>
+          <p class="font-bold text-gray-900 dark:text-white text-base">Decline request?</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1" id="decline-msg-text">This will remove the request. The sender won't be notified.</p>
         </div>
       </div>
       <div class="flex gap-3">
         <button onclick="hideDeclineModal()"
-                class="flex-1 px-4 py-2.5 border border-gray-200 text-sm font-semibold text-gray-700 rounded-xl hover:bg-gray-50 transition">
+                class="flex-1 px-4 py-2.5 bg-gray-100 text-gray-700 text-sm font-bold rounded-xl hover:bg-gray-200 dark:bg-gray-500 dark:text-white dark:hover:bg-gray-400 transition">
           Cancel
         </button>
         <button onclick="confirmDecline()"
-                class="flex-1 px-4 py-2.5 bg-red-500 text-white text-sm font-bold rounded-xl hover:bg-red-600 transition">
+                class="flex-1 px-4 py-2.5 bg-red-100 text-red-800 text-sm font-bold rounded-xl hover:bg-red-600 hover:text-white dark:bg-red-700 dark:text-white dark:hover:bg-red-600 transition">
           Decline
         </button>
       </div>

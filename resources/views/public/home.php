@@ -11,31 +11,31 @@
 ?>
 
 <!-- HERO SECTION — Split layout -->
-<div class="relative bg-white overflow-hidden">
+<div class="relative bg-white dark:bg-gray-800 overflow-hidden transition-colors duration-200">
     <div class="max-w-7xl mx-auto">
         <div class="relative lg:grid lg:grid-cols-2 min-h-[600px] lg:min-h-[680px]">
 
             <!-- LEFT — Text -->
-            <div class="relative z-10 flex flex-col justify-center px-6 sm:px-10 lg:px-12 py-16 lg:py-20 bg-white">
+            <div class="relative z-10 flex flex-col justify-center px-6 sm:px-10 lg:px-12 py-16 lg:py-20 bg-white dark:bg-gray-800">
                 <div class="flex items-center gap-2.5 mb-7">
-                    <span class="flex items-center gap-2 bg-indigo-50 text-indigo-700 text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full">
+                    <span class="flex items-center gap-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full">
                         <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse"></span>
                         Algeria's Craftsman Platform
                     </span>
                 </div>
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-[1.05] tracking-tight mb-6">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white leading-[1.05] tracking-tight mb-6">
                     Find the right professional for your
-                    <span class="text-indigo-600 italic font-light"> home projects.</span>
+                    <span class="text-indigo-600 dark:text-indigo-400 italic font-light"> home projects.</span>
                 </h1>
-                <p class="text-gray-500 text-lg leading-relaxed mb-10 max-w-lg">
+                <p class="text-gray-500 dark:text-gray-400 text-lg leading-relaxed mb-10 max-w-lg">
                     Connect with top-rated, verified craftsmen across Algeria. From plumbing to carpentry — get it done right, on time, every time.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-3 mb-12">
                     <?php if (!isset($_SESSION['user_id'])): ?>
-                        <a href="<?= APP_URL ?>/register" class="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 text-base">
+                        <a href="<?= APP_URL ?>/register" class="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 dark:shadow-indigo-900/30 text-base">
                             Get Started Free <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                         </a>
-                        <a href="<?= APP_URL ?>/search" class="inline-flex items-center justify-center px-7 py-3.5 bg-indigo-50 text-indigo-700 font-bold rounded-xl hover:bg-indigo-100 transition text-base">Browse Craftsmen</a>
+                        <a href="<?= APP_URL ?>/search" class="inline-flex items-center justify-center px-7 py-3.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 font-bold rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition text-base">Browse Craftsmen</a>
                     <?php elseif ($_SESSION['role'] === 'homeowner'): ?>
                         <a href="<?= APP_URL ?>/search" class="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition shadow-lg text-base">Find a Craftsman <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a>
                         <a href="<?= APP_URL ?>/homeowner/dashboard" class="inline-flex items-center justify-center px-7 py-3.5 bg-indigo-50 text-indigo-700 font-bold rounded-xl hover:bg-indigo-100 transition text-base">My Dashboard</a>
@@ -48,26 +48,26 @@
                 </div>
 
                 <!-- Trust badges strip -->
-                <div class="flex flex-wrap items-center gap-5 pt-6 border-t border-gray-100">
+                <div class="flex flex-wrap items-center gap-5 pt-6 border-t border-gray-100 dark:border-gray-700">
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <div class="w-8 h-8 bg-green-50 dark:bg-green-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
                             <svg class="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                         </div>
-                        <span class="text-xs font-semibold text-gray-600">Verified Professionals</span>
+                        <span class="text-xs font-semibold text-gray-600 dark:text-gray-300">Verified Professionals</span>
                     </div>
-                    <div class="w-px h-5 bg-gray-200 hidden sm:block"></div>
+                    <div class="w-px h-5 bg-gray-200 dark:bg-gray-600 hidden sm:block"></div>
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <div class="w-8 h-8 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
                             <svg class="w-4 h-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                         </div>
-                        <span class="text-xs font-semibold text-gray-600">Rated <?= ($stats['avg_rating'] ?? 0) > 0 ? number_format($stats['avg_rating'],1) : '4.8' ?>/5 by Clients</span>
+                        <span class="text-xs font-semibold text-gray-600 dark:text-gray-300">Rated <?= ($stats['avg_rating'] ?? 0) > 0 ? number_format($stats['avg_rating'],1) : '4.8' ?>/5 by Clients</span>
                     </div>
-                    <div class="w-px h-5 bg-gray-200 hidden sm:block"></div>
+                    <div class="w-px h-5 bg-gray-200 dark:bg-gray-600 hidden sm:block"></div>
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <div class="w-8 h-8 bg-amber-50 dark:bg-amber-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
                             <svg class="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         </div>
-                        <span class="text-xs font-semibold text-gray-600"><?= ($stats['wilayas'] ?? 0) > 0 ? $stats['wilayas'] : '20+' ?> Wilayas Covered</span>
+                        <span class="text-xs font-semibold text-gray-600 dark:text-gray-300"><?= ($stats['wilayas'] ?? 0) > 0 ? $stats['wilayas'] : '20+' ?> Wilayas Covered</span>
                     </div>
                 </div>
             </div>
@@ -81,21 +81,21 @@
                     <div class="absolute inset-0" style="background: linear-gradient(to right, white 0%, transparent 18%)"></div>
                     <div class="absolute bottom-0 left-0 right-0 h-16" style="background: linear-gradient(to top, white 0%, transparent 100%)"></div>
                 </div>
-                <div class="absolute bottom-10 left-4 bg-white rounded-2xl shadow-xl px-5 py-4 flex items-center gap-3 border border-indigo-50 z-10">
+                <div class="absolute bottom-10 left-4 bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-gray-900/50 px-5 py-4 flex items-center gap-3 border border-indigo-50 dark:border-gray-700 z-10">
                     <div class="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center flex-shrink-0">
                         <svg class="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                     </div>
                     <div>
-                        <p class="text-xs text-gray-400 font-medium">Every Professional</p>
-                        <p class="text-sm font-extrabold text-gray-900">Verified & Background Checked</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 font-medium">Every Professional</p>
+                        <p class="text-sm font-extrabold text-gray-900 dark:text-gray-100">Verified & Background Checked</p>
                     </div>
                 </div>
-                <div class="absolute top-10 right-6 bg-white rounded-2xl shadow-xl px-4 py-3.5 z-10 border border-indigo-50">
+                <div class="absolute top-10 right-6 bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-gray-900/50 px-4 py-3.5 z-10 border border-indigo-50 dark:border-gray-700">
                     <div class="flex items-center gap-0.5 mb-1">
                         <?php for ($i = 0; $i < 5; $i++): ?><svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><?php endfor; ?>
                     </div>
-                    <p class="text-xs font-extrabold text-gray-900"><?= ($stats['avg_rating'] ?? 0) > 0 ? number_format($stats['avg_rating'],1) : '4.8' ?> / 5.0</p>
-                    <p class="text-xs text-gray-400 font-medium"><?= ($stats['completed_bookings'] ?? 0) > 0 ? number_format($stats['completed_bookings']).'+ jobs done' : 'Client satisfaction' ?></p>
+                    <p class="text-xs font-extrabold text-gray-900 dark:text-gray-100"><?= ($stats['avg_rating'] ?? 0) > 0 ? number_format($stats['avg_rating'],1) : '4.8' ?> / 5.0</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 font-medium"><?= ($stats['completed_bookings'] ?? 0) > 0 ? number_format($stats['completed_bookings']).'+ jobs done' : 'Client satisfaction' ?></p>
                 </div>
             </div>
         </div>
@@ -104,18 +104,18 @@
 
 
 <!-- SPECIALIST DIRECTORY -->
-<div class="py-16 bg-gray-50">
+<div class="py-16 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
             <div>
-                <p class="text-indigo-600 text-xs font-bold tracking-widest uppercase mb-2">Browse by Trade</p>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                    The Specialist <span class="text-indigo-600 italic font-light">Directory</span>
+                <p class="text-indigo-600 dark:text-indigo-400 text-xs font-bold tracking-widest uppercase mb-2">Browse by Trade</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight">
+                    The Specialist <span class="text-indigo-600 dark:text-indigo-400 italic font-light">Directory</span>
                 </h2>
-                <p class="mt-2 text-gray-500 text-sm max-w-md">A curated selection of the region's finest professionals, categorised by their domain of excellence.</p>
+                <p class="mt-2 text-gray-500 dark:text-gray-400 text-sm max-w-md">A curated selection of the region's finest professionals, categorised by their domain of excellence.</p>
             </div>
-            <a href="<?= APP_URL ?>/search" class="inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-800 whitespace-nowrap self-start sm:self-auto border-b-2 border-indigo-100 pb-1 hover:border-indigo-400 transition-colors">
+            <a href="<?= APP_URL ?>/search" class="inline-flex items-center gap-2 text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 whitespace-nowrap self-start sm:self-auto border-b-2 border-indigo-100 dark:border-indigo-800 pb-1 hover:border-indigo-400 dark:hover:border-indigo-500 transition-colors">
                 View all professionals <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
             </a>
         </div>
@@ -160,17 +160,17 @@
 
 
 <!-- HOW IT WORKS -->
-<div class="py-16 bg-white">
+<div class="py-16 bg-white dark:bg-gray-800 transition-colors duration-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-10">
-            <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">How It Works</h2>
-            <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">Get started in three simple steps</p>
-            <p class="mt-3 text-gray-500 text-base max-w-xl mx-auto">Whether you need work done or are looking for new opportunities, we've made the process simple.</p>
+            <h2 class="text-base text-indigo-600 dark:text-indigo-400 font-semibold tracking-wide uppercase">How It Works</h2>
+            <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">Get started in three simple steps</p>
+            <p class="mt-3 text-gray-500 dark:text-gray-400 text-base max-w-xl mx-auto">Whether you need work done or are looking for new opportunities, we've made the process simple.</p>
         </div>
         <div class="flex justify-center mb-10">
-            <div class="inline-flex bg-gray-100 rounded-xl p-1 gap-1">
-                <button id="tab-homeowner-btn" onclick="switchHowTab('homeowner')" class="px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-white text-gray-900 shadow">For Homeowners</button>
-                <button id="tab-craftsman-btn" onclick="switchHowTab('craftsman')" class="px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-gray-500">For Craftsmen</button>
+            <div class="inline-flex bg-gray-100 dark:bg-gray-700 rounded-xl p-1 gap-1">
+                <button id="tab-homeowner-btn" onclick="switchHowTab('homeowner')" class="px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 shadow">For Homeowners</button>
+                <button id="tab-craftsman-btn" onclick="switchHowTab('craftsman')" class="px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-gray-500 dark:text-gray-400">For Craftsmen</button>
             </div>
         </div>
 
@@ -190,15 +190,15 @@
         foreach ($hiwSteps as $tab => $steps): ?>
         <div id="hiw-<?= $tab ?>" class="hiw-content <?= $tab === 'craftsman' ? 'hidden' : '' ?>">
             <div class="grid md:grid-cols-3 gap-8 relative">
-                <div class="hidden md:block absolute top-8 h-0.5 bg-indigo-100 z-0" style="left:16.67%; right:16.67%;"></div>
+                <div class="hidden md:block absolute top-8 h-0.5 bg-indigo-100 dark:bg-indigo-900/40 z-0" style="left:16.67%; right:16.67%;"></div>
                 <?php foreach ($steps as $s): ?>
                 <div class="text-center px-4 relative z-10">
                     <div class="relative mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-indigo-600 text-white mb-5 shadow-lg">
-                        <span class="absolute -top-1 -right-1 bg-white text-indigo-600 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border border-indigo-100 shadow-sm"><?= $s['n'] ?></span>
+                        <span class="absolute -top-1 -right-1 bg-white dark:bg-gray-800 text-indigo-600 dark:text-indigo-400 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border border-indigo-100 dark:border-gray-600 shadow-sm"><?= $s['n'] ?></span>
                         <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="<?= $s['icon'] ?>"/></svg>
                     </div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-2"><?= $s['t'] ?></h3>
-                    <p class="text-gray-500 text-sm leading-relaxed"><?= $s['d'] ?></p>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2"><?= $s['t'] ?></h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed"><?= $s['d'] ?></p>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -209,7 +209,7 @@
 
 
 <!-- WHY CRAFTS — Image mosaic + feature rows -->
-<div class="py-16 bg-gray-50">
+<div class="py-16 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid lg:grid-cols-2 gap-14 items-center">
             <div class="relative hidden md:block">
@@ -235,9 +235,9 @@
                 <div class="absolute -top-4 -right-4 w-32 h-32 bg-indigo-100 rounded-full blur-2xl -z-10 opacity-50"></div>
             </div>
             <div>
-                <p class="text-indigo-600 text-xs font-bold tracking-widest uppercase mb-3">Why Crafts?</p>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight mb-4">A better way to hire <span class="text-indigo-600 italic font-light">professionals</span></h2>
-                <p class="text-gray-500 text-base mb-10 max-w-lg">We take the hassle out of finding reliable help for your home improvements.</p>
+                <p class="text-indigo-600 dark:text-indigo-400 text-xs font-bold tracking-widest uppercase mb-3">Why Crafts?</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight mb-4">A better way to hire <span class="text-indigo-600 dark:text-indigo-400 italic font-light">professionals</span></h2>
+                <p class="text-gray-500 dark:text-gray-400 text-base mb-10 max-w-lg">We take the hassle out of finding reliable help for your home improvements.</p>
                 <div class="space-y-7">
                     <?php
                     $features = [
@@ -248,8 +248,8 @@
                     ];
                     foreach ($features as $f): ?>
                     <div class="flex gap-5">
-                        <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center"><svg class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?= $f['icon'] ?>"/></svg></div>
-                        <div><h4 class="text-base font-bold text-gray-900 mb-1"><?= $f['t'] ?></h4><p class="text-gray-500 text-sm leading-relaxed"><?= $f['d'] ?></p></div>
+                        <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center"><svg class="h-6 w-6 text-indigo-600 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?= $f['icon'] ?>"/></svg></div>
+                        <div><h4 class="text-base font-bold text-gray-900 dark:text-white mb-1"><?= $f['t'] ?></h4><p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed"><?= $f['d'] ?></p></div>
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -260,9 +260,9 @@
 
 
 <!-- STATS BAR -->
-<div class="pb-10 bg-gray-50">
+<div class="pb-10 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-10">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6 sm:p-10">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-0">
                 <?php
                 $statItems = [
@@ -275,8 +275,8 @@
                 <div class="flex items-center justify-center gap-4 py-5 px-4 <?= $si['border'] ?>">
                     <div class="p-3 <?= $si['bg'] ?> rounded-xl hidden sm:block flex-shrink-0"><svg class="w-7 h-7" <?= $si['fill'] ? 'fill="currentColor"' : 'fill="none" stroke="currentColor"' ?> viewBox="0 0 <?= $si['fill'] ? '20 20' : '24 24' ?>"><?php if (!$si['fill']): ?><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?= $si['icon'] ?>"/><?php else: ?><path d="<?= $si['icon'] ?>"/><?php endif; ?></svg></div>
                     <div class="text-center sm:text-left">
-                        <p class="text-2xl sm:text-3xl font-extrabold text-gray-900"><?= $si['val'] ?></p>
-                        <p class="mt-1 text-xs sm:text-sm font-medium text-gray-500"><?= $si['label'] ?></p>
+                        <p class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white"><?= $si['val'] ?></p>
+                        <p class="mt-1 text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400"><?= $si['label'] ?></p>
                     </div>
                 </div>
                 <?php endforeach; ?>
@@ -288,7 +288,7 @@
 
 <!-- CTA SECTION -->
 <?php if (!isset($_SESSION['user_id'])): ?>
-<div class="bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
+<div class="bg-gray-50 dark:bg-gray-900 py-10 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         <div class="relative overflow-hidden rounded-3xl px-8 py-16 sm:px-16 sm:py-24 text-center" style="background: linear-gradient(135deg, #3730a3 0%, #4f46e5 50%, #6366f1 100%);">
             <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl pointer-events-none"></div>
@@ -331,7 +331,7 @@
 </div>
 
 <?php else: ?>
-<div class="bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
+<div class="bg-gray-50 dark:bg-gray-900 py-10 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         <div class="relative overflow-hidden rounded-3xl px-8 py-16 sm:px-16 sm:py-24 text-center" style="background: linear-gradient(135deg, #3730a3 0%, #4f46e5 50%, #6366f1 100%);">
             <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl pointer-events-none"></div>

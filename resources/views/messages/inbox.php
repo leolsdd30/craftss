@@ -163,6 +163,52 @@ body footer{display:none!important}
   body.chat-open nav{display:none!important}
   #mia{padding-bottom:max(12px,env(safe-area-inset-bottom))}
 }
+
+/* ── DARK MODE OVERRIDES ──────────────────────────────────── */
+html.dark #msg-shell { background: #111827; }
+html.dark #msg-list-panel { background: #1f2937; border-color: #374151; }
+html.dark #msg-chat-panel, html.dark #msg-chat-panel.mobile-open { background: #111827; }
+html.dark .cr:hover { background: #374151; }
+html.dark .cr.active { background: #374151; }
+html.dark .cn { color: #e5e7eb !important; }
+html.dark .cp { color: #9ca3af !important; }
+html.dark .cr.unread .cn { color: #ffffff !important; font-weight: 800; }
+html.dark .cr.unread .cp { color: #e5e7eb !important; }
+html.dark .cts { color: #6b7280 !important; }
+html.dark .text-gray-900 { color: #f3f4f6 !important; }
+html.dark .text-gray-800 { color: #e5e7eb !important; }
+html.dark .text-gray-700 { color: #d1d5db !important; }
+html.dark .text-gray-500 { color: #9ca3af !important; }
+html.dark .bg-white { background: #1f2937 !important; }
+html.dark .border-gray-100 { border-color: #374151 !important; }
+html.dark .border-gray-200 { border-color: #4b5563 !important; }
+html.dark .bg-indigo-50 { background: #312e81 !important; }
+html.dark .text-indigo-300 { color: #a5b4fc !important; }
+html.dark .bg-gray-50, html.dark .bg-gray-100 { background: #374151 !important; }
+html.dark .text-gray-400, html.dark .text-gray-300 { color: #9ca3af !important; }
+html.dark #cs { background: #374151; color: #f3f4f6; }
+html.dark #cs:focus { background: #4b5563; }
+html.dark .itb { color: #9ca3af; }
+html.dark .itb.active { color: #818cf8; border-color: #818cf8; }
+html.dark .ctx, html.dark .msg-ctx-pop { background: #1f2937; border-color: #374151; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+html.dark .ci { color: #d1d5db; }
+html.dark .ci:hover { background: #374151; color: #f3f4f6; }
+html.dark .ci.danger:hover { background: #7f1d1d; }
+html.dark .msg-ctx-header { border-color: #374151; }
+html.dark .bt { background: #374151; color: #f3f4f6; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+html.dark .dc span { background: #374151; color: #d1d5db; }
+html.dark #mia { background: #1f2937; border-color: #374151; }
+html.dark #mi { background: #111827; border-color: #4b5563; color: #f3f4f6; }
+html.dark #mi:focus { border-color: #818cf8; }
+html.dark #req-banner { background: #1f2937; border-color: #374151; }
+html.dark .rmb:hover { background: #4b5563; color: #818cf8; }
+html.dark .msg-menu-btn:hover { background: #4b5563; color: #d1d5db; }
+html.dark .bg-red-100 { background: #7f1d1d !important; }
+html.dark .text-red-500 { color: #fca5a5 !important; }
+html.dark .bg-amber-100 { background: #78350f !important; }
+html.dark .text-amber-500 { color: #fcd34d !important; }
+html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important; }
+
 </style>
 
 <div id="msg-shell">
@@ -174,7 +220,7 @@ body footer{display:none!important}
   <div class="px-4 pt-5 pb-3 border-b border-gray-100 flex-shrink-0">
     <div class="flex items-center justify-between mb-3">
       <h1 class="text-xl font-extrabold text-gray-900 tracking-tight">Messages</h1>
-      <a href="<?= APP_URL ?>/search" title="New conversation" class="p-2 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition">
+      <a href="<?= APP_URL ?>/search" title="New conversation" class="p-2 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 dark:hover:text-indigo-300 transition">
         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
       </a>
     </div>
@@ -252,7 +298,7 @@ body footer{display:none!important}
 
   <!-- Chat header -->
   <div class="flex items-center gap-3 px-5 py-3 bg-white border-b border-gray-100 flex-shrink-0">
-    <button class="md:hidden p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 transition" onclick="closeMobile()">
+    <button class="md:hidden p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300 transition" onclick="closeMobile()">
       <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
     </button>
     <div class="relative flex-shrink-0">
@@ -272,11 +318,11 @@ body footer{display:none!important}
       <p class="text-xs text-gray-400 capitalize"><?= e(ucfirst($openUser['role'])) ?></p>
     </div>
     <div class="flex items-center gap-1 flex-shrink-0">
-      <a href="<?= APP_URL ?>/profile/<?= e($openUser['username']??'') ?>" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition" title="View profile">
+      <a href="<?= APP_URL ?>/profile/<?= e($openUser['username']??'') ?>" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/50 dark:hover:text-indigo-400 rounded-lg transition" title="View profile">
         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
       </a>
       <?php if($openConvo): ?>
-      <button onclick="showCtx(event,<?=(int)$openConvo['id']?>,<?=(int)$openUid?>)" class="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition">
+      <button onclick="showCtx(event,<?=(int)$openConvo['id']?>,<?=(int)$openUid?>)" class="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300 rounded-lg transition">
         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
       </button>
       <?php endif; ?>
@@ -294,8 +340,8 @@ body footer{display:none!important}
       </div>
     </div>
     <div class="flex items-center gap-2 flex-shrink-0">
-      <button onclick="doAccept(<?=(int)$openConvo['id']?>,<?=(int)$openUid?>)" class="px-4 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-700 transition">Accept</button>
-      <button onclick="doDeclinePrompt(<?=(int)$openConvo['id']?>,<?=(int)$openUid?>)" class="px-4 py-1.5 bg-white border border-gray-200 text-gray-700 text-xs font-semibold rounded-lg hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition">Decline</button>
+      <button onclick="doAccept(<?=(int)$openConvo['id']?>,<?=(int)$openUid?>)" class="px-4 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 transition">Accept</button>
+      <button onclick="doDeclinePrompt(<?=(int)$openConvo['id']?>,<?=(int)$openUid?>)" class="px-4 py-1.5 bg-red-100 text-red-800 text-xs font-bold rounded-lg hover:bg-red-600 hover:text-white dark:bg-red-700 dark:text-white dark:hover:bg-red-600 transition">Decline</button>
     </div>
   </div>
   <?php endif; ?>
@@ -360,8 +406,10 @@ body footer{display:none!important}
 
 <?php else: ?>
   <div id="chat-empty">
-    <div class="h-20 w-20 bg-indigo-50 rounded-3xl flex items-center justify-center">
-      <svg class="h-10 w-10 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+    <div class="h-20 w-20 bg-indigo-50 dark:bg-indigo-500/10 rounded-[1.75rem] flex items-center justify-center mb-2">
+      <svg class="h-10 w-10 text-indigo-400 dark:text-indigo-400 drop-shadow-sm" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+      </svg>
     </div>
     <div class="text-center">
       <p class="font-semibold text-gray-600">Select a conversation</p>
@@ -384,16 +432,20 @@ body footer{display:none!important}
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xs p-6 relative z-10">
       <h3 class="text-base font-bold text-gray-900 mb-4">Move to folder</h3>
       <div class="space-y-2">
-        <button onclick="doFolder('primary')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 transition text-sm font-semibold text-gray-700">
-          <span class="h-8 w-8 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600 flex-shrink-0"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></span>
+        <button onclick="doFolder('primary')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 dark:hover:border-indigo-500 transition text-sm font-semibold text-gray-700 dark:text-gray-300">
+          <span class="h-8 w-8 bg-indigo-100 dark:bg-indigo-900/60 rounded-lg flex items-center justify-center text-indigo-600 dark:text-white flex-shrink-0"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></span>
           Primary
         </button>
-        <button onclick="doFolder('general')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-200 hover:border-gray-400 hover:bg-gray-50 transition text-sm font-semibold text-gray-700">
-          <span class="h-8 w-8 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 flex-shrink-0"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"/></svg></span>
+        <button onclick="doFolder('general')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 dark:hover:border-gray-500 transition text-sm font-semibold text-gray-700 dark:text-gray-300">
+          <span class="h-8 w-8 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 dark:text-white flex-shrink-0">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+            </svg>
+          </span>
           General
         </button>
       </div>
-      <button onclick="hideFM()" class="mt-4 w-full text-center text-sm text-gray-400 hover:text-gray-600 transition">Cancel</button>
+      <button onclick="hideFM()" class="mt-4 w-full text-center text-sm text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition">Cancel</button>
     </div>
   </div>
 </div>
@@ -404,8 +456,8 @@ body footer{display:none!important}
   <div class="fixed inset-0 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 relative z-10">
       <div class="flex items-center gap-3 mb-4">
-        <div class="h-10 w-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-          <svg class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        <div class="h-10 w-10 bg-red-100 dark:bg-red-900/60 rounded-full flex items-center justify-center flex-shrink-0">
+          <svg class="h-5 w-5 text-red-500 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
         </div>
         <div>
           <p class="font-bold text-gray-900">Delete conversation?</p>
@@ -413,8 +465,8 @@ body footer{display:none!important}
         </div>
       </div>
       <div class="flex gap-3">
-        <button onclick="hideDM()" class="flex-1 px-4 py-2 border border-gray-200 text-sm font-semibold text-gray-700 rounded-xl hover:bg-gray-50 transition">Cancel</button>
-        <button onclick="doDelete()" class="flex-1 px-4 py-2 bg-red-600 text-white text-sm font-bold rounded-xl hover:bg-red-700 transition">Delete</button>
+        <button onclick="hideDM()" class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 text-sm font-bold rounded-xl hover:bg-gray-200 dark:bg-gray-500 dark:text-white dark:hover:bg-gray-400 transition">Cancel</button>
+        <button onclick="doDelete()" class="flex-1 px-4 py-2 bg-red-100 text-red-800 text-sm font-bold rounded-xl hover:bg-red-600 hover:text-white dark:bg-red-700 dark:text-white dark:hover:bg-red-600 transition">Delete</button>
       </div>
     </div>
   </div>
@@ -426,8 +478,8 @@ body footer{display:none!important}
   <div class="fixed inset-0 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 relative z-10">
       <div class="flex items-center gap-3 mb-4">
-        <div class="h-10 w-10 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
-          <svg class="h-5 w-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        <div class="h-10 w-10 bg-amber-100 dark:bg-amber-900/60 rounded-full flex items-center justify-center flex-shrink-0">
+          <svg class="h-5 w-5 text-amber-500 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
         </div>
         <div>
           <p class="font-bold text-gray-900">Decline request?</p>
@@ -435,8 +487,8 @@ body footer{display:none!important}
         </div>
       </div>
       <div class="flex gap-3">
-        <button onclick="hideDCM()" class="flex-1 px-4 py-2 border border-gray-200 text-sm font-semibold text-gray-700 rounded-xl hover:bg-gray-50 transition">Cancel</button>
-        <button onclick="doDecline()" class="flex-1 px-4 py-2 bg-amber-500 text-white text-sm font-bold rounded-xl hover:bg-amber-600 transition">Decline</button>
+        <button onclick="hideDCM()" class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 text-sm font-bold rounded-xl hover:bg-gray-200 dark:bg-gray-500 dark:text-white dark:hover:bg-gray-400 transition">Cancel</button>
+        <button onclick="doDecline()" class="flex-1 px-4 py-2 bg-yellow-100 text-yellow-800 text-sm font-bold rounded-xl hover:bg-amber-500 hover:text-white dark:bg-amber-700 dark:text-white dark:hover:bg-amber-600 transition">Decline</button>
       </div>
     </div>
   </div>

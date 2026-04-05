@@ -264,10 +264,12 @@ footer { display: none !important; }
     padding: 0.65rem 1.125rem; background: #f9f8ff;
     border-top: 1px solid #f3f0ff;
     display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap;
+    border-radius: 0 0 0.875rem 0.875rem;
 }
 .booking-footer-banner {
     padding: 0.55rem 1.125rem; display: flex; align-items: center;
     gap: 0.45rem; font-size: 0.775rem; font-weight: 700;
+    border-radius: 0 0 0.875rem 0.875rem;
 }
 .booking-footer-banner svg { width: 14px; height: 14px; flex-shrink: 0; }
 .booking-footer-banner.orange { background: #fff7ed; border-top: 1px solid #fed7aa; color: #9a3412; }
@@ -281,12 +283,7 @@ footer { display: none !important; }
     border-radius: 0.875rem; padding: 1rem;
     transition: all 0.15s; position: relative; overflow: hidden;
 }
-.saved-card::after {
-    content: ''; position: absolute; bottom: -12px; right: -12px;
-    width: 56px; height: 56px; border-radius: 50%;
-    background: radial-gradient(circle,#fce7f3 0%,transparent 70%);
-    opacity: 0.7; pointer-events: none;
-}
+.saved-card::after { display: none; }
 .saved-card:hover { border-color: #fbcfe8; box-shadow: 0 4px 16px rgba(236,72,153,0.08); transform: translateY(-1px); }
 .saved-top    { display: flex; align-items: flex-start; gap: 0.7rem; margin-bottom: 0.75rem; }
 .saved-avatar { width: 40px; height: 40px; border-radius: 0.55rem; object-fit: cover; border: 2px solid #fce7f3; }
@@ -317,6 +314,8 @@ footer { display: none !important; }
 .btn-yellow:hover { background: #f59e0b; color: white; }
 .btn-gray   { background: #f3f4f6; color: #374151; }
 .btn-gray:hover   { background: #e5e7eb; }
+.btn-pink   { background: #fce7f3; color: #db2777; }
+.btn-pink:hover   { background: #ec4899; color: white; }
 
 /* ── Empty states ─────────────────────────────────────────── */
 .empty-state {
@@ -523,6 +522,198 @@ footer { display: none !important; }
 .filter-opt-left { display: flex; align-items: center; gap: 0.55rem; }
 .filter-opt-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .filter-opt-count { background: #f3f4f6; color: #6b7280; font-size: 0.65rem; font-weight: 800; padding: 0.1rem 0.4rem; border-radius: 99px; }
+
+/* ── DARK MODE OVERRIDES ──────────────────────────────────── */
+html.dark .dash-shell { background: #111827; }
+html.dark .dash-sidebar, html.dark .dash-metrics { background: #1f2937; border-color: #374151; }
+html.dark .dash-nav-item { color: #9ca3af; }
+html.dark .dash-nav-item:hover, html.dark .dash-nav-item.active { background: #374151; color: #a5b4fc; }
+html.dark .dash-nav-item.active { border-left-color: #818cf8; color: #818cf8; }
+html.dark .dash-sidebar-bottom { border-color: #374151; }
+html.dark .dash-sidebar-greeting { border-color: #374151; }
+html.dark .dash-sidebar-greeting h2 { color: #f3f4f6; }
+html.dark .dash-quick-btn.primary { background: #4f46e5; color: white; }
+html.dark .dash-quick-btn.secondary { background: #374151; border-color: #4b5563; color: #d1d5db; }
+html.dark .dash-quick-btn.secondary:hover { background: #4b5563; }
+html.dark .dash-welcome h1 { color: #f3f4f6; }
+html.dark .activity-list { background: #1f2937; border-color: #374151; }
+html.dark .activity-item { border-color: #374151; color: #d1d5db; }
+html.dark .activity-item:hover { background: #374151; }
+html.dark .activity-text p { color: #f3f4f6; }
+html.dark .job-card, html.dark .quote-card, html.dark .booking-card, html.dark .review-card { background: #1f2937; border-color: #374151; }
+html.dark .saved-card { background: #1f2937; border-color: #374151; }
+html.dark .saved-card::after { background: radial-gradient(circle, rgba(129,140,248,0.15) 0%, transparent 70%); }
+html.dark .saved-avatar { border-color: #4b5563; }
+html.dark .saved-cat { color: #a5b4fc; }
+html.dark .saved-wilaya { color: #9ca3af; }
+html.dark .job-card:hover, html.dark .quote-card:hover, html.dark .booking-card:hover, html.dark .saved-card:hover, html.dark .review-card:hover { border-color: #818cf8; }
+html.dark .job-title, html.dark .quote-craftsman, html.dark .quote-title, html.dark .booking-name, html.dark .saved-name, html.dark .review-name, html.dark .dash-tab-header h2 { color: #f3f4f6; }
+html.dark .quote-card-actions, html.dark .booking-card-actions { background: #111827; border-color: #374151; }
+html.dark .saved-bottom { background: transparent; border-color: #374151; }
+html.dark .quote-msg { background: #374151; border-left-color: #4f46e5; color: #d1d5db; }
+html.dark .quote-price, html.dark .bchip.price { color: #34d399; }
+html.dark .quote-date, html.dark .booking-desc, html.dark .bchip, html.dark .review-date { color: #9ca3af; }
+html.dark .review-comment { color: #d1d5db; }
+html.dark .saved-rate { color: #f3f4f6; }
+html.dark .saved-rate span { color: #9ca3af; }
+html.dark .group-header span.label { color: #9ca3af; }
+html.dark .group-header span.count, html.dark .filter-opt-count { background: #374151; color: #d1d5db; }
+html.dark .filter-menu { background: #1f2937; border-color: #374151; }
+html.dark .filter-opt { color: #d1d5db; }
+html.dark .filter-opt:hover { background: #374151; color: #f3f4f6; }
+html.dark .filter-btn { background: #1f2937; border-color: #374151; color: #d1d5db; }
+html.dark .filter-btn:hover { background: #374151; color: #f3f4f6; }
+html.dark .empty-state { background: #1f2937; border-color: #374151; }
+html.dark .empty-state h3 { color: #f3f4f6; }
+html.dark .job-chip.cat { background: #374151; color: #a5b4fc; }
+
+html.dark .metric-card { background: #1f2937; border-color: #374151; }
+html.dark .metric-card.green { background: rgba(21,128,61,0.2); border-color: #16a34a; }
+html.dark .metric-card.indigo { background: rgba(79,70,229,0.2); border-color: #6366f1; }
+html.dark .metric-card.amber { background: rgba(217,119,6,0.2); border-color: #d97706; }
+html.dark .metric-card.purple { background: rgba(147,51,234,0.2); border-color: #9333ea; }
+html.dark .metric-card.blue { background: rgba(59,130,246,0.2); border-color: #3b82f6; }
+html.dark .metric-card.pink { background: rgba(236,72,153,0.2); border-color: #ec4899; }
+html.dark .metric-label { color: #d1d5db; }
+html.dark .metrics-heading { color: #9ca3af; }
+html.dark .metric-value.indigo { color: #a5b4fc; }
+html.dark .metric-value.green { color: #4ade80; }
+html.dark .metric-value.amber { color: #fcd34d; }
+html.dark .metric-value.purple { color: #d8b4fe; }
+html.dark .metric-value.blue { color: #93c5fd; }
+html.dark .metric-value.pink { color: #f9a8d4; }
+html.dark .metric-badge.green { background: #15803d; color: #dcfce7; }
+html.dark .metric-badge.indigo { background: #4338ca; color: #e0e7ff; }
+html.dark .metric-badge.amber { background: #b45309; color: #fef3c7; }
+html.dark .metric-badge.purple { background: #7e22ce; color: #f3e8ff; }
+
+html.dark .mob-dash-drawer { background: #1f2937; border-top: 1px solid #374151; }
+html.dark .mob-dash-nav-item { color: #d1d5db; }
+html.dark .mob-dash-nav-item:hover, html.dark .mob-dash-nav-item.active { background: #374151; color: #a5b4fc; }
+html.dark .mob-dash-nav-item.active { border-color: #818cf8; color: #818cf8; font-weight: 700; }
+html.dark .mob-dash-handle { background: #4b5563; }
+html.dark .mob-dash-divider { background: #374151; }
+html.dark .mob-dash-quick.secondary { background: #374151; color: #a5b4fc; }
+html.dark .mob-dash-quick.secondary:hover { background: #4b5563; }
+
+html.dark .attention-banner { background: #1f2937; border-color: #374151; }
+html.dark .attention-banner h3 { color: #f3f4f6; }
+html.dark .attention-banner a { background: #374151; border-color: #4b5563; color: #a5b4fc; }
+html.dark .attention-banner.orange { background: #451a03; border-color: #78350f; }
+html.dark .attention-banner.orange h3 { color: #fcd34d; }
+html.dark .attention-banner.orange p { color: #fde68a; }
+html.dark .attention-banner.orange a { background: #78350f; border-color: #92400e; color: #fef3c7; }
+
+html.dark .all-good-banner { background: #064e3b; border-color: #065f46; color: #6ee7b7; }
+html.dark .all-good-banner p { color: #6ee7b7; }
+
+html.dark .booking-footer-banner.orange { background: #451a03; border-top-color: #78350f; color: #fde68a; }
+html.dark .booking-footer-banner.purple { background: #2e1065; border-top-color: #4c1d95; color: #d8b4fe; }
+html.dark .booking-footer-banner.green { background: #064e3b; border-top-color: #065f46; color: #86efac; }
+
+html.dark .sbadge.yellow { background: #a16207; color: #fef9c3; }
+html.dark .sbadge.green { background: #15803d; color: #dcfce7; }
+html.dark .sbadge.red { background: #b91c1c; color: #fee2e2; }
+html.dark .sbadge.blue { background: #1d4ed8; color: #dbeafe; }
+html.dark .sbadge.purple { background: #7e22ce; color: #f3e8ff; }
+html.dark .sbadge.orange { background: #c2410c; color: #ffedd5; }
+html.dark .sbadge.gray { background: #4b5563; color: #e5e7eb; }
+
+html.dark .btn-green { background: #047857; color: white; }
+html.dark .btn-green:hover { background: #059669; }
+html.dark .btn-red { background: #b91c1c; color: white; }
+html.dark .btn-red:hover { background: #dc2626; }
+html.dark .btn-orange { background: #b45309; color: white; }
+html.dark .btn-orange:hover { background: #d97706; }
+html.dark .btn-blue { background: #1d4ed8; color: white; }
+html.dark .btn-blue:hover { background: #2563eb; }
+html.dark .btn-indigo { background: #4338ca; color: white; }
+html.dark .btn-indigo:hover { background: #4f46e5; }
+html.dark .btn-yellow { background: #b45309; color: white; }
+html.dark .btn-yellow:hover { background: #d97706; }
+html.dark .btn-gray { background: #6b7280; color: white; }
+html.dark .btn-gray:hover { background: #9ca3af; }
+html.dark .btn-pink { background: #9d174d; color: white; }
+html.dark .btn-pink:hover { background: #db2777; }
+
+/* Saved card meta text */
+.saved-meta { display: inline-flex; align-items: center; gap: 0.2rem; font-size: 0.68rem; font-weight: 600; color: #9ca3af; }
+html.dark .saved-meta { color: #9ca3af; }
+
+/* Sidebar nav badges dark mode */
+html.dark .dash-nav-badge.red { background: #ef4444; }
+html.dark .dash-nav-badge.amber { background: #f59e0b; }
+html.dark .dash-nav-badge.pink { background: #ec4899; }
+
+/* Modal icon circle backgrounds */
+html.dark #confirm-modal .bg-green-100 { background: #065f46 !important; }
+html.dark #confirm-modal .bg-red-100 { background: #991b1b !important; }
+
+/* Activity dot icon backgrounds */
+html.dark .act-dot.blue { background: #1e3a8a; color: #60a5fa; }
+html.dark .act-dot.green { background: #064e3b; color: #34d399; }
+html.dark .act-dot.amber { background: #78350f; color: #fbbf24; }
+html.dark .act-dot.indigo { background: #312e81; color: #818cf8; }
+html.dark .act-dot.orange { background: #7c2d12; color: #fb923c; }
+html.dark .act-dot.purple { background: #4c1d95; color: #c084fc; }
+
+/* Metric icon backgrounds */
+html.dark .metric-icon.green { background: #064e3b; color: #34d399; }
+html.dark .metric-icon.indigo { background: #312e81; color: #818cf8; }
+html.dark .metric-icon.amber { background: #78350f; color: #fbbf24; }
+html.dark .metric-icon.pink { background: #831843; color: #f9a8d4; }
+html.dark .metric-icon.blue { background: #1e3a8a; color: #60a5fa; }
+
+/* Metric sub text */
+html.dark .metric-sub.green { color: #6ee7b7; }
+html.dark .metric-sub.indigo { color: #a5b4fc; }
+html.dark .metric-sub.amber { color: #fde68a; }
+html.dark .metric-sub.pink { color: #f9a8d4; }
+html.dark .metric-sub.blue { color: #93c5fd; }
+
+/* Metric badge extra */
+html.dark .metric-badge.pink { background: #831843; color: #f9a8d4; }
+html.dark .metric-badge.blue { background: #1e3a8a; color: #93c5fd; }
+
+/* Section label */
+html.dark .section-label { color: #9ca3af; }
+
+/* Quote price bg */
+html.dark .quote-price { background: #064e3b; color: #34d399; }
+
+/* Booking footer banner blue (job in progress) */
+html.dark .booking-footer-banner.blue { background: #1e3a8a; border-top-color: #1d4ed8; color: #93c5fd; }
+
+/* Attention banner yellow */
+html.dark .attention-banner.yellow { background: #451a03; border-color: #78350f; }
+html.dark .attention-banner.yellow h3 { color: #fde68a; }
+html.dark .attention-banner.yellow p { color: #fcd34d; }
+html.dark .attention-banner.yellow .attention-icon { background: #b45309; }
+html.dark .attention-banner.yellow a { background: #78350f; border-color: #92400e; color: #fef3c7; }
+
+/* Attention banner purple */
+html.dark .attention-banner.purple { background: #2e1065; border-color: #4c1d95; }
+html.dark .attention-banner.purple h3 { color: #d8b4fe; }
+html.dark .attention-banner.purple p { color: #c084fc; }
+html.dark .attention-banner.purple .attention-icon { background: #7e22ce; }
+html.dark .attention-banner.purple a { background: #4c1d95; border-color: #6b21a8; color: #e9d5ff; }
+
+/* Inline counter-offer text in booking cards */
+html.dark .booking-card-actions p { color: #d1d5db !important; }
+
+/* Modals */
+html.dark #confirm-modal .bg-white { background: #1f2937 !important; }
+html.dark #confirm-modal .text-gray-900,
+html.dark #confirm-modal .text-base { color: #f3f4f6 !important; }
+html.dark #confirm-modal .text-gray-500 { color: #d1d5db !important; }
+html.dark #confirm-modal .bg-green-100 { background: #15803d !important; }
+html.dark #confirm-modal .bg-red-100 { background: #b91c1c !important; }
+html.dark #confirm-modal .text-green-600 { color: #ffffff !important; }
+html.dark #confirm-modal .text-red-600 { color: #ffffff !important; }
+
+/* Flash messages */
+html.dark .flash.success { background: #064e3b; border-color: #065f46; color: #6ee7b7; }
+html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca5a5; }
 
 </style>
 
@@ -1124,23 +1315,27 @@ footer { display: none !important; }
                 <div class="saved-card">
                     <div class="saved-top">
                         <img class="saved-avatar" src="<?= get_profile_picture_url($fav['profile_picture']??'default.png',$fav['first_name'],$fav['last_name']) ?>" alt="<?= e($fav['first_name']) ?>">
-                        <div>
+                        <div style="flex:1;min-width:0">
                             <div class="saved-name">
                                 <?= htmlspecialchars($fav['first_name'].' '.$fav['last_name']) ?>
                                 <?php if (!empty($fav['is_verified'])): ?>
                                 <svg viewBox="0 0 20 20" fill="#3b82f6" style="width:12px;height:12px;display:inline;vertical-align:middle"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
                                 <?php endif; ?>
                             </div>
-                            <div class="saved-cat"><?= htmlspecialchars($fav['service_category']??'') ?></div>
-                            <?php if (!empty($fav['wilaya'])): ?>
-                            <div class="saved-wilaya"><?= htmlspecialchars(preg_replace('/^\d{2}\s-\s/','',$fav['wilaya'])) ?></div>
-                            <?php endif; ?>
+                            <?php $favCatStyles = get_category_classes($fav['service_category']??'General Handyman'); ?>
+                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[0.62rem] font-bold uppercase tracking-wider ring-1 ring-inset <?= $favCatStyles['badge'] ?>" style="margin-top:0.2rem"><?= htmlspecialchars($fav['service_category']??'') ?></span>
+                            <div style="display:flex;align-items:center;gap:0.55rem;margin-top:0.3rem;flex-wrap:wrap">
+                                <?php if (!empty($fav['wilaya'])): ?>
+                                <span class="saved-meta"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:10px;height:10px;flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg><?= htmlspecialchars(preg_replace('/^\d{2}\s-\s/','',$fav['wilaya'])) ?></span>
+                                <?php endif; ?>
+                                <span class="saved-meta"><svg viewBox="0 0 20 20" fill="#f59e0b" style="width:10px;height:10px;flex-shrink:0"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><?= number_format((float)($fav['rating_score']??0),1) ?> (<?= (int)($fav['reviews_count']??0) ?>)</span>
+                            </div>
                         </div>
                     </div>
                     <div class="saved-bottom">
                         <div class="saved-rate"><?= number_format($fav['hourly_rate']??0,0) ?> <span>DZD/hr</span></div>
                         <div class="saved-actions">
-                            <button type="button" onclick="confirmRemoveFavorite(<?= $fav['id'] ?>)" class="btn btn-red" style="padding:0.32rem 0.55rem" title="Remove">
+                            <button type="button" onclick="confirmRemoveFavorite(<?= $fav['id'] ?>)" class="btn btn-pink" style="padding:0.32rem 0.55rem" title="Remove">
                                 <svg fill="currentColor" viewBox="0 0 20 20" style="width:12px;height:12px"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/></svg>
                             </button>
                             <a href="<?= APP_URL ?>/profile/<?= $fav['username'] ?>" class="btn btn-indigo">View</a>

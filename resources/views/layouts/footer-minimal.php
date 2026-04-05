@@ -5,26 +5,26 @@
  * Used on pages that set $minimalFooter = true (e.g. messages, dashboards).
  */
 ?>
-        <footer class="bg-white border-t border-gray-200 mt-auto py-6">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center text-sm text-gray-500 gap-4">
+        <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-auto py-6 transition-colors duration-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center text-sm text-gray-500 dark:text-gray-400 gap-4">
                 <div class="flex items-center space-x-2">
                     <svg class="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/>
                     </svg>
-                    <span class="font-bold text-gray-900">Crafts</span>
+                    <span class="font-bold text-gray-900 dark:text-gray-100">Crafts</span>
                     <span>&copy; <?= date('Y') ?></span>
                 </div>
                 <div class="flex flex-wrap justify-center sm:justify-end items-center gap-x-5 gap-y-3">
-                    <a href="<?= APP_URL ?>/support" class="group flex items-center gap-1.5 text-gray-500 hover:text-indigo-600 transition-colors font-medium">
+                    <a href="<?= APP_URL ?>/support" class="group flex items-center gap-1.5 text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-medium">
                         <svg class="w-4 h-4 text-gray-400 group-hover:text-indigo-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         Support
                     </a>
-                    <a href="<?= APP_URL ?>/terms" class="text-gray-500 hover:text-gray-900 transition-colors font-medium">Terms</a>
-                    <a href="<?= APP_URL ?>/privacy" class="text-gray-500 hover:text-gray-900 transition-colors font-medium">Privacy</a>
+                    <a href="<?= APP_URL ?>/terms" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors font-medium">Terms</a>
+                    <a href="<?= APP_URL ?>/privacy" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors font-medium">Privacy</a>
                     
-                    <div class="w-px h-4 bg-gray-200 hidden sm:block mx-1"></div>
+                    <div class="w-px h-4 bg-gray-200 dark:bg-gray-600 hidden sm:block mx-1"></div>
                     
                     <div class="flex items-center space-x-3">
                         <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-[#1DA1F2] transition-colors" aria-label="Twitter">
