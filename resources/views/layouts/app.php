@@ -65,15 +65,24 @@ if (!empty($img) && strpos($img, 'http') !== 0) {
 
         // Toggle function called by the Sun/Moon button or the mobile switch
         function toggleDarkMode() {
-            document.documentElement.classList.add('theme-transitioning');
-            document.documentElement.classList.toggle('dark');
-            if (document.documentElement.classList.contains('dark')) {
-                localStorage.setItem('theme', 'dark');
-            } else {
-                localStorage.setItem('theme', 'light');
-            }
+            var el = document.documentElement;
+            
+            // 1. Prepare elements for animation
+            el.classList.add('theme-transitioning');
+            
+            // 2. TIMING FIX: Force browser to sync the transition timer across all elements *before* colors change.
+            void el.offsetHeight;
+            
+            // 3. Flip colors
+            var isDark = el.classList.toggle('dark');
+            
+            // 4. STORAGE FIX: Save to phone's disk silently in background when CPU is free
             setTimeout(function() {
-                document.documentElement.classList.remove('theme-transitioning');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            }, 400);
+
+            setTimeout(function() {
+                el.classList.remove('theme-transitioning');
             }, 300);
         }
     </script>
@@ -83,7 +92,7 @@ if (!empty($img) && strpos($img, 'http') !== 0) {
 
         /* ── Global dark mode transition applied ONLY during toggle ── */
         html.theme-transitioning * {
-            transition-property: background-color, border-color, color, fill, stroke, box-shadow !important;
+            transition-property: background-color, border-color, color, fill, stroke, box-shadow, transform !important;
             transition-duration: 200ms !important;
             transition-timing-function: ease !important;
         }
@@ -179,7 +188,7 @@ if (!empty($img) && strpos($img, 'http') !== 0) {
             background: #fff; z-index: 61;
             display: flex; flex-direction: column;
             transform: translateX(-100%);
-            transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease;
             box-shadow: 4px 0 24px rgba(0,0,0,0.12);
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
