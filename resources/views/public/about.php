@@ -10,10 +10,10 @@
         <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 24px 24px;"></div>
     </div> 
     <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-        <span class="inline-block bg-white bg-opacity-20 text-white text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">Our Story</span>
-        <h1 class="text-4xl sm:text-5xl font-extrabold text-white mb-4 leading-tight">About Crafts</h1>
+        <span class="inline-block bg-white bg-opacity-20 text-white text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5"><?= __('static_about.badge') ?></span>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-white mb-4 leading-tight"><?= __('static_about.title') ?></h1>
         <p class="text-indigo-200 text-lg max-w-2xl mx-auto">
-            The premier platform connecting skilled craftsmen and homeowners across Algeria.
+            <?= __('static_about.subtitle') ?>
         </p>
     </div>
 </div> </div> </div>
@@ -25,73 +25,73 @@
         <!-- Mission -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-8 sm:p-10">
             <div class="flex items-center mb-5">
-                <div class="h-10 w-10 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center mr-3 flex-shrink-0">
+                <div class="h-10 w-10 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center <?= __('lang') === 'ar' ? 'ml-3' : 'mr-3' ?> flex-shrink-0">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                     </svg>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Our Mission</h2>
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white"><?= __('static_about.mission_title') ?></h2>
             </div>
-            <p class="text-gray-600 dark:text-gray-300 leading-relaxed border-l-4 border-indigo-400 dark:border-indigo-500 pl-5 italic text-lg mb-5">
-                Crafts is the easiest way to find and hire reliable craftsmen and service professionals in Algeria.
+            <p class="text-gray-600 dark:text-gray-300 leading-relaxed <?= __('lang') === 'ar' ? 'border-r-4 pr-5' : 'border-l-4 pl-5' ?> border-indigo-400 dark:border-indigo-500 italic text-lg mb-5">
+                <?= __('static_about.mission_quote') ?>
             </p>
             <p class="text-gray-500 dark:text-gray-400 leading-relaxed">
-                Our mission is to empower local Algerian craftsmen by providing them with a digital platform to showcase their skills, find meaningful work, and build their reputation. Simultaneously, we strive to make it effortless for homeowners to discover, hire, and review trustworthy professionals for any project, big or small.
+                <?= __('static_about.mission_desc') ?>
             </p>
         </div>
 
         <!-- Why Crafts -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-8 sm:p-10">
             <div class="flex items-center mb-6">
-                <div class="h-10 w-10 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-xl flex items-center justify-center mr-3 flex-shrink-0">
+                <div class="h-10 w-10 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-xl flex items-center justify-center <?= __('lang') === 'ar' ? 'ml-3' : 'mr-3' ?> flex-shrink-0">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Why Choose Crafts?</h2>
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white"><?= __('static_about.why_title') ?></h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-indigo-50 dark:bg-indigo-900/20 p-6 rounded-xl border border-indigo-100 dark:border-indigo-800/50">
                     <div class="flex items-center mb-3">
-                        <svg class="h-5 w-5 text-indigo-500 dark:text-indigo-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <svg class="h-5 w-5 text-indigo-500 dark:text-indigo-400 <?= __('lang') === 'ar' ? 'ml-2' : 'mr-2' ?>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                         </svg>
-                        <h3 class="font-bold text-indigo-900 dark:text-indigo-300">For Homeowners</h3>
+                        <h3 class="font-bold text-indigo-900 dark:text-indigo-300"><?= __('static_about.for_homeowners') ?></h3>
                     </div>
                     <ul class="space-y-2 text-sm text-indigo-800 dark:text-indigo-200">
                         <li class="flex items-center gap-2">
                             <span class="h-1.5 w-1.5 rounded-full bg-indigo-400 dark:bg-indigo-500 flex-shrink-0"></span>
-                            Access a network of verified professionals
+                            <?= __('static_about.ho_1') ?>
                         </li>
                         <li class="flex items-center gap-2">
                             <span class="h-1.5 w-1.5 rounded-full bg-indigo-400 dark:bg-indigo-500 flex-shrink-0"></span>
-                            Read genuine reviews and view past work
+                            <?= __('static_about.ho_2') ?>
                         </li>
                         <li class="flex items-center gap-2">
                             <span class="h-1.5 w-1.5 rounded-full bg-indigo-400 dark:bg-indigo-500 flex-shrink-0"></span>
-                            Secure booking and clear communication
+                            <?= __('static_about.ho_3') ?>
                         </li>
                     </ul>
                 </div>
                 <div class="bg-green-50 dark:bg-green-900/20 p-6 rounded-xl border border-green-100 dark:border-green-800/50">
                     <div class="flex items-center mb-3">
-                        <svg class="h-5 w-5 text-green-500 dark:text-green-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <svg class="h-5 w-5 text-green-500 dark:text-green-400 <?= __('lang') === 'ar' ? 'ml-2' : 'mr-2' ?>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
-                        <h3 class="font-bold text-green-900 dark:text-green-300">For Craftsmen</h3>
+                        <h3 class="font-bold text-green-900 dark:text-green-300"><?= __('static_about.for_craftsmen') ?></h3>
                     </div>
                     <ul class="space-y-2 text-sm text-green-800 dark:text-green-200">
                         <li class="flex items-center gap-2">
                             <span class="h-1.5 w-1.5 rounded-full bg-green-400 dark:bg-green-500 flex-shrink-0"></span>
-                            Showcase your portfolio and skills
+                            <?= __('static_about.cr_1') ?>
                         </li>
                         <li class="flex items-center gap-2">
                             <span class="h-1.5 w-1.5 rounded-full bg-green-400 dark:bg-green-500 flex-shrink-0"></span>
-                            Receive job requests directly
+                            <?= __('static_about.cr_2') ?>
                         </li>
                         <li class="flex items-center gap-2">
                             <span class="h-1.5 w-1.5 rounded-full bg-green-400 dark:bg-green-500 flex-shrink-0"></span>
-                            Build a trusted online reputation
+                            <?= __('static_about.cr_3') ?>
                         </li>
                     </ul>
                 </div>
@@ -102,18 +102,18 @@
         <div class="bg-indigo-700 rounded-2xl p-8 sm:p-10 text-center relative overflow-hidden">
             <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
             <div class="relative z-10">
-                <h2 class="text-2xl font-bold text-white mb-3">Join Our Community</h2>
+                <h2 class="text-2xl font-bold text-white mb-3"><?= __('static_about.join_title') ?></h2>
                 <p class="text-indigo-200 mb-8 max-w-xl mx-auto">
-                    Whether you're looking to get a job done right or grow your craftsmanship business, Crafts is here for you. Built on trust, quality, and mutual respect.
+                    <?= __('static_about.join_desc') ?>
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                     <a href="<?= APP_URL ?>/register"
                        class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-semibold rounded-xl text-indigo-700 bg-white hover:bg-indigo-50 transition shadow-sm">
-                        Get Started Now
+                        <?= __('static_about.btn_start') ?>
                     </a>
                     <a href="<?= APP_URL ?>/search"
                        class="inline-flex justify-center items-center px-6 py-3 border border-white border-opacity-40 text-base font-semibold rounded-xl text-white hover:bg-white hover:bg-opacity-10 transition">
-                        Find a Professional
+                        <?= __('static_about.btn_find') ?>
                     </a>
                 </div>
             </div>
@@ -139,7 +139,7 @@
                         <p class="text-3xl font-extrabold text-gray-900 dark:text-white">
                             <?= ($stats['craftsmen'] ?? 0) > 0 ? number_format($stats['craftsmen']) . '+' : '—' ?>
                         </p>
-                        <p class="mt-1 text-sm font-medium text-gray-500 dark:text-gray-400">Skilled Craftsmen</p>
+                        <p class="mt-1 text-sm font-medium text-gray-500 dark:text-gray-400"><?= __('home.stats_craftsmen') ?></p>
                     </div>
                 </div>
 
@@ -152,7 +152,7 @@
                         <p class="text-3xl font-extrabold text-gray-900 dark:text-white">
                             <?= ($stats['wilayas'] ?? 0) > 0 ? $stats['wilayas'] : '—' ?>
                         </p>
-                        <p class="mt-1 text-sm font-medium text-gray-500 dark:text-gray-400">Wilayas Covered</p>
+                        <p class="mt-1 text-sm font-medium text-gray-500 dark:text-gray-400"><?= __('home.stats_wilayas') ?></p>
                     </div>
                 </div>
 
@@ -165,7 +165,7 @@
                         <p class="text-3xl font-extrabold text-gray-900 dark:text-white">
                             <?= ($stats['completed_bookings'] ?? 0) > 0 ? number_format($stats['completed_bookings']) . '+' : '—' ?>
                         </p>
-                        <p class="mt-1 text-sm font-medium text-gray-500 dark:text-gray-400">Jobs Completed</p>
+                        <p class="mt-1 text-sm font-medium text-gray-500 dark:text-gray-400"><?= __('home.stats_jobs') ?></p>
                     </div>
                 </div>
 
@@ -178,7 +178,7 @@
                         <p class="text-3xl font-extrabold text-gray-900 dark:text-white">
                             <?= ($stats['avg_rating'] ?? 0) > 0 ? number_format($stats['avg_rating'], 1) . '★' : '—' ?>
                         </p>
-                        <p class="mt-1 text-sm font-medium text-gray-500 dark:text-gray-400">Average Rating</p>
+                        <p class="mt-1 text-sm font-medium text-gray-500 dark:text-gray-400"><?= __('home.stats_rating') ?></p>
                     </div>
                 </div>
 

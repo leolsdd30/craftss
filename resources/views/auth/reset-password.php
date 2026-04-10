@@ -13,7 +13,7 @@
 
         <!-- Logo -->
         <div class="relative z-10">
-            <a href="<?= APP_URL ?>/" class="flex items-center space-x-3">
+            <a href="<?= APP_URL ?>/" class="flex items-center gap-3">
                 <div class="h-10 w-10 bg-white rounded-xl flex items-center justify-center shadow-md">
                     <svg class="h-6 w-6 text-indigo-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
@@ -31,50 +31,50 @@
                 </svg>
             </div>
             <h2 class="text-3xl font-bold text-white leading-snug mb-4">
-                Create a new<br>password
+                <?= __('auth_reset.title') ?>
             </h2>
             <p class="text-indigo-200 text-base leading-relaxed">
-                Choose something strong and memorable. Your new password must be at least 8 characters.
+                <?= __('auth_reset.desc') ?>
             </p>
 
             <!-- Tips -->
             <ul class="mt-6 space-y-2">
-                <li class="flex items-center space-x-2 text-indigo-200 text-sm">
+                <li class="flex items-center gap-2 text-indigo-200 text-sm">
                     <svg class="h-4 w-4 text-indigo-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                     </svg>
-                    <span>At least 8 characters</span>
+                    <span><?= __('auth_reset.tip_length') ?></span>
                 </li>
                 <li class="flex items-center space-x-2 text-indigo-200 text-sm">
                     <svg class="h-4 w-4 text-indigo-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                     </svg>
-                    <span>Mix letters and numbers</span>
+                    <span><?= __('auth_reset.tip_mix') ?></span>
                 </li>
-                <li class="flex items-center space-x-2 text-indigo-200 text-sm">
+                <li class="flex items-center gap-2 text-indigo-200 text-sm">
                     <svg class="h-4 w-4 text-indigo-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                     </svg>
-                    <span>Don't reuse old passwords</span>
+                    <span><?= __('auth_reset.tip_reuse') ?></span>
                 </li>
             </ul>
         </div>
 
         <!-- Stat badges -->
-        <div class="relative z-10 flex items-center space-x-6">
+        <div class="relative z-10 flex items-center gap-6">
             <div class="text-center">
                 <p class="text-2xl font-extrabold text-white">500+</p>
-                <p class="text-xs text-indigo-200 mt-0.5">Craftsmen</p>
+                <p class="text-xs text-indigo-200 mt-0.5"><?= __('auth_forgot.stats_craftsmen') ?></p>
             </div>
             <div class="w-px h-10 bg-indigo-500"></div>
             <div class="text-center">
                 <p class="text-2xl font-extrabold text-white">48</p>
-                <p class="text-xs text-indigo-200 mt-0.5">Wilayas</p>
+                <p class="text-xs text-indigo-200 mt-0.5"><?= __('auth_forgot.stats_wilayas') ?></p>
             </div>
             <div class="w-px h-10 bg-indigo-500"></div>
             <div class="text-center">
                 <p class="text-2xl font-extrabold text-white">1,200+</p>
-                <p class="text-xs text-indigo-200 mt-0.5">Jobs Done</p>
+                <p class="text-xs text-indigo-200 mt-0.5"><?= __('auth_forgot.stats_jobs') ?></p>
             </div>
         </div>
     </div>
@@ -85,7 +85,7 @@
 
             <!-- Mobile logo -->
             <div class="flex justify-center mb-8 lg:hidden">
-                <a href="<?= APP_URL ?>/" class="flex items-center space-x-2">
+                <a href="<?= APP_URL ?>/" class="flex items-center gap-2">
                     <div class="h-9 w-9 bg-indigo-600 rounded-xl flex items-center justify-center">
                         <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
@@ -96,12 +96,12 @@
             </div>
 
             <div class="mb-8">
-                <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white">Set new password</h1>
-                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Must be at least 8 characters.</p>
+                <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white"><?= __('auth_reset.form_title') ?></h1>
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400"><?= __('auth_reset.form_desc') ?></p>
             </div>
 
             <?php if (!empty($error)): ?>
-            <div class="mb-6 flex items-start space-x-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
+            <div class="mb-6 flex items-start gap-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
                 <svg class="h-5 w-5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
@@ -115,14 +115,14 @@
 
                 <!-- New Password -->
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">New password</label>
+                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?= __('auth_reset.pw_label') ?></label>
                     <div class="relative">
                         <input id="password" name="password" type="password" required autocomplete="new-password"
                             class="block w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
-                                   focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition pr-11"
-                            placeholder="At least 8 characters">
+                                   focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition <?= __('lang') === 'ar' ? 'pl-11 pr-4' : 'pr-11' ?>"
+                            placeholder="<?= __('auth_reset.pw_placeholder') ?>" dir="ltr">
                         <button type="button" onclick="togglePassword('password', this)"
-                            class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
+                            class="absolute inset-y-0 <?= __('lang') === 'ar' ? 'left-0' : 'right-0' ?> px-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
                             <svg class="h-4 w-4 eye-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -135,14 +135,14 @@
 
                 <!-- Confirm Password -->
                 <div>
-                    <label for="password_confirm" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Confirm new password</label>
+                    <label for="password_confirm" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?= __('auth_reset.pw_confirm_label') ?></label>
                     <div class="relative">
                         <input id="password_confirm" name="password_confirm" type="password" required autocomplete="new-password"
                             class="block w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
-                                   focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition pr-11"
-                            placeholder="Repeat your password">
+                                   focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition <?= __('lang') === 'ar' ? 'pl-11 pr-4' : 'pr-11' ?>"
+                            placeholder="<?= __('auth_reset.pw_confirm_placeholder') ?>" dir="ltr">
                         <button type="button" onclick="togglePassword('password_confirm', this)"
-                            class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
+                            class="absolute inset-y-0 <?= __('lang') === 'ar' ? 'left-0' : 'right-0' ?> px-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
                             <svg class="h-4 w-4 eye-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -155,17 +155,17 @@
 
                 <button type="submit" id="submit-btn"
                     class="w-full flex justify-center items-center px-4 py-2.5 bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 text-white text-sm font-semibold rounded-xl shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-indigo-500">
-                    Reset Password
-                    <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <?= __('auth_reset.btn_reset') ?>
+                    <svg class="<?= __('lang') === 'ar' ? 'mr-2 rotate-180' : 'ml-2' ?> h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                     </svg>
                 </button>
             </form>
 
             <p class="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
-                Remember it now?
+                <?= __('auth_reset.remember_now') ?>
                 <a href="<?= APP_URL ?>/login" class="font-semibold text-indigo-600 hover:text-indigo-500 transition">
-                    Back to Sign In
+                    <?= __('auth_forgot.back_login') ?>
                 </a>
             </p>
 
@@ -194,6 +194,11 @@ var pwLenMsg  = document.getElementById('pw-length-msg');
 var pwMatchMsg = document.getElementById('pw-match-msg');
 var submitBtn = document.getElementById('submit-btn');
 
+var msgTooShort = "<?= __('auth_reset.js_too_short') ?>";
+var msgGood = "<?= __('auth_reset.js_good') ?>";
+var msgMatch = "<?= __('auth_reset.js_match') ?>";
+var msgNoMatch = "<?= __('auth_reset.js_no_match') ?>";
+
 // -- Length check on the main password field --
 pwField.addEventListener('input', function () {
     var val = pwField.value;
@@ -205,13 +210,13 @@ pwField.addEventListener('input', function () {
         pwField.classList.add('border-gray-300', 'dark:border-gray-600');
     } else if (val.length < 8) {
         pwLenMsg.classList.remove('hidden');
-        pwLenMsg.textContent  = '✗ Too short — minimum 8 characters';
+        pwLenMsg.textContent  = msgTooShort;
         pwLenMsg.className    = 'mt-1 text-xs text-red-500 dark:text-red-400';
         pwField.classList.remove('border-green-400', 'dark:border-green-500', 'border-gray-300', 'dark:border-gray-600');
         pwField.classList.add('border-red-400', 'dark:border-red-500');
     } else {
         pwLenMsg.classList.remove('hidden');
-        pwLenMsg.textContent  = '✓ Good length';
+        pwLenMsg.textContent  = msgGood;
         pwLenMsg.className    = 'mt-1 text-xs text-green-600 dark:text-green-500';
         pwField.classList.remove('border-red-400', 'dark:border-red-500', 'border-gray-300', 'dark:border-gray-600');
         pwField.classList.add('border-green-400', 'dark:border-green-500');
@@ -238,12 +243,12 @@ function checkMatch() {
     pwMatchMsg.classList.remove('hidden');
 
     if (mainVal === val) {
-        pwMatchMsg.textContent = '✓ Passwords match';
+        pwMatchMsg.textContent = msgMatch;
         pwMatchMsg.className   = 'mt-1 text-xs text-green-600 dark:text-green-500';
         pwConfirm.classList.remove('border-red-400', 'dark:border-red-500', 'border-gray-300', 'dark:border-gray-600');
         pwConfirm.classList.add('border-green-400', 'dark:border-green-500');
     } else {
-        pwMatchMsg.textContent = '✗ Passwords do not match';
+        pwMatchMsg.textContent = msgNoMatch;
         pwMatchMsg.className   = 'mt-1 text-xs text-red-500 dark:text-red-400';
         pwConfirm.classList.remove('border-green-400', 'dark:border-green-500', 'border-gray-300', 'dark:border-gray-600');
         pwConfirm.classList.add('border-red-400', 'dark:border-red-500');
