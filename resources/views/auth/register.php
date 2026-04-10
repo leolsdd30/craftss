@@ -13,7 +13,7 @@
 
         <!-- Logo -->
         <div class="relative z-10">
-            <a href="<?= APP_URL ?>/" class="flex items-center space-x-3">
+            <a href="<?= APP_URL ?>/" class="flex items-center gap-3">
                 <div class="h-10 w-10 bg-white rounded-xl flex items-center justify-center shadow-md">
                     <svg class="h-6 w-6 text-indigo-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
@@ -25,7 +25,7 @@
 
         <!-- Role cards -->
         <div class="relative z-10 space-y-4">
-            <p class="text-indigo-200 text-sm font-semibold uppercase tracking-widest mb-4">Who is Crafts for?</p>
+            <p class="text-indigo-200 text-sm font-semibold uppercase tracking-widest mb-4"><?= __('auth.who_is_for') ?></p>
 
             <div class="bg-white bg-opacity-10 border border-white border-opacity-20 rounded-xl p-5 backdrop-blur-sm">
                 <div class="flex items-start space-x-4">
@@ -35,8 +35,8 @@
                         </svg>
                     </div>
                     <div>
-                        <p class="text-white font-bold">Homeowners</p>
-                        <p class="text-indigo-200 text-sm mt-0.5">Post jobs, browse craftsmen, and get your home projects done by verified professionals.</p>
+                        <p class="text-white font-bold"><?= __('auth.homeowner') . (__('lang') === 'en' ? 's' : '') ?></p>
+                        <p class="text-indigo-200 text-sm mt-0.5"><?= __('auth.homeowners_desc') ?></p>
                     </div>
                 </div>
             </div>
@@ -49,8 +49,8 @@
                         </svg>
                     </div>
                     <div>
-                        <p class="text-white font-bold">Craftsmen</p>
-                        <p class="text-indigo-200 text-sm mt-0.5">Build your profile, receive booking requests, and grow your client base across Algeria.</p>
+                        <p class="text-white font-bold"><?= __('auth.craftsman') . (__('lang') === 'en' ? 's' : 'ين') ?></p>
+                        <p class="text-indigo-200 text-sm mt-0.5"><?= __('auth.craftsmen_desc') ?></p>
                     </div>
                 </div>
             </div>
@@ -58,7 +58,7 @@
 
         <!-- Bottom note -->
         <div class="relative z-10">
-            <p class="text-indigo-300 text-sm">Free to join. No subscription fees. Pay only when you get the job done.</p>
+            <p class="text-indigo-300 text-sm"><?= __('auth.free_to_join') ?></p>
         </div>
     </div>
 
@@ -68,7 +68,7 @@
 
             <!-- Mobile logo -->
             <div class="flex justify-center mb-8 lg:hidden">
-                <a href="<?= APP_URL ?>/" class="flex items-center space-x-2">
+                <a href="<?= APP_URL ?>/" class="flex items-center gap-2">
                     <div class="h-9 w-9 bg-indigo-600 rounded-xl flex items-center justify-center">
                         <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
@@ -79,11 +79,11 @@
             </div>
 
             <div class="mb-8">
-                <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white">Create your account</h1>
+                <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white"><?= __('auth.create_account') ?></h1>
                 <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                    Already have an account?
+                    <?= __('auth.already_have') ?>
                     <a href="<?= APP_URL ?>/login" class="font-semibold text-indigo-600 hover:text-indigo-500 transition">
-                        Sign in
+                        <?= __('auth.signin_btn') ?>
                     </a>
                 </p>
             </div>
@@ -103,14 +103,14 @@
                 <!-- First & Last Name -->
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label for="first_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">First name</label>
+                        <label for="first_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?= __('auth.firstname') ?></label>
                         <input id="first_name" name="first_name" type="text" required autocomplete="given-name"
                             class="block w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                    focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                             placeholder="Ahmed">
                     </div>
                     <div>
-                        <label for="last_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Last name</label>
+                        <label for="last_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?= __('auth.lastname') ?></label>
                         <input id="last_name" name="last_name" type="text" required autocomplete="family-name"
                             class="block w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                    focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
@@ -120,7 +120,7 @@
 
                 <!-- Email -->
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email address</label>
+                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?= __('auth.email') ?></label>
                     <input id="email" name="email" type="email" required autocomplete="email"
                         class="block w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
@@ -129,12 +129,12 @@
 
                 <!-- Password -->
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?= __('auth.password') ?></label>
                     <div class="relative">
                         <input id="password" name="password" type="password" required autocomplete="new-password"
                             class="block w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                    focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition pr-11"
-                            placeholder="At least 8 characters">
+                            placeholder="<?= __('auth.pw_placeholder') ?>">
                         <button type="button" onclick="togglePassword('password', this)"
                             class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
                             <svg class="h-4 w-4 eye-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -152,14 +152,14 @@
                             <svg class="h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                             </svg>
-                            <span>At least 8 characters minimum</span>
+                            <span><?= __('auth.pw_rule') ?></span>
                         </li>
                     </ul>
                 </div>
 
                 <!-- Account Type -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">I am a...</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"><?= __('auth.i_am_a') ?></label>
                     <div class="grid grid-cols-2 gap-3">
                         <!-- Homeowner option -->
                         <label class="role-option relative cursor-pointer">
@@ -168,8 +168,8 @@
                                 <svg class="h-7 w-7 text-indigo-600 dark:text-indigo-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                                 </svg>
-                                <span class="text-sm font-semibold text-gray-900 dark:text-white">Homeowner</span>
-                                <span class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 text-center">I need work done</span>
+                                <span class="text-sm font-semibold text-gray-900 dark:text-white"><?= __('auth.homeowner') ?></span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 text-center"><?= __('auth.need_work') ?></span>
                             </div>
                         </label>
                         <!-- Craftsman option -->
@@ -179,8 +179,8 @@
                                 <svg class="h-7 w-7 text-gray-500 dark:text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                                 </svg>
-                                <span class="text-sm font-semibold text-gray-900 dark:text-white">Craftsman</span>
-                                <span class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 text-center">I want to find work</span>
+                                <span class="text-sm font-semibold text-gray-900 dark:text-white"><?= __('auth.craftsman') ?></span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 text-center"><?= __('auth.find_work') ?></span>
                             </div>
                         </label>
                     </div>
@@ -189,7 +189,7 @@
                 <!-- Submit -->
                 <button type="submit" id="submit-btn"
                     class="w-full flex justify-center items-center px-4 py-2.5 bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 text-white text-sm font-semibold rounded-xl shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-indigo-500">
-                    Create account
+                    <?= __('auth.create_btn') ?>
                     <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                     </svg>
@@ -197,10 +197,10 @@
             </form>
 
             <p class="mt-8 text-center text-xs text-gray-400 dark:text-gray-500">
-                By creating an account you agree to our
-                <a href="#" class="underline hover:text-gray-600">Terms of Service</a>
-                and
-                <a href="#" class="underline hover:text-gray-600">Privacy Policy</a>.
+                <?= __('auth.agree_terms_reg') ?>
+                <a href="#" class="underline hover:text-gray-600"><?= __('footer.terms') ?></a>
+                <?= __('lang') === 'ar' ? 'و' : 'and' ?>
+                <a href="#" class="underline hover:text-gray-600"><?= __('footer.privacy') ?></a>.
             </p>
         </div>
     </div>

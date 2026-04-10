@@ -4,22 +4,9 @@ $activeFilterCount = (int)!empty($filters['category'])
                    + (int)!empty($filters['wilaya'])
                    + (int)!empty($filters['sort']);
 
-$categories = ["Plumbing","Electrical","Carpentry","Painting","Roofing","HVAC","Landscaping","Tiling","General Handyman"];
-$wilayas = [
-    "01 - Adrar","02 - Chlef","03 - Laghouat","04 - Oum El Bouaghi","05 - Batna",
-    "06 - Béjaïa","07 - Biskra","08 - Béchar","09 - Blida","10 - Bouira",
-    "11 - Tamanrasset","12 - Tébessa","13 - Tlemcen","14 - Tiaret","15 - Tizi Ouzou",
-    "16 - Alger","17 - Djelfa","18 - Jijel","19 - Sétif","20 - Saïda",
-    "21 - Skikda","22 - Sidi Bel Abbès","23 - Annaba","24 - Guelma","25 - Constantine",
-    "26 - Médéa","27 - Mostaganem","28 - M'Sila","29 - Mascara","30 - Ouargla",
-    "31 - Oran","32 - El Bayadh","33 - Illizi","34 - Bordj Bou Arréridj",
-    "35 - Boumerdès","36 - El Tarf","37 - Tindouf","38 - Tissemsilt",
-    "39 - El Oued","40 - Khenchela","41 - Souk Ahras","42 - Tipaza","43 - Mila",
-    "44 - Aïn Defla","45 - Naâma","46 - Aïn Témouchent","47 - Ghardaïa","48 - Relizane",
-    "49 - Timimoun","50 - Bordj Badji Mokhtar","51 - Ouled Djellal","52 - Béni Abbès",
-    "53 - In Salah","54 - In Guezzam","55 - Touggourt","56 - Djanet",
-    "57 - El M'Ghair","58 - El Meniaa",
-];
+$categories = array_keys(__('categories') ?: []);
+$wilayas = __('wilayas'); // Get localized array of wilayas
+
 $selectedCat    = $filters['category'] ?? '';
 $selectedWilaya = $filters['wilaya']   ?? '';
 $selectedSort   = $filters['sort']     ?? '';
@@ -31,19 +18,19 @@ $searchQuery    = $filters['search']   ?? '';
 
     <!-- Page Header -->
     <div class="mb-6">
-        <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">Find Skilled Professionals</h1>
-        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Browse verified craftsmen with experience in your specific home project needs.</p>
+        <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight"><?= __('search.title') ?></h1>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><?= __('search.subtitle') ?></p>
     </div>
 
     <!-- Active filter tags (quick remove) -->
     <?php if ($activeFilterCount > 0): ?>
     <div class="flex flex-wrap items-center gap-2 mb-5" id="active-tags">
-        <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mr-1">Active:</span>
+        <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mr-1"><?= __('search.active_filters') ?></span>
         <?php if (!empty($selectedCat)): ?>
             <?php $tagCat = get_category_classes($selectedCat); ?>
             <a href="<?= APP_URL ?>/search?<?= http_build_query(array_diff_key($_GET, ['category'=>''])) ?>"
                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold <?= $tagCat['badge'] ?> hover:opacity-80 transition">
-                <?= e($selectedCat) ?>
+                <?= __('categories.' . $selectedCat) ?>
                 <svg class="w-3 h-3" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
             </a>
         <?php endif; ?>
@@ -51,19 +38,19 @@ $searchQuery    = $filters['search']   ?? '';
             <a href="<?= APP_URL ?>/search?<?= http_build_query(array_diff_key($_GET, ['wilaya'=>''])) ?>"
                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:opacity-80 transition">
                 <svg class="w-3 h-3 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
-                <?= e(preg_replace('/^\d{2}\s-\s/', '', $selectedWilaya)) ?>
+                <?= e(preg_replace('/^\d{2}\s-\s/', '', $wilayas[$selectedWilaya] ?? $selectedWilaya)) ?>
                 <svg class="w-3 h-3" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
             </a>
         <?php endif; ?>
         <?php if (!empty($selectedSort)): ?>
-            <?php $sortLabels = ['top_rated'=>'Top Rated','rate_low'=>'Rate: Low→High','rate_high'=>'Rate: High→Low']; ?>
+            <?php $sortLabels = ['top_rated'=>__('search.sort_top_rated'),'rate_low'=>__('search.sort_rate_low'),'rate_high'=>__('search.sort_rate_high')]; ?>
             <a href="<?= APP_URL ?>/search?<?= http_build_query(array_diff_key($_GET, ['sort'=>''])) ?>"
                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 hover:opacity-80 transition">
-                <?= $sortLabels[$selectedSort] ?? 'Custom Sort' ?>
+                <?= $sortLabels[$selectedSort] ?? __('search.sort_custom') ?>
                 <svg class="w-3 h-3" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
             </a>
         <?php endif; ?>
-        <a href="<?= APP_URL ?>/search" class="text-xs text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-semibold ml-1 transition">Clear all</a>
+        <a href="<?= APP_URL ?>/search" class="text-xs text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-semibold ml-1 transition"><?= __('search.clear_all') ?></a>
     </div>
     <?php endif; ?>
 
@@ -71,7 +58,7 @@ $searchQuery    = $filters['search']   ?? '';
     <button type="button" onclick="openFilterDrawer()"
             class="lg:hidden mb-5 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition">
         <svg class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>
-        Filters
+        <?= __('search.filters') ?>
         <?php if ($activeFilterCount > 0): ?>
         <span class="inline-flex items-center justify-center w-5 h-5 text-xs font-bold rounded-full bg-indigo-600 text-white"><?= $activeFilterCount ?></span>
         <?php endif; ?>
@@ -88,7 +75,7 @@ $searchQuery    = $filters['search']   ?? '';
                 <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden mb-5">
                     <div class="h-1.5 w-full bg-indigo-500"></div>
                     <div class="p-5">
-                        <h3 class="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider mb-4">Category</h3>
+                        <h3 class="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider mb-4"><?= __('search.category') ?></h3>
                         <input type="hidden" name="category" id="category-input" value="<?= e($selectedCat) ?>">
                         <div class="flex flex-wrap gap-2" id="category-pills">
                             <?php foreach ($categories as $cat):
@@ -102,7 +89,7 @@ $searchQuery    = $filters['search']   ?? '';
                                            <?= $isActive
                                                ? $catClasses['badge'] . ' border-current shadow-sm ring-1 ring-current/20'
                                                : 'bg-gray-50 dark:bg-transparent text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800' ?>">
-                                <?= $cat ?>
+                                <?= __('categories.' . $cat) ?>
                             </button>
                             <?php endforeach; ?>
                         </div>
@@ -111,10 +98,10 @@ $searchQuery    = $filters['search']   ?? '';
 
                 <!-- Sort -->
                 <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-5 mb-5">
-                    <h3 class="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider mb-4">Sort By</h3>
+                    <h3 class="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider mb-4"><?= __('search.sort_by') ?></h3>
                     <div class="space-y-2">
                         <?php
-                        $sortOptions = ['' => 'Newest First', 'top_rated' => 'Top Rated', 'rate_low' => 'Rate: Low to High', 'rate_high' => 'Rate: High to Low'];
+                        $sortOptions = ['' => __('search.sort_newest'), 'top_rated' => __('search.sort_top_rated'), 'rate_low' => __('search.sort_rate_low'), 'rate_high' => __('search.sort_rate_high')];
                         foreach ($sortOptions as $val => $label):
                             $isActive = ($selectedSort === $val);
                         ?>
@@ -135,7 +122,7 @@ $searchQuery    = $filters['search']   ?? '';
                 <a href="<?= APP_URL ?>/search"
                    class="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl text-sm font-semibold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/50 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors">
                     <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
-                    Clear All Filters
+                    <?= __('search.clear_all_filters') ?>
                 </a>
                 <?php endif; ?>
 
@@ -154,7 +141,7 @@ $searchQuery    = $filters['search']   ?? '';
                     </div>
                     <input type="text" name="q" id="q" form="search-form"
                            value="<?= htmlspecialchars($searchQuery) ?>"
-                           placeholder="Search by name, skill..."
+                           placeholder="<?= __('search.search_placeholder') ?>"
                            class="w-full pl-9 pr-8 py-3 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 bg-white dark:bg-gray-800 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
                     <button type="button" id="clear-search-btn" onclick="clearSearch()" class="absolute inset-y-0 right-0 pr-3 items-center text-gray-300 hover:text-red-500 transition <?= !empty($searchQuery) ? 'flex' : 'hidden' ?>">
                         <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
@@ -164,15 +151,16 @@ $searchQuery    = $filters['search']   ?? '';
                 <!-- Wilaya (searchable) -->
                 <div class="relative" id="wilaya-wrapper">
                     <input type="hidden" name="wilaya" id="wilaya-input" form="search-form" value="<?= e($selectedWilaya) ?>">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <div class="absolute inset-y-0 <?= __('lang') === 'ar' ? 'right-0 pr-3' : 'left-0 pl-3' ?> flex items-center pointer-events-none">
                         <svg class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
                     </div>
                     <input type="text" id="wilaya-search" autocomplete="off"
-                           placeholder="<?= !empty($selectedWilaya) ? e(preg_replace('/^\d{2}\s-\s/', '', $selectedWilaya)) : 'Search locations...' ?>"
-                           class="w-full pl-9 pr-8 py-3 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 bg-white dark:bg-gray-800 shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors
+                           placeholder="<?= !empty($selectedWilaya) ? e(preg_replace('/^\d{2}\s-\s/', '', __('wilayas.' . $selectedWilaya) ?? $selectedWilaya)) : __('search.search_locations') ?>"
+                           style="<?= __('lang') === 'ar' ? 'text-align: right; direction: ltr;' : '' ?>"
+                           class="w-full <?= __('lang') === 'ar' ? 'pr-9 pl-8 direction-ltr text-right' : 'pl-9 pr-8' ?> py-3 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 bg-white dark:bg-gray-800 shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors
                                   <?= !empty($selectedWilaya) ? 'font-semibold text-emerald-700 dark:text-emerald-400' : '' ?>">
                     <?php if (!empty($selectedWilaya)): ?>
-                    <button type="button" onclick="clearWilaya()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-red-500 transition">
+                    <button type="button" onclick="clearWilaya()" class="absolute inset-y-0 <?= __('lang') === 'ar' ? 'left-0 pl-3' : 'right-0 pr-3' ?> flex items-center text-gray-400 hover:text-red-500 transition">
                         <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
                     </button>
                     <?php endif; ?>
@@ -185,12 +173,12 @@ $searchQuery    = $filters['search']   ?? '';
             <!-- Result text -->
             <div class="flex items-center justify-between mb-5">
                 <p class="text-sm text-gray-500 dark:text-gray-400">
-                    Showing <span class="font-bold text-gray-800 dark:text-gray-200 text-base"><?= $totalResults ?></span>
-                    <?= $totalResults === 1 ? 'craftsman' : 'craftsmen' ?>
-                    <?php if ($activeFilterCount > 0): ?>matching your filters<?php endif; ?>
+                    <?= __('search.showing') ?> <span class="font-bold text-gray-800 dark:text-gray-200 text-base"><?= $totalResults ?></span>
+                    <?= $totalResults === 1 ? __('search.craftsman') : __('search.craftsmen') ?>
+                    <?php if ($activeFilterCount > 0): ?><?= __('search.matching_filters') ?><?php endif; ?>
                 </p>
                 <?php if ($activeFilterCount > 0): ?>
-                <a href="<?= APP_URL ?>/search" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium lg:hidden">Clear limits</a>
+                <a href="<?= APP_URL ?>/search" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium lg:hidden"><?= __('search.clear_limits') ?></a>
                 <?php endif; ?>
             </div>
 
@@ -205,10 +193,10 @@ $searchQuery    = $filters['search']   ?? '';
                     <?php if (isset($_SESSION['user_id']) && ($_SESSION['role'] ?? '') !== 'admin'): ?>
                     <button type="button"
                             onclick="toggleFavorite(<?= $craft['user_id'] ?>, this)"
-                            class="absolute top-4 right-4 p-1.5 rounded-full z-20 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-sm border
+                            class="absolute top-4 <?= __('lang') === 'ar' ? 'left-4' : 'right-4' ?> p-1.5 rounded-full z-20 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-sm border
                                    <?= $craft['is_favorite'] ? 'border-pink-200 dark:border-pink-900/60 text-pink-500 dark:text-pink-400' : 'border-gray-200 dark:border-gray-600 text-gray-300 dark:text-gray-500 hover:text-pink-400 dark:hover:text-pink-400 hover:border-pink-200 dark:hover:border-pink-900/60' ?>
                                    transition-colors duration-200 focus:outline-none"
-                            title="<?= $craft['is_favorite'] ? 'Remove from favorites' : 'Save to favorites' ?>">
+                            title="<?= $craft['is_favorite'] ? __('search.remove_favorite') : __('search.save_favorite') ?>">
                         <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg"
                              <?= $craft['is_favorite'] ? 'viewBox="0 0 20 20" fill="currentColor"' : 'fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"' ?>>
                             <path <?= $craft['is_favorite']
@@ -240,12 +228,13 @@ $searchQuery    = $filters['search']   ?? '';
                                     <?php endif; ?>
                                 </h2>
                                 <span class="inline-flex items-center mt-1.5 px-2 py-0.5 rounded-md text-xs font-semibold <?= $catStyles['badge'] ?? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 ring-indigo-600/20 dark:ring-indigo-400/20' ?>">
-                                    <?= htmlspecialchars($craft['service_category']) ?>
+                                    <?= __('categories.' . $craft['service_category']) ?? htmlspecialchars($craft['service_category']) ?>
                                 </span>
                                 <?php if (!empty($craft['wilaya'])): ?>
                                 <p class="text-xs text-gray-400 dark:text-gray-500 mt-1 flex items-center">
                                     <svg class="h-3 w-3 mr-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
-                                    <?= htmlspecialchars(preg_replace('/^\d{2}\s-\s/', '', $craft['wilaya'])) ?>
+                                    <?php $wilaya_arr = is_array(__('wilayas')) ? __('wilayas') : []; ?>
+                                    <?= htmlspecialchars(preg_replace('/^\d{2}\s-\s/', '', $wilaya_arr[$craft['wilaya']] ?? $craft['wilaya'])) ?>
                                 </p>
                                 <?php endif; ?>
                             </div>
@@ -268,7 +257,7 @@ $searchQuery    = $filters['search']   ?? '';
                                     <svg class="h-3.5 w-3.5 text-gray-200" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                                     <?php endfor; ?>
                                 </div>
-                                <span class="text-xs text-gray-400">No reviews</span>
+                                <span class="text-xs text-gray-400"><?= __('search.no_reviews') ?></span>
                             <?php endif; ?>
                         </div>
 
@@ -282,13 +271,13 @@ $searchQuery    = $filters['search']   ?? '';
                         <!-- Rate + Verified footer -->
                         <div class="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700 mt-auto">
                             <div>
-                                <span class="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wider">Hourly</span>
+                                <span class="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wider"><?= __('search.hourly') ?></span>
                                 <p class="font-bold text-gray-900 dark:text-gray-100 text-base leading-tight"><?= number_format($craft['hourly_rate'], 2) ?> DZD</p>
                             </div>
                             <?php if ($craft['is_verified']): ?>
                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800">
                                 <svg class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                                Verified
+                                <?= __('search.verified') ?>
                             </span>
                             <?php endif; ?>
                         </div>
@@ -298,12 +287,12 @@ $searchQuery    = $filters['search']   ?? '';
                     <div class="px-6 py-3.5 bg-gray-50/50 dark:bg-gray-700/30 border-t border-gray-100 dark:border-gray-700 flex gap-2">
                         <a href="<?= APP_URL ?>/profile/<?= htmlspecialchars($craft['username']) ?>"
                            class="flex-1 text-center py-2 px-3 rounded-xl text-sm font-semibold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 border border-indigo-100 dark:border-indigo-800 transition duration-150">
-                            View Profile
+                            <?= __('search.view_profile') ?>
                         </a>
                         <?php if (isset($_SESSION['user_id']) && ($_SESSION['role'] ?? '') !== 'admin'): ?>
                         <a href="<?= APP_URL ?>/bookings/create/<?= htmlspecialchars($craft['username']) ?>"
                            class="flex-1 text-center py-2 px-3 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150">
-                            Book Now
+                            <?= __('search.book_now') ?>
                         </a>
                         <?php endif; ?>
                     </div>
@@ -361,11 +350,11 @@ $searchQuery    = $filters['search']   ?? '';
                 <div class="mx-auto h-16 w-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
                     <svg class="h-8 w-8 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 </div>
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">No craftsmen found</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Try adjusting your filters or search keywords.</p>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1"><?= __('search.no_results') ?></h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-6"><?= __('search.no_results_desc') ?></p>
                 <a href="<?= APP_URL ?>/search"
                    class="inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 shadow-sm">
-                    Clear all filters
+                    <?= __('search.clear_all_filters') ?>
                 </a>
             </div>
 
@@ -386,9 +375,9 @@ $searchQuery    = $filters['search']   ?? '';
         <div class="w-10 h-1 rounded-full bg-gray-300 dark:bg-gray-600"></div>
     </div>
     <div class="px-5 pb-2 flex items-center justify-between border-b border-gray-100 dark:border-gray-700">
-        <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">Filters</h3>
+        <h3 class="text-base font-bold text-gray-900 dark:text-gray-100"><?= __('search.filters') ?></h3>
         <?php if ($activeFilterCount > 0): ?>
-        <a href="<?= APP_URL ?>/search" class="text-xs font-semibold text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300">Clear all</a>
+        <a href="<?= APP_URL ?>/search" class="text-xs font-semibold text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"><?= __('search.clear_all') ?></a>
         <?php endif; ?>
     </div>
 
@@ -397,14 +386,15 @@ $searchQuery    = $filters['search']   ?? '';
 
             <!-- Search -->
             <div>
-                <label class="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider mb-2 block">Search</label>
+                <label class="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider mb-2 block"><?= __('search.search_placeholder') ?></label>
                 <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <div class="absolute inset-y-0 <?= __('lang') === 'ar' ? 'right-0 pr-3' : 'left-0 pl-3' ?> flex items-center pointer-events-none">
                         <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </div>
-                    <input type="text" name="q" id="mob-q" value="<?= htmlspecialchars($searchQuery) ?>" placeholder="Search by name, skill..."
-                           class="w-full pl-9 pr-8 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-gray-50/50 dark:bg-gray-700 dark:text-gray-100 focus:bg-white dark:focus:bg-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                    <button type="button" id="mob-clear-search-btn" onclick="clearMobSearch()" class="absolute inset-y-0 right-0 pr-3 items-center text-gray-400 hover:text-red-500 transition <?= !empty($searchQuery) ? 'flex' : 'hidden' ?>">
+                    <input type="text" name="q" id="mob-q" value="<?= htmlspecialchars($searchQuery) ?>" placeholder="<?= __('search.search_placeholder') ?>"
+                           style="<?= __('lang') === 'ar' ? 'text-align: right; direction: ltr;' : '' ?>"
+                           class="w-full <?= __('lang') === 'ar' ? 'pr-9 pl-8 direction-ltr text-right' : 'pl-9 pr-8' ?> py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-gray-50/50 dark:bg-gray-700 dark:text-gray-100 focus:bg-white dark:focus:bg-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                    <button type="button" id="mob-clear-search-btn" onclick="clearMobSearch()" class="absolute inset-y-0 <?= __('lang') === 'ar' ? 'left-0 pl-3' : 'right-0 pr-3' ?> items-center text-gray-400 hover:text-red-500 transition <?= !empty($searchQuery) ? 'flex' : 'hidden' ?>">
                         <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
                     </button>
                 </div>
@@ -412,7 +402,7 @@ $searchQuery    = $filters['search']   ?? '';
 
             <!-- Categories -->
             <div>
-                <label class="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider mb-3 block">Category</label>
+                <label class="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider mb-3 block"><?= __('search.category') ?></label>
                 <input type="hidden" name="category" id="mob-category-input" value="<?= e($selectedCat) ?>">
                 <div class="flex flex-wrap gap-2">
                     <?php foreach ($categories as $cat):
@@ -424,7 +414,7 @@ $searchQuery    = $filters['search']   ?? '';
                             data-cat="<?= $cat ?>"
                             class="mob-cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border
                                    <?= $isActive ? $catClasses['badge'] . ' border-current' : 'bg-gray-50 dark:bg-transparent text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700' ?>">
-                        <?= $cat ?>
+                        <?= __('categories.' . $cat) ?>
                     </button>
                     <?php endforeach; ?>
                 </div>
@@ -432,23 +422,23 @@ $searchQuery    = $filters['search']   ?? '';
 
             <!-- Wilaya -->
             <div>
-                <label class="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider mb-2 block">Location</label>
+                <label class="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider mb-2 block"><?= __('search.location') ?></label>
                 <select name="wilaya" class="w-full border border-gray-200 dark:border-gray-600 rounded-xl text-sm py-2.5 px-3 bg-gray-50/50 dark:bg-gray-700 dark:text-gray-100 focus:bg-white dark:focus:bg-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                    <option value="">All Regions</option>
-                    <?php foreach ($wilayas as $w): ?>
-                    <option value="<?= $w ?>" <?= ($selectedWilaya === $w) ? 'selected' : '' ?>><?= $w ?></option>
+                    <option value=""><?= __('search.all_regions') ?></option>
+                    <?php foreach ($wilayas as $w => $wName): ?>
+                    <option value="<?= $w ?>" <?= ($selectedWilaya === $w) ? 'selected' : '' ?>><?= $wName ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
 
             <!-- Sort -->
             <div>
-                <label class="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider mb-2 block">Sort By</label>
+                <label class="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider mb-2 block"><?= __('search.sort_by') ?></label>
                 <select name="sort" class="w-full border border-gray-200 dark:border-gray-600 rounded-xl text-sm py-2.5 px-3 bg-gray-50/50 dark:bg-gray-700 dark:text-gray-100 focus:bg-white dark:focus:bg-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                    <option value="" <?= empty($selectedSort) ? 'selected' : '' ?>>Newest First</option>
-                    <option value="top_rated" <?= ($selectedSort === 'top_rated') ? 'selected' : '' ?>>Top Rated</option>
-                    <option value="rate_low" <?= ($selectedSort === 'rate_low') ? 'selected' : '' ?>>Rate: Low to High</option>
-                    <option value="rate_high" <?= ($selectedSort === 'rate_high') ? 'selected' : '' ?>>Rate: High to Low</option>
+                    <option value="" <?= empty($selectedSort) ? 'selected' : '' ?>><?= __('search.sort_newest') ?></option>
+                    <option value="top_rated" <?= ($selectedSort === 'top_rated') ? 'selected' : '' ?>><?= __('search.sort_top_rated') ?></option>
+                    <option value="rate_low" <?= ($selectedSort === 'rate_low') ? 'selected' : '' ?>><?= __('search.sort_rate_low') ?></option>
+                    <option value="rate_high" <?= ($selectedSort === 'rate_high') ? 'selected' : '' ?>><?= __('search.sort_rate_high') ?></option>
                 </select>
             </div>
 
@@ -457,10 +447,10 @@ $searchQuery    = $filters['search']   ?? '';
 
     <!-- Sticky bottom buttons -->
     <div class="px-5 py-4 border-t border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 flex gap-3">
-        <a href="<?= APP_URL ?>/search" class="flex-1 text-center py-2.5 px-4 rounded-xl text-sm font-semibold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition">Clear All</a>
+        <a href="<?= APP_URL ?>/search" class="flex-1 text-center py-2.5 px-4 rounded-xl text-sm font-semibold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition"><?= __('search.clear_all') ?></a>
         <button type="button" onclick="document.getElementById('mob-search-form').submit()"
                 class="flex-1 py-2.5 px-4 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition shadow-sm">
-            Apply Filters
+            <?= __('search.apply_filters') ?>
         </button>
     </div>
 </div>
@@ -494,7 +484,7 @@ function mobSelectCategory(cat) {
 }
 
 /* ── Wilaya searchable dropdown (Desktop) ── */
-var allWilayas = <?= json_encode($wilayas) ?>;
+var allWilayas = <?= json_encode($wilayas) ?>; // Output object {"01 - Adrar":"01 - أدرار", ...}
 var wilayaSearch = document.getElementById('wilaya-search');
 var wilayaDropdown = document.getElementById('wilaya-dropdown');
 var wilayaInput = document.getElementById('wilaya-input');
@@ -516,27 +506,33 @@ function filterWilayas(query) {
     var html = '';
     var count = 0;
     // "All Regions" option
-    html += '<button type="button" onmousedown="selectWilaya(\'\')" class="w-full text-left px-4 py-2.5 text-sm hover:bg-indigo-50 hover:text-indigo-700 transition-colors ' + (!wilayaInput.value ? 'font-bold text-indigo-700 bg-indigo-50' : 'text-gray-600') + '">All Regions</button>';
+    html += '<button type="button" onmousedown="selectWilaya(\'\')" class="w-full text-start px-4 py-2.5 text-sm hover:bg-indigo-50 hover:text-indigo-700 transition-colors ' + (!wilayaInput.value ? 'font-bold text-indigo-700 bg-indigo-50' : 'text-gray-600') + '"><?= __('search.all_regions') ?></button>';
 
-    allWilayas.forEach(function(w) {
-        var name = w.replace(/^\d{2}\s-\s/, '');
-        if (!q || w.toLowerCase().indexOf(q) > -1 || name.toLowerCase().indexOf(q) > -1) {
-            var isSelected = (wilayaInput.value === w);
-            html += '<button type="button" onmousedown="selectWilaya(\'' + w.replace(/'/g, "\\'") + '\')" class="w-full text-left px-4 py-2.5 text-sm hover:bg-indigo-50 hover:text-indigo-700 transition-colors ' + (isSelected ? 'font-bold text-indigo-700 bg-indigo-50' : 'text-gray-600') + '">' + w + '</button>';
-            count++;
+    for (var w in allWilayas) {
+        if (allWilayas.hasOwnProperty(w)) {
+            var localizedName = allWilayas[w];
+            var nameWithoutNumber = localizedName.replace(/^\d{2}\s-\s/, ''); // "Adrar" or "أدرار"
+            if (!q || localizedName.toLowerCase().indexOf(q) > -1 || nameWithoutNumber.toLowerCase().indexOf(q) > -1) {
+                var isSelected = (wilayaInput.value === w);
+                html += '<button type="button" onmousedown="selectWilaya(\'' + w.replace(/'/g, "\\'") + '\', \'' + localizedName.replace(/'/g, "\\'") + '\')" class="w-full text-start px-4 py-2.5 text-sm hover:bg-indigo-50 hover:text-indigo-700 transition-colors ' + (isSelected ? 'font-bold text-indigo-700 bg-indigo-50' : 'text-gray-600') + '">' + localizedName + '</button>';
+                count++;
+            }
         }
-    });
+    }
 
     if (count === 0 && q) {
-        html = '<div class="px-4 py-3 text-sm text-gray-400">No wilayas found</div>';
+        html = '<div class="px-4 py-3 text-sm text-gray-400"><?= __('search.no_results') ?></div>';
     }
 
     wilayaDropdown.innerHTML = html;
     wilayaDropdown.classList.remove('hidden');
 }
 
-function selectWilaya(w) {
+function selectWilaya(w, localizedName) {
     wilayaInput.value = w;
+    if (localizedName && wilayaSearch) {
+        wilayaSearch.value = localizedName.replace(/^\d{2}\s-\s/, '');
+    }
     wilayaDropdown.classList.add('hidden');
     document.getElementById('search-form').submit();
 }
@@ -624,12 +620,12 @@ async function toggleFavorite(craftsmanId, btnElement) {
     if (isCurrentlyFavorite) {
         btnElement.classList.remove('border-pink-200', 'text-pink-500', 'dark:border-pink-900/60', 'dark:text-pink-400');
         btnElement.classList.add('border-gray-200', 'text-gray-300', 'dark:border-gray-600', 'dark:text-gray-500');
-        btnElement.title = 'Save to favorites';
+        btnElement.title = '<?= __('search.save_favorite') ?>';
         btnElement.innerHTML = '<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>';
     } else {
         btnElement.classList.add('border-pink-200', 'text-pink-500', 'dark:border-pink-900/60', 'dark:text-pink-400');
         btnElement.classList.remove('border-gray-200', 'text-gray-300', 'dark:border-gray-600', 'dark:text-gray-500');
-        btnElement.title = 'Remove from favorites';
+        btnElement.title = '<?= __('search.remove_favorite') ?>';
         btnElement.innerHTML = '<svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/></svg>';
     }
 

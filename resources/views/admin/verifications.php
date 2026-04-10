@@ -109,6 +109,20 @@
         <!-- Results bar: count + inline pagination -->
         <?php
             $qs = http_build_query(['filter' => $filter, 'search' => $search, 'wilaya' => $wilayaFilter, 'category' => $categoryFilter, 'sort' => $sortFilter ?? '']);
+            $catColor = function($cat) {
+                switch ($cat) {
+                    case 'Plumbing': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300';
+                    case 'Electrical': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300';
+                    case 'Carpentry': return 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300';
+                    case 'Painting': return 'bg-pink-100 text-pink-800 dark:bg-pink-900/40 dark:text-pink-300';
+                    case 'Roofing': return 'bg-stone-100 text-stone-800 dark:bg-stone-900/40 dark:text-stone-300';
+                    case 'HVAC': return 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-300';
+                    case 'Landscaping': return 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300';
+                    case 'Tiling': return 'bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300';
+                    case 'General Handyman': return 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300';
+                    default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
+                }
+            };
         ?>
         <?php if ($totalCraftsmen > 0): ?>
         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
@@ -187,7 +201,7 @@
                         <?php if (!empty($c['service_category'])): ?>
                         <div class="flex items-center justify-between text-sm">
                             <span class="text-gray-500 dark:text-gray-400">Category</span>
-                            <span class="font-medium text-gray-900 dark:text-white"><?= htmlspecialchars($c['service_category']) ?></span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] uppercase tracking-wider font-bold <?= $catColor($c['service_category']) ?>"><?= htmlspecialchars($c['service_category']) ?></span>
                         </div>
                         <?php endif; ?>
                         <?php if (!empty($c['hourly_rate'])): ?>

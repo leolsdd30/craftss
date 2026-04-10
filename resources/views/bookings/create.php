@@ -29,20 +29,7 @@ $catColors = [
 ];
 $badgeClass = $catColors[$category] ?? 'bg-indigo-100 text-indigo-700';
 
-$wilayas = [
-    "01 - Adrar","02 - Chlef","03 - Laghouat","04 - Oum El Bouaghi","05 - Batna",
-    "06 - Béjaïa","07 - Biskra","08 - Béchar","09 - Blida","10 - Bouira",
-    "11 - Tamanrasset","12 - Tébessa","13 - Tlemcen","14 - Tiaret","15 - Tizi Ouzou",
-    "16 - Alger","17 - Djelfa","18 - Jijel","19 - Sétif","20 - Saïda",
-    "21 - Skikda","22 - Sidi Bel Abbès","23 - Annaba","24 - Guelma","25 - Constantine",
-    "26 - Médéa","27 - Mostaganem","28 - M'Sila","29 - Mascara","30 - Ouargla",
-    "31 - Oran","32 - El Bayadh","33 - Illizi","34 - Bordj Bou Arréridj","35 - Boumerdès",
-    "36 - El Tarf","37 - Tindouf","38 - Tissemsilt","39 - El Oued","40 - Khenchela",
-    "41 - Souk Ahras","42 - Tipaza","43 - Mila","44 - Aïn Defla","45 - Naâma",
-    "46 - Aïn Témouchent","47 - Ghardaïa","48 - Relizane","49 - Timimoun",
-    "50 - Bordj Badji Mokhtar","51 - Ouled Djellal","52 - Béni Abbès","53 - In Salah",
-    "54 - In Guezzam","55 - Touggourt","56 - Djanet","57 - El M'Ghair","58 - El Meniaa"
-];
+$wilayas = array_keys(__('wilayas') ?: []);
 
 $postDate    = $_POST['scheduled_date'] ?? '';
 $postAddress = $_POST['address']        ?? '';
@@ -83,6 +70,11 @@ if ($postDate) {
     overflow: hidden;
     user-select: none;
     flex-direction: column;
+}
+html.dark .dtp-popup {
+    background: #1f2937; /* gray-800 */
+    border-color: #374151; /* gray-700 */
+    box-shadow: 0 16px 48px rgba(0,0,0,.4);
 }
 .dtp-popup.open { display: flex; }
 
@@ -138,10 +130,15 @@ if ($postDate) {
     width: 100%;
 }
 .dp-day:hover:not(.disabled):not(.other-month) { background: #eef2ff; color: #4f46e5; }
+html.dark .dp-day:hover:not(.disabled):not(.other-month) { background: rgba(79, 70, 229, 0.2); color: #a5b4fc; }
 .dp-day.today   { border: 2px solid #a5b4fc; color: #4f46e5; font-weight: 700; }
+html.dark .dp-day.today { border-color: #6366f1; color: #818cf8; }
 .dp-day.selected { background: #4f46e5 !important; color: #fff !important; font-weight: 700; }
 .dp-day.disabled { color: #d1d5db; cursor: default; }
+html.dark .dp-day:not(.selected):not(.disabled) { color: #d1d5db; }
+html.dark .dp-day.disabled { color: #4b5563; }
 .dp-day.other-month { color: #e5e7eb; cursor: default; pointer-events: none; }
+html.dark .dp-day.other-month { color: #374151; }
 
 /* ─── Month grid ──────────────────────────────────────────── */
 .dp-months-grid {
@@ -154,7 +151,11 @@ if ($postDate) {
     padding: 7px 2px; cursor: pointer; text-align: center;
     transition: background .12s, border-color .12s, color .12s;
 }
+html.dark .dp-month-btn {
+    background: #374151; border-color: #4b5563; color: #d1d5db;
+}
 .dp-month-btn:hover  { background: #eef2ff; border-color: #a5b4fc; color: #4f46e5; }
+html.dark .dp-month-btn:hover { background: rgba(79, 70, 229, 0.2); border-color: #6366f1; color: #a5b4fc; }
 .dp-month-btn.active { background: #4f46e5; border-color: #4f46e5; color: #fff; }
 
 /* ─── Date popup footer ───────────────────────────────────── */
@@ -164,8 +165,11 @@ if ($postDate) {
     display: flex; justify-content: space-between; align-items: center; gap: 8px;
     flex-shrink: 0;
 }
+html.dark .dp-footer { border-color: #374151; }
 .dp-footer-text { font-size: 0.7rem; color: #4f46e5; font-weight: 600; flex: 1; }
+html.dark .dp-footer-text { color: #a5b4fc; }
 .dp-footer-text.empty { color: #9ca3af; font-weight: 400; }
+html.dark .dp-footer-text.empty { color: #6b7280; }
 .dp-confirm {
     background: #4f46e5; color: #fff; border: none;
     border-radius: 7px; font-size: 0.7rem; font-weight: 700;
@@ -196,8 +200,11 @@ if ($postDate) {
 .tp-col::-webkit-scrollbar { width: 4px; }
 .tp-col::-webkit-scrollbar-track { background: #f5f5ff; }
 .tp-col::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 4px; }
+html.dark .tp-col::-webkit-scrollbar-track { background: #111827; }
+html.dark .tp-col::-webkit-scrollbar-thumb { background: #374151; }
 .tp-col::-webkit-scrollbar-thumb:hover { background: #818cf8; }
 .tp-col + .tp-col { border-left: 1px solid #f0f0f0; }
+html.dark .tp-col + .tp-col { border-left-color: #374151; }
 .tp-col-labels {
     display: flex;
     border-bottom: 1px solid #f0f0f0;
@@ -254,6 +261,9 @@ if ($postDate) {
 .dtp-btn-chevron { color: #9ca3af; flex-shrink: 0; transition: transform .2s; }
 .dtp-trigger-btn.open .dtp-btn-chevron { transform: rotate(180deg); }
 
+/* RTL DatePicker Flip */
+html[dir="rtl"] .dp-nav-btn svg { transform: scaleX(-1); }
+
 /* ─── DARK MODE SUPPORTS ──────────────────────────────────── */
 html.dark .dtp-popup { background: #1f2937; border-color: #374151; box-shadow: 0 16px 48px rgba(0,0,0,.5); }
 html.dark .dp-header { background: #4338ca; }
@@ -297,13 +307,13 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
     <div class="mb-8">
         <a href="<?= APP_URL ?>/profile/<?= e($craftsman['username']) ?>"
            class="inline-flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition mb-4 group">
-            <svg class="mr-1.5 h-4 w-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <svg class="<?= __('lang') === 'ar' ? 'ml-1.5 rotate-180' : 'mr-1.5' ?> h-4 w-4 group-hover:<?= __('lang') === 'ar' ? 'translate-x-0.5' : '-translate-x-0.5' ?> transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
             </svg>
-            Back to Profile
+            <?= __('booking_create.back_profile') ?>
         </a>
-        <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">Request a Booking</h1>
-        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Fill in the details — the craftsman will review and respond to your request.</p>
+        <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight"><?= __('booking_create.request_booking') ?></h1>
+        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400"><?= __('booking_create.request_booking_desc') ?></p>
     </div>
 
     <?php if (!empty($error)): ?>
@@ -332,22 +342,22 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
                         <span class="text-white text-xs font-bold">1</span>
                     </div>
                     <div>
-                        <p class="text-sm font-bold text-gray-900 dark:text-white">Job Details</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Be specific — the more detail, the better the craftsman can prepare.</p>
+                        <p class="text-sm font-bold text-gray-900 dark:text-white"><?= __('booking_create.job_details') ?></p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400"><?= __('booking_create.job_details_desc') ?></p>
                     </div>
                 </div>
                 <div class="px-6 py-5">
                     <label for="description" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 pt-1">
-                        Job Description <span class="text-red-500 dark:text-red-400">*</span>
+                        <?= __('booking_create.job_description') ?> <span class="text-red-500 dark:text-red-400">*</span>
                     </label>
                     <textarea id="description" name="description" rows="5" required maxlength="1000"
-                        placeholder="e.g. I need to fix a leaking pipe under the kitchen sink. The water has been dripping for 2 days..."
+                        placeholder="<?= __('booking_create.job_description_ph') ?>"
                         class="block w-full px-4 py-3 bg-gray-50/50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                focus:bg-white dark:focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none leading-relaxed"
                         oninput="document.getElementById('desc-count').textContent=this.value.length"
                     ><?= e($postDesc) ?></textarea>
                     <div class="mt-1.5 flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
-                        <span>Provide specific details about the issue.</span>
+                        <span><?= __('booking_create.job_description_hint') ?></span>
                         <div><span id="desc-count" class="font-medium"><?= strlen($postDesc) ?></span>/1000</div>
                     </div>
                 </div>
@@ -360,8 +370,8 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
                         <span class="text-white text-xs font-bold">2</span>
                     </div>
                     <div>
-                        <p class="text-sm font-bold text-gray-900 dark:text-white">Job Location</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Where should the craftsman come to?</p>
+                        <p class="text-sm font-bold text-gray-900 dark:text-white"><?= __('booking_create.job_location') ?></p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400"><?= __('booking_create.job_location_desc') ?></p>
                     </div>
                 </div>
                 <div class="px-6 py-5">
@@ -369,7 +379,7 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
                         <!-- Wilaya -->
                         <div>
                             <label for="wilaya_select" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 pt-1">
-                                Wilaya <span class="text-red-500 dark:text-red-400">*</span>
+                                <?= __('job_create.wilaya') ?> <span class="text-red-500 dark:text-red-400">*</span>
                             </label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
@@ -379,11 +389,11 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
                                     </svg>
                                 </div>
                                 <select id="wilaya_select" required
-                                    class="block w-full pl-10 pr-4 py-2.5 bg-gray-50/50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white
+                                    class="block w-full pl-10 pr-4 h-[46px] bg-gray-50/50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white
                                            focus:bg-white dark:focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
-                                    <option value="">— Select Wilaya —</option>
+                                    <option value=""><?= __('job_create.wilaya_ph') ?></option>
                                     <?php foreach ($wilayas as $w): ?>
-                                    <option value="<?= e($w) ?>" <?= $savedWilaya === $w ? 'selected' : '' ?>><?= e($w) ?></option>
+                                    <option value="<?= e($w) ?>" <?= $savedWilaya === $w ? 'selected' : '' ?>><?= e(__('wilayas.' . $w) ?? $w) ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -392,12 +402,12 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
                         <!-- Street -->
                         <div>
                             <label for="street_address" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 pt-1">
-                                Street Address <span class="text-red-500 dark:text-red-400">*</span>
+                                <?= __('booking_create.street_address') ?> <span class="text-red-500 dark:text-red-400">*</span>
                             </label>
                             <input id="street_address" type="text" required
-                                placeholder="e.g. 12 Rue des Frères, Cité des Pins"
+                                placeholder="<?= __('booking_create.street_address_ph') ?>"
                                 value="<?= e($savedStreet) ?>"
-                                class="block w-full px-4 py-2.5 bg-gray-50/50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
+                                class="block w-full px-4 h-[46px] bg-gray-50/50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                        focus:bg-white dark:focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
                         </div>
                     </div>
@@ -411,14 +421,14 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
                         <span class="text-white text-xs font-bold">3</span>
                     </div>
                     <div>
-                        <p class="text-sm font-bold text-gray-900 dark:text-white">Preferred Schedule</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Pick a date and time — the craftsman may suggest an alternative.</p>
+                        <p class="text-sm font-bold text-gray-900 dark:text-white"><?= __('booking_create.preferred_schedule') ?></p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400"><?= __('booking_create.preferred_schedule_desc') ?></p>
                     </div>
                 </div>
                 <div class="px-6 py-5">
 
                     <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 pt-1">
-                        Date &amp; Time <span class="text-red-500 dark:text-red-400">*</span>
+                        <?= __('booking_create.date_time') ?> <span class="text-red-500 dark:text-red-400">*</span>
                     </label>
 
                     <!-- Two buttons side by side -->
@@ -429,7 +439,7 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
                             <svg class="dtp-btn-icon h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
-                            <span id="dp-trigger-text" class="dtp-btn-text">Select date</span>
+                            <span id="dp-trigger-text" class="dtp-btn-text"><?= __('booking_create.select_date') ?></span>
                             <svg class="dtp-btn-chevron h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                             </svg>
@@ -440,7 +450,7 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
                             <svg class="dtp-btn-icon h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
-                            <span id="tp-trigger-text" class="dtp-btn-text">Time</span>
+                            <span id="tp-trigger-text" class="dtp-btn-text"><?= __('booking_create.time') ?></span>
                             <svg class="dtp-btn-chevron h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                             </svg>
@@ -467,18 +477,18 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
                         </div>
                         <div class="dp-body" id="dp-body"></div>
                         <div class="dp-footer">
-                            <span class="dp-footer-text empty" id="dp-footer-text">No date selected</span>
-                            <button type="button" class="dp-confirm" id="dp-confirm">Confirm</button>
+                            <span class="dp-footer-text empty" id="dp-footer-text"><?= __('lang') === 'ar' ? 'لم يتم تحديد تاريخ' : 'No date selected' ?></span>
+                            <button type="button" class="dp-confirm" id="dp-confirm"><?= __('lang') === 'ar' ? 'تأكيد' : 'Confirm' ?></button>
                         </div>
                     </div>
 
                     <!-- TIME POPUP -->
                     <div id="tp-popup" class="dtp-popup" role="dialog" aria-label="Time picker">
-                        <div class="tp-header">Select Time</div>
+                        <div class="tp-header"><?= __('lang') === 'ar' ? 'اختر الوقت' : 'Select Time' ?></div>
                         <!-- Labels row — outside scroll container so scroll starts at 00 -->
                         <div class="tp-col-labels">
-                            <div class="tp-col-label">hr</div>
-                            <div class="tp-col-label">min</div>
+                            <div class="tp-col-label"><?= __('lang') === 'ar' ? 'سا' : 'hr' ?></div>
+                            <div class="tp-col-label"><?= __('lang') === 'ar' ? 'دق' : 'min' ?></div>
                         </div>
                         <div class="tp-cols">
                             <div class="tp-col" id="tp-hours"></div>
@@ -486,7 +496,7 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
                         </div>
                         <div class="tp-footer">
                             <span class="tp-footer-text empty" id="tp-footer-text">——:——</span>
-                            <button type="button" class="tp-confirm" id="tp-confirm">OK</button>
+                            <button type="button" class="tp-confirm" id="tp-confirm"><?= __('lang') === 'ar' ? 'موافق' : 'OK' ?></button>
                         </div>
                     </div>
 
@@ -494,7 +504,7 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
                         <svg class="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        <p class="text-xs text-amber-800 dark:text-amber-200 leading-tight">This is a preferred schedule. The craftsman may suggest an alternative based on their availability.</p>
+                        <p class="text-xs text-amber-800 dark:text-amber-200 leading-tight"><?= __('booking_create.schedule_hint') ?></p>
                     </div>
                 </div>
             </div>
@@ -503,7 +513,7 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
             <div class="mt-8 flex flex-col-reverse sm:flex-row items-center justify-end gap-3 pt-2">
                 <a href="<?= APP_URL ?>/profile/<?= e($craftsman['username']) ?>"
                    class="w-full sm:w-auto px-6 py-2.5 text-sm font-semibold text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl transition-colors text-center shadow-sm">
-                    Cancel
+                    <?= __('forms.cancel') ?>
                 </a>
                 <button type="submit"
                         class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-8 py-2.5
@@ -512,7 +522,7 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
                     </svg>
-                    Send Booking Request
+                    <?= __('booking_create.send_request') ?>
                 </button>
             </div>
 
@@ -531,7 +541,7 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                             </svg>
                         </div>
-                        <h2 class="text-xs font-bold text-gray-800 dark:text-gray-200 tracking-wider uppercase">You're booking</h2>
+                        <h2 class="text-xs font-bold text-gray-800 dark:text-gray-200 tracking-wider uppercase"><?= __('booking_create.youre_booking') ?></h2>
                     </div>
                 
                     <div class="flex items-center gap-3 mb-5">
@@ -553,7 +563,7 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
                             </div>
                             <?php $badgeColors = get_category_classes($category); ?>
                             <span class="inline-flex items-center mt-1.5 px-2 py-0.5 rounded-md text-xs font-semibold <?= $badgeColors['badge'] ?>">
-                                <?= e($category) ?>
+                                <?= e(__('categories.' . $category) ?? $category) ?>
                             </span>
                         </div>
                     </div>
@@ -567,12 +577,12 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
                                 <?php endfor; ?>
                             </div>
                             <p class="text-sm font-bold text-gray-900 dark:text-white"><?= $avgRating>0?number_format($avgRating,1):'—' ?></p>
-                            <p class="text-xs text-gray-400 dark:text-gray-500"><?= $totalReviews ?> review<?= $totalReviews!==1?'s':'' ?></p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500"><?= __('lang') === 'ar' ? ($totalReviews === 1 ? 'تقييم' : 'تقييمات') : ($totalReviews !== 1 ? 'reviews' : 'review') ?></p>
                         </div>
                         <div class="bg-gray-50/50 dark:bg-gray-700/30 rounded-xl p-3 text-center border border-gray-100 dark:border-gray-700">
-                            <p class="text-xs text-gray-400 dark:text-gray-500 mb-1">Hourly Rate</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mb-1"><?= __('lang') === 'ar' ? 'السعر بالساعة' : 'Hourly Rate' ?></p>
                             <p class="text-sm font-bold text-indigo-600 dark:text-indigo-400"><?= number_format($hourlyRate,0) ?></p>
-                            <p class="text-xs text-gray-400 dark:text-gray-500">DZD / hr</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500"><?= __('lang') === 'ar' ? 'دج / ساعة' : 'DZD / hr' ?></p>
                         </div>
                     </div>
                     <?php if (!empty($craftsman['wilaya'])): ?>
@@ -586,7 +596,7 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
                     <a href="<?= APP_URL ?>/profile/<?= e($craftsman['username']) ?>"
                        class="flex items-center justify-center w-full py-2.5 text-xs font-bold text-indigo-600 dark:text-indigo-400
                               bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-xl transition-colors border border-indigo-100 dark:border-indigo-800">
-                        View Full Profile →
+                        <?= __('booking_create.view_profile') ?> <?= __('lang') === 'ar' ? '←' : '→' ?>
                     </a>
                 </div>
             </div>
@@ -600,13 +610,13 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
                             <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                         </div>
-                        <h2 class="text-xs font-bold text-gray-800 dark:text-gray-200 tracking-wider uppercase">How It Works</h2>
+                        <h2 class="text-xs font-bold text-gray-800 dark:text-gray-200 tracking-wider uppercase"><?= __('forms.how_it_works') ?></h2>
                     </div>
                     <div class="space-y-5">
                         <?php foreach([
-                            ['1','You send the request',  'Describe the job, location, and preferred time.'],
-                            ['2','Craftsman reviews it',  'They can accept, decline, or send a counter-offer.'],
-                            ['3','Job gets done',         'Track progress and confirm on completion.'],
+                            ['1', __('booking_create.step_1_title'),  __('booking_create.step_1_desc')],
+                            ['2', __('booking_create.step_2_title'),  __('booking_create.step_2_desc')],
+                            ['3', __('booking_create.step_3_title'),  __('booking_create.step_3_desc')],
                         ] as [$n,$t,$d]): ?>
                         <div class="flex items-start gap-3.5">
                             <div class="h-8 w-8 rounded flex items-center justify-center flex-shrink-0 bg-emerald-50 dark:bg-emerald-900/30">
@@ -630,12 +640,10 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
 <script>
 (function () {
 
-    var MONTHS_LONG  = ['January','February','March','April','May','June',
-                        'July','August','September','October','November','December'];
-    var MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun',
-                        'Jul','Aug','Sep','Oct','Nov','Dec'];
-    var DAYS_SHORT   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-    var DAYS_LONG    = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    var MONTHS_LONG  = <?= __('lang') === 'ar' ? "['جانفي','فيفري','مارس','أفريل','ماي','جوان','جويلية','أوت','سبتمبر','أكتوبر','نوفمبر','ديسمبر']" : "['January','February','March','April','May','June','July','August','September','October','November','December']" ?>;
+    var MONTHS_SHORT = <?= __('lang') === 'ar' ? "['جانفي','فيفري','مارس','أفريل','ماي','جوان','جويلية','أوت','سبتمبر','أكتوبر','نوفمبر','ديسمبر']" : "['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']" ?>;
+    var DAYS_SHORT   = <?= __('lang') === 'ar' ? "['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت']" : "['Sun','Mon','Tue','Wed','Thu','Fri','Sat']" ?>;
+    var DAYS_LONG    = <?= __('lang') === 'ar' ? "['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت']" : "['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']" ?>;
 
     function pad(n){ return n < 10 ? '0'+n : ''+n; }
     function localDate(y,m,d){ var dt=new Date(y,m,d); dt.setHours(0,0,0,0); return dt; }
@@ -815,10 +823,10 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
         var el = document.getElementById('dp-footer-text');
         if (ds.selD !== null) {
             var d = localDate(ds.selY, ds.selM, ds.selD);
-            el.textContent = DAYS_SHORT[d.getDay()] + ' ' + MONTHS_SHORT[ds.selM] + ' ' + ds.selD + ' ' + ds.selY;
+            el.textContent = DAYS_SHORT[d.getDay()] + ' ' + ds.selD + ' ' + MONTHS_SHORT[ds.selM] + ' ' + ds.selY;
             el.classList.remove('empty');
         } else {
-            el.textContent = 'No date selected';
+            el.textContent = '<?= __('lang') === 'ar' ? 'لم يتم تحديد تاريخ' : 'No date selected' ?>';
             el.classList.add('empty');
         }
     }
@@ -828,11 +836,11 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
         var trigEl = document.getElementById('dp-trigger');
         if (ds.confirmed && ds.selD !== null) {
             var d = localDate(ds.selY, ds.selM, ds.selD);
-            textEl.textContent = DAYS_SHORT[d.getDay()] + ' ' + MONTHS_SHORT[ds.selM] + ' ' + ds.selD + ' ' + ds.selY;
+            textEl.textContent = DAYS_SHORT[d.getDay()] + ' ' + ds.selD + ' ' + MONTHS_SHORT[ds.selM] + ' ' + ds.selY;
             textEl.className = 'dtp-btn-text filled';
             trigEl.classList.add('filled'); trigEl.classList.remove('error');
         } else {
-            textEl.textContent = 'Select date';
+            textEl.textContent = '<?= __('booking_create.select_date') ?>';
             textEl.className = 'dtp-btn-text';
             trigEl.classList.remove('filled');
         }
@@ -921,7 +929,7 @@ html.dark .dtp-trigger-btn.error { border-color: #ef4444; box-shadow: 0 0 0 3px 
             textEl.className = 'dtp-btn-text filled';
             trigEl.classList.add('filled'); trigEl.classList.remove('error');
         } else {
-            textEl.textContent = 'Time';
+            textEl.textContent = '<?= __('booking_create.time') ?>';
             textEl.className = 'dtp-btn-text';
             trigEl.classList.remove('filled');
         }

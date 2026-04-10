@@ -5,12 +5,12 @@
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-0 mb-6">
             <div>
-                <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white">Notifications</h1>
+                <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white"><?= __('notifications.title') ?></h1>
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
                     <?php if ($unreadCount > 0): ?>
-                        You have <span class="font-bold text-indigo-600 dark:text-indigo-400"><?= $unreadCount ?></span> unread notification<?= $unreadCount !== 1 ? 's' : '' ?>
+                        <?= __('notifications.unread_count', ['count' => $unreadCount]) ?>
                     <?php else: ?>
-                        You're all caught up!
+                        <?= __('notifications.all_caught_up') ?>
                     <?php endif; ?>
                 </p>
             </div>
@@ -19,18 +19,18 @@
                 <?php if ($unreadCount > 0): ?>
                 <button onclick="markAllRead()"
                         class="flex-1 sm:flex-none justify-center inline-flex items-center px-3 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 border border-indigo-200 rounded-lg hover:bg-indigo-100 transition duration-150 whitespace-nowrap dark:bg-indigo-900/30 dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-900/50">
-                    <svg class="h-4 w-4 mr-1.5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <svg class="h-4 w-4 <?= __('lang') === 'ar' ? 'ml-1.5' : 'mr-1.5' ?> flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                     </svg>
-                    Mark all read
+                    <?= __('notifications.mark_all_read') ?>
                 </button>
                 <?php endif; ?>
                 <button onclick="clearAll()"
                         class="flex-1 sm:flex-none justify-center inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-200 rounded-lg hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition duration-150 whitespace-nowrap dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-red-900/30 dark:hover:text-red-400 dark:hover:border-red-800">
-                    <svg class="h-4 w-4 mr-1.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <svg class="h-4 w-4 <?= __('lang') === 'ar' ? 'ml-1.5' : 'mr-1.5' ?> flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                     </svg>
-                    Clear all
+                    <?= __('notifications.clear_all') ?>
                 </button>
             </div>
             <?php endif; ?>
@@ -42,13 +42,13 @@
             <button id="filter-all-btn"
                     onclick="setFilter('all')"
                     class="px-3 py-1.5 text-xs font-semibold rounded-full transition duration-150 bg-indigo-600 dark:bg-indigo-500 text-white">
-                All
+                <?= __('notifications.filter_all') ?>
             </button>
             <button id="filter-unread-btn"
                     onclick="setFilter('unread')"
                     class="inline-flex items-center px-3 py-1.5 text-xs font-semibold rounded-full transition duration-150 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-indigo-300 dark:hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400">
-                Unread
-                <span class="ml-1.5 inline-flex items-center justify-center w-4 h-4 text-xs font-bold rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300"><?= $unreadCount ?></span>
+                <?= __('notifications.filter_unread') ?>
+                <span class="<?= __('lang') === 'ar' ? 'mr-1.5' : 'ml-1.5' ?> inline-flex items-center justify-center w-4 h-4 text-xs font-bold rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300"><?= $unreadCount ?></span>
             </button>
         </div>
         <?php endif; ?>
@@ -61,8 +61,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
             </div>
-            <h3 class="text-base font-semibold text-gray-900 dark:text-white">No notifications yet</h3>
-            <p class="mt-1 text-sm text-gray-400 dark:text-gray-500">When something happens, you'll see it here.</p>
+            <h3 class="text-base font-semibold text-gray-900 dark:text-white"><?= __('notifications.empty_title') ?></h3>
+            <p class="mt-1 text-sm text-gray-400 dark:text-gray-500"><?= __('notifications.empty_desc') ?></p>
         </div>
 
         <?php else:
@@ -75,18 +75,18 @@
             foreach ($notifications as $notif) {
                 $date = date('Y-m-d', strtotime($notif['created_at']));
                 if ($date === $today) {
-                    $label = 'Today';
+                    $labelKey = 'today';
                 } elseif ($date === $yesterday) {
-                    $label = 'Yesterday';
+                    $labelKey = 'yesterday';
                 } elseif (strtotime($notif['created_at']) >= strtotime('-7 days')) {
-                    $label = 'This Week';
+                    $labelKey = 'this_week';
                 } else {
-                    $label = 'Earlier';
+                    $labelKey = 'earlier';
                 }
-                $groups[$label][] = $notif;
+                $groups[$labelKey][] = $notif;
             }
 
-            $orderedLabels = ['Today', 'Yesterday', 'This Week', 'Earlier'];
+            $orderedLabels = ['today', 'yesterday', 'this_week', 'earlier'];
 
             $iconMap = [
                 'booking_accepted'  => ['bg' => 'bg-green-100 dark:bg-green-900/40',  'text' => 'text-green-600 dark:text-green-400',  'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>'],
@@ -112,10 +112,10 @@
 
                 <!-- Group Label -->
                 <div class="flex items-center gap-3 mb-3">
-                    <span class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider"><?= $label ?></span>
+                    <span class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider"><?= __('notifications.' . $label) ?></span>
                     <?php if ($groupUnreadCount > 0): ?>
                     <span class="group-unread-badge inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-bold bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300">
-                        <?= $groupUnreadCount ?> unread
+                        <?= $groupUnreadCount ?> <?= __('notifications.unread_badge') ?>
                     </span>
                     <?php endif; ?>
                     <div class="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
@@ -125,11 +125,11 @@
                     <?php foreach ($groups[$label] as $notif):
                         $style   = $iconMap[$notif['type']] ?? $defaultIcon;
                         $diff    = time() - strtotime($notif['created_at']);
-                        if      ($diff < 60)     $timeAgo = 'Just now';
-                        elseif  ($diff < 3600)   $timeAgo = floor($diff / 60) . 'm ago';
-                        elseif  ($diff < 86400)  $timeAgo = floor($diff / 3600) . 'h ago';
-                        elseif  ($diff < 604800) $timeAgo = floor($diff / 86400) . 'd ago';
-                        else                     $timeAgo = date('M d', strtotime($notif['created_at']));
+                        if      ($diff < 60)     $timeAgo = __('time.just_now');
+                        elseif  ($diff < 3600)   $timeAgo = str_replace(':m', floor($diff / 60), __('time.m_ago'));
+                        elseif  ($diff < 86400)  $timeAgo = str_replace(':h', floor($diff / 3600), __('time.h_ago'));
+                        elseif  ($diff < 604800) $timeAgo = str_replace(':d', floor($diff / 86400), __('time.d_ago'));
+                        else                     $timeAgo = date('Y/m/d', strtotime($notif['created_at']));
 
                         $notifHref = null;
                         if (!empty($notif['link'])) {
@@ -152,24 +152,76 @@
                         </div>
 
                         <!-- Content -->
-                        <div class="flex-1 min-w-0 pr-8">
+                        <div class="flex-1 min-w-0 <?= __('lang') === 'ar' ? 'pl-8' : 'pr-8' ?>">
                             <div class="flex items-start justify-between gap-2">
+                                <?php
+                                    $translatedTitle = __('notif_types.' . $notif['type']);
+                                    if ($translatedTitle === 'notif_types.' . $notif['type']) {
+                                        $translatedTitle = htmlspecialchars($notif['title']);
+                                    }
+
+                                    $msg = htmlspecialchars($notif['message']);
+
+                                    // Bold the user's name if the message starts with it
+                                    $userNamesSuffixes = [
+                                        ' sent you a booking request.',
+                                        ' has sent a counter-offer for your booking. Please review the changes.',
+                                        ' accepted your counter-offer. The job is now in progress!',
+                                        ' has declined your counter-offer. The booking has been cancelled.',
+                                        ' has confirmed the work is done. Great job!',
+                                        ' submitted a quote of ',
+                                        ' left you a ',
+                                        ' sent you a new message.',
+                                        ' wants to send you a message.'
+                                    ];
+                                    foreach ($userNamesSuffixes as $suffix) {
+                                        if (($pos = strpos($msg, $suffix)) !== false && $pos > 0 && $pos < 30) {
+                                            $name = substr($msg, 0, $pos);
+                                            $rest = substr($msg, $pos);
+                                            $msg = '<span class="font-bold text-gray-900 dark:text-white">' . $name . '</span>' . $rest;
+                                            break;
+                                        }
+                                    }
+
+                                    if (__('lang') === 'ar') {
+                                        $arMsg = [
+                                            ' sent you a booking request.' => ' أرسل لك طلب حجز.',
+                                            'Your booking request has been accepted. The job is now in progress.' => 'تم قبول طلب الحجز الخاص بك. العمل قيد التنفيذ الآن.',
+                                            ' has sent a counter-offer for your booking. Please review the changes.' => ' أرسل عرضًا مضادًا لحجزك. يرجى مراجعة التغييرات.',
+                                            ' accepted your counter-offer. The job is now in progress!' => ' قبل العرض المضاد. العمل قيد التنفيذ الآن!',
+                                            ' has declined your counter-offer. The booking has been cancelled.' => ' رفض العرض المضاد. تم إلغاء الحجز.',
+                                            'Unfortunately, your booking request was declined by the craftsman.' => 'للأسف، رفض الحرفي طلب الحجز الخاص بك.',
+                                            'The craftsman has marked the job as complete. Please confirm the work is done.' => 'حدد الحرفي الوظيفة كمكتملة. يرجى تأكيد إنجاز العمل.',
+                                            ' has confirmed the work is done. Great job!' => ' أكد أن العمل قد اكتمل. عمل رائع!',
+                                            ' submitted a quote of ' => ' قدم عرض سعر بقيمة ',
+                                            ' DZD on your job: ' => ' دينار جزائري على وظيفتك: ',
+                                            'Your quote on &quot;' => 'تم قبول عرض السعر الخاص بك على &quot;',
+                                            '&quot; has been accepted!' => '&quot;!',
+                                            '&quot; was not accepted.' => '&quot; لم يتم قبوله.',
+                                            ' left you a ' => ' ترك لك تقييم ',
+                                            '-star review!' => ' نجوم!',
+                                            ' sent you a new message.' => ' أرسل لك رسالة جديدة.',
+                                            ' wants to send you a message.' => ' يريد إرسال رسالة إليك.'
+                                        ];
+                                        $msg = str_replace(array_keys($arMsg), array_values($arMsg), $msg);
+                                    }
+                                ?>
                                 <p class="text-sm font-semibold text-gray-900 dark:text-white leading-snug">
-                                    <?= htmlspecialchars($notif['title']) ?>
+                                    <?= $translatedTitle ?>
                                     <?php if (!$notif['is_read']): ?>
-                                    <span class="inline-block w-2 h-2 bg-indigo-500 dark:bg-indigo-400 rounded-full ml-1 align-middle" id="unread-dot-<?= $notif['id'] ?>"></span>
+                                    <span class="inline-block w-2 h-2 bg-indigo-500 dark:bg-indigo-400 rounded-full <?= __('lang') === 'ar' ? 'mr-1' : 'ml-1' ?> align-middle" id="unread-dot-<?= $notif['id'] ?>"></span>
                                     <?php endif; ?>
                                 </p>
                                 <span class="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap flex-shrink-0"><?= $timeAgo ?></span>
                             </div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5 leading-relaxed break-words"><?= htmlspecialchars($notif['message']) ?></p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5 leading-relaxed break-words"><?= $msg ?></p>
 
                             <div class="flex items-center gap-4 mt-2">
                                 <?php if ($notifHref): ?>
                                 <a href="<?= $notifHref ?>"
                                    class="inline-flex items-center text-xs font-semibold text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors">
-                                    View Details
-                                    <svg class="ml-1 h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                    <?= __('notifications.view_details') ?>
+                                    <svg class="<?= __('lang') === 'ar' ? 'mr-1' : 'ml-1' ?> h-3 w-3 <?= __('lang') === 'ar' ? 'transform rotate-180' : '' ?>" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                                     </svg>
                                 </a>
@@ -179,10 +231,10 @@
                                 <button onclick="markOneRead(<?= $notif['id'] ?>)"
                                         id="mark-read-btn-<?= $notif['id'] ?>"
                                         class="inline-flex items-center text-xs font-medium text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-                                    <svg class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <svg class="h-3 w-3 <?= __('lang') === 'ar' ? 'ml-1' : 'mr-1' ?>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                                     </svg>
-                                    Mark as read
+                                    <?= __('notifications.mark_as_read') ?>
                                 </button>
                                 <?php endif; ?>
                             </div>
@@ -190,8 +242,8 @@
 
                         <!-- Dismiss button — visible on hover -->
                         <button onclick="dismissNotification(<?= $notif['id'] ?>)"
-                                title="Dismiss"
-                                class="absolute top-3 right-3 p-1 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 opacity-0 group-hover:opacity-100 transition-all duration-150">
+                                title="<?= __('notifications.dismiss') ?>"
+                                class="absolute top-3 <?= __('lang') === 'ar' ? 'left-3' : 'right-3' ?> p-1 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 opacity-0 group-hover:opacity-100 transition-all duration-150">
                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                             </svg>
@@ -210,8 +262,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
             </div>
-            <h3 class="text-sm font-semibold text-gray-900 dark:text-white">No unread notifications</h3>
-            <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">You're all caught up!</p>
+            <h3 class="text-sm font-semibold text-gray-900 dark:text-white"><?= __('notifications.no_unread_title') ?></h3>
+            <p class="mt-1 text-xs text-gray-400 dark:text-gray-500"><?= __('notifications.all_caught_up') ?></p>
         </div>
 
         <?php endif; ?>
@@ -328,8 +380,8 @@ async function dismissNotification(id) {
 // ── Clear all ────────────────────────────────────────────────────────
 function clearAll() {
     showConfirmModal(
-        'Clear all notifications',
-        'This will permanently remove all your notifications. This cannot be undone.',
+        '<?= addslashes(__('notifications.modal_clear_title')) ?>',
+        '<?= addslashes(__('notifications.modal_clear_desc')) ?>',
         'decline'
     );
 }
@@ -353,7 +405,7 @@ function updateGroupBadges() {
         const unreadCount = group.querySelectorAll('[id^="notif-"][data-read="0"]').length;
         const badge = group.querySelector('.group-unread-badge');
         if (badge) {
-            badge.textContent = unreadCount + ' unread';
+            badge.textContent = unreadCount + ' <?= addslashes(__('notifications.unread_badge')) ?>';
             badge.style.display = unreadCount > 0 ? '' : 'none';
         }
     });
@@ -377,11 +429,11 @@ function showConfirmModal(title, message, type) {
     var id  = document.getElementById('modal-icon-decline');
     if (type === 'accept') {
         btn.className   = 'px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition duration-150';
-        btn.textContent = 'Confirm';
+        btn.textContent = '<?= addslashes(__('notifications.confirm')) ?>';
         ia.classList.remove('hidden'); id.classList.add('hidden');
     } else {
         btn.className   = 'px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition duration-150';
-        btn.textContent = 'Yes, Clear All';
+        btn.textContent = '<?= addslashes(__('notifications.yes_clear_all')) ?>';
         ia.classList.add('hidden'); id.classList.remove('hidden');
     }
     document.getElementById('confirm-modal').classList.remove('hidden');
@@ -404,12 +456,12 @@ function confirmAction() {
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full transform transition-all">
             <div class="p-6">
                 <div class="flex items-center mb-4">
-                    <div id="modal-icon-accept" class="hidden flex-shrink-0 bg-green-100 rounded-full p-2 mr-3">
+                    <div id="modal-icon-accept" class="hidden flex-shrink-0 bg-green-100 rounded-full p-2 <?= __('lang') === 'ar' ? 'ml-3' : 'mr-3' ?>">
                         <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                         </svg>
                     </div>
-                    <div id="modal-icon-decline" class="hidden flex-shrink-0 bg-red-100 rounded-full p-2 mr-3">
+                    <div id="modal-icon-decline" class="hidden flex-shrink-0 bg-red-100 rounded-full p-2 <?= __('lang') === 'ar' ? 'ml-3' : 'mr-3' ?>">
                         <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
                         </svg>
@@ -417,14 +469,14 @@ function confirmAction() {
                     <h3 id="modal-title" class="text-lg font-bold text-gray-900 dark:text-white"></h3>
                 </div>
                 <p id="modal-message" class="text-sm text-gray-600 dark:text-gray-400 mb-6"></p>
-                <div class="flex justify-end space-x-3">
+                <div class="flex justify-end <?= __('lang') === 'ar' ? 'space-x-reverse space-x-3' : 'space-x-3' ?>">
                     <button onclick="hideConfirmModal()"
                             class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 dark:text-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition duration-150">
-                        Cancel
+                        <?= __('forms.cancel') ?>
                     </button>
                     <button id="modal-confirm-btn" onclick="confirmAction()"
                             class="px-4 py-2 text-sm font-medium text-white bg-red-600 dark:bg-red-500 hover:bg-red-700 dark:hover:bg-red-600 rounded-lg transition duration-150">
-                        Confirm
+                        <?= __('notifications.confirm') ?>
                     </button>
                 </div>
             </div>

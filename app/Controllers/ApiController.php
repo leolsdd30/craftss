@@ -43,7 +43,52 @@ class ApiController extends Controller
             $n['time_ago'] = $this->timeAgo($n['created_at'] ?? '');
             $n['link'] = $n['link'] ?? '/notifications';
             if (isset($n['message'])) {
-                $n['message'] = htmlspecialchars((string)$n['message'], ENT_QUOTES, 'UTF-8');
+                $msg = htmlspecialchars((string)$n['message'], ENT_QUOTES, 'UTF-8');
+                
+                // Bold the user's name if the message starts with it
+                $userNamesSuffixes = [
+                    ' sent you a booking request.',
+                    ' has sent a counter-offer for your booking. Please review the changes.',
+                    ' accepted your counter-offer. The job is now in progress!',
+                    ' has declined your counter-offer. The booking has been cancelled.',
+                    ' has confirmed the work is done. Great job!',
+                    ' submitted a quote of ',
+                    ' left you a ',
+                    ' sent you a new message.',
+                    ' wants to send you a message.'
+                ];
+                foreach ($userNamesSuffixes as $suffix) {
+                    if (($pos = strpos($msg, $suffix)) !== false && $pos > 0 && $pos < 30) {
+                        $name = substr($msg, 0, $pos);
+                        $rest = substr($msg, $pos);
+                        $msg = '<span class="font-bold text-gray-900 dark:text-white">' . $name . '</span>' . $rest;
+                        break;
+                    }
+                }
+
+                if (function_exists('__') && __('lang') === 'ar') {
+                    $arMsg = [
+                        ' sent you a booking request.' => ' أرسل لك طلب حجز.',
+                        'Your booking request has been accepted. The job is now in progress.' => 'تم قبول طلب الحجز الخاص بك. العمل قيد التنفيذ الآن.',
+                        ' has sent a counter-offer for your booking. Please review the changes.' => ' أرسل عرضًا مضادًا لحجزك. يرجى مراجعة التغييرات.',
+                        ' accepted your counter-offer. The job is now in progress!' => ' قبل العرض المضاد. العمل قيد التنفيذ الآن!',
+                        ' has declined your counter-offer. The booking has been cancelled.' => ' رفض العرض المضاد. تم إلغاء الحجز.',
+                        'Unfortunately, your booking request was declined by the craftsman.' => 'للأسف، رفض الحرفي طلب الحجز الخاص بك.',
+                        'The craftsman has marked the job as complete. Please confirm the work is done.' => 'حدد الحرفي الوظيفة كمكتملة. يرجى تأكيد إنجاز العمل.',
+                        ' has confirmed the work is done. Great job!' => ' أكد أن العمل قد اكتمل. عمل رائع!',
+                        ' submitted a quote of ' => ' قدم عرض سعر بقيمة ',
+                        ' DZD on your job: ' => ' دينار جزائري على وظيفتك: ',
+                        'Your quote on &quot;' => 'تم قبول عرض السعر الخاص بك على &quot;',
+                        '&quot; has been accepted!' => '&quot;!',
+                        '&quot; was not accepted.' => '&quot; لم يتم قبوله.',
+                        ' left you a ' => ' ترك لك تقييم ',
+                        '-star review!' => ' نجوم!',
+                        ' sent you a new message.' => ' أرسل لك رسالة جديدة.',
+                        ' wants to send you a message.' => ' يريد إرسال رسالة إليك.'
+                    ];
+                    $msg = str_replace(array_keys($arMsg), array_values($arMsg), $msg);
+                }
+                $n['message'] = $msg;
             }
         }
         unset($n);
@@ -124,6 +169,15 @@ class ApiController extends Controller
     {
         if (empty($datetime)) return '';
         $diff = time() - strtotime($datetime);
+        
+        if (function_exists('__')) {
+            if      ($diff < 60)     return __('time.just_now');
+            elseif  ($diff < 3600)   return str_replace(':m', floor($diff / 60), __('time.m_ago'));
+            elseif  ($diff < 86400)  return str_replace(':h', floor($diff / 3600), __('time.h_ago'));
+            elseif  ($diff < 604800) return str_replace(':d', floor($diff / 86400), __('time.d_ago'));
+            else                     return date('Y/m/d', strtotime($datetime));
+        }
+
         if ($diff < 60)      return 'Just now';
         if ($diff < 3600)    return floor($diff / 60) . 'm ago';
         if ($diff < 86400)   return floor($diff / 3600) . 'h ago';

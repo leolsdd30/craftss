@@ -72,9 +72,55 @@ session_set_cookie_params([
 // Start the session globally here so all controllers have access to $_SESSION
 session_start();
 
+// Initialize default locale
+if (empty($_SESSION['locale'])) {
+    $_SESSION['locale'] = 'en';
+}
+
 // Generate a CSRF token if one does not exist for the current session
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+// Global helper function for translations
+if (!function_exists('__')) {
+    function __($key, $replacements = [])
+    {
+        static $langData = [];
+        $locale = $_SESSION['locale'] ?? 'en';
+        
+        if (!isset($langData[$locale])) {
+            $langFile = BASE_PATH . "/app/Lang/{$locale}.php";
+            if (file_exists($langFile)) {
+                $langData[$locale] = require $langFile;
+            } else {
+                $langData[$locale] = [];
+            }
+        }
+
+        // Handle nested keys like 'navbar.home'
+        $keys = explode('.', $key);
+        $value = $langData[$locale];
+
+        foreach ($keys as $k) {
+            if (is_array($value) && array_key_exists($k, $value)) {
+                $value = $value[$k];
+            } else {
+                return $key; // Return the key itself if not found
+            }
+        }
+
+        if (is_string($value)) {
+            foreach ($replacements as $search => $replace) {
+                $value = str_replace(':' . $search, (string) $replace, $value);
+            }
+            return $value;
+        } elseif (is_array($value)) {
+            return $value;
+        }
+
+        return $key;
+    }
 }
 
 // Global helper function to escape output and prevent Cross-Site Scripting (XSS)
@@ -132,11 +178,12 @@ if (!function_exists('get_category_classes')) {
 // Global helper for formatting job timestamps
 if (!function_exists('job_time_ago')) {
     function job_time_ago($datetime) {
+        if (!$datetime) return '';
         $diff = time() - strtotime($datetime);
-        if      ($diff < 60)     return 'Just now';
-        elseif  ($diff < 3600)   return floor($diff / 60) . 'm ago';
-        elseif  ($diff < 86400)  return floor($diff / 3600) . 'h ago';
-        elseif  ($diff < 604800) return floor($diff / 86400) . 'd ago';
+        if      ($diff < 60)     return __('time.just_now');
+        elseif  ($diff < 3600)   return __('time.m_ago', ['m' => floor($diff / 60)]);
+        elseif  ($diff < 86400)  return __('time.h_ago', ['h' => floor($diff / 3600)]);
+        elseif  ($diff < 604800) return __('time.d_ago', ['d' => floor($diff / 86400)]);
         else                     return date('M d', strtotime($datetime));
     }
 }
@@ -160,10 +207,10 @@ if (!function_exists('req_time_ago')) {
     function req_time_ago($datetime) {
         if (!$datetime) return '';
         $diff = time() - strtotime($datetime);
-        if ($diff < 60)     return 'Just now';
-        if ($diff < 3600)   return floor($diff / 60) . 'm ago';
-        if ($diff < 86400)  return floor($diff / 3600) . 'h ago';
-        if ($diff < 604800) return floor($diff / 86400) . 'd ago';
+        if ($diff < 60)     return __('time.just_now');
+        if ($diff < 3600)   return __('time.m_ago', ['m' => floor($diff / 60)]);
+        if ($diff < 86400)  return __('time.h_ago', ['h' => floor($diff / 3600)]);
+        if ($diff < 604800) return __('time.d_ago', ['d' => floor($diff / 86400)]);
         return date('M j', strtotime($datetime));
     }
 }
@@ -171,10 +218,14 @@ if (!function_exists('req_time_ago')) {
 // Global helper for day grouping in message conversations
 if (!function_exists('format_message_date')) {
     function format_message_date($dt) {
+        if (!$dt) return '';
         $diff = time() - strtotime($dt);
-        if ($diff < 86400)  return 'Today';
-        if ($diff < 172800) return 'Yesterday';
-        if ($diff < 604800) return date('l', strtotime($dt));
+        if ($diff < 86400)  return __('time.today');
+        if ($diff < 172800) return __('time.yesterday');
+        if ($diff < 604800) {
+            // Translate day name securely, or return English
+            return date('l', strtotime($dt)); // We can add day names to lang files later if needed
+        }
         return date('M j, Y', strtotime($dt));
     }
 }

@@ -42,8 +42,8 @@ if ($isCraftsman) {
                 </svg>
             </div>
             <div>
-                <h3 class="text-lg font-extrabold text-emerald-900 mb-1">Email Successfully Verified! 🎉</h3>
-                <p class="text-emerald-700 font-medium">Your email address has been securely confirmed. Your account is now fully active, and you have complete access to post jobs, browse profiles, and manage bookings!</p>
+                <h3 class="text-lg font-extrabold text-emerald-900 mb-1"><?= __('profile.email_verified') ?></h3>
+                <p class="text-emerald-700 font-medium"><?= __('profile.email_verified_desc') ?></p>
             </div>
         </div>
         <?php endif; ?>
@@ -128,13 +128,14 @@ if ($isCraftsman) {
                             <?php if (!empty($user['wilaya'])): ?>
                             <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 flex items-center">
                                 <svg class="h-3.5 w-3.5 mr-0.5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
-                                <?= htmlspecialchars($user['wilaya']) ?>
+                                <?php $wilaya_arr = is_array(__('wilayas')) ? __('wilayas') : []; ?>
+                                <?= htmlspecialchars(preg_replace('/^\d{2}\s-\s/', '', $wilaya_arr[$user['wilaya']] ?? $user['wilaya'])) ?>
                             </span>
                             <?php endif; ?>
                             <?php if ($isCraftsman && !empty($craftsmanDetails['is_published'])): ?>
                             <span class="inline-flex items-center px-2 py-0.5 rounded bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[10px] font-bold uppercase tracking-wider border border-green-200 dark:border-green-700">
-                                <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1 animate-pulse"></span>
-                                Available
+                                <span class="w-1.5 h-1.5 bg-green-500 rounded-full <?= __('lang') === 'ar' ? 'ml-1' : 'mr-1' ?> animate-pulse"></span>
+                                <?= __('profile.available') ?>
                             </span>
                             <?php endif; ?>
                         </div>
@@ -145,43 +146,43 @@ if ($isCraftsman) {
                         <?php if ($isOwnProfile): ?>
                             <a href="<?= APP_URL ?>/profile/edit"
                                class="flex-1 flex items-center justify-center py-2.5 rounded-xl text-sm font-bold bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 shadow-sm transition-all">
-                                <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                                Edit
+                                <svg class="h-4 w-4 <?= __('lang') === 'ar' ? 'ml-1.5' : 'mr-1.5' ?>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                <?= __('profile.edit') ?>
                             </a>
                             <?php if ($isCraftsman): ?>
                             <button onclick="openLaunchModal()"
                                 class="flex-1 flex items-center justify-center py-2.5 rounded-xl text-sm font-bold text-white shadow-sm transition-all
                                        <?= !empty($craftsmanDetails['is_published']) ? 'bg-emerald-500' : 'bg-indigo-600' ?>">
                                 <?php if (!empty($craftsmanDetails['is_published'])): ?>
-                                <svg class="h-4 w-4 mr-1.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                                Live
+                                <svg class="h-4 w-4 <?= __('lang') === 'ar' ? 'ml-1.5' : 'mr-1.5' ?>" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                                <?= __('profile.live') ?>
                                 <?php else: ?>
-                                <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                                Launch
+                                <svg class="h-4 w-4 <?= __('lang') === 'ar' ? 'ml-1.5' : 'mr-1.5' ?>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                <?= __('profile.launch') ?>
                                 <?php endif; ?>
                             </button>
                             <?php endif; ?>
                         <?php elseif (isset($_SESSION['user_id'])): ?>
                             <a href="<?= APP_URL ?>/messages/<?= htmlspecialchars($user['username'] ?? '') ?>"
                                class="flex-1 flex items-center justify-center py-2.5 rounded-xl text-sm font-bold bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 shadow-sm transition-all">
-                                <svg class="h-4 w-4 mr-1.5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-                                Message
+                                <svg class="h-4 w-4 <?= __('lang') === 'ar' ? 'ml-1.5' : 'mr-1.5' ?> text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                                <?= __('profile.message') ?>
                             </a>
                             <?php if ($isCraftsman && !$isOwnProfile && ($_SESSION['role'] ?? '') !== 'admin'): ?>
                             <a href="<?= APP_URL ?>/bookings/create/<?= htmlspecialchars($user['username']) ?>"
                                class="flex-1 flex items-center justify-center py-2.5 rounded-xl text-sm font-bold text-white bg-indigo-600 shadow-sm transition-all">
-                                <svg class="h-4 w-4 mr-1.5 text-indigo-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                Book
+                                <svg class="h-4 w-4 <?= __('lang') === 'ar' ? 'ml-1.5' : 'mr-1.5' ?> text-indigo-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                <?= __('profile.book') ?>
                             </a>
                             <?php endif; ?>
                         <?php elseif ($isCraftsman): ?>
                             <a href="<?= APP_URL ?>/login"
                                class="flex-1 flex items-center justify-center py-2.5 rounded-xl text-sm font-bold bg-white text-gray-700 border border-gray-200 shadow-sm transition-all">
-                                Message
+                                <?= __('profile.message') ?>
                             </a>
                             <a href="<?= APP_URL ?>/register"
                                class="flex-1 flex items-center justify-center py-2.5 rounded-xl text-sm font-bold text-white bg-indigo-600 shadow-sm transition-all">
-                                Sign up
+                                <?= __('profile.sign_up') ?>
                             </a>
                         <?php endif; ?>
                     </div>
@@ -213,17 +214,18 @@ if ($isCraftsman) {
 
                                 <?php if (!empty($user['wilaya'])): ?>
                                 <span class="text-sm font-semibold text-gray-500 dark:text-gray-400 flex items-center">
-                                    <svg class="h-4 w-4 mr-1 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <svg class="h-4 w-4 <?= __('lang') === 'ar' ? 'ml-1' : 'mr-1' ?> text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                                     </svg>
-                                    <?= htmlspecialchars($user['wilaya']) ?>
+                                    <?php $wilaya_arr = is_array(__('wilayas')) ? __('wilayas') : []; ?>
+                                    <?= htmlspecialchars(preg_replace('/^\d{2}\s-\s/', '', $wilaya_arr[$user['wilaya']] ?? $user['wilaya'])) ?>
                                 </span>
                                 <?php endif; ?>
 
                                 <?php if ($isCraftsman && !empty($craftsmanDetails['is_published'])): ?>
                                 <span class="inline-flex items-center px-2.5 py-1 rounded bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-bold uppercase tracking-wider border border-green-200 dark:border-green-700">
-                                    <span class="w-2 h-2 bg-green-500 rounded-full mr-1.5 animate-pulse"></span>
-                                    Available
+                                    <span class="w-2 h-2 bg-green-500 rounded-full <?= __('lang') === 'ar' ? 'ml-1.5' : 'mr-1.5' ?> animate-pulse"></span>
+                                    <?= __('profile.available') ?>
                                 </span>
                                 <?php endif; ?>
                             </div>
@@ -237,11 +239,11 @@ if ($isCraftsman) {
                         <div class="relative" id="shareWrapper">
                             <button type="button" onclick="toggleShareMenu()"
                                 class="flex items-center justify-center px-4 py-3 rounded-xl text-sm font-bold border shadow-sm transition-all duration-200 bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600"
-                                title="Share this profile">
-                                <svg class="h-5 w-5 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                title="<?= __('profile.share') ?>">
+                                <svg class="h-5 w-5 <?= __('lang') === 'ar' ? 'ml-2' : 'mr-2' ?> text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
                                 </svg>
-                                Share
+                                <?= __('profile.share') ?>
                             </button>
                             <!-- Share Dropdown -->
                             <div id="shareDropdown" class="hidden absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 z-50 overflow-hidden">
@@ -268,17 +270,17 @@ if ($isCraftsman) {
                         <button type="button" onclick="toggleFavorite(<?= $user['id'] ?>, this)"
                             class="flex items-center justify-center px-4 py-3 rounded-xl text-sm font-bold border shadow-sm transition-all duration-200
                                    <?= $isFavorite ? 'bg-pink-50 border-pink-200 text-pink-600 hover:bg-pink-100' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50' ?>"
-                            title="<?= $isFavorite ? 'Remove from saved' : 'Save craftsman' ?>">
+                            title="<?= $isFavorite ? __('profile.saved') : __('profile.save') ?>">
                             <?php if ($isFavorite): ?>
-                            <svg class="h-5 w-5 mr-2 text-pink-500" viewBox="0 0 20 20" fill="currentColor">
+                            <svg class="h-5 w-5 <?= __('lang') === 'ar' ? 'ml-2' : 'mr-2' ?> text-pink-500" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
                             </svg>
-                            Saved
+                            <?= __('profile.saved') ?>
                             <?php else: ?>
-                            <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <svg class="h-5 w-5 <?= __('lang') === 'ar' ? 'ml-2' : 'mr-2' ?>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                             </svg>
-                            Save
+                            <?= __('profile.save') ?>
                             <?php endif; ?>
                         </button>
                         <?php endif; ?>
@@ -286,53 +288,53 @@ if ($isCraftsman) {
                         <?php if ($isOwnProfile): ?>
                             <a href="<?= APP_URL ?>/profile/edit"
                                class="flex items-center justify-center px-5 py-3 rounded-xl text-sm font-bold bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 shadow-sm hover:shadow hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all">
-                                <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <svg class="h-4 w-4 <?= __('lang') === 'ar' ? 'ml-2' : 'mr-2' ?>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                 </svg>
-                                Edit Profile
+                                <?= __('profile.edit_profile') ?>
                             </a>
                             <?php if ($isCraftsman): ?>
                             <button onclick="openLaunchModal()"
                                 class="flex items-center justify-center px-5 py-3 rounded-xl text-sm font-bold text-white shadow-sm hover:shadow transition-all
                                        <?= !empty($craftsmanDetails['is_published']) ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-indigo-600 hover:bg-indigo-700' ?>">
                                 <?php if (!empty($craftsmanDetails['is_published'])): ?>
-                                <svg class="h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <svg class="h-4 w-4 <?= __('lang') === 'ar' ? 'ml-2' : 'mr-2' ?>" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                                 </svg>
-                                Card is Live
+                                <?= __('profile.card_is_live') ?>
                                 <?php else: ?>
-                                <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <svg class="h-4 w-4 <?= __('lang') === 'ar' ? 'ml-2' : 'mr-2' ?>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                                 </svg>
-                                Launch Card
+                                <?= __('profile.launch_card') ?>
                                 <?php endif; ?>
                             </button>
                             <?php endif; ?>
                         <?php elseif (isset($_SESSION['user_id'])): ?>
                             <a href="<?= APP_URL ?>/messages/<?= htmlspecialchars($user['username'] ?? '') ?>"
                                class="flex items-center justify-center px-5 py-3 rounded-xl text-sm font-bold bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 shadow-sm hover:shadow hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all">
-                                <svg class="h-4 w-4 mr-2 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <svg class="h-4 w-4 <?= __('lang') === 'ar' ? 'ml-2' : 'mr-2' ?> text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                                 </svg>
-                                Message
+                                <?= __('profile.message') ?>
                             </a>
                             <?php if ($isCraftsman && !$isOwnProfile && ($_SESSION['role'] ?? '') !== 'admin'): ?>
                             <a href="<?= APP_URL ?>/bookings/create/<?= htmlspecialchars($user['username']) ?>"
                                class="flex items-center justify-center px-5 py-3 rounded-xl text-sm font-bold text-white bg-indigo-600 shadow-sm hover:shadow hover:bg-indigo-700 transition-all">
-                                <svg class="h-4 w-4 mr-2 text-indigo-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <svg class="h-4 w-4 <?= __('lang') === 'ar' ? 'ml-2' : 'mr-2' ?> text-indigo-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                 </svg>
-                                Request Booking
+                                <?= __('profile.request_booking') ?>
                             </a>
                             <?php endif; ?>
                         <?php elseif ($isCraftsman): ?>
                             <a href="<?= APP_URL ?>/login"
                                class="flex items-center justify-center px-5 py-3 rounded-xl text-sm font-bold bg-white text-gray-700 border border-gray-200 shadow-sm hover:shadow hover:bg-gray-50 transition-all">
-                                Send Message
+                                <?= __('profile.send_message') ?>
                             </a>
                             <a href="<?= APP_URL ?>/register"
                                class="flex items-center justify-center px-5 py-3 rounded-xl text-sm font-bold text-white bg-indigo-600 shadow-sm hover:shadow hover:bg-indigo-700 transition-all">
-                                Sign up to Book
+                                <?= __('profile.sign_up_to_book') ?>
                             </a>
                         <?php endif; ?>
                     </div>
@@ -346,7 +348,7 @@ if ($isCraftsman) {
                     <div class="bg-yellow-50/40 dark:bg-yellow-900/20 border border-yellow-100/50 dark:border-yellow-800/30 rounded-xl p-4 shadow-sm transition-all flex flex-col justify-center">
                         <div class="flex items-center gap-2 mb-2">
                             <svg class="w-4 h-4 text-yellow-500 dark:text-yellow-400" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                            <p class="text-[11px] font-bold text-yellow-700/80 dark:text-yellow-400 uppercase tracking-wider">Global Rating</p>
+                            <p class="text-[11px] font-bold text-yellow-700/80 dark:text-yellow-400 uppercase tracking-wider"><?= __('profile.global_rating') ?></p>
                         </div>
                         <div class="flex items-end gap-1.5 mt-0.5">
                             <p class="text-xl font-bold text-gray-900 dark:text-white tracking-tight leading-none"><?= number_format((float)$rating['avg_rating'], 1) ?></p>
@@ -358,7 +360,7 @@ if ($isCraftsman) {
                     <div class="bg-indigo-50/40 dark:bg-indigo-900/20 border border-indigo-100/50 dark:border-indigo-800/30 rounded-xl p-4 shadow-sm transition-all flex flex-col justify-center">
                         <div class="flex items-center gap-2 mb-2">
                             <svg class="w-4 h-4 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                            <p class="text-[11px] font-bold text-indigo-700/80 dark:text-indigo-400 uppercase tracking-wider">Hourly Rate</p>
+                            <p class="text-[11px] font-bold text-indigo-700/80 dark:text-indigo-400 uppercase tracking-wider"><?= __('profile.hourly_rate') ?></p>
                         </div>
                         <p class="text-xl font-bold text-gray-900 dark:text-white tracking-tight leading-none mt-0.5"><?= number_format($craftsmanDetails['hourly_rate'] ?? 0, 2) ?> <span class="text-sm font-medium text-gray-500 dark:text-gray-400 ml-0.5">DZD</span></p>
                     </div>
@@ -367,7 +369,7 @@ if ($isCraftsman) {
                     <div class="bg-teal-50/40 dark:bg-teal-900/20 border border-teal-100/50 dark:border-teal-800/30 rounded-xl p-4 shadow-sm transition-all flex flex-col justify-center">
                         <div class="flex items-center gap-2 mb-2">
                             <svg class="w-4 h-4 text-teal-500 dark:text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                            <p class="text-[11px] font-bold text-teal-700/80 dark:text-teal-400 uppercase tracking-wider">Member Since</p>
+                            <p class="text-[11px] font-bold text-teal-700/80 dark:text-teal-400 uppercase tracking-wider"><?= __('profile.member_since') ?></p>
                         </div>
                         <p class="text-xl font-bold text-gray-900 dark:text-white tracking-tight leading-none mt-0.5"><?= date('Y', strtotime($user['created_at'])) ?></p>
                     </div>
@@ -377,7 +379,7 @@ if ($isCraftsman) {
                     <div class="bg-purple-50/40 dark:bg-purple-900/20 border border-purple-100/50 dark:border-purple-800/30 rounded-xl p-4 shadow-sm transition-all flex flex-col justify-center">
                         <div class="flex items-center gap-2 mb-2">
                             <svg class="w-4 h-4 text-purple-500 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
-                            <p class="text-[11px] font-bold text-purple-700/80 dark:text-purple-400 uppercase tracking-wider">Total Jobs</p>
+                            <p class="text-[11px] font-bold text-purple-700/80 dark:text-purple-400 uppercase tracking-wider"><?= __('profile.total_jobs') ?></p>
                         </div>
                         <p class="text-xl font-bold text-gray-900 dark:text-white tracking-tight leading-none mt-0.5"><?= (int)($totalCompletedJobs ?? 0) ?></p>
                     </div>
@@ -403,8 +405,8 @@ if ($isCraftsman) {
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     <div>
-                        <p class="font-bold text-base mb-1">Profile Incomplete</p>
-                        <p class="text-red-600 dark:text-red-300">To publish your card, please edit your profile and provide your: Phone Number, Location, Service Category, Hourly Rate, and Bio.</p>
+                        <p class="font-bold text-base mb-1"><?= __('profile.incomplete_profile') ?></p>
+                        <p class="text-red-600 dark:text-red-300"><?= __('profile.incomplete_profile_desc') ?></p>
                     </div>
                 </div>
                 <?php elseif (isset($_GET['info']) && $_GET['info'] === 'unpublished'): ?>
@@ -413,8 +415,8 @@ if ($isCraftsman) {
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     <div>
-                        <p class="font-bold text-base mb-1">Card Automatically Unpublished</p>
-                        <p class="text-blue-700 dark:text-blue-200">Because you removed required information from your profile, your marketing card was taken off the Job Board. Fill in the required fields to publish it again.</p>
+                        <p class="font-bold text-base mb-1"><?= __('profile.unpublished_title') ?></p>
+                        <p class="text-blue-700 dark:text-blue-200"><?= __('profile.unpublished_desc') ?></p>
                     </div>
                 </div>
                 <?php endif; ?>
@@ -424,17 +426,17 @@ if ($isCraftsman) {
                 <!-- About Me -->
                 <div class="bg-white dark:bg-gray-800 rounded-[1.5rem] shadow-sm border border-gray-100 dark:border-gray-700 p-7">
                     <h2 class="text-lg font-extrabold text-gray-900 dark:text-white mb-4 flex items-center">
-                        <svg class="mr-2.5 h-6 w-6 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <svg class="<?= __('lang') === 'ar' ? 'ml-2.5' : 'mr-2.5' ?> h-6 w-6 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                         </svg>
-                        About Me
+                        <?= __('profile.about_me') ?>
                     </h2>
                     <?php if (!empty($craftsmanDetails['bio'])): ?>
                     <div class="prose prose-sm text-gray-600 dark:text-gray-300 leading-relaxed max-w-none">
                         <?= nl2br(htmlspecialchars($craftsmanDetails['bio'])) ?>
                     </div>
                     <?php else: ?>
-                    <p class="text-sm text-gray-400 dark:text-gray-500 italic">This craftsman hasn't added a bio yet.</p>
+                    <p class="text-sm text-gray-400 dark:text-gray-500 italic"><?= __('profile.no_bio') ?></p>
                     <?php endif; ?>
                 </div>
 
@@ -442,13 +444,13 @@ if ($isCraftsman) {
                 <div class="bg-white dark:bg-gray-800 rounded-[1.5rem] shadow-sm border border-gray-100 dark:border-gray-700 p-7">
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-lg font-extrabold text-gray-900 dark:text-white flex items-center">
-                            <svg class="mr-2.5 h-6 w-6 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <svg class="<?= __('lang') === 'ar' ? 'ml-2.5' : 'mr-2.5' ?> h-6 w-6 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
-                            Portfolio
+                            <?= __('profile.portfolio') ?>
                         </h2>
                         <?php if (!empty($images)): ?>
-                        <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-700 px-3 py-1.5 rounded-lg border border-gray-100 dark:border-gray-600"><?= count($images) ?> photo<?= count($images) !== 1 ? 's' : '' ?></span>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-700 px-3 py-1.5 rounded-lg border border-gray-100 dark:border-gray-600"><?= str_replace(':count', count($images), __(count($images) !== 1 ? 'profile.photos' : 'profile.photo')) ?></span>
                         <?php endif; ?>
                     </div>
 
@@ -480,9 +482,9 @@ if ($isCraftsman) {
                         <svg class="mx-auto h-10 w-10 text-gray-300 dark:text-gray-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
-                        <p class="text-sm text-gray-400 dark:text-gray-500">No portfolio images uploaded yet.</p>
+                        <p class="text-sm text-gray-400 dark:text-gray-500"><?= __('profile.no_portfolio') ?></p>
                         <?php if ($isOwnProfile): ?>
-                        <a href="<?= APP_URL ?>/profile/edit" class="mt-2 inline-block text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium">Add photos →</a>
+                        <a href="<?= APP_URL ?>/profile/edit" class="mt-2 inline-block text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium"><?= __('profile.add_photos') ?></a>
                         <?php endif; ?>
                     </div>
                     <?php endif; ?>
@@ -491,8 +493,8 @@ if ($isCraftsman) {
                 <?php else: ?>
                 <!-- Homeowner profile content -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-                    <h2 class="text-base font-bold text-gray-900 dark:text-white mb-3">About</h2>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">This user is an active homeowner on Crafts.</p>
+                    <h2 class="text-base font-bold text-gray-900 dark:text-white mb-3"><?= __('profile.homeowner_about') ?></h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400"><?= __('profile.homeowner_active') ?></p>
                 </div>
                 <?php endif; ?>
 
@@ -506,11 +508,11 @@ if ($isCraftsman) {
                 <div class="sticky top-24 pt-2">
                     <div class="flex items-center justify-between mb-5 px-1 pb-3 border-b border-gray-100 dark:border-gray-700">
                         <h2 class="text-xl font-extrabold text-gray-900 dark:text-white tracking-tight flex items-center">
-                            <svg class="mr-2.5 h-6 w-6 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <svg class="<?= __('lang') === 'ar' ? 'ml-2.5' : 'mr-2.5' ?> h-6 w-6 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
                             </svg>
-                            Reviews
-                            <span class="ml-2.5 text-xs font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 px-2.5 py-1 rounded-full"><?= $rating['total_reviews'] ?></span>
+                            <?= __('profile.reviews') ?>
+                            <span class="<?= __('lang') === 'ar' ? 'mr-2.5' : 'ml-2.5' ?> text-xs font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 px-2.5 py-1 rounded-full"><?= $rating['total_reviews'] ?></span>
                         </h2>
                     </div>
 
@@ -553,8 +555,10 @@ if ($isCraftsman) {
                         <svg class="mx-auto h-12 w-12 text-gray-300 dark:text-gray-600 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
                         </svg>
-                        <h3 class="text-sm font-bold text-gray-900 dark:text-white mt-1">No reviews yet</h3>
-                        <p class="text-[13px] text-gray-500 dark:text-gray-400 mt-1">Be the first to review this craftsman!</p>
+                        <h3 class="text-sm font-bold text-gray-900 dark:text-white mt-1"><?= __('profile.no_reviews') ?></h3>
+                        <?php if (!$isOwnProfile): ?>
+                        <p class="text-[13px] text-gray-500 dark:text-gray-400 mt-1"><?= __('profile.first_review') ?></p>
+                        <?php endif; ?>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -624,12 +628,12 @@ html.dark .custom-scrollbar::-webkit-scrollbar-thumb {
             <div class="px-6 pt-6 pb-2">
                 <div class="flex items-center justify-between mb-2">
                     <div class="flex items-center">
-                        <div class="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full p-2 mr-3">
+                        <div class="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full p-2 <?= __('lang') === 'ar' ? 'ml-3' : 'mr-3' ?>">
                             <svg class="h-6 w-6 text-indigo-600 dark:text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                             </svg>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Launch Card Preview</h3>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white"><?= __('profile.preview_title') ?></h3>
                     </div>
                     <button onclick="closeLaunchModal()" class="text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 transition">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -643,16 +647,16 @@ html.dark .custom-scrollbar::-webkit-scrollbar-thumb {
                 <?php if (!$canPublish): ?>
                 <div class="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700/50 text-yellow-800 dark:text-yellow-200 p-4 rounded-md mb-6 text-sm shadow-sm">
                     <p class="font-bold flex items-center">
-                        <svg class="h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <svg class="h-4 w-4 <?= __('lang') === 'ar' ? 'ml-2' : 'mr-2' ?>" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                         </svg>
-                        Profile Incomplete
+                        <?= __('profile.incomplete_profile') ?>
                     </p>
-                    <p class="mt-1 text-yellow-700 dark:text-yellow-300">To publish your marketing card, please <a href="<?= APP_URL ?>/profile/edit" class="font-bold underline hover:text-yellow-900 dark:hover:text-yellow-100">edit your profile</a> and provide your Phone Number, Location, Category, Bio, and Hourly Rate.</p>
+                    <p class="mt-1 text-yellow-700 dark:text-yellow-300"><?= __('profile.incomplete_profile_desc') ?></p>
                 </div>
                 <?php else: ?>
                 <p class="text-gray-500 dark:text-gray-400 mb-4 text-center text-sm leading-relaxed">
-                    This is how your business card appears to homeowners.
+                    <?= __('profile.preview_desc') ?>
                 </p>
                 <?php endif; ?>
 
@@ -692,11 +696,11 @@ html.dark .custom-scrollbar::-webkit-scrollbar-thumb {
 
                         <div class="flex items-center justify-between text-sm py-3 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/80 -mx-6 px-6 -mb-6">
                             <div>
-                                <span class="text-gray-500 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">Hourly Rate</span>
+                                <span class="text-gray-500 dark:text-gray-400 text-xs font-medium uppercase tracking-wider"><?= __('profile.hourly_rate') ?></span>
                                 <p class="font-bold text-gray-900 dark:text-white text-base"><?= number_format($craftsmanDetails['hourly_rate'] ?? 0, 2) ?> DZD</p>
                             </div>
-                            <div class="text-right">
-                                <span class="text-gray-500 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">Success Rating</span>
+                            <div class="text-<?= __('lang') === 'ar' ? 'left' : 'right' ?>">
+                                <span class="text-gray-500 dark:text-gray-400 text-xs font-medium uppercase tracking-wider"><?= __('profile.success_rating') ?></span>
                                 <p class="font-bold text-indigo-600 flex items-center justify-end gap-1">
                                     100% 
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -707,7 +711,7 @@ html.dark .custom-scrollbar::-webkit-scrollbar-thumb {
                         </div>
                     </div>
                     <div class="px-6 py-3 bg-gray-100 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 mt-auto text-center text-xs text-gray-400 dark:text-gray-500 font-medium">
-                        Preview Only
+                        <?= __('profile.preview_only') ?>
                     </div>
                 </div>
 
@@ -715,7 +719,7 @@ html.dark .custom-scrollbar::-webkit-scrollbar-thumb {
             <div class="bg-gray-50 dark:bg-gray-800/80 px-6 py-4 flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3 border-t border-gray-200 dark:border-gray-700">
                 <div class="w-full sm:w-auto mt-3 sm:mt-0">
                     <button type="button" onclick="closeLaunchModal()" class="w-full inline-flex justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-150">
-                        Cancel
+                        <?= __('profile.cancel') ?>
                     </button>
                 </div>
 
@@ -726,21 +730,21 @@ html.dark .custom-scrollbar::-webkit-scrollbar-thumb {
                         <input type="hidden" name="status" value="<?= !empty($craftsmanDetails['is_published']) ? '0' : '1' ?>">
                         <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent shadow-sm text-sm font-bold rounded-md text-white <?= !empty($craftsmanDetails['is_published']) ? 'bg-red-600 hover:bg-red-700' : 'bg-indigo-600 hover:bg-indigo-700' ?> focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150">
                             <?php if (!empty($craftsmanDetails['is_published'])): ?>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 <?= __('lang') === 'ar' ? 'ml-2' : 'mr-2' ?>" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd" />
                                 </svg>
-                                Unpublish Card
+                                <?= __('profile.unpublish_card') ?>
                             <?php else: ?>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 <?= __('lang') === 'ar' ? 'ml-2' : 'mr-2' ?>" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                                 </svg>
-                                Go Live Now
+                                <?= __('profile.go_live_now') ?>
                             <?php endif; ?>
                         </button>
                     </form>
                     <?php else: ?>
                     <a href="<?= APP_URL ?>/profile/edit" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent shadow-sm text-sm font-bold rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150">
-                        Complete Profile First
+                        <?= __('profile.complete_profile_first') ?>
                     </a>
                     <?php endif; ?>
                 </div>
@@ -760,19 +764,19 @@ html.dark .custom-scrollbar::-webkit-scrollbar-thumb {
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-sm w-full transform transition-all border border-gray-100 dark:border-gray-700">
             <div class="p-6">
                 <div class="flex items-center mb-4">
-                    <div class="flex-shrink-0 bg-red-100 dark:bg-red-900/30 rounded-full p-2 mr-3">
+                    <div class="flex-shrink-0 bg-red-100 dark:bg-red-900/30 rounded-full p-2 <?= __('lang') === 'ar' ? 'ml-3' : 'mr-3' ?>">
                         <svg class="h-6 w-6 text-red-600 dark:text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                         </svg>
                     </div>
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">Log Out?</h3>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white"><?= __('profile.logout_title') ?></h3>
                 </div>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">Are you sure you want to log out of your account?</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-6"><?= __('profile.logout_desc') ?></p>
                 <div class="flex justify-end space-x-3">
-                    <button onclick="closeLogoutModal()" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition duration-150">Cancel</button>
+                    <button onclick="closeLogoutModal()" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition duration-150"><?= __('profile.cancel') ?></button>
                     <form action="<?= APP_URL ?>/logout" method="POST" class="inline">
                         <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token'] ?? '') ?>">
-                        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition duration-150">Yes, Log Out</button>
+                        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition duration-150"><?= __('profile.yes_logout') ?></button>
                     </form>
                 </div>
             </div>
@@ -858,7 +862,7 @@ async function toggleFavorite(craftsmanId, btnElement) {
         // Change to "Save" (Not favorite)
         btnElement.classList.remove('bg-pink-50', 'border-pink-200', 'text-pink-600', 'hover:bg-pink-100', 'dark:bg-pink-900/30', 'dark:border-pink-800', 'dark:text-pink-400', 'dark:hover:bg-pink-900/50');
         btnElement.classList.add('bg-white', 'border-gray-200', 'text-gray-600', 'hover:bg-gray-50', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-gray-300', 'dark:hover:bg-gray-600');
-        btnElement.title = 'Save craftsman';
+        btnElement.title = "<?= __('profile.save') ?>";
         
         icon.classList.remove('text-pink-500');
         icon.classList.add('text-gray-400');
@@ -868,12 +872,12 @@ async function toggleFavorite(craftsmanId, btnElement) {
         icon.setAttribute('stroke-width', '2');
         icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />';
         
-        if (textSpan) textSpan.innerText = 'Save';
+        if (textSpan) textSpan.innerText = "<?= __('profile.save') ?>";
     } else {
         // Change to "Saved" (Is favorite)
         btnElement.classList.remove('bg-white', 'border-gray-200', 'text-gray-600', 'hover:bg-gray-50', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:text-gray-300', 'dark:hover:bg-gray-600');
         btnElement.classList.add('bg-pink-50', 'border-pink-200', 'text-pink-600', 'hover:bg-pink-100', 'dark:bg-pink-900/30', 'dark:border-pink-800', 'dark:text-pink-400', 'dark:hover:bg-pink-900/50');
-        btnElement.title = 'Remove from saved';
+        btnElement.title = "<?= __('profile.saved') ?>";
         
         icon.classList.remove('text-gray-400');
         icon.classList.add('text-pink-500');
@@ -883,7 +887,7 @@ async function toggleFavorite(craftsmanId, btnElement) {
         icon.setAttribute('viewBox', '0 0 20 20');
         icon.innerHTML = '<path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />';
         
-        if (textSpan) textSpan.innerText = 'Saved';
+        if (textSpan) textSpan.innerText = "<?= __('profile.saved') ?>";
     }
 
     // 3) Send request to the backend with proper CSRF token
@@ -935,10 +939,10 @@ function copyProfileLink() {
     var url = window.location.href;
     navigator.clipboard.writeText(url).then(function() {
         var textEl = document.getElementById('copyLinkText');
-        textEl.innerText = 'Copied!';
+        textEl.innerText = "<?= __('profile.link_copied') ?>";
         textEl.parentElement.classList.add('text-green-600');
         setTimeout(function() {
-            textEl.innerText = 'Copy Link';
+            textEl.innerText = "<?= __('profile.copy_link') ?>";
             textEl.parentElement.classList.remove('text-green-600');
         }, 2000);
     });

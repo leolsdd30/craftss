@@ -7,6 +7,7 @@ use App\Controllers\CraftsmanController;
 use App\Controllers\JobBoardController;
 use App\Controllers\SearchController;
 use App\Controllers\ProfileController;
+use App\Controllers\LanguageController;
 
 use App\Controllers\BookingController;
 use App\Controllers\ReviewController;
@@ -34,6 +35,9 @@ $router->get('/privacy', [HomeController::class , 'privacy']);
 
 // API Routes
 $router->get('/api/poll', [ApiController::class , 'poll']);
+
+// Language Route
+$router->get('/lang/{locale}', [LanguageController::class , 'switchLang']);
 
 // Public Search & Profile Routes
 $router->get('/search', [SearchController::class , 'index']);

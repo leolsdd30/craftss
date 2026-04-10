@@ -17,16 +17,8 @@ if ($isCraftsman && !empty($craftsmanDetails['json_metadata'])) {
     }
 }
 
-$wilayas = [
-    "01 - Adrar","02 - Chlef","03 - Laghouat","04 - Oum El Bouaghi","05 - Batna","06 - Béjaïa","07 - Biskra","08 - Béchar","09 - Blida","10 - Bouira",
-    "11 - Tamanrasset","12 - Tébessa","13 - Tlemcen","14 - Tiaret","15 - Tizi Ouzou","16 - Alger","17 - Djelfa","18 - Jijel","19 - Sétif","20 - Saïda",
-    "21 - Skikda","22 - Sidi Bel Abbès","23 - Annaba","24 - Guelma","25 - Constantine","26 - Médéa","27 - Mostaganem","28 - M'Sila","29 - Mascara","30 - Ouargla",
-    "31 - Oran","32 - El Bayadh","33 - Illizi","34 - Bordj Bou Arréridj","35 - Boumerdès","36 - El Tarf","37 - Tindouf","38 - Tissemsilt","39 - El Oued","40 - Khenchela",
-    "41 - Souk Ahras","42 - Tipaza","43 - Mila","44 - Aïn Defla","45 - Naâma","46 - Aïn Témouchent","47 - Ghardaïa","48 - Relizane","49 - Timimoun","50 - Bordj Badji Mokhtar",
-    "51 - Ouled Djellal","52 - Béni Abbès","53 - In Salah","54 - In Guezzam","55 - Touggourt","56 - Djanet","57 - El M'Ghair","58 - El Meniaa"
-];
-
-$categories = ["Plumbing","Electrical","Carpentry","Painting","Roofing","HVAC","Landscaping","Tiling","General Handyman"];
+$wilayas    = array_keys(__('wilayas') ?: []);
+$categories = array_keys(__('categories') ?: []);
 
 // Username lock logic
 $canEditUsername = true;
@@ -45,16 +37,20 @@ if (!empty($user['username_updated_at'])) {
 
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <!-- Header area with Back link -->
-        <div class="flex items-center justify-between mb-6">
-            <a href="<?= APP_URL ?>/profile/<?= e($user['username']) ?>"
-               class="inline-flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition group">
-                <svg class="mr-1.5 h-4 w-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                </svg>
-                Back to Profile
-            </a>
-            <h1 class="text-xl font-bold text-gray-900 dark:text-white hidden sm:block">Edit Profile</h1>
+        <!-- Header area aligned with the grid -->
+        <div class="flex flex-col lg:grid lg:grid-cols-3 gap-6 items-end mb-6">
+            <div class="lg:col-span-1 lg:col-start-1">
+                <a href="<?= APP_URL ?>/profile/<?= e($user['username']) ?>"
+                   class="inline-flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition group mb-1 lg:mb-0">
+                    <svg class="<?= __('lang') === 'ar' ? 'ml-1.5 rotate-180' : 'mr-1.5' ?> h-4 w-4 group-hover:<?= __('lang') === 'ar' ? 'translate-x-0.5' : '-translate-x-0.5' ?> transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    <?= __('profile_edit.back_to_profile') ?>
+                </a>
+            </div>
+            <div class="lg:col-span-2 lg:col-start-2">
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white hidden sm:block"><?= __('profile_edit.edit_profile') ?></h1>
+            </div>
         </div>
 
         <form action="<?= APP_URL ?>/profile/edit" method="POST" enctype="multipart/form-data" id="edit-form">
@@ -69,8 +65,8 @@ if (!empty($user['username_updated_at'])) {
             <div class="order-1 lg:order-none lg:col-span-1 lg:col-start-1 lg:row-start-1 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
                 <div class="p-5">
                     <h2 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-4 flex items-center">
-                        <svg class="h-3.5 w-3.5 mr-1.5 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                        Profile Picture
+                        <svg class="h-3.5 w-3.5 <?= __('lang') === 'ar' ? 'ml-1.5' : 'mr-1.5' ?> text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        <?= __('profile_edit.profile_picture') ?>
                     </h2>
 
                     <div class="flex items-center gap-4 sm:flex-col sm:items-center">
@@ -103,15 +99,15 @@ if (!empty($user['username_updated_at'])) {
                                 <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
                                 </svg>
-                                Change Photo
+                                <?= __('profile_edit.change_photo') ?>
                             </button>
-                            <p id="file-name" class="mt-1.5 text-[10px] sm:text-xs text-center text-gray-400">JPG, PNG, GIF or WebP · max 5MB</p>
+                            <p id="file-name" class="mt-1.5 text-[10px] sm:text-xs text-center text-gray-400"><?= __('profile_edit.pic_requirements') ?></p>
 
                             <?php if (!empty($user['profile_picture']) && $user['profile_picture'] !== 'default.png'): ?>
                             <input type="checkbox" name="remove_picture" id="remove_picture" value="1" class="hidden">
                             <button type="button" id="remove-btn" onclick="removePhoto()"
                                 class="mt-2 w-full text-xs font-medium text-red-500 hover:text-red-700 transition text-center">
-                                Remove Photo
+                                <?= __('profile_edit.remove_photo') ?>
                             </button>
                             <?php endif; ?>
                         </div>
@@ -122,56 +118,56 @@ if (!empty($user['username_updated_at'])) {
             <!-- 2. PERSONAL INFORMATION (Mobile: Order 2, Desktop: Col 2-3 Row 1) -->
             <div class="order-2 lg:order-none lg:col-span-2 lg:col-start-2 lg:row-start-1 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                 <h2 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-4 flex items-center">
-                    <svg class="h-3.5 w-3.5 mr-1.5 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                    Personal Information
+                    <svg class="h-3.5 w-3.5 <?= __('lang') === 'ar' ? 'ml-1.5' : 'mr-1.5' ?> text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    <?= __('profile_edit.personal_info') ?>
                 </h2>
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
                     <div>
-                        <label for="first_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">First Name</label>
+                        <label for="first_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?= __('profile_edit.first_name') ?></label>
                         <input type="text" name="first_name" id="first_name" required
                                value="<?= e($user['first_name']) ?>"
-                               class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                               class="block w-full px-4 py-2.5 h-11 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                     </div>
 
                     <div>
-                        <label for="last_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Last Name</label>
+                        <label for="last_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?= __('profile_edit.last_name') ?></label>
                         <input type="text" name="last_name" id="last_name" required
                                value="<?= e($user['last_name']) ?>"
-                               class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                               class="block w-full px-4 py-2.5 h-11 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                     </div>
 
                     <div>
                         <label for="phone_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center">
-                            Phone Number
+                            <?= __('profile_edit.phone_number') ?>
                             <?php if ($isCraftsman && empty($user['phone_number'])): ?>
-                            <span class="text-[10px] text-amber-500 font-bold ml-2 inline-flex items-center bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 uppercase tracking-widest">
-                                <svg class="w-3 h-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                                Publish req.
+                            <span class="text-[10px] text-amber-500 font-bold <?= __('lang') === 'ar' ? 'mr-2' : 'ml-2' ?> inline-flex items-center bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 uppercase tracking-widest">
+                                <svg class="w-3 h-3 <?= __('lang') === 'ar' ? 'ml-0.5' : 'mr-0.5' ?>" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                <?= __('profile_edit.publish_req') ?>
                             </span>
                             <?php endif; ?>
                         </label>
                         <input type="tel" name="phone_number" id="phone_number"
                                value="<?= e($user['phone_number'] ?? '') ?>"
-                               placeholder="e.g. 0555 123 456"
-                               class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                               placeholder="<?= __('profile_edit.phone_placeholder') ?>"
+                               class="block w-full px-4 py-2.5 h-11 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition direction-ltr input-ltr">
                     </div>
 
                     <div>
                         <label for="wilaya" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center">
-                            Wilaya
+                            <?= __('profile_edit.wilaya') ?>
                             <?php if ($isCraftsman && empty($user['wilaya'])): ?>
-                            <span class="text-[10px] text-amber-500 font-bold ml-2 inline-flex items-center bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 uppercase tracking-widest">
-                                <svg class="w-3 h-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                                Publish req.
+                            <span class="text-[10px] text-amber-500 font-bold <?= __('lang') === 'ar' ? 'mr-2' : 'ml-2' ?> inline-flex items-center bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 uppercase tracking-widest">
+                                <svg class="w-3 h-3 <?= __('lang') === 'ar' ? 'ml-0.5' : 'mr-0.5' ?>" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                <?= __('profile_edit.publish_req') ?>
                             </span>
                             <?php endif; ?>
                         </label>
                         <select name="wilaya" id="wilaya"
-                                class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                            <option value="">— Select Wilaya —</option>
+                                class="block w-full px-4 py-2.5 h-11 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            <option value=""><?= __('profile_edit.select_wilaya') ?></option>
                             <?php foreach ($wilayas as $w): ?>
-                            <option value="<?= e($w) ?>" <?= ($user['wilaya'] ?? '') === $w ? 'selected' : '' ?>><?= e($w) ?></option>
+                            <option value="<?= e($w) ?>" <?= ($user['wilaya'] ?? '') === $w ? 'selected' : '' ?>><?= __('wilayas.' . $w) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -179,28 +175,29 @@ if (!empty($user['username_updated_at'])) {
                     <!-- Merged Username -->
                     <div class="sm:col-span-2 pt-5 border-t border-gray-100 dark:border-gray-700 mt-2">
                         <label for="username" class="block text-sm font-bold text-gray-900 dark:text-white mb-1">
-                            Public Username
-                            <span class="text-gray-400 dark:text-gray-500 font-normal ml-1 text-xs">— appears in your profile URL</span>
+                            <?= __('profile_edit.public_username') ?>
+                            <span class="text-gray-400 dark:text-gray-500 font-normal <?= __('lang') === 'ar' ? 'mr-1' : 'ml-1' ?> text-xs"><?= __('profile_edit.username_desc') ?></span>
                         </label>
                         <?php if (!$canEditUsername): ?>
                         <input type="text" value="<?= e($user['username'] ?? '') ?>" disabled
-                               class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed">
+                               class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed text-left direction-ltr">
                         <p class="mt-1.5 text-xs text-amber-600 flex items-center gap-1">
                             <svg class="h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                             </svg>
-                            You can change your username in <?= $daysRemaining ?> day<?= $daysRemaining !== 1 ? 's' : '' ?>.
+                            <?= str_replace(':days', $daysRemaining, __('profile_edit.username_change_wait')) ?>
                         </p>
                         <?php else: ?>
-                        <div class="relative">
+                        <div class="relative direction-ltr input-ltr" style="direction: ltr;">
                             <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400 text-sm pointer-events-none">@</span>
                             <input type="text" name="username" id="username"
                                    value="<?= e($user['username'] ?? '') ?>"
-                                   placeholder="your_username"
-                                   class="block w-full pl-8 pr-4 py-2.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                   placeholder="<?= __('profile_edit.username_placeholder') ?>"
+                                   style="text-align: left; direction: ltr;"
+                                   class="block w-full pl-8 pr-4 py-2.5 h-11 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                         </div>
-                        <div id="username-feedback" class="mt-1.5 text-xs font-medium flex items-center transition-all duration-200"></div>
-                        <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">Must start with a letter · min 3 chars · letters, numbers, _ and - only</p>
+                        <div id="username-feedback" class="mt-1.5 text-xs font-medium flex items-center transition-all duration-200 direction-ltr"></div>
+                        <p class="mt-1 text-xs text-gray-400 dark:text-gray-500"><?= __('profile_edit.username_reqs') ?></p>
                         <?php endif; ?>
                     </div>
 
@@ -211,31 +208,31 @@ if (!empty($user['username_updated_at'])) {
             <?php if ($isCraftsman): ?>
             <div class="order-3 lg:order-none lg:col-span-2 lg:col-start-2 lg:row-start-2 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                 <h2 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-4 flex items-center">
-                    <svg class="h-3.5 w-3.5 mr-1.5 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                    Professional Details
+                    <svg class="h-3.5 w-3.5 <?= __('lang') === 'ar' ? 'ml-1.5' : 'mr-1.5' ?> text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    <?= __('profile_edit.professional_details') ?>
                 </h2>
                 <div class="space-y-4">
 
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
-                            <label for="service_category" class="block text-sm font-medium text-gray-700 mb-1">Service Category</label>
+                            <label for="service_category" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?= __('profile_edit.service_category') ?></label>
                             <select name="service_category" id="service_category"
-                                    class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                    class="block w-full px-4 py-2.5 h-11 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                                 <?php
                                 $selectedCat = $craftsmanDetails['service_category'] ?? 'General Handyman';
                                 foreach ($categories as $cat):
                                 ?>
-                                <option value="<?= e($cat) ?>" <?= $cat === $selectedCat ? 'selected' : '' ?>><?= e($cat) ?></option>
+                                <option value="<?= e($cat) ?>" <?= $cat === $selectedCat ? 'selected' : '' ?>><?= __('categories.' . $cat) ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
                         <div>
-                            <label for="hourly_rate" class="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                                Hourly Rate
+                            <label for="hourly_rate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center">
+                                <?= __('profile_edit.hourly_rate') ?>
                                 <?php if (!isset($craftsmanDetails['hourly_rate']) || $craftsmanDetails['hourly_rate'] <= 0): ?>
-                                <span class="text-[10px] text-amber-500 font-bold ml-2 inline-flex items-center bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 uppercase tracking-widest">
-                                    <svg class="w-3 h-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                                    Publish req.
+                                <span class="text-[10px] text-amber-500 font-bold <?= __('lang') === 'ar' ? 'mr-2' : 'ml-2' ?> inline-flex items-center bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 uppercase tracking-widest">
+                                    <svg class="w-3 h-3 <?= __('lang') === 'ar' ? 'ml-0.5' : 'mr-0.5' ?>" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                    <?= __('profile_edit.publish_req') ?>
                                 </span>
                                 <?php endif; ?>
                             </label>
@@ -243,8 +240,8 @@ if (!empty($user['username_updated_at'])) {
                                 <input type="number" name="hourly_rate" id="hourly_rate"
                                        step="0.01" min="0"
                                        value="<?= e($craftsmanDetails['hourly_rate'] ?? '0.00') ?>"
-                                       class="block w-full px-4 py-2.5 pr-14 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                       class="block w-full px-4 py-2.5 h-11 <?= __('lang') === 'ar' ? 'pl-14 direction-ltr text-right' : 'pr-14' ?> border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                <div class="absolute inset-y-0 <?= __('lang') === 'ar' ? 'left-0 pl-3' : 'right-0 pr-3' ?> flex items-center pointer-events-none">
                                     <span class="text-gray-400 dark:text-gray-500 text-sm font-medium">DZD</span>
                                 </div>
                             </div>
@@ -252,35 +249,35 @@ if (!empty($user['username_updated_at'])) {
                     </div>
 
                     <div>
-                        <label for="bio" class="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                            Professional Bio
+                        <label for="bio" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center">
+                            <?= __('profile_edit.professional_bio') ?>
                             <?php if (empty($craftsmanDetails['bio'])): ?>
-                            <span class="text-[10px] text-amber-500 font-bold ml-2 inline-flex items-center bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 uppercase tracking-widest">
-                                <svg class="w-3 h-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                                Publish req.
+                            <span class="text-[10px] text-amber-500 font-bold <?= __('lang') === 'ar' ? 'mr-2' : 'ml-2' ?> inline-flex items-center bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 uppercase tracking-widest">
+                                <svg class="w-3 h-3 <?= __('lang') === 'ar' ? 'ml-0.5' : 'mr-0.5' ?>" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                <?= __('profile_edit.publish_req') ?>
                             </span>
                             <?php else: ?>
-                            <span class="text-gray-400 font-normal ml-1 text-xs">(optional)</span>
+                            <span class="text-gray-400 dark:text-gray-500 font-normal <?= __('lang') === 'ar' ? 'mr-1' : 'ml-1' ?> text-xs"><?= __('profile_edit.optional') ?></span>
                             <?php endif; ?>
                         </label>
                         <textarea id="bio" name="bio" rows="5"
                                   maxlength="500"
-                                  placeholder="Describe your experience, skills, and what makes you stand out..."
+                                  placeholder="<?= __('profile_edit.bio_placeholder') ?>"
                                   class="block w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition resize-none"
                                   oninput="document.getElementById('bio-count').textContent=this.value.length"
                         ><?= e($craftsmanDetails['bio'] ?? '') ?></textarea>
-                        <p class="mt-1 text-xs text-gray-400 text-right">
-                            <span id="bio-count"><?= strlen($craftsmanDetails['bio'] ?? '') ?></span>/500
+                        <p class="mt-1 text-xs text-gray-400 text-<?= __('lang') === 'ar' ? 'left' : 'right' ?>">
+                            <span id="bio-count"><?= mb_strlen($craftsmanDetails['bio'] ?? '', 'UTF-8') ?></span>/500
                         </p>
                     </div>
                     
                     <!-- Total Jobs Privacy Toggle -->
                     <div class="pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
                         <div>
-                            <h4 class="text-sm font-bold text-gray-900 dark:text-white">Show Total Completed Jobs</h4>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Display the number of jobs you've finished on your profile card.</p>
+                            <h4 class="text-sm font-bold text-gray-900 dark:text-white"><?= __('profile_edit.show_total_jobs') ?></h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"><?= __('profile_edit.show_total_jobs_desc') ?></p>
                         </div>
-                        <label class="relative inline-flex items-center cursor-pointer">
+                        <label class="relative inline-flex items-center cursor-pointer <?= __('lang') === 'ar' ? 'mr-3' : 'ml-3' ?>" style="direction: ltr;">
                             <input type="checkbox" name="show_total_jobs" value="1" class="sr-only peer" <?= $showTotalJobs ? 'checked' : '' ?>>
                             <div class="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 dark:after:border-gray-500 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                         </label>
@@ -295,16 +292,16 @@ if (!empty($user['username_updated_at'])) {
             <div class="order-4 lg:order-none lg:col-span-1 lg:col-start-1 lg:row-start-2 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
                 <div class="p-5">
                     <h2 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1 flex items-center">
-                        <svg class="h-3.5 w-3.5 mr-1.5 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                        Portfolio
+                        <svg class="h-3.5 w-3.5 <?= __('lang') === 'ar' ? 'ml-1.5' : 'mr-1.5' ?> text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        <?= __('profile_edit.portfolio') ?>
                     </h2>
-                    <p class="text-xs text-gray-400 mb-4">Up to 10 images · JPG PNG GIF WebP · 5MB each</p>
+                    <p class="text-xs text-gray-400 mb-4"><?= __('profile_edit.portfolio_reqs') ?></p>
 
                     <!-- Existing images -->
                     <?php if (!empty($existingImages)): ?>
                     <div class="mb-4">
                         <p class="text-xs font-medium text-gray-500 mb-2">
-                            Current (<span id="portfolio-count"><?= count($existingImages) ?></span>) — hover to remove
+                            <?= str_replace(':count', '<span id="portfolio-count">' . count($existingImages) . '</span>', __('profile_edit.current_count')) ?>
                         </p>
                         <div class="grid grid-cols-3 gap-2" id="existing-portfolio">
                             <?php foreach ($existingImages as $index => $img): 
@@ -321,7 +318,7 @@ if (!empty($user['username_updated_at'])) {
                                      onclick="openEditLightbox('<?= $imgUrl ?>', 'existing')">
                                 <!-- X button top-right -->
                                 <button type="button" onclick="event.stopPropagation(); removePortfolioImage(<?= $index ?>, '<?= e($img) ?>')"
-                                    class="absolute top-1.5 right-1.5 z-10 bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs font-bold shadow-lg transition-colors">
+                                    class="absolute top-1.5 <?= __('lang') === 'ar' ? 'left-1.5' : 'right-1.5' ?> z-10 bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs font-bold shadow-lg transition-colors">
                                     ×
                                 </button>
                                 <input type="hidden" name="existing_images[]" value="<?= e($img) ?>" id="input-portfolio-<?= $index ?>">
@@ -343,7 +340,7 @@ if (!empty($user['username_updated_at'])) {
                         <svg class="mx-auto h-8 w-8 text-gray-300 dark:text-gray-500 mb-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
-                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400" id="dropzone-text">Click to add images</p>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400" id="dropzone-text"><?= __('profile_edit.click_to_add') ?></p>
                     </div>
 
                     <!-- New image previews -->
@@ -360,14 +357,14 @@ if (!empty($user['username_updated_at'])) {
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
                 <a href="<?= APP_URL ?>/profile/<?= e($user['username']) ?>"
                    class="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition">
-                    Cancel
+                    <?= __('profile_edit.cancel') ?>
                 </a>
                 <button type="submit" form="edit-form"
                     class="inline-flex items-center gap-2 px-8 py-2.5 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                     </svg>
-                    Save Changes
+                    <?= __('profile_edit.save_changes') ?>
                 </button>
             </div>
         </div>
@@ -380,7 +377,7 @@ if (!empty($user['username_updated_at'])) {
     <div class="fixed inset-0 flex items-center justify-center p-4 pointer-events-none">
         <!-- Close button -->
         <button onclick="closeEditLightbox()"
-            class="pointer-events-auto absolute top-4 right-4 z-10 text-white hover:text-gray-300 transition p-2">
+            class="pointer-events-auto absolute top-4 <?= __('lang') === 'ar' ? 'left-4' : 'right-4' ?> z-10 text-white hover:text-gray-300 transition p-2">
             <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
             </svg>
@@ -428,7 +425,7 @@ function previewImage(event) {
 function removePhoto() {
     document.getElementById('remove_picture').checked = true;
     document.getElementById('profile-upload').value = '';
-    document.getElementById('file-name').textContent = 'JPG, PNG, GIF or WebP · max 5MB';
+    document.getElementById('file-name').textContent = <?= json_encode(__('profile_edit.pic_requirements')) ?>;
     document.getElementById('profile-preview').style.opacity = '0.3';
     var removeBtn = document.getElementById('remove-btn');
     if (removeBtn) removeBtn.style.display = 'none';
@@ -473,8 +470,8 @@ function syncPortfolioInput() {
     document.getElementById('portfolio-upload').files = dt.files;
     var textEl = document.getElementById('dropzone-text');
     textEl.textContent = pendingFiles.length > 0
-        ? pendingFiles.length + ' image' + (pendingFiles.length > 1 ? 's' : '') + ' ready to upload'
-        : 'Click to add images';
+        ? <?= json_encode(__('profile_edit.js_ready')) ?>.replace(':count', pendingFiles.length)
+        : <?= json_encode(__('profile_edit.click_to_add')) ?>;
 }
 
 function renderNewPreviews() {
@@ -505,7 +502,7 @@ function renderNewPreviews() {
             // New badge
             var badge = document.createElement('div');
             badge.className = 'absolute bottom-0 inset-x-0 bg-indigo-600 bg-opacity-80 px-2 py-1 text-center pointer-events-none';
-            badge.innerHTML = '<span class="text-xs text-white font-medium">New</span>';
+            badge.innerHTML = '<span class="text-xs text-white font-medium"><?= __('profile_edit.new_badge') ?></span>';
             wrapper.appendChild(badge);
         };
         reader.readAsDataURL(file);
@@ -527,7 +524,7 @@ function renderNewPreviews() {
         var val    = input.value.trim();
         var localOk = validateLocal(val);
         if (localOk && val !== originalValue) {
-            showLoading('Checking availability...');
+            showLoading(<?= json_encode(__('profile_edit.js_checking')) ?>);
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(function () { checkServer(val); }, 400);
         }
@@ -546,11 +543,11 @@ function renderNewPreviews() {
         input.classList.remove('border-red-400','border-green-400','border-yellow-400','ring-1','ring-red-400','ring-green-400','ring-yellow-400');
         feedback.className = 'mt-1.5 text-xs font-medium flex items-center transition-all duration-200';
         if (val === originalValue) { feedback.innerHTML = ''; usernameValid = true; return true; }
-        if (!val)                  { showError('Username cannot be empty.'); return false; }
-        if (val.length < 3)        { showError('Too short — minimum 3 characters.'); return false; }
-        if (/^[0-9]/.test(val))    { showError('Cannot start with a number.'); return false; }
-        if (/\s/.test(val))        { showError('Spaces are not allowed.'); return false; }
-        if (!/^[a-zA-Z][a-zA-Z0-9_-]{2,}$/.test(val)) { showError('Only letters, numbers, _ and - allowed.'); return false; }
+        if (!val)                  { showError(<?= json_encode(__('profile_edit.js_empty')) ?>); return false; }
+        if (val.length < 3)        { showError(<?= json_encode(__('profile_edit.js_too_short')) ?>); return false; }
+        if (/^[0-9]/.test(val))    { showError(<?= json_encode(__('profile_edit.js_no_number')) ?>); return false; }
+        if (/\s/.test(val))        { showError(<?= json_encode(__('profile_edit.js_no_spaces')) ?>); return false; }
+        if (!/^[a-zA-Z][a-zA-Z0-9_-]{2,}$/.test(val)) { showError(<?= json_encode(__('profile_edit.js_invalid_chars')) ?>); return false; }
         return true;
     }
 
@@ -560,10 +557,10 @@ function renderNewPreviews() {
             .then(function (d) {
                 if (input.value.trim() !== val) return;
                 input.classList.remove('border-yellow-400','ring-yellow-400');
-                if (d.available) { showSuccess('Username is available!'); usernameValid = true; }
-                else             { showError(d.message || 'This username is already taken.'); usernameValid = false; }
+                if (d.available) { showSuccess(<?= json_encode(__('profile_edit.js_available')) ?>); usernameValid = true; }
+                else             { showError(d.message || <?= json_encode(__('profile_edit.js_taken')) ?>); usernameValid = false; }
             })
-            .catch(function () { showSuccess('Username looks good.'); usernameValid = true; });
+            .catch(function () { showSuccess(<?= json_encode(__('profile_edit.js_looks_good')) ?>); usernameValid = true; });
     }
 
     function showError(msg) {

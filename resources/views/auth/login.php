@@ -13,7 +13,7 @@
 
         <!-- Logo -->
         <div class="relative z-10">
-            <a href="<?= APP_URL ?>/" class="flex items-center space-x-3">
+            <a href="<?= APP_URL ?>/" class="flex items-center gap-3">
                 <div class="h-10 w-10 bg-white rounded-xl flex items-center justify-center shadow-md">
                     <svg class="h-6 w-6 text-indigo-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
@@ -27,10 +27,10 @@
         <div class="relative z-10">
             <blockquote class="text-white">
                 <p class="text-3xl font-bold leading-snug mb-6">
-                    "Connecting skilled hands<br>with homes that need them."
+                    <?= __('auth.login_quote') ?>
                 </p>
                 <p class="text-indigo-200 text-base">
-                    Thousands of verified craftsmen ready to help with your next project — plumbing, electrical, carpentry, and more.
+                    <?= __('auth.login_quote_sub') ?>
                 </p>
             </blockquote>
         </div>
@@ -39,17 +39,17 @@
         <div class="relative z-10 flex items-center space-x-6">
             <div class="text-center">
                 <p class="text-2xl font-extrabold text-white">500+</p>
-                <p class="text-xs text-indigo-200 mt-0.5">Craftsmen</p>
+                <p class="text-xs text-indigo-200 mt-0.5"><?= __('auth.stats_craft') ?></p>
             </div>
             <div class="w-px h-10 bg-indigo-500"></div>
             <div class="text-center">
                 <p class="text-2xl font-extrabold text-white">48</p>
-                <p class="text-xs text-indigo-200 mt-0.5">Wilayas</p>
+                <p class="text-xs text-indigo-200 mt-0.5"><?= __('auth.stats_wilayas') ?></p>
             </div>
             <div class="w-px h-10 bg-indigo-500"></div>
             <div class="text-center">
                 <p class="text-2xl font-extrabold text-white">1,200+</p>
-                <p class="text-xs text-indigo-200 mt-0.5">Jobs Done</p>
+                <p class="text-xs text-indigo-200 mt-0.5"><?= __('auth.stats_jobs') ?></p>
             </div>
         </div>
     </div>
@@ -64,13 +64,13 @@
     <svg class="h-5 w-5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
     </svg>
-    <span>Password updated successfully. You can now sign in with your new password.</span>
+    <span><?= __('auth.pw_updated') ?></span>
 </div>
 <?php endif; ?>
 
             <!-- Mobile logo -->
             <div class="flex justify-center mb-8 lg:hidden">
-                <a href="<?= APP_URL ?>/" class="flex items-center space-x-2">
+                <a href="<?= APP_URL ?>/" class="flex items-center gap-2">
                     <div class="h-9 w-9 bg-indigo-600 rounded-xl flex items-center justify-center">
                         <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
@@ -81,11 +81,11 @@
             </div>
 
             <div class="mb-8">
-                <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white">Welcome back</h1>
+                <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white"><?= __('auth.login_title') ?></h1>
                 <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                    Don't have an account?
+                    <?= __('auth.no_account') ?>
                     <a href="<?= APP_URL ?>/register" class="font-semibold text-indigo-600 hover:text-indigo-500 transition">
-                        Sign up for free
+                        <?= __('auth.signup_free') ?>
                     </a>
                 </p>
             </div>
@@ -104,7 +104,7 @@
 
                 <!-- Email -->
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email address</label>
+                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?= __('auth.email') ?></label>
                     <input id="email" name="email" type="email" autocomplete="email" required
                         class="block w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
@@ -113,7 +113,7 @@
 
                 <!-- Password -->
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><?= __('auth.password') ?></label>
                     <div class="relative">
                         <input id="password" name="password" type="password" autocomplete="current-password" required
                             class="block w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
@@ -133,13 +133,13 @@
 <div class="flex justify-end -mt-1">
     <a href="<?= APP_URL ?>/forgot-password"
        class="text-xs font-medium text-indigo-600 hover:text-indigo-500 transition">
-        Forgot your password?
+        <?= __('auth.forgot_pw') ?>
     </a>
 </div>
                 <!-- Submit -->
                 <button type="submit"
                     class="w-full flex justify-center items-center px-4 py-2.5 bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 text-white text-sm font-semibold rounded-xl shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-indigo-500">
-                    Sign in
+                    <?= __('auth.signin_btn') ?>
                     <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                     </svg>
@@ -147,10 +147,10 @@
             </form>
 
             <p class="mt-8 text-center text-xs text-gray-400 dark:text-gray-500">
-                By signing in you agree to our
-                <a href="#" class="underline hover:text-gray-600">Terms of Service</a>
-                and
-                <a href="#" class="underline hover:text-gray-600">Privacy Policy</a>.
+                <?= __('auth.agree_terms') ?>
+                <a href="#" class="underline hover:text-gray-600"><?= __('footer.terms') ?></a>
+                <?= __('lang') === 'ar' ? 'و' : 'and' ?>
+                <a href="#" class="underline hover:text-gray-600"><?= __('footer.privacy') ?></a>.
             </p>
         </div>
     </div>

@@ -21,8 +21,8 @@
                         </svg>
                         Support
                     </a>
-                    <a href="<?= APP_URL ?>/terms" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors font-medium">Terms</a>
-                    <a href="<?= APP_URL ?>/privacy" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors font-medium">Privacy</a>
+                    <a href="<?= APP_URL ?>/terms" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors font-medium"><?= __('footer.terms') ?></a>
+                    <a href="<?= APP_URL ?>/privacy" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors font-medium"><?= __('footer.privacy') ?></a>
                     
                     <div class="w-px h-4 bg-gray-200 dark:bg-gray-600 hidden sm:block mx-1"></div>
                     

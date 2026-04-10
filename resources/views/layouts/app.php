@@ -18,7 +18,7 @@ if (!empty($img) && strpos($img, 'http') !== 0) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= e(__('lang')) ?>" dir="<?= e(__('dir')) ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -87,8 +87,9 @@ if (!empty($img) && strpos($img, 'http') !== 0) {
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
+        html[lang="ar"] body { font-family: 'Cairo', sans-serif; }
 
         /* ── Global dark mode transition applied ONLY during toggle ── */
         html.theme-transitioning * {
@@ -183,18 +184,22 @@ if (!empty($img) && strpos($img, 'http') !== 0) {
         #mob-overlay.open { opacity: 1; pointer-events: auto; }
 
         #mob-drawer {
-            position: fixed; top: 0; left: 0; bottom: 0;
+            position: fixed; top: 0; bottom: 0;
             width: 82vw; max-width: 320px;
             background: #fff; z-index: 61;
             display: flex; flex-direction: column;
-            transform: translateX(-100%);
             transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease;
             box-shadow: 4px 0 24px rgba(0,0,0,0.12);
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
         }
         html.dark #mob-drawer { background: #1f2937; }
-        #mob-drawer.open { transform: translateX(0); }
+        
+        /* Drawer sliding based on LTR/RTL direction */
+        html[dir="ltr"] #mob-drawer { left: 0; transform: translateX(-100%); }
+        html[dir="ltr"] #mob-drawer.open { transform: translateX(0); }
+        html[dir="rtl"] #mob-drawer { right: 0; transform: translateX(100%); }
+        html[dir="rtl"] #mob-drawer.open { transform: translateX(0); }
 
         .mob-header {
             display: flex; align-items: center; justify-content: flex-start;
@@ -232,7 +237,7 @@ if (!empty($img) && strpos($img, 'http') !== 0) {
         html.dark .mob-link.active .mob-link-icon { color: #818cf8; }
         html.dark .mob-link-icon { color: #6b7280; }
         .mob-badge {
-            margin-left: auto;
+            margin-inline-start: auto; /* Logical replacement for margin-left: auto */
             background: #ef4444; color: #fff;
             font-size: 0.65rem; font-weight: 700;
             padding: 0.1rem 0.45rem; border-radius: 9999px;
@@ -254,7 +259,8 @@ if (!empty($img) && strpos($img, 'http') !== 0) {
         #mob-services-list.open::-webkit-scrollbar { display: none; }
         .mob-service-link {
             display: flex; align-items: center; gap: 0.75rem;
-            padding: 0.625rem 1.25rem 0.625rem 3rem;
+            padding: 0.625rem 1.25rem;
+            padding-inline-start: 3rem; /* Logical padding */
             font-size: 0.875rem; font-weight: 500; color: #6b7280;
             text-decoration: none; transition: background 0.12s, color 0.12s;
         }
@@ -285,7 +291,7 @@ if (!empty($img) && strpos($img, 'http') !== 0) {
 
         /* Services chevron rotation */
         #mob-services-chevron {
-            margin-left: auto;
+            margin-inline-start: auto; /* Logical */
             transition: transform 0.22s ease;
         }
         #mob-services-chevron.rotated { transform: rotate(180deg); }
@@ -511,9 +517,14 @@ if (!empty($img) && strpos($img, 'http') !== 0) {
             dragging = false;
             var dx = e.changedTouches[0].clientX - startX;
             var dy = Math.abs(e.changedTouches[0].clientY - startY);
-            // Swipe left at least 60px, and more horizontal than vertical
-            if (dx < -60 && dy < 80) {
-                closeDrawer();
+            var isRTL = document.documentElement.getAttribute('dir') === 'rtl';
+
+            if (isRTL) {
+                // Swipe right to close in RTL (more horizontal than vertical)
+                if (dx > 60 && dy < 80) closeDrawer();
+            } else {
+                // Swipe left to close in LTR
+                if (dx < -60 && dy < 80) closeDrawer();
             }
         }, { passive: true });
     })();
@@ -635,7 +646,7 @@ if (!empty($img) && strpos($img, 'http') !== 0) {
                                         <div class="${iconColor}">${iconSvg}</div>
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <p class="text-sm text-gray-800 dark:text-gray-100 ${isUnread ? 'font-semibold' : 'font-medium'} leading-snug break-words">${notif.message.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
+                                        <p class="text-sm text-gray-800 dark:text-gray-100 ${isUnread ? 'font-semibold' : 'font-medium'} leading-snug break-words">${notif.message}</p>
                                         <span class="text-[10px] text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider block mt-1">${notif.time_ago}</span>
                                     </div>
                                     ${unreadDot}

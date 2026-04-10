@@ -6,20 +6,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'homeowner') {
 }
 $hideFooter = true;
 
-$wilayas = [
-    "01 - Adrar","02 - Chlef","03 - Laghouat","04 - Oum El Bouaghi","05 - Batna",
-    "06 - Béjaïa","07 - Biskra","08 - Béchar","09 - Blida","10 - Bouira",
-    "11 - Tamanrasset","12 - Tébessa","13 - Tlemcen","14 - Tiaret","15 - Tizi Ouzou",
-    "16 - Alger","17 - Djelfa","18 - Jijel","19 - Sétif","20 - Saïda",
-    "21 - Skikda","22 - Sidi Bel Abbès","23 - Annaba","24 - Guelma","25 - Constantine",
-    "26 - Médéa","27 - Mostaganem","28 - M'Sila","29 - Mascara","30 - Ouargla",
-    "31 - Oran","32 - El Bayadh","33 - Illizi","34 - Bordj Bou Arréridj","35 - Boumerdès",
-    "36 - El Tarf","37 - Tindouf","38 - Tissemsilt","39 - El Oued","40 - Khenchela",
-    "41 - Souk Ahras","42 - Tipaza","43 - Mila","44 - Aïn Defla","45 - Naâma",
-    "46 - Aïn Témouchent","47 - Ghardaïa","48 - Relizane","49 - Timimoun","50 - Bordj Badji Mokhtar",
-    "51 - Ouled Djellal","52 - Béni Abbès","53 - In Salah","54 - In Guezzam","55 - Touggourt",
-    "56 - Djanet","57 - El M'Ghair","58 - El Meniaa"
-];
+$wilayas = array_keys(__('wilayas') ?: []);
 
 $categories = [
     'Plumbing'         => ['icon' => 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4',        'bg' => 'bg-blue-50',   'border' => 'border-blue-200',   'icon_color' => 'text-blue-600 bg-blue-100'],
@@ -47,13 +34,13 @@ if (!empty($job['images'])) {
         <div class="mb-8">
             <a href="<?= APP_URL ?>/homeowner/dashboard"
                class="inline-flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition mb-4 group">
-                <svg class="mr-1.5 h-4 w-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg class="<?= __('lang') === 'ar' ? 'ml-1.5 rotate-180' : 'mr-1.5' ?> h-4 w-4 group-hover:<?= __('lang') === 'ar' ? 'translate-x-0.5' : '-translate-x-0.5' ?> transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                 </svg>
-                Back to Dashboard
+                <?= __('job_edit.back_dashboard') ?>
             </a>
-            <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">Edit Job</h1>
-            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Update your job details to attract the right craftsmen.</p>
+            <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight"><?= __('job_edit.edit_job') ?></h1>
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400"><?= __('job_edit.edit_job_desc') ?></p>
         </div>
 
         <?php if (!empty($error)): ?>
@@ -82,36 +69,36 @@ if (!empty($job['images'])) {
                             <span class="text-white text-xs font-bold">1</span>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-gray-900 dark:text-white">Job Details</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Give your job a clear title and detailed description.</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white"><?= __('job_create.job_details') ?></p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400"><?= __('job_create.job_details_desc') ?></p>
                         </div>
                     </div>
                     <div class="px-6 py-5 space-y-5">
 
                         <div>
                             <label for="title" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 pt-1">
-                                Job Title <span class="text-red-500">*</span>
+                                <?= __('job_create.job_title') ?> <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="title" id="title" required maxlength="100"
-                                   placeholder="e.g. Fix leaking kitchen faucet"
+                                   placeholder="<?= __('job_create.job_title_ph') ?>"
                                    value="<?= e($_POST['title'] ?? $job['title'] ?? '') ?>"
                                    class="block w-full px-4 py-2.5 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                           focus:bg-white dark:focus:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
-                            <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">A clear title gets more relevant quotes.</p>
+                            <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400"><?= __('job_create.job_title_hint') ?></p>
                         </div>
 
                         <div>
                             <label for="description" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                                Description <span class="text-red-500">*</span>
+                                <?= __('job_create.description') ?> <span class="text-red-500">*</span>
                             </label>
                             <textarea name="description" id="description" rows="6" required maxlength="2000"
-                                      placeholder="Describe the work in detail — materials needed, size of the area, urgency, any specific requirements..."
+                                      placeholder="<?= __('job_create.description_ph') ?>"
                                       class="block w-full px-4 py-3 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                              focus:bg-white dark:focus:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none leading-relaxed"
                                       oninput="document.getElementById('desc-count').textContent=this.value.length"
                             ><?= e($_POST['description'] ?? $job['description'] ?? '') ?></textarea>
                             <div class="mt-1.5 flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
-                                <span>Be as descriptive as possible.</span>
+                                <span><?= __('job_create.description_hint') ?></span>
                                 <div><span id="desc-count" class="font-medium"><?= strlen($_POST['description'] ?? $job['description'] ?? '') ?></span>/2000</div>
                             </div>
                         </div>
@@ -126,8 +113,8 @@ if (!empty($job['images'])) {
                             <span class="text-white text-xs font-bold">2</span>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-gray-900 dark:text-white">Service Category <span class="text-red-500">*</span></p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Pick the category that best matches your job.</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white"><?= __('job_create.service_category') ?> <span class="text-red-500">*</span></p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400"><?= __('job_create.service_category_desc') ?></p>
                         </div>
                     </div>
                     <div class="px-6 py-5">
@@ -167,14 +154,14 @@ if (!empty($job['images'])) {
                                     </svg>
                                 </div>
                                 <span class="cat-label text-xs sm:text-sm font-semibold tracking-tight leading-tight <?= $isSelected ? $activeTextClass : $defaultTextClass ?>">
-                                    <?= e($catName) ?>
+                                    <?= e(__('categories.' . $catName) ?? $catName) ?>
                                 </span>
                             </button>
                             <?php endforeach; ?>
                         </div>
                         <div id="category-error" class="hidden mt-3 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/50 rounded-lg px-4 py-2.5 flex items-center gap-2">
                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                            Please select a service category to proceed.
+                            <?= __('job_create.service_category_err') ?>
                         </div>
                     </div>
                 </div>
@@ -186,8 +173,8 @@ if (!empty($job['images'])) {
                             <span class="text-white text-xs font-bold">3</span>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-gray-900 dark:text-white">Location &amp; Budget</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Where is the job and what's your expected budget?</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white"><?= __('job_create.location_budget') ?></p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400"><?= __('job_create.location_budget_desc') ?></p>
                         </div>
                     </div>
                     <div class="px-6 py-5">
@@ -196,7 +183,7 @@ if (!empty($job['images'])) {
                             <!-- Wilaya -->
                             <div>
                                 <label for="address" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 pt-1">
-                                    Wilaya <span class="text-red-500">*</span>
+                                    <?= __('job_create.wilaya') ?> <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
@@ -206,14 +193,14 @@ if (!empty($job['images'])) {
                                         </svg>
                                     </div>
                                     <select name="address" id="address" required
-                                            class="block w-full pl-10 pr-4 py-2.5 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white
+                                            class="block w-full pl-10 pr-4 h-[46px] bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white
                                                    focus:bg-white dark:focus:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
-                                        <option value="">— Select your Wilaya —</option>
+                                        <option value=""><?= __('job_create.wilaya_ph') ?></option>
                                         <?php 
                                         $currentWilaya = $_POST['address'] ?? $job['address'] ?? '';
                                         foreach ($wilayas as $w): ?>
                                         <option value="<?= e($w) ?>" <?= $currentWilaya === $w ? 'selected' : '' ?>>
-                                            <?= e($w) ?>
+                                            <?= e(__('wilayas.' . $w) ?? $w) ?>
                                         </option>
                                         <?php endforeach; ?>
                                     </select>
@@ -223,14 +210,14 @@ if (!empty($job['images'])) {
                             <!-- Budget -->
                             <div>
                                 <label for="budget" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 pt-1">
-                                    Budget
-                                    <span class="text-gray-400 dark:text-gray-500 font-normal ml-1 text-xs">(optional)</span>
+                                    <?= __('job_create.budget') ?>
+                                    <span class="text-gray-400 dark:text-gray-500 font-normal <?= __('lang') === 'ar' ? 'mr-1' : 'ml-1' ?> text-xs"><?= __('forms.optional') ?></span>
                                 </label>
                                 <div class="relative">
                                     <input type="text" name="budget" id="budget"
-                                           placeholder="e.g. 5000 – 10000"
+                                           placeholder="<?= __('job_create.budget_ph') ?>"
                                            value="<?= e($_POST['budget'] ?? $job['budget_range'] ?? '') ?>"
-                                           class="block w-full px-4 py-2.5 pr-14 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
+                                           class="block w-full px-4 h-[46px] pr-14 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                                   focus:bg-white dark:focus:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
                                     <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none border-l border-gray-200 dark:border-gray-600 my-1.5 pl-3">
                                         <span class="text-xs font-bold text-gray-400 dark:text-gray-500">DZD</span>
@@ -249,8 +236,8 @@ if (!empty($job['images'])) {
                             <span class="text-white text-xs font-bold">4</span>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-gray-900 dark:text-white">Photos <span class="text-gray-400 dark:text-gray-500 font-normal ml-1 text-xs">(optional)</span></p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Photos help craftsmen understand your project better. Max 3 images.</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white"><?= __('job_create.photos') ?> <span class="text-gray-400 dark:text-gray-500 font-normal <?= __('lang') === 'ar' ? 'mr-1' : 'ml-1' ?> text-xs"><?= __('forms.optional') ?></span></p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400"><?= __('job_create.photos_desc') ?></p>
                         </div>
                     </div>
                     <div class="px-6 py-5">
@@ -261,8 +248,8 @@ if (!empty($job['images'])) {
                             <svg class="mx-auto h-10 w-10 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
-                            <p class="mt-2 text-sm font-semibold text-gray-700 dark:text-gray-300">Click to upload or drag & drop</p>
-                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">JPG, PNG, or WebP • Max 2 MB each • Up to 3 images combined</p>
+                            <p class="mt-2 text-sm font-semibold text-gray-700 dark:text-gray-300"><?= __('job_create.upload_click') ?></p>
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400"><?= __('job_edit.upload_hint_combined') ?></p>
                         </div>
                         <!-- Image Previews -->
                         <div id="image-previews" class="mt-4 grid grid-cols-3 gap-3" style="display:none"></div>
@@ -287,7 +274,7 @@ if (!empty($job['images'])) {
                             <div class="h-6 w-6 rounded flex items-center justify-center bg-indigo-50 dark:bg-indigo-900/40">
                                 <svg class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                             </div>
-                            <h2 class="text-xs font-bold text-gray-800 dark:text-gray-200 tracking-wider uppercase">Editing Tips</h2>
+                            <h2 class="text-xs font-bold text-gray-800 dark:text-gray-200 tracking-wider uppercase"><?= __('forms.editing_tips') ?></h2>
                         </div>
                         
                         <div class="space-y-5">
@@ -298,8 +285,8 @@ if (!empty($job['images'])) {
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-sm font-bold text-gray-800 dark:text-gray-200">Clear Edits</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">Updating your job will instantly reflect on the public job board for all craftsmen to see.</p>
+                                    <p class="text-sm font-bold text-gray-800 dark:text-gray-200"><?= __('job_edit.tips_clear_edits') ?></p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed"><?= __('job_edit.tips_clear_edits_desc') ?></p>
                                 </div>
                             </div>
                             <div class="flex items-start gap-3.5">
@@ -309,8 +296,8 @@ if (!empty($job['images'])) {
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-sm font-bold text-gray-800 dark:text-gray-200">Photo Limits</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">You can have a maximum of 3 photos combined. Delete an existing photo first to add a new one.</p>
+                                    <p class="text-sm font-bold text-gray-800 dark:text-gray-200"><?= __('job_edit.tips_photo_limits') ?></p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed"><?= __('job_edit.tips_photo_limits_desc') ?></p>
                                 </div>
                             </div>
                         </div>
@@ -330,14 +317,14 @@ if (!empty($job['images'])) {
             ?>
             <a href="<?= $cancelUrl ?>"
                class="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                Cancel
+                <?= __('forms.cancel') ?>
             </a>
             <button type="submit" form="job-form"
                 class="inline-flex items-center gap-2 px-8 py-2.5 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                 </svg>
-                Save Changes
+                <?= __('forms.save_changes') ?>
             </button>
         </div>
     </div>
@@ -497,7 +484,7 @@ function renderPreviews() {
         
         const badge = document.createElement('span');
         badge.className = 'absolute bottom-1.5 left-1.5 bg-gray-600/80 text-white text-[10px] uppercase font-bold px-1.5 py-0.5 rounded backdrop-blur-sm pointer-events-none';
-        badge.innerText = 'Current';
+        badge.innerText = '<?= __('job_edit.current_badge') ?>';
 
         const btn = document.createElement('button');
         btn.type = 'button';
@@ -524,7 +511,7 @@ function renderPreviews() {
         
         const badge = document.createElement('span');
         badge.className = 'absolute bottom-1.5 left-1.5 bg-green-500 text-white text-[10px] uppercase font-bold px-1.5 py-0.5 rounded shadow-sm pointer-events-none';
-        badge.innerText = 'New';
+        badge.innerText = '<?= __('job_edit.new_badge') ?>';
 
         const btn = document.createElement('button');
         btn.type = 'button';

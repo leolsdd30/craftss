@@ -22,7 +22,7 @@ $hideFooter = true;
         <!-- Back -->
         <a href="<?= APP_URL ?>/jobs" class="inline-flex items-center text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors mb-6">
             <svg class="mr-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-            Back to Job Board
+            <?= __('job_show.back_to_board') ?>
         </a>
 
         <!-- Flash Messages -->
@@ -32,10 +32,10 @@ $hideFooter = true;
             <p class="text-sm font-medium text-green-800 dark:text-green-300">
                 <?php
                     switch($_GET['success']) {
-                        case 'quote_submitted': echo 'Your quote has been submitted! The homeowner will review it shortly.'; break;
-                        case 'quote_accepted':  echo 'Quote accepted! The craftsman has been notified.'; break;
-                        case 'quote_rejected':  echo 'Quote declined.'; break;
-                        default: echo 'Action completed successfully.';
+                        case 'quote_submitted': echo __('job_show.quote_submitted'); break;
+                        case 'quote_accepted':  echo __('job_show.quote_accepted_flash'); break;
+                        case 'quote_rejected':  echo __('job_show.quote_declined'); break;
+                        default: echo __('job_show.action_success');
                     }
                 ?>
             </p>
@@ -48,10 +48,10 @@ $hideFooter = true;
             <p class="text-sm font-medium text-red-800 dark:text-red-300">
                 <?php
                     switch($_GET['error']) {
-                        case 'price_required':  echo 'Please enter your price.'; break;
-                        case 'own_job':         echo 'You cannot submit a quote on your own job.'; break;
-                        case 'already_quoted':  echo 'You have already submitted a quote for this job.'; break;
-                        case 'submit_failed':   echo 'Something went wrong. Please try again.'; break;
+                        case 'price_required':  echo __('job_show.price_required'); break;
+                        case 'own_job':         echo __('job_show.own_job'); break;
+                        case 'already_quoted':  echo __('job_show.already_quoted'); break;
+                        case 'submit_failed':   echo __('job_show.submit_failed'); break;
                         default: echo htmlspecialchars($_GET['error']);
                     }
                 ?>
@@ -72,10 +72,10 @@ $hideFooter = true;
                         <div class="flex items-center gap-2 mb-4 flex-wrap">
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold
                                 <?= $job['status'] === 'open' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400' : ($job['status'] === 'assigned' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300') ?>">
-                                <?= $job['status'] === 'open' ? '● Open' : ucfirst($job['status']) ?>
+                                <?= $job['status'] === 'open' ? '● ' . __('job_show.status_open') : __('job_show.status_' . strtolower($job['status'])) ?>
                             </span>
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold <?= $catStyles['badge'] ?>">
-                                <?= htmlspecialchars($job['service_category']) ?>
+                                <?= __('categories.' . $job['service_category']) ?? htmlspecialchars($job['service_category']) ?>
                             </span>
                         </div>
                         <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white leading-tight mb-4 break-words">
@@ -108,7 +108,7 @@ $hideFooter = true;
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 sm:p-8">
                     <h2 class="text-base font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                         <svg class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                        Job Description
+                        <?= __('job_show.job_description') ?>
                     </h2>
                     <div class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line break-words">
                         <?= htmlspecialchars($job['description']) ?>
@@ -128,9 +128,9 @@ $hideFooter = true;
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
                             <svg class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                            Photos
+                            <?= __('job_show.photos') ?>
                         </h2>
-                        <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/50 px-3 py-1.5 rounded-lg border border-gray-100 dark:border-gray-700"><?= count($jobImages) ?> photo<?= count($jobImages) !== 1 ? 's' : '' ?></span>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/50 px-3 py-1.5 rounded-lg border border-gray-100 dark:border-gray-700"><?= count($jobImages) ?> <?= count($jobImages) === 1 ? __('job_show.photo') : __('job_show.photos_plural') ?></span>
                     </div>
 
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
@@ -191,7 +191,7 @@ $hideFooter = true;
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 sm:p-8">
                     <h2 class="text-base font-bold text-gray-900 dark:text-white mb-5 flex items-center gap-2">
                         <svg class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                        Quotes Received
+                        <?= __('job_show.quotes_received') ?>
                         <span class="ml-1 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-400 text-xs font-bold px-2 py-0.5 rounded-full"><?= count($quotes) ?></span>
                     </h2>
                     <?php if (!empty($quotes)): ?>
@@ -222,7 +222,7 @@ $hideFooter = true;
                                     <p class="text-xl font-extrabold text-gray-900 dark:text-white"><?= number_format($quote['quoted_price'], 0) ?> <span class="text-sm font-semibold text-gray-400 dark:text-gray-500">DZD</span></p>
                                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold
                                         <?= $quote['status'] === 'accepted' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400' : ($quote['status'] === 'rejected' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400' : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400') ?>">
-                                        <?= ucfirst($quote['status']) ?>
+                                        <?= __('job_show.status_' . strtolower($quote['status'])) ?>
                                     </span>
                                 </div>
                             </div>
@@ -235,16 +235,16 @@ $hideFooter = true;
                             <div class="mt-4 flex items-center justify-between">
                                 <a href="<?= APP_URL ?>/profile/<?= htmlspecialchars($quote['username']) ?>"
                                    class="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors">
-                                    View Profile →
+                                    <?= __('job_show.view_profile') ?>
                                 </a>
                                 <div class="flex gap-2">
                                     <button onclick="openRejectModal(<?= $quote['id'] ?>, '<?= htmlspecialchars($quote['first_name']) ?>')"
                                             class="px-4 py-1.5 text-xs font-semibold rounded-lg text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-150">
-                                        Decline
+                                        <?= __('job_show.decline_btn') ?>
                                     </button>
                                     <button onclick="openAcceptModal(<?= $quote['id'] ?>, '<?= htmlspecialchars($quote['first_name'] . ' ' . $quote['last_name']) ?>', '<?= number_format($quote['quoted_price'], 0) ?>')"
                                             class="px-4 py-1.5 text-xs font-semibold rounded-lg text-white bg-green-600 hover:bg-green-700 transition duration-150">
-                                        Accept Quote
+                                        <?= __('job_show.accept_quote_btn') ?>
                                     </button>
                                 </div>
                             </div>
@@ -255,7 +255,7 @@ $hideFooter = true;
                     <?php else: ?>
                     <div class="text-center py-10 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl">
                         <svg class="mx-auto h-10 w-10 text-gray-300 dark:text-gray-600 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">No quotes yet. Craftsmen will start submitting proposals soon.</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400"><?= __('job_show.no_quotes') ?></p>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -270,9 +270,9 @@ $hideFooter = true;
                             <svg class="h-5 w-5 text-gray-400 dark:text-gray-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
                         </div>
                         <div>
-                            <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200">Quote Not Selected</h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">The homeowner went with another craftsman for this job.</p>
-                            <a href="<?= APP_URL ?>/jobs" class="inline-flex items-center mt-3 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors">Browse more jobs →</a>
+                            <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200"><?= __('job_show.quote_not_selected') ?></h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5"><?= __('job_show.not_selected_desc') ?></p>
+                            <a href="<?= APP_URL ?>/jobs" class="inline-flex items-center mt-3 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"><?= __('job_show.browse_more') ?></a>
                         </div>
                     </div>
                     <?php elseif (($myQuoteStatus ?? null) === 'accepted'): ?>
@@ -282,9 +282,9 @@ $hideFooter = true;
                             <svg class="h-5 w-5 text-green-600 dark:text-green-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
                         </div>
                         <div>
-                            <h3 class="text-sm font-bold text-green-900 dark:text-green-100">Quote Accepted!</h3>
-                            <p class="text-sm text-green-700 dark:text-green-300 mt-0.5">Congratulations! The homeowner accepted your quote for this job.</p>
-                            <a href="<?= APP_URL ?>/craftsman/dashboard#active" class="inline-flex items-center mt-3 text-sm font-semibold text-green-700 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 transition-colors">View active jobs →</a>
+                            <h3 class="text-sm font-bold text-green-900 dark:text-green-100"><?= __('job_show.quote_accepted_title') ?></h3>
+                            <p class="text-sm text-green-700 dark:text-green-300 mt-0.5"><?= __('job_show.accepted_desc') ?></p>
+                            <a href="<?= APP_URL ?>/craftsman/dashboard#active" class="inline-flex items-center mt-3 text-sm font-semibold text-green-700 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 transition-colors"><?= __('job_show.view_active') ?></a>
                         </div>
                     </div>
                     <?php else: ?>
@@ -294,9 +294,9 @@ $hideFooter = true;
                             <svg class="h-5 w-5 text-green-600 dark:text-green-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
                         </div>
                         <div>
-                            <h3 class="text-sm font-bold text-green-900 dark:text-green-100">Quote Submitted!</h3>
-                            <p class="text-sm text-green-700 dark:text-green-300 mt-0.5">The homeowner will review your quote and get back to you.</p>
-                            <a href="<?= APP_URL ?>/craftsman/dashboard#quotes" class="inline-flex items-center mt-3 text-sm font-semibold text-green-700 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 transition-colors">View my quotes →</a>
+                            <h3 class="text-sm font-bold text-green-900 dark:text-green-100"><?= __('job_show.quote_submitted_title') ?></h3>
+                            <p class="text-sm text-green-700 dark:text-green-300 mt-0.5"><?= __('job_show.submitted_desc') ?></p>
+                            <a href="<?= APP_URL ?>/craftsman/dashboard#quotes" class="inline-flex items-center mt-3 text-sm font-semibold text-green-700 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 transition-colors"><?= __('job_show.view_quotes') ?></a>
                         </div>
                     </div>
                     <?php endif; ?>
@@ -307,8 +307,8 @@ $hideFooter = true;
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 text-center">
                     <svg class="mx-auto h-10 w-10 text-gray-300 dark:text-gray-600 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                        <a href="<?= APP_URL ?>/login" class="font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300">Log in</a>
-                        or <a href="<?= APP_URL ?>/register" class="font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300">create an account</a> to submit a quote.
+                        <a href="<?= APP_URL ?>/login" class="font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300"><?= __('job_show.login_to_quote') ?></a>
+                        <?= __('job_show.or') ?> <a href="<?= APP_URL ?>/register" class="font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300"><?= __('job_show.create_acc_to_quote') ?></a> <?= __('job_show.to_submit_quote') ?>
                     </p>
                 </div>
                 <?php endif; ?>
@@ -320,38 +320,38 @@ $hideFooter = true;
 
                 <!-- Info Card -->
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-5">
-                    <h3 class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-4">Job Details</h3>
+                    <h3 class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-4"><?= __('job_show.job_details') ?></h3>
                     <div class="space-y-3">
                         <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-500 dark:text-gray-400">Category</span>
+                            <span class="text-gray-500 dark:text-gray-400"><?= __('job_show.category') ?></span>
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold <?= $catStyles['badge'] ?>">
-                                <?= htmlspecialchars($job['service_category']) ?>
+                                <?= __('categories.' . $job['service_category']) ?? htmlspecialchars($job['service_category']) ?>
                             </span>
                         </div>
                         <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-500 dark:text-gray-400">Location</span>
+                            <span class="text-gray-500 dark:text-gray-400"><?= __('job_show.location') ?></span>
                             <span class="font-medium text-gray-700 dark:text-gray-300"><?= htmlspecialchars(preg_replace('/^\d{2}\s-\s/', '', $job['address'])) ?></span>
                         </div>
                         <?php if (!empty($job['budget_range'])): ?>
                         <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-500 dark:text-gray-400">Budget</span>
+                            <span class="text-gray-500 dark:text-gray-400"><?= __('job_show.budget') ?></span>
                             <span class="font-semibold text-green-700 dark:text-green-400"><?= htmlspecialchars($job['budget_range']) ?> DZD</span>
                         </div>
                         <?php endif; ?>
                         <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-500 dark:text-gray-400">Posted</span>
+                            <span class="text-gray-500 dark:text-gray-400"><?= __('job_show.posted') ?></span>
                             <span class="text-gray-500 dark:text-gray-400"><?= $timeAgo ?></span>
                         </div>
                         <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-500 dark:text-gray-400">Status</span>
+                            <span class="text-gray-500 dark:text-gray-400"><?= __('job_show.status') ?></span>
                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold
                                 <?= $job['status'] === 'open' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300' ?>">
-                                <?= ucfirst($job['status']) ?>
+                                <?= __('job_show.status_' . strtolower($job['status'])) ?>
                             </span>
                         </div>
                         <?php if ($isOwner): ?>
                         <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-500 dark:text-gray-400">Quotes</span>
+                            <span class="text-gray-500 dark:text-gray-400"><?= __('job_show.quotes') ?></span>
                             <span class="font-semibold text-indigo-600 dark:text-indigo-400"><?= count($quotes) ?></span>
                         </div>
                         <?php endif; ?>
@@ -365,26 +365,26 @@ $hideFooter = true;
                     <button onclick="openQuoteModal()"
                             class="w-full inline-flex items-center justify-center px-4 py-3 border border-transparent text-sm font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition duration-150">
                         <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-                        Submit Quote
+                        <?= __('job_show.submit_quote') ?>
                     </button>
                     <?php elseif ($alreadyQuoted && ($myQuoteStatus ?? null) === 'rejected'): ?>
                     <div class="w-full inline-flex items-center justify-center px-4 py-3 text-sm font-semibold rounded-xl text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                        Quote Not Selected
+                        <?= __('job_show.quote_not_selected') ?>
                     </div>
                     <?php elseif ($alreadyQuoted): ?>
                     <div class="w-full inline-flex items-center justify-center px-4 py-3 text-sm font-semibold rounded-xl text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/50">
                         <svg class="mr-2 h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                        Quote Submitted
+                        <?= __('job_show.quote_submitted_btn') ?>
                     </div>
                     <?php elseif ($job['status'] !== 'open'): ?>
                     <div class="w-full inline-flex items-center justify-center px-4 py-3 text-sm font-semibold rounded-xl text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                        Job is no longer open
+                        <?= __('job_show.job_closed') ?>
                     </div>
                     <?php endif; ?>
                     <a href="<?= APP_URL ?>/messages/<?= htmlspecialchars($job['poster_username'] ?? '') ?>"
                        class="w-full inline-flex items-center justify-center px-4 py-3 border border-gray-200 dark:border-gray-600 text-sm font-semibold rounded-xl text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition duration-150">
                         <svg class="mr-2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-                        Message Homeowner
+                        <?= __('job_show.message_homeowner') ?>
                     </a>
                 </div>
                 <?php endif; ?>
@@ -394,11 +394,11 @@ $hideFooter = true;
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-5 space-y-3">
                     <a href="<?= APP_URL ?>/register"
                        class="w-full inline-flex items-center justify-center px-4 py-3 border border-transparent text-sm font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition duration-150">
-                        Sign up to Quote
+                        <?= __('job_show.signup_quote') ?>
                     </a>
                     <a href="<?= APP_URL ?>/login"
                        class="w-full inline-flex items-center justify-center px-4 py-3 border border-gray-200 dark:border-gray-600 text-sm font-semibold rounded-xl text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition duration-150">
-                        Log In
+                        <?= __('job_show.login') ?>
                     </a>
                 </div>
                 <?php endif; ?>
@@ -411,16 +411,16 @@ $hideFooter = true;
                         <svg class="mr-2 h-4 w-4 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                         </svg>
-                        Manage in Dashboard
+                        <?= __('job_show.manage_dashboard') ?>
                     </a>
                     
                     <?php if ($job['status'] === 'open'): ?>
                     <div class="grid grid-cols-2 gap-3">
                         <a href="<?= APP_URL ?>/jobs/edit/<?= $job['id'] ?>?source=job_view" class="inline-flex items-center justify-center px-4 py-2 border border-amber-200 dark:border-amber-900/50 text-sm font-semibold rounded-xl text-amber-700 dark:text-amber-500 bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/40 transition duration-150">
-                            Edit Job
+                            <?= __('job_show.edit_job') ?>
                         </a>
                         <button onclick="openDeleteModal()" class="inline-flex items-center justify-center px-4 py-2 border border-red-200 dark:border-red-900/50 text-sm font-semibold rounded-xl text-red-700 dark:text-red-500 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 transition duration-150">
-                            Cancel Job
+                            <?= __('job_show.cancel_job') ?>
                         </button>
                     </div>
                     <?php endif; ?>
@@ -446,7 +446,7 @@ $hideFooter = true;
                         <svg class="h-5 w-5 text-indigo-600 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
                     </div>
                     <div>
-                        <h3 class="text-base font-bold text-gray-900 dark:text-white">Submit Your Quote</h3>
+                        <h3 class="text-base font-bold text-gray-900 dark:text-white"><?= __('job_show.modal_submit_title') ?></h3>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate max-w-xs"><?= htmlspecialchars($job['title']) ?></p>
                     </div>
                 </div>
@@ -461,43 +461,43 @@ $hideFooter = true;
                 <!-- Price -->
                 <div>
                     <label for="modal_quoted_price" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                        Your Price <span class="text-red-500">*</span>
+                        <?= __('job_show.your_price') ?> <span class="text-red-500">*</span>
                     </label>
                     <div class="relative">
                         <input type="number" name="quoted_price" id="modal_quoted_price"
-                               step="1" min="1" required placeholder="e.g. 5000"
-                               class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2.5 pr-16 text-sm">
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                               step="1" min="1" required placeholder="<?= __('job_show.price_placeholder') ?>"
+                               class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2.5 rtl:pl-16 rtl:pr-4 ltr:pr-16 text-sm">
+                        <div class="absolute inset-y-0 ltr:right-0 rtl:left-0 flex items-center ltr:pr-4 rtl:pl-4 pointer-events-none">
                             <span class="text-sm font-semibold text-gray-400 dark:text-gray-500">DZD</span>
                         </div>
                     </div>
                     <?php if (!empty($job['budget_range'])): ?>
-                    <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">Homeowner's budget: <span class="font-semibold text-gray-600 dark:text-gray-400"><?= htmlspecialchars($job['budget_range']) ?> DZD</span></p>
+                    <p class="mt-1 text-xs text-gray-400 dark:text-gray-500"><?= __('job_show.homeowner_budget') ?> <span class="font-semibold text-gray-600 dark:text-gray-400"><?= htmlspecialchars($job['budget_range']) ?> DZD</span></p>
                     <?php endif; ?>
                 </div>
                 <!-- Cover Message — bigger, no tips -->
                 <div>
                     <label for="modal_cover_message" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                        Cover Message <span class="text-gray-400 dark:text-gray-500 font-normal">(recommended)</span>
+                        <?= __('job_show.cover_message') ?> <span class="text-gray-400 dark:text-gray-500 font-normal"><?= __('job_show.recommended') ?></span>
                     </label>
                     <textarea name="cover_message" id="modal_cover_message" rows="7"
                               maxlength="1000"
-                              placeholder="Introduce yourself, describe your experience with this type of work, your approach, what's included in your price, and estimated timeline..."
+                              placeholder="<?= __('job_show.cover_placeholder') ?>"
                               class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2.5 text-sm"
                               oninput="document.getElementById('modal-char-count').textContent = this.value.length"></textarea>
                     <div class="flex justify-between mt-1">
-                        <p class="text-xs text-gray-400 dark:text-gray-500">A strong message greatly increases your chances of being hired.</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500"><?= __('job_show.cover_help') ?></p>
                         <p class="text-xs text-gray-400 dark:text-gray-500"><span id="modal-char-count">0</span>/1000</p>
                     </div>
                 </div>
                 <!-- Actions -->
                 <div class="flex items-center justify-between pt-1">
                     <button type="button" onclick="closeQuoteModal()"
-                            class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">Cancel</button>
+                            class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"><?= __('job_show.cancel') ?></button>
                     <button type="submit"
                             class="inline-flex items-center px-6 py-2.5 border border-transparent text-sm font-bold rounded-xl shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150">
                         <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-                        Submit Quote
+                        <?= __('job_show.submit_quote') ?>
                     </button>
                 </div>
             </form>
@@ -516,15 +516,15 @@ $hideFooter = true;
                 <div class="h-10 w-10 rounded-full bg-green-100 dark:bg-green-900/40 flex items-center justify-center mr-3">
                     <svg class="h-6 w-6 text-green-600 dark:text-green-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                 </div>
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Accept Quote</h3>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white"><?= __('job_show.accept_quote_modal_title') ?></h3>
             </div>
             <p id="acceptModalText" class="text-sm text-gray-600 dark:text-gray-300 mb-6"></p>
             <div class="flex justify-end gap-3">
-                <button onclick="closeAcceptModal()" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition">Cancel</button>
+                <button onclick="closeAcceptModal()" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition"><?= __('job_show.cancel') ?></button>
                 <form method="POST" action="<?= APP_URL ?>/jobs/accept-quote" class="inline">
                     <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token'] ?? '') ?>">
                     <input type="hidden" name="quote_id" id="acceptQuoteId" value="">
-                    <button type="submit" class="px-4 py-2 text-sm font-bold text-white bg-green-600 hover:bg-green-700 rounded-lg transition">Confirm & Accept</button>
+                    <button type="submit" class="px-4 py-2 text-sm font-bold text-white bg-green-600 hover:bg-green-700 rounded-lg transition"><?= __('job_show.confirm_accept') ?></button>
                 </form>
             </div>
         </div>
@@ -540,15 +540,15 @@ $hideFooter = true;
                 <div class="h-10 w-10 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center mr-3">
                     <svg class="h-6 w-6 text-red-600 dark:text-red-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
                 </div>
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Decline Quote</h3>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white"><?= __('job_show.decline_quote_modal_title') ?></h3>
             </div>
             <p id="rejectModalText" class="text-sm text-gray-600 dark:text-gray-300 mb-6"></p>
             <div class="flex justify-end gap-3">
-                <button onclick="closeRejectModal()" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition">Cancel</button>
+                <button onclick="closeRejectModal()" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition"><?= __('job_show.cancel') ?></button>
                 <form method="POST" action="<?= APP_URL ?>/jobs/reject-quote" class="inline">
                     <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token'] ?? '') ?>">
                     <input type="hidden" name="quote_id" id="rejectQuoteId" value="">
-                    <button type="submit" class="px-4 py-2 text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg transition">Yes, Decline</button>
+                    <button type="submit" class="px-4 py-2 text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg transition"><?= __('job_show.yes_decline') ?></button>
                 </form>
             </div>
         </div>
@@ -566,15 +566,15 @@ $hideFooter = true;
                 <div class="h-10 w-10 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center mr-3">
                     <svg class="h-6 w-6 text-red-600 dark:text-red-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
                 </div>
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Cancel Job Post</h3>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white"><?= __('job_show.cancel_job_modal_title') ?></h3>
             </div>
-            <p class="text-sm text-gray-600 dark:text-gray-300 mb-6">Are you sure you want to cancel this job? It will be removed from the public job board and no new craftsmen will be able to submit quotes. This cannot be undone.</p>
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-6"><?= __('job_show.cancel_job_desc') ?></p>
             <div class="flex justify-end gap-3">
-                <button onclick="closeDeleteModal()" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition">Nevermind</button>
+                <button onclick="closeDeleteModal()" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition"><?= __('job_show.nevermind') ?></button>
                 <form method="POST" action="<?= APP_URL ?>/jobs/delete" class="inline">
                     <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token'] ?? '') ?>">
                     <input type="hidden" name="job_id" value="<?= $job['id'] ?>">
-                    <button type="submit" class="px-4 py-2 text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg transition">Yes, Cancel Job</button>
+                    <button type="submit" class="px-4 py-2 text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg transition"><?= __('job_show.yes_cancel') ?></button>
                 </form>
             </div>
         </div>
@@ -594,7 +594,7 @@ function closeQuoteModal() {
 function openAcceptModal(quoteId, name, price) {
     document.getElementById('acceptQuoteId').value = quoteId;
     document.getElementById('acceptModalText').textContent =
-        'Accept ' + name + '\u2019s quote of ' + price + ' DZD? All other quotes will be declined and the job will be assigned.';
+        <?= json_encode(__('job_show.js_accept_text')) ?>.replace(':name', name).replace(':price', price);
     document.getElementById('acceptModal').style.display = 'block';
     document.body.style.overflow = 'hidden';
 }
@@ -605,7 +605,7 @@ function closeAcceptModal() {
 function openRejectModal(quoteId, name) {
     document.getElementById('rejectQuoteId').value = quoteId;
     document.getElementById('rejectModalText').textContent =
-        'Are you sure you want to decline ' + name + '\u2019s quote? This action cannot be undone.';
+        <?= json_encode(__('job_show.js_decline_text')) ?>.replace(':name', name);
     document.getElementById('rejectModal').style.display = 'block';
     document.body.style.overflow = 'hidden';
 }

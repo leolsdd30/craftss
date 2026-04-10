@@ -6,20 +6,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'homeowner') {
 }
 $hideFooter = true;
 
-$wilayas = [
-    "01 - Adrar","02 - Chlef","03 - Laghouat","04 - Oum El Bouaghi","05 - Batna",
-    "06 - Béjaïa","07 - Biskra","08 - Béchar","09 - Blida","10 - Bouira",
-    "11 - Tamanrasset","12 - Tébessa","13 - Tlemcen","14 - Tiaret","15 - Tizi Ouzou",
-    "16 - Alger","17 - Djelfa","18 - Jijel","19 - Sétif","20 - Saïda",
-    "21 - Skikda","22 - Sidi Bel Abbès","23 - Annaba","24 - Guelma","25 - Constantine",
-    "26 - Médéa","27 - Mostaganem","28 - M'Sila","29 - Mascara","30 - Ouargla",
-    "31 - Oran","32 - El Bayadh","33 - Illizi","34 - Bordj Bou Arréridj","35 - Boumerdès",
-    "36 - El Tarf","37 - Tindouf","38 - Tissemsilt","39 - El Oued","40 - Khenchela",
-    "41 - Souk Ahras","42 - Tipaza","43 - Mila","44 - Aïn Defla","45 - Naâma",
-    "46 - Aïn Témouchent","47 - Ghardaïa","48 - Relizane","49 - Timimoun","50 - Bordj Badji Mokhtar",
-    "51 - Ouled Djellal","52 - Béni Abbès","53 - In Salah","54 - In Guezzam","55 - Touggourt",
-    "56 - Djanet","57 - El M'Ghair","58 - El Meniaa"
-];
+$wilayas = array_keys(__('wilayas') ?: []);
 
 $categories = [
     'Plumbing'         => ['icon' => 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4',        'bg' => 'bg-blue-50',   'border' => 'border-blue-200',   'icon_color' => 'text-blue-600 bg-blue-100'],
@@ -41,13 +28,13 @@ $categories = [
         <div class="mb-8">
             <a href="<?= APP_URL ?>/jobs"
                class="inline-flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition mb-4 group">
-                <svg class="mr-1.5 h-4 w-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg class="<?= __('lang') === 'ar' ? 'ml-1.5 rotate-180' : 'mr-1.5' ?> h-4 w-4 group-hover:<?= __('lang') === 'ar' ? 'translate-x-0.5' : '-translate-x-0.5' ?> transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                 </svg>
-                Back to Job Board
+                <?= __('job_create.back_job_board') ?>
             </a>
-            <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">Post a Job</h1>
-            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Describe your project — top-rated verified craftsmen in your wilaya will send you competitive quotes in minutes.</p>
+            <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight"><?= __('job_create.post_job') ?></h1>
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400"><?= __('job_create.post_job_desc') ?></p>
         </div>
 
         <?php if (!empty($error)): ?>
@@ -75,36 +62,36 @@ $categories = [
                             <span class="text-white text-xs font-bold">1</span>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-gray-900 dark:text-white">Job Details</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Give your job a clear title and detailed description.</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white"><?= __('job_create.job_details') ?></p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400"><?= __('job_create.job_details_desc') ?></p>
                         </div>
                     </div>
                     <div class="px-6 py-5 space-y-5">
 
                         <div>
                             <label for="title" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 pt-1">
-                                Job Title <span class="text-red-500">*</span>
+                                <?= __('job_create.job_title') ?> <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="title" id="title" required maxlength="100"
-                                   placeholder="e.g. Fix leaking kitchen faucet"
+                                   placeholder="<?= __('job_create.job_title_ph') ?>"
                                    value="<?= e($_POST['title'] ?? '') ?>"
                                    class="block w-full px-4 py-2.5 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                           focus:bg-white dark:focus:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
-                            <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">A clear title gets more relevant quotes.</p>
+                            <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400"><?= __('job_create.job_title_hint') ?></p>
                         </div>
 
                         <div>
                             <label for="description" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                                Description <span class="text-red-500">*</span>
+                                <?= __('job_create.description') ?> <span class="text-red-500">*</span>
                             </label>
                             <textarea name="description" id="description" rows="6" required maxlength="2000"
-                                      placeholder="Describe the work in detail — materials needed, size of the area, urgency, any specific requirements..."
+                                      placeholder="<?= __('job_create.description_ph') ?>"
                                       class="block w-full px-4 py-3 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                              focus:bg-white dark:focus:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none leading-relaxed"
                                       oninput="document.getElementById('desc-count').textContent=this.value.length"
                             ><?= e($_POST['description'] ?? '') ?></textarea>
                             <div class="mt-1.5 flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
-                                <span>Be as descriptive as possible.</span>
+                                <span><?= __('job_create.description_hint') ?></span>
                                 <div><span id="desc-count" class="font-medium"><?= strlen($_POST['description'] ?? '') ?></span>/2000</div>
                             </div>
                         </div>
@@ -119,8 +106,8 @@ $categories = [
                             <span class="text-white text-xs font-bold">2</span>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-gray-900 dark:text-white">Service Category <span class="text-red-500">*</span></p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Pick the category that best matches your job.</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white"><?= __('job_create.service_category') ?> <span class="text-red-500">*</span></p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400"><?= __('job_create.service_category_desc') ?></p>
                         </div>
                     </div>
                     <div class="px-6 py-5">
@@ -159,14 +146,14 @@ $categories = [
                                     </svg>
                                 </div>
                                 <span class="cat-label text-xs sm:text-sm font-semibold tracking-tight leading-tight <?= $isSelected ? $activeTextClass : $defaultTextClass ?>">
-                                    <?= e($catName) ?>
+                                    <?= e(__('categories.' . $catName) ?? $catName) ?>
                                 </span>
                             </button>
                             <?php endforeach; ?>
                         </div>
                         <div id="category-error" class="hidden mt-3 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/50 rounded-lg px-4 py-2.5 flex items-center gap-2">
                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                            Please select a service category to proceed.
+                            <?= __('job_create.service_category_err') ?>
                         </div>
                     </div>
                 </div>
@@ -178,8 +165,8 @@ $categories = [
                             <span class="text-white text-xs font-bold">3</span>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-gray-900 dark:text-white">Location &amp; Budget</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Where is the job and what's your expected budget?</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white"><?= __('job_create.location_budget') ?></p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400"><?= __('job_create.location_budget_desc') ?></p>
                         </div>
                     </div>
                     <div class="px-6 py-5">
@@ -188,7 +175,7 @@ $categories = [
                             <!-- Wilaya -->
                             <div>
                                 <label for="address" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 pt-1">
-                                    Wilaya <span class="text-red-500">*</span>
+                                    <?= __('job_create.wilaya') ?> <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
@@ -198,12 +185,12 @@ $categories = [
                                         </svg>
                                     </div>
                                     <select name="address" id="address" required
-                                            class="block w-full pl-10 pr-4 py-2.5 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white
+                                            class="block w-full pl-10 pr-4 h-[46px] bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white
                                                    focus:bg-white dark:focus:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
-                                        <option value="">— Select your Wilaya —</option>
+                                        <option value=""><?= __('job_create.wilaya_ph') ?></option>
                                         <?php foreach ($wilayas as $w): ?>
                                         <option value="<?= e($w) ?>" <?= ($_POST['address'] ?? '') === $w ? 'selected' : '' ?>>
-                                            <?= e($w) ?>
+                                            <?= e(__('wilayas.' . $w) ?? $w) ?>
                                         </option>
                                         <?php endforeach; ?>
                                     </select>
@@ -213,14 +200,14 @@ $categories = [
                             <!-- Budget -->
                             <div>
                                 <label for="budget" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 pt-1">
-                                    Budget
-                                    <span class="text-gray-400 dark:text-gray-500 font-normal ml-1 text-xs">(optional)</span>
+                                    <?= __('job_create.budget') ?>
+                                    <span class="text-gray-400 dark:text-gray-500 font-normal <?= __('lang') === 'ar' ? 'mr-1' : 'ml-1' ?> text-xs"><?= __('forms.optional') ?></span>
                                 </label>
                                 <div class="relative">
                                     <input type="text" name="budget" id="budget"
-                                           placeholder="e.g. 5000 – 10000"
+                                           placeholder="<?= __('job_create.budget_ph') ?>"
                                            value="<?= e($_POST['budget'] ?? '') ?>"
-                                           class="block w-full px-4 py-2.5 pr-14 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
+                                           class="block w-full px-4 h-[46px] pr-14 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                                   focus:bg-white dark:focus:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
                                     <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none border-l border-gray-200 dark:border-gray-600 my-1.5 pl-3">
                                         <span class="text-xs font-bold text-gray-400 dark:text-gray-500">DZD</span>
@@ -239,8 +226,8 @@ $categories = [
                             <span class="text-white text-xs font-bold">4</span>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-gray-900 dark:text-white">Photos <span class="text-gray-400 dark:text-gray-500 font-normal ml-1 text-xs">(optional)</span></p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Photos help craftsmen understand your project better. Max 3 images.</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white"><?= __('job_create.photos') ?> <span class="text-gray-400 dark:text-gray-500 font-normal <?= __('lang') === 'ar' ? 'mr-1' : 'ml-1' ?> text-xs"><?= __('forms.optional') ?></span></p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400"><?= __('job_create.photos_desc') ?></p>
                         </div>
                     </div>
                     <div class="px-6 py-5">
@@ -251,8 +238,8 @@ $categories = [
                             <svg class="mx-auto h-10 w-10 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
-                            <p class="mt-2 text-sm font-semibold text-gray-700 dark:text-gray-300">Click to upload or drag & drop</p>
-                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">JPG, PNG, or WebP • Max 2 MB each • Up to 3 images</p>
+                            <p class="mt-2 text-sm font-semibold text-gray-700 dark:text-gray-300"><?= __('job_create.upload_click') ?></p>
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400"><?= __('job_create.upload_hint') ?></p>
                         </div>
                         <!-- Image Previews -->
                         <div id="image-previews" class="mt-4 grid grid-cols-3 gap-3" style="display:none"></div>
@@ -277,14 +264,14 @@ $categories = [
                             <div class="h-6 w-6 rounded flex items-center justify-center bg-indigo-50 dark:bg-indigo-900/40">
                                 <svg class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                             </div>
-                            <h2 class="text-xs font-bold text-gray-800 dark:text-gray-200 tracking-wider uppercase">Tips for Success</h2>
+                            <h2 class="text-xs font-bold text-gray-800 dark:text-gray-200 tracking-wider uppercase"><?= __('forms.tips_for_success') ?></h2>
                         </div>
                         
                         <div class="space-y-5">
                             <?php foreach ([
-                                ['M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z', 'Be Highly Specific',   'Mention specific dimensions, materials needed, and current state of the problem.', 'text-amber-500', 'bg-amber-50 dark:bg-amber-900/20'],
-                                ['M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z', 'Set Exact Location', 'Craftsmen sort jobs by proximity. Selecting your exact wilaya gets you faster replies.', 'text-rose-500', 'bg-rose-50 dark:bg-rose-900/20'],
-                                ['M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', 'Mention a Budget',   'Providing a realistic budget sets expectations instantly and filters out extreme quotes.', 'text-emerald-500', 'bg-emerald-50 dark:bg-emerald-900/20'],
+                                ['M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z', __('job_create.tips_specific'),   __('job_create.tips_specific_desc'), 'text-amber-500', 'bg-amber-50 dark:bg-amber-900/20'],
+                                ['M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z', __('job_create.tips_location'), __('job_create.tips_location_desc'), 'text-rose-500', 'bg-rose-50 dark:bg-rose-900/20'],
+                                ['M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', __('job_create.tips_budget'),   __('job_create.tips_budget_desc'), 'text-emerald-500', 'bg-emerald-50 dark:bg-emerald-900/20'],
                             ] as [$iconPath, $title, $desc, $iconColor, $iconBg]): ?>
                             <div class="flex items-start gap-3.5">
                                 <div class="h-8 w-8 shrink-0 rounded flex items-center justify-center <?= $iconBg ?>">
@@ -308,8 +295,8 @@ $categories = [
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     <div>
-                        <p class="text-sm font-bold text-emerald-900 dark:text-emerald-100 leading-tight">100% Free</p>
-                        <p class="text-xs text-emerald-700 dark:text-emerald-300 mt-1 leading-relaxed">Posting a job on Crafts is completely free. We do not charge homeowners any hidden platform fees.</p>
+                        <p class="text-sm font-bold text-emerald-900 dark:text-emerald-100 leading-tight"><?= __('forms.100_percent_free') ?></p>
+                        <p class="text-xs text-emerald-700 dark:text-emerald-300 mt-1 leading-relaxed"><?= __('forms.100_percent_free_desc') ?></p>
                     </div>
                 </div>
 
@@ -322,14 +309,14 @@ $categories = [
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
             <a href="<?= APP_URL ?>/jobs"
                class="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                Cancel
+                <?= __('forms.cancel') ?>
             </a>
             <button type="submit" form="job-form"
                 class="inline-flex items-center gap-2 px-8 py-2.5 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
                 </svg>
-                Publish Job Post
+                <?= __('job_create.publish_job') ?>
             </button>
         </div>
     </div>
