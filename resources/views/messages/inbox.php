@@ -1,21 +1,22 @@
 <?php
 /* ── Helpers ──────────────────────────────────────────── */
 function msgTimeAgo($dt) {
-    if (!$dt) return '';
-    $d = time() - strtotime($dt);
-    if ($d < 60)     return 'now';
-    if ($d < 3600)   return floor($d/60).'m';
-    if ($d < 86400)  return floor($d/3600).'h';
-    if ($d < 604800) return date('D', strtotime($dt));
-    return date('M j', strtotime($dt));
+    return req_time_ago($dt);
 }
 function msgDateChip($dt) {
     if (!$dt) return '';
     $d = time() - strtotime($dt);
-    if ($d < 86400)   return 'Today';
-    if ($d < 172800)  return 'Yesterday';
-    if ($d < 604800)  return date('l', strtotime($dt));
-    return date('M j, Y', strtotime($dt));
+    $arM = ['Jan'=>'جانفي','Feb'=>'فيفري','Mar'=>'مارس','Apr'=>'أفريل','May'=>'ماي','Jun'=>'جوان','Jul'=>'جويلية','Aug'=>'أوت','Sep'=>'سبتمبر','Oct'=>'أكتوبر','Nov'=>'نوفمبر','Dec'=>'ديسمبر'];
+    if ($d < 86400)   return __('messages.today');
+    if ($d < 172800)  return __('messages.yesterday');
+    if ($d < 604800) {
+        $l = date('l', strtotime($dt));
+        $arD = ['Sunday'=>'الأحد','Monday'=>'الاثنين','Tuesday'=>'الثلاثاء','Wednesday'=>'الأربعاء','Thursday'=>'الخميس','Friday'=>'الجمعة','Saturday'=>'السبت'];
+        return __('lang') === 'ar' ? ($arD[$l] ?? $l) : $l;
+    }
+    $m = date('M', strtotime($dt));
+    $mStr = __('lang') === 'ar' ? ($arM[$m] ?? $m) : $m;
+    return date('j', strtotime($dt)) . ' ' . $mStr;
 }
 
 $me      = $_SESSION['user_id'];
@@ -48,7 +49,7 @@ if (!empty($openMessages)) {
 
         // 30 minute gap time chip in the middle
         if ($ts - $prevTimeChipTs >= $GAP) {
-            $grouped[] = ['type'=>'time','label'=>date('g:i A', $ts)];
+            $grouped[] = ['type'=>'time','label'=>date('H:i', $ts)];
             $prevTimeChipTs = $ts;
             // Also reset gap for bubbles
             $gap = true;
@@ -209,6 +210,17 @@ html.dark .bg-amber-100 { background: #78350f !important; }
 html.dark .text-amber-500 { color: #fcd34d !important; }
 html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important; }
 
+/* ── RTL OVERRIDES ────────────────────────────────────────── */
+html[lang="ar"] #msg-list-panel { border-right: none; border-left: 1px solid #e5e7eb; }
+html[lang="ar"].dark #msg-list-panel { border-left-color: #374151; }
+html[lang="ar"] #msg-chat-panel { transform: translateX(-100%); }
+html[lang="ar"] #msg-chat-panel.mobile-open { transform: translateX(0); }
+html[lang="ar"] .bm { border-radius: 18px 18px 18px 4px; }
+html[lang="ar"] .bt { border-radius: 18px 18px 4px 18px; }
+html[lang="ar"] .bm-c { border-radius: 18px 4px 18px 18px; }
+html[lang="ar"] .bt-c { border-radius: 4px 18px 18px 18px; }
+html[lang="ar"] #cs { padding: 8px 36px 8px 14px; }
+
 </style>
 
 <div id="msg-shell">
@@ -219,31 +231,31 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
   <!-- Header -->
   <div class="px-4 pt-5 pb-3 border-b border-gray-100 flex-shrink-0">
     <div class="flex items-center justify-between mb-3">
-      <h1 class="text-xl font-extrabold text-gray-900 tracking-tight">Messages</h1>
-      <a href="<?= APP_URL ?>/search" title="New conversation" class="p-2 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 dark:hover:text-indigo-300 transition">
+      <h1 class="text-xl font-extrabold text-gray-900 tracking-tight"><?= __('messages.title') ?></h1>
+      <a href="<?= APP_URL ?>/search" title="<?= __('messages.new_conversation') ?>" class="p-2 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 dark:hover:text-indigo-300 transition">
         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
       </a>
     </div>
     <div class="relative">
-      <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-      <input type="text" id="cs" placeholder="Search conversations…" oninput="filterConvos(this.value)">
+      <svg class="absolute <?= __('lang') === 'ar' ? 'right-3' : 'left-3' ?> top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <input type="text" id="cs" placeholder="<?= __('messages.search_placeholder') ?>" oninput="filterConvos(this.value)">
     </div>
   </div>
 
   <!-- Tabs -->
   <div class="flex border-b border-gray-100 px-2 flex-shrink-0">
     <button class="itb <?= $openFolder==='primary' ? 'active' : '' ?>" id="tab-btn-primary" onclick="switchTab('primary')">
-      Primary
+      <?= __('messages.primary') ?>
       <?php $pu = count(array_filter($primaryConvos, fn($c)=>(int)($c['unread_count']??0)>0)); ?>
       <?php if($pu>0):?><span class="bg-indigo-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full"><?=$pu?></span><?php endif;?>
     </button>
     <button class="itb <?= $openFolder==='general' ? 'active' : '' ?>" id="tab-btn-general" onclick="switchTab('general')">
-      General
+      <?= __('messages.general') ?>
       <?php $gu = count(array_filter($generalConvos, fn($c)=>(int)($c['unread_count']??0)>0)); ?>
       <?php if($gu>0):?><span class="bg-gray-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full"><?=$gu?></span><?php endif;?>
     </button>
     <a href="<?= APP_URL ?>/messages/requests" class="itb">
-      Requests
+      <?= __('messages.requests') ?>
       <?php if($requestCount>0):?><span class="bg-amber-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full"><?=$requestCount?></span><?php endif;?>
     </a>
   </div>
@@ -257,7 +269,7 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
         $pinned   = array_values(array_filter($primaryConvos, fn($c)=>!empty($c['is_pinned'])));
         $unpinned = array_values(array_filter($primaryConvos, fn($c)=> empty($c['is_pinned'])));
         if($pinned): ?>
-        <p class="px-4 pt-2 pb-1 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Pinned</p>
+        <p class="px-4 pt-2 pb-1 text-[10px] font-bold text-gray-400 uppercase tracking-widest"><?= __('messages.pinned') ?></p>
         <?php foreach($pinned as $c) echo renderRow($c,$openUid,$me);
         if($unpinned): ?><div class="mx-4 my-2 border-t border-gray-100"></div><?php endif;
         endif;
@@ -267,8 +279,8 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
         <div class="h-14 w-14 bg-indigo-50 rounded-2xl flex items-center justify-center mb-4">
           <svg class="h-7 w-7 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
         </div>
-        <p class="text-sm font-semibold text-gray-500">No primary messages</p>
-        <a href="<?= APP_URL ?>/search" class="mt-3 px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-700 transition">Find Craftsmen</a>
+        <p class="text-sm font-semibold text-gray-500"><?= __('messages.no_primary') ?></p>
+        <a href="<?= APP_URL ?>/search" class="mt-3 px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-700 transition"><?= __('messages.find_craftsmen') ?></a>
       </div>
       <?php endif; ?>
     </div>
@@ -282,8 +294,8 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
         <div class="h-14 w-14 bg-gray-50 rounded-2xl flex items-center justify-center mb-4">
           <svg class="h-7 w-7 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
         </div>
-        <p class="text-sm font-semibold text-gray-500">No general messages</p>
-        <p class="text-xs text-gray-400 mt-1">Move conversations here to keep Primary clean</p>
+        <p class="text-sm font-semibold text-gray-500"><?= __('messages.no_general') ?></p>
+        <p class="text-xs text-gray-400 mt-1"><?= __('messages.no_general_desc') ?></p>
       </div>
       <?php endif; ?>
     </div>
@@ -299,7 +311,7 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
   <!-- Chat header -->
   <div class="flex items-center gap-3 px-5 py-3 bg-white border-b border-gray-100 flex-shrink-0">
     <button class="md:hidden p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300 transition" onclick="closeMobile()">
-      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+      <svg class="h-5 w-5 <?= __('lang') === 'ar' ? 'rotate-180' : '' ?>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
     </button>
     <div class="relative flex-shrink-0">
       <img src="<?= e(get_profile_picture_url($openUser['profile_picture']??'default.png',$openUser['first_name'],$openUser['last_name'])) ?>"
@@ -315,10 +327,10 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
         <svg class="h-4 w-4 text-blue-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
         <?php endif; ?>
       </div>
-      <p class="text-xs text-gray-400 capitalize"><?= e(ucfirst($openUser['role'])) ?></p>
+      <p class="text-xs text-gray-400 capitalize"><?= __('auth.' . $openUser['role']) ?></p>
     </div>
     <div class="flex items-center gap-1 flex-shrink-0">
-      <a href="<?= APP_URL ?>/profile/<?= e($openUser['username']??'') ?>" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/50 dark:hover:text-indigo-400 rounded-lg transition" title="View profile">
+      <a href="<?= APP_URL ?>/profile/<?= e($openUser['username']??'') ?>" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/50 dark:hover:text-indigo-400 rounded-lg transition" title="<?= __('messages.view_profile') ?>">
         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
       </a>
       <?php if($openConvo): ?>
@@ -335,13 +347,13 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
     <div class="flex items-center gap-3 min-w-0">
       <img src="<?= e(get_profile_picture_url($openUser['profile_picture']??'default.png',$openUser['first_name'],$openUser['last_name'])) ?>" class="h-9 w-9 rounded-full object-cover flex-shrink-0">
       <div class="min-w-0">
-        <p class="text-sm font-bold text-gray-900"><?= e($openUser['first_name']) ?> wants to message you</p>
+        <p class="text-sm font-bold text-gray-900"><?= e($openUser['first_name']) ?> <?= __('messages.wants_to_message') ?></p>
         <p class="text-xs text-gray-500 truncate"><?= e(mb_substr(end($openMessages)['message_body']??'',0,60)) ?></p>
       </div>
     </div>
     <div class="flex items-center gap-2 flex-shrink-0">
-      <button onclick="doAccept(<?=(int)$openConvo['id']?>,<?=(int)$openUid?>)" class="px-4 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 transition">Accept</button>
-      <button onclick="doDeclinePrompt(<?=(int)$openConvo['id']?>,<?=(int)$openUid?>)" class="px-4 py-1.5 bg-red-100 text-red-800 text-xs font-bold rounded-lg hover:bg-red-600 hover:text-white dark:bg-red-700 dark:text-white dark:hover:bg-red-600 transition">Decline</button>
+      <button onclick="doAccept(<?=(int)$openConvo['id']?>,<?=(int)$openUid?>)" class="px-4 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 transition"><?= __('messages.accept') ?></button>
+      <button onclick="doDeclinePrompt(<?=(int)$openConvo['id']?>,<?=(int)$openUid?>)" class="px-4 py-1.5 bg-red-100 text-red-800 text-xs font-bold rounded-lg hover:bg-red-600 hover:text-white dark:bg-red-700 dark:text-white dark:hover:bg-red-600 transition"><?= __('messages.decline') ?></button>
     </div>
   </div>
   <?php endif; ?>
@@ -352,20 +364,32 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
     <div class="flex flex-col items-center justify-center h-full gap-3 text-center py-12">
       <img src="<?= e(get_profile_picture_url($openUser['profile_picture']??'default.png',$openUser['first_name'],$openUser['last_name'])) ?>" class="h-16 w-16 rounded-full object-cover border-2 border-indigo-100 shadow-sm">
       <p class="font-bold text-gray-800"><?= e($openUser['first_name'].' '.$openUser['last_name']) ?></p>
-      <p class="text-xs text-gray-400">Start the conversation below</p>
+      <p class="text-xs text-gray-400"><?= __('messages.start_conversation') ?></p>
     </div>
     <?php else:
       foreach($grouped as $item):
         if($item['type']==='date'): ?>
         <div class="dc"><span><?= e($item['label']) ?></span></div>
         <?php elseif($item['type']==='time'): ?>
-        <div class="tc"><span><?= e($item['label']) ?></span></div>
+        <div class="tc"><span dir="ltr"><?= e($item['label']) ?></span></div>
         <?php else:
           $msg=$item['data']; $isMe=$item['isMe']; $showAv=$item['showAv'];
-          $time=date('g:i A',strtotime($msg['created_at']));
+          $time=date('H:i',strtotime($msg['created_at']));
+          
+          // Generate modal date without year
+          $dc = time() - strtotime($msg['created_at']);
+          if ($dc < 86400) { $dateStr = __('messages.today'); }
+          elseif ($dc < 172800) { $dateStr = __('messages.yesterday'); }
+          else {
+              $arM = ['Jan'=>'جانفي','Feb'=>'فيفري','Mar'=>'مارس','Apr'=>'أفريل','May'=>'ماي','Jun'=>'جوان','Jul'=>'جويلية','Aug'=>'أوت','Sep'=>'سبتمبر','Oct'=>'أكتوبر','Nov'=>'نوفمبر','Dec'=>'ديسمبر'];
+              $m = date('M', strtotime($msg['created_at']));
+              $mStr = __('lang') === 'ar' ? ($arM[$m] ?? $m) : $m;
+              $dateStr = date('j', strtotime($msg['created_at'])) . ' ' . $mStr;
+          }
+
           if($isMe): ?>
           <div class="flex justify-end items-end gap-1 msg-row" data-message-id="<?=$msg['id']?>" data-sender-id="<?=$msg['sender_id']?>" data-ts="<?=strtotime($msg['created_at'])*1000?>">
-            <div class="msg-menu-btn" onclick="openMsgMenu(event, <?=$msg['id']?>, '<?=$time?>', true)">
+            <div class="msg-menu-btn" onclick="openMsgMenu(event, <?=$msg['id']?>, '<?=e($dateStr)?>', '<?=$time?>', true)">
               <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
             </div>
             <div class="wm">
@@ -381,7 +405,7 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
               <?php if($showAv):?><span class="text-[11px] font-semibold text-gray-500 px-1"><?=e($msg['first_name'])?></span><?php endif;?>
               <div class="bt <?=$item['nextSame']?'bt-c':''?> msg-body"><?=nl2br(e($msg['message_body']))?></div>
             </div>
-            <div class="msg-menu-btn" onclick="openMsgMenu(event, <?=$msg['id']?>, '<?=$time?>', false)">
+            <div class="msg-menu-btn" onclick="openMsgMenu(event, <?=$msg['id']?>, '<?=e($dateStr)?>', '<?=$time?>', false)">
               <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
             </div>
           </div>
@@ -392,15 +416,15 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
   <!-- Input -->
   <?php if($canSend): ?>
   <div id="mia">
-    <textarea id="mi" placeholder="Message…" rows="1" oninput="resize(this)"></textarea>
-    <button id="sb" disabled title="Send">
+    <textarea id="mi" placeholder="<?= __('messages.type_message') ?>" rows="1" oninput="resize(this)"></textarea>
+    <button id="sb" disabled title="<?= __('messages.send') ?>">
       <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
     </button>
   </div>
   <?php elseif($isRequest&&$isRecipient): ?>
   <div class="flex items-center justify-center gap-2 px-5 py-4 bg-white border-t border-gray-100 text-sm text-gray-400">
     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-    Accept the request above to reply
+    <?= __('messages.accept_to_reply') ?>
   </div>
   <?php endif; ?>
 
@@ -412,8 +436,8 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
       </svg>
     </div>
     <div class="text-center">
-      <p class="font-semibold text-gray-600">Select a conversation</p>
-      <p class="text-sm text-gray-400 mt-1">Choose from the list or start a new chat</p>
+      <p class="font-semibold text-gray-600"><?= __('messages.select_conversation') ?></p>
+      <p class="text-sm text-gray-400 mt-1"><?= __('messages.select_conversation_desc') ?></p>
     </div>
   </div>
 <?php endif; ?>
@@ -430,11 +454,11 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
   <div class="fixed inset-0 bg-black/40" onclick="hideFM()"></div>
   <div class="fixed inset-0 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xs p-6 relative z-10">
-      <h3 class="text-base font-bold text-gray-900 mb-4">Move to folder</h3>
+      <h3 class="text-base font-bold text-gray-900 mb-4"><?= __('messages.move_to_folder') ?></h3>
       <div class="space-y-2">
         <button onclick="doFolder('primary')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 dark:hover:border-indigo-500 transition text-sm font-semibold text-gray-700 dark:text-gray-300">
           <span class="h-8 w-8 bg-indigo-100 dark:bg-indigo-900/60 rounded-lg flex items-center justify-center text-indigo-600 dark:text-white flex-shrink-0"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></span>
-          Primary
+          <?= __('messages.primary') ?>
         </button>
         <button onclick="doFolder('general')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 dark:hover:border-gray-500 transition text-sm font-semibold text-gray-700 dark:text-gray-300">
           <span class="h-8 w-8 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 dark:text-white flex-shrink-0">
@@ -442,10 +466,10 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
               <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
             </svg>
           </span>
-          General
+          <?= __('messages.general') ?>
         </button>
       </div>
-      <button onclick="hideFM()" class="mt-4 w-full text-center text-sm text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition">Cancel</button>
+      <button onclick="hideFM()" class="mt-4 w-full text-center text-sm text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition"><?= __('messages.cancel') ?></button>
     </div>
   </div>
 </div>
@@ -460,13 +484,13 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
           <svg class="h-5 w-5 text-red-500 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
         </div>
         <div>
-          <p class="font-bold text-gray-900">Delete conversation?</p>
-          <p class="text-xs text-gray-500 mt-0.5">Hides it from your inbox. The other person won't be notified.</p>
+          <p class="font-bold text-gray-900"><?= __('messages.delete_conversation') ?></p>
+          <p class="text-xs text-gray-500 mt-0.5"><?= __('messages.delete_desc') ?></p>
         </div>
       </div>
       <div class="flex gap-3">
-        <button onclick="hideDM()" class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 text-sm font-bold rounded-xl hover:bg-gray-200 dark:bg-gray-500 dark:text-white dark:hover:bg-gray-400 transition">Cancel</button>
-        <button onclick="doDelete()" class="flex-1 px-4 py-2 bg-red-100 text-red-800 text-sm font-bold rounded-xl hover:bg-red-600 hover:text-white dark:bg-red-700 dark:text-white dark:hover:bg-red-600 transition">Delete</button>
+        <button onclick="hideDM()" class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 text-sm font-bold rounded-xl hover:bg-gray-200 dark:bg-gray-500 dark:text-white dark:hover:bg-gray-400 transition"><?= __('messages.cancel') ?></button>
+        <button onclick="doDelete()" class="flex-1 px-4 py-2 bg-red-100 text-red-800 text-sm font-bold rounded-xl hover:bg-red-600 hover:text-white dark:bg-red-700 dark:text-white dark:hover:bg-red-600 transition"><?= __('messages.delete') ?></button>
       </div>
     </div>
   </div>
@@ -482,13 +506,13 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
           <svg class="h-5 w-5 text-amber-500 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
         </div>
         <div>
-          <p class="font-bold text-gray-900">Decline request?</p>
-          <p class="text-xs text-gray-500 mt-0.5" id="dcm-txt">The sender won't be notified.</p>
+          <p class="font-bold text-gray-900"><?= __('messages.decline_prompt') ?></p>
+          <p class="text-xs text-gray-500 mt-0.5" id="dcm-txt"><?= __('messages.decline_desc') ?></p>
         </div>
       </div>
       <div class="flex gap-3">
-        <button onclick="hideDCM()" class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 text-sm font-bold rounded-xl hover:bg-gray-200 dark:bg-gray-500 dark:text-white dark:hover:bg-gray-400 transition">Cancel</button>
-        <button onclick="doDecline()" class="flex-1 px-4 py-2 bg-yellow-100 text-yellow-800 text-sm font-bold rounded-xl hover:bg-amber-500 hover:text-white dark:bg-amber-700 dark:text-white dark:hover:bg-amber-600 transition">Decline</button>
+        <button onclick="hideDCM()" class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 text-sm font-bold rounded-xl hover:bg-gray-200 dark:bg-gray-500 dark:text-white dark:hover:bg-gray-400 transition"><?= __('messages.cancel') ?></button>
+        <button onclick="doDecline()" class="flex-1 px-4 py-2 bg-yellow-100 text-yellow-800 text-sm font-bold rounded-xl hover:bg-amber-500 hover:text-white dark:bg-amber-700 dark:text-white dark:hover:bg-amber-600 transition"><?= __('messages.decline') ?></button>
       </div>
     </div>
   </div>
@@ -598,10 +622,11 @@ async function send(){
   // Remove empty state
   const es=mc?mc.querySelector('.flex.flex-col.items-center'):null; if(es)es.remove();
   // Optimistic bubble
-  const tstr=new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
+  const tstr=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false});
+  const dateStr="<?= __('messages.today') ?>";
   if(mc){
     // Very simple optimistic render without timestamps under it. Middle timestamp if big gap could be added but skipping to keep optimistic instant.
-    mc.insertAdjacentHTML('beforeend',`<div class="flex justify-end items-end gap-1 msg-row" data-sender-id="${ME}" data-ts="${Date.now()}"><div class="msg-menu-btn" onclick="openMsgMenu(event, null, '${tstr}', true)"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg></div><div class="wm"><div class="bm msg-body">${esc(body)}</div></div></div>`);
+    mc.insertAdjacentHTML('beforeend',`<div class="flex justify-end items-end gap-1 msg-row" data-sender-id="${ME}" data-ts="${Date.now()}"><div class="msg-menu-btn" onclick="openMsgMenu(event, null, '${esc(dateStr)}', '${tstr}', true)"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg></div><div class="wm"><div class="bm msg-body">${esc(body)}</div></div></div>`);
     mc.scrollTop=mc.scrollHeight;
   }
   inp.value=''; inp.style.height='auto';
@@ -620,7 +645,7 @@ function updatePreview(uid,body,pfx){
   if(rows.length){
     rows.forEach(r=>{
       const p=r.querySelector('.cp'); if(p)p.textContent=(pfx?pfx+': ':'')+body.substring(0,55);
-      const t=r.querySelector('.cts'); if(t)t.textContent='now';
+      const t=r.querySelector('.cts'); if(t)t.textContent='<?= __('messages.now') ?>';
     });
   } else {
     injectRow(uid,body,pfx);
@@ -643,7 +668,7 @@ async function injectRow(uid,body,pfx){
         <div class="flex-1 min-w-0">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-1 min-w-0"><p class="cn text-sm font-bold truncate text-gray-800">${esc(u.first_name+' '+u.last_name)}</p>${vbadge}</div>
-            <span class="cts text-[11px] text-gray-400">now</span>
+            <span class="cts text-[11px] text-gray-400"><?= __('messages.now') ?></span>
           </div>
           <div class="flex items-center justify-between gap-2 mt-0.5">
             <p class="cp text-xs text-gray-400 truncate">${esc((pfx?pfx+': ':'')+body.substring(0,55))}</p>
@@ -682,8 +707,9 @@ function rebadgeTabs(){
 /* Relative time */
 function rt(dt){
   const d=new Date(dt.includes('T')?dt:dt+' UTC'), diff=Math.floor((Date.now()-d.getTime())/1000);
-  if(diff<60)return'now'; if(diff<3600)return Math.floor(diff/60)+'m'; if(diff<86400)return Math.floor(diff/3600)+'h';
-  return['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+  if(diff<60)return'<?= __('messages.now') ?? 'now' ?>'; if(diff<3600)return Math.floor(diff/60)+'m'; if(diff<86400)return Math.floor(diff/3600)+'h';
+  if(diff<604800)return Math.floor(diff/86400)+'d';
+  return Math.floor(diff/604800)+'w';
 }
 
 /* Message poll — new messages in open chat */
@@ -702,7 +728,8 @@ setInterval(async()=>{
       if(m.sender_id==ME){lastId=Math.max(lastId,m.id);pSnd=m.sender_id;pTs=new Date(m.created_at+' UTC').getTime();return;}
       lastId=Math.max(lastId,m.id);
       const mts=new Date(m.created_at+' UTC').getTime();
-      const time=new Date(m.created_at+' UTC').toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
+      const time=new Date(m.created_at+' UTC').toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false});
+      const dateStr="<?= __('messages.today') ?>";
       const pic=m.pic_url||fbAv(m.first_name,m.last_name);
       const showAv=(pSnd!=m.sender_id||(mts-pTs)>GAP);
       const av=showAv?`<img src="${pic}" class="h-7 w-7 rounded-full object-cover flex-shrink-0 border border-gray-100 shadow-sm" onerror="this.src='${fbAv(m.first_name,m.last_name)}'">`:
@@ -711,10 +738,10 @@ setInterval(async()=>{
       
       // Inject time chip if big gap
       if (mts - pTs >= BIG_GAP && pTs !== 0) {
-        mc.insertAdjacentHTML('beforeend',`<div class="tc"><span>${time}</span></div>`);
+        mc.insertAdjacentHTML('beforeend',`<div class="tc"><span dir="ltr">${time}</span></div>`);
       }
 
-      mc.insertAdjacentHTML('beforeend',`<div class="flex items-end gap-1 msg-row" data-message-id="${m.id}" data-sender-id="${m.sender_id}" data-ts="${mts}">${av}<div class="wt">${showAv?`<span class="text-[11px] font-semibold text-gray-500 px-1">${esc(m.first_name)}</span>`:''}<div class="bt msg-body">${esc(m.message_body)}</div></div><div class="msg-menu-btn" onclick="openMsgMenu(event, ${m.id}, '${time}', false)"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg></div></div>`);
+      mc.insertAdjacentHTML('beforeend',`<div class="flex items-end gap-1 msg-row" data-message-id="${m.id}" data-sender-id="${m.sender_id}" data-ts="${mts}">${av}<div class="wt">${showAv?`<span class="text-[11px] font-semibold text-gray-500 px-1">${esc(m.first_name)}</span>`:''}<div class="bt msg-body">${esc(m.message_body)}</div></div><div class="msg-menu-btn" onclick="openMsgMenu(event, ${m.id}, '${esc(dateStr)}', '${time}', false)"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg></div></div>`);
       pSnd=m.sender_id; pTs=mts;
       updatePreview(oUid,m.message_body,m.first_name);
     });
@@ -737,7 +764,7 @@ setInterval(async()=>{
       const rows=document.querySelectorAll('[data-uid="'+uid+'"]');
       if(rows.length){
         rows.forEach(row=>{
-          const p=row.querySelector('.cp'); if(p)p.textContent=((c.last_sender_id==ME?'You: ':'')+c.last_message||'').substring(0,55);
+          const p=row.querySelector('.cp'); if(p)p.textContent=((c.last_sender_id==ME?'<?= __('messages.you') ?>: ':'')+c.last_message||'').substring(0,55);
           const t=row.querySelector('.cts'); if(t)t.textContent=rt(c.last_message_at||'');
           const dot=row.querySelector('.udot'), badge=row.querySelector('.ubadge');
           if(unread>0&&!muted&&!isOpen){
@@ -766,7 +793,7 @@ setInterval(async()=>{
                 <span class="cts text-[11px] text-gray-400">${rt(c.last_message_at||'')}</span>
               </div>
               <div class="flex items-center justify-between gap-2 mt-0.5">
-                <p class="cp text-xs ${unread>0?'text-gray-700 font-medium':'text-gray-400'} truncate">${esc(((c.last_sender_id==ME?'You: ':'')+c.last_message||'').substring(0,55))}</p>
+                <p class="cp text-xs ${unread>0?'text-gray-700 font-medium':'text-gray-400'} truncate">${esc(((c.last_sender_id==ME?'<?= __('messages.you') ?>: ':'')+c.last_message||'').substring(0,55))}</p>
                 <div class="flex items-center gap-1 flex-shrink-0">${ub}<button class="rmb" onclick="event.stopPropagation();showCtx(event,${cid},${uid})"><svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"/></svg></button></div>
               </div>
             </div>
@@ -784,12 +811,12 @@ function showCtx(ev,cid,uid){
   const pinned=row?row.dataset.pinned==='1':false, muted=row?row.dataset.muted==='1':false;
   const m=document.getElementById('ctx');
   m.innerHTML=`
-    <div class="ci" onclick="doPin(${cid},${uid})"><svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>${pinned?'Unpin':'Pin'}</div>
-    <div class="ci" onclick="doMute(${cid},${uid})"><svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="${muted?'M15.536 8.464a5 5 0 010 7.072M12 6v12m0 0L8 14m4 4l4-4':'M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2'}"/></svg>${muted?'Unmute':'Mute'}</div>
-    <div class="ci" onclick="doMarkRead(${cid})"><svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Mark as read</div>
-    <div class="ci" onclick="showFM(${cid})"><svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>Move to folder</div>
+    <div class="ci" onclick="doPin(${cid},${uid})"><svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>${pinned?'<?= __('messages.unpin') ?>':'<?= __('messages.pin') ?>'}</div>
+    <div class="ci" onclick="doMute(${cid},${uid})"><svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="${muted?'M15.536 8.464a5 5 0 010 7.072M12 6v12m0 0L8 14m4 4l4-4':'M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2'}"/></svg>${muted?'<?= __('messages.unmute') ?>':'<?= __('messages.mute') ?>'}</div>
+    <div class="ci" onclick="doMarkRead(${cid})"><svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><?= __('messages.mark_read') ?></div>
+    <div class="ci" onclick="showFM(${cid})"><svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg><?= __('messages.move_to_folder') ?></div>
     <div style="height:1px;background:#f1f5f9;margin:4px 0"></div>
-    <div class="ci danger" onclick="showDM(${cid})"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>Delete</div>`;
+    <div class="ci danger" onclick="showDM(${cid})"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg><?= __('messages.delete') ?></div>`;
   m.classList.remove('hidden');
   const x=Math.min(ev.clientX,window.innerWidth-200), y=(ev.clientY+220>window.innerHeight)?ev.clientY-220:ev.clientY;
   m.style.left=Math.max(8,x)+'px'; m.style.top=Math.max(8,y)+'px';
@@ -801,17 +828,17 @@ document.addEventListener('click',(e)=>{
 document.addEventListener('contextmenu',e=>{const r=e.target.closest('.cr[data-uid]');if(r){e.preventDefault();showCtx(e,parseInt(r.dataset.cid||0),parseInt(r.dataset.uid||0));}});
 
 /* Message Menu (three dots) */
-function openMsgMenu(ev, msgId, timeStr, isMe) {
+function openMsgMenu(ev, msgId, dateStr, timeStr, isMe) {
   ev.stopPropagation();
   // Get text content of this specific message row
   let row = ev.currentTarget.closest('.msg-row');
   let body = row ? row.querySelector('.msg-body').innerText : '';
   
   const m = document.getElementById('msg-ctx');
-  let html = `<div class="msg-ctx-header">${timeStr}</div>`;
-  html += `<div class="ci" onclick="copyMsgText('${esc(body.replace(/'/g, "\\'"))}')"><svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>Copy</div>`;
+  let html = `<div class="msg-ctx-header flex items-center justify-center gap-1.5"><span dir="ltr">${timeStr}</span> <span class="text-gray-300">&bull;</span> <span class="text-gray-600 font-semibold">${dateStr}</span></div>`;
+  html += `<div class="ci" onclick="copyMsgText('${esc(body.replace(/'/g, "\\'"))}')"><svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg><?= __('messages.copy') ?></div>`;
   if (isMe && msgId) {
-     html += `<div class="ci danger" onclick="deleteMessage(${msgId})"><svg class="h-4 w-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>Delete</div>`;
+     html += `<div class="ci danger" onclick="deleteMessage(${msgId})"><svg class="h-4 w-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg><?= __('messages.delete') ?></div>`;
   }
   m.innerHTML = html;
   m.classList.add('open');
@@ -822,10 +849,11 @@ function openMsgMenu(ev, msgId, timeStr, isMe) {
   // Calculate height of the menu approximately (header + 1 or 2 items)
   let menuHeight = isMe ? 120 : 80; // approximate height in pixels
   
+  let isAr = document.documentElement.lang === 'ar';
   if (isMe) {
-     x = x - 150; // Pop open to the left if it's our message
+     x = isAr ? x + 10 : x - 150; // Pop open to the side if it's our message
   } else {
-     x = x + 10;
+     x = isAr ? x - 150 : x + 10;
   }
   
   // Try to open ABOVE the cursor by subtracting the menu height + some padding

@@ -278,7 +278,7 @@ $activeFilterCount = (int)!empty($selectedCat)
                             <div class="flex items-center gap-3 text-xs text-gray-400 dark:text-gray-500 min-w-0">
                                 <span class="flex items-center gap-1 truncate">
                                     <svg class="h-3.5 w-3.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
-                                    <?= htmlspecialchars(preg_replace('/^\d{2}\s-\s/', '', $job['address'])) ?>
+                                    <?= htmlspecialchars(preg_replace('/^\d{2}\s-\s/', '', __('wilayas.' . $job['address']) ?? $job['address'])) ?>
                                 </span>
                                 <span class="flex items-center gap-1 flex-shrink-0">
                                     <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
@@ -321,8 +321,8 @@ $activeFilterCount = (int)!empty($selectedCat)
                     </p>
                     <nav class="isolate inline-flex -space-x-px rounded-lg shadow-sm">
                         <?php if ($page > 1): ?>
-                        <a href="<?= build_job_url($page - 1, $filters) ?>" class="relative inline-flex items-center rounded-l-lg px-2 py-2 text-gray-400 dark:text-gray-500 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd"/></svg>
+                        <a href="<?= build_job_url($page - 1, $filters) ?>" class="relative inline-flex items-center rounded-l-lg rtl:rounded-l-none rtl:rounded-r-lg px-2 py-2 text-gray-400 dark:text-gray-500 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <svg class="h-4 w-4 <?= __('lang') === 'ar' ? 'rotate-180' : '' ?>" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd"/></svg>
                         </a>
                         <?php endif; ?>
                         <?php for ($i = max(1, $page - 2); $i <= min($totalPages, $page + 2); $i++): ?>
@@ -332,8 +332,8 @@ $activeFilterCount = (int)!empty($selectedCat)
                         </a>
                         <?php endfor; ?>
                         <?php if ($page < $totalPages): ?>
-                        <a href="<?= build_job_url($page + 1, $filters) ?>" class="relative inline-flex items-center rounded-r-lg px-2 py-2 text-gray-400 dark:text-gray-500 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"/></svg>
+                        <a href="<?= build_job_url($page + 1, $filters) ?>" class="relative inline-flex items-center rounded-r-lg rtl:rounded-r-none rtl:rounded-l-lg px-2 py-2 text-gray-400 dark:text-gray-500 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <svg class="h-4 w-4 <?= __('lang') === 'ar' ? 'rotate-180' : '' ?>" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"/></svg>
                         </a>
                         <?php endif; ?>
                     </nav>

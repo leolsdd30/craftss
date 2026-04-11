@@ -87,6 +87,10 @@ if (!empty($img) && strpos($img, 'http') !== 0) {
         }
     </script>
     <style>
+         /* ── use only cairo for both language 
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
+       body { font-family: 'Cairo', sans-serif; }  ── */
+
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
         html[lang="ar"] body { font-family: 'Cairo', sans-serif; }
@@ -306,6 +310,7 @@ if (!empty($img) && strpos($img, 'http') !== 0) {
             flex-shrink: 0;
         }
         #mob-menu-btn:hover { background: #f3f4f6; color: #111827; }
+        html.dark #mob-menu-btn:hover { background: #374151; color: #f3f4f6; }
 
         /* Body scroll lock */
         body.drawer-open { overflow: hidden; }

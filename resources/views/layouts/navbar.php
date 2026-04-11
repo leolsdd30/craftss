@@ -180,7 +180,7 @@
 
                         <!-- Language Toggle -->
                         <a href="<?= APP_URL ?>/lang/<?= __('lang') === 'en' ? 'ar' : 'en' ?>" class="hidden sm:flex items-center justify-center relative p-2 transition-colors duration-200 rounded-lg text-sm font-semibold text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-indigo-400" title="Switch Language">
-                            <?= __('lang') === 'en' ? 'عربي' : 'EN' ?>
+                            <span class="<?= __('lang') === 'en' ? "font-['Cairo']" : '' ?>"><?= __('lang') === 'en' ? 'عربي' : 'EN' ?></span>
                         </a>
 
                         <!-- Dark Mode Toggle -->
@@ -376,7 +376,7 @@
                     <?php else: ?>
                         <!-- Language Toggle (Guest) -->
                         <a href="<?= APP_URL ?>/lang/<?= __('lang') === 'en' ? 'ar' : 'en' ?>" class="hidden sm:flex items-center justify-center relative p-2 transition-colors duration-200 rounded-lg text-sm font-semibold text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-indigo-400" title="Switch Language">
-                            <?= __('lang') === 'en' ? 'عربي' : 'EN' ?>
+                            <span class="<?= __('lang') === 'en' ? "font-['Cairo']" : '' ?>"><?= __('lang') === 'en' ? 'عربي' : 'EN' ?></span>
                         </a>
 
                         <!-- Dark Mode Toggle (Guest) -->

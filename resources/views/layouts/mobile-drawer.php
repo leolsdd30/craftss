@@ -52,27 +52,27 @@
         <?php endif; ?>
 
         <!-- ── Explore section ───────────────────────────────── -->
-        <div class="mob-section-label">Explore</div>
+        <div class="mob-section-label"><?= __('navbar.explore') ?></div>
 
         <a href="<?= APP_URL ?>/" class="mob-link <?= $isHome ? 'active' : '' ?>" onclick="closeDrawerFast()">
             <svg class="mob-link-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-            Home
+            <?= __('navbar.home') ?>
         </a>
 
         <a href="<?= APP_URL ?>/search" class="mob-link <?= $isSearch ? 'active' : '' ?>" onclick="closeDrawerFast()">
             <svg class="mob-link-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-            Find Craftsmen
+            <?= __('navbar.find_craftsmen') ?>
         </a>
 
         <a href="<?= APP_URL ?>/jobs" class="mob-link <?= $isJobs ? 'active' : '' ?>" onclick="closeDrawerFast()">
             <svg class="mob-link-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-            Job Board
+            <?= __('navbar.job_board') ?>
         </a>
 
         <!-- Services sub-menu toggle -->
         <button onclick="toggleMobServices()" class="mob-link w-full text-start">
             <svg class="mob-link-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
-            Services
+            <?= __('navbar.services') ?>
             <svg id="mob-services-chevron" class="mob-link-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
             </svg>
@@ -107,7 +107,7 @@
             <svg class="mob-link-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 6C11.666 4.604 10.601 3 10.601 3" />
             </svg>
-            <span><?= __('lang') === 'en' ? 'اللغة العربية' : 'English' ?></span>
+            <span class="<?= __('lang') === 'en' ? "font-['Cairo']" : '' ?>"><?= __('lang') === 'en' ? 'اللغة العربية' : 'English' ?></span>
         </a>
 
         <!-- ── Dark mode toggle ──────────────────────────────── -->
@@ -121,7 +121,7 @@
             <svg class="mob-link-icon hidden dark:block text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
             </svg>
-            <span>Dark Mode</span>
+            <span><?= __('navbar.dark_mode') ?></span>
             
             <!-- Sliding Toggle UI (pushes right) -->
             <div class="ms-auto relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-gray-200 dark:bg-indigo-600 shadow-inner">
@@ -135,13 +135,13 @@
         <?php
             if ($_SESSION['role'] === 'admin') {
                 $mobDashUrl   = APP_URL . '/admin/dashboard';
-                $mobDashLabel = 'Admin Dashboard';
+                $mobDashLabel = __('navbar.admin_dashboard');
             } elseif ($_SESSION['role'] === 'craftsman') {
                 $mobDashUrl   = APP_URL . '/craftsman/dashboard';
-                $mobDashLabel = 'My Dashboard';
+                $mobDashLabel = __('navbar.my_dashboard');
             } else {
                 $mobDashUrl   = APP_URL . '/homeowner/dashboard';
-                $mobDashLabel = 'My Dashboard';
+                $mobDashLabel = __('navbar.my_dashboard');
             }
         ?>
         <a href="<?= $mobDashUrl ?>" class="mob-link <?= $isDashboard ? 'active' : '' ?>" onclick="closeDrawerFast()">
@@ -161,7 +161,7 @@
                     <svg class="mob-link-icon" style="color:#f87171;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                     </svg>
-                    Log Out
+                    <?= __('navbar.logout') ?>
                 </button>
             </form>
             <?php else: ?>
@@ -169,12 +169,12 @@
                 <a href="<?= APP_URL ?>/login"
                    class="flex items-center justify-center px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
                    onclick="closeDrawerFast()">
-                    Log in
+                    <?= __('navbar.login') ?>
                 </a>
                 <a href="<?= APP_URL ?>/register"
                    class="flex items-center justify-center px-4 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-sm font-semibold text-white transition"
                    onclick="closeDrawerFast()">
-                    Sign up — it's free
+                    <?= __('auth.signup_free') ?>
                 </a>
             </div>
             <?php endif; ?>

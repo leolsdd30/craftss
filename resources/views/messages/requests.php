@@ -108,6 +108,13 @@ html.dark #req-preview-panel { background: #111827; }
 html.dark #req-action-bar { background: #1f2937; border-color: #374151; }
 html.dark .req-bubble { background: #374151; border-color: #4b5563; color: #f3f4f6; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
 html.dark .req-card:hover, html.dark .req-card.active { background: #374151; }
+
+/* ── RTL OVERRIDES ────────────────────────────────────────── */
+html[lang="ar"] #req-list-panel { border-right: none; border-left: 1px solid #e5e7eb; }
+html[lang="ar"].dark #req-list-panel { border-left-color: #374151; }
+html[lang="ar"] .req-bubble { border-radius: 16px 16px 4px 16px; }
+html[lang="ar"] #req-preview-panel { transform: translateX(-100%); }
+html[lang="ar"] #req-preview-panel.mobile-open { transform: translateX(0); }
 html.dark .bg-white { background: #1f2937 !important; }
 html.dark .border-gray-100 { border-color: #374151 !important; }
 html.dark .border-gray-200 { border-color: #4b5563 !important; }
@@ -133,18 +140,18 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
     <div class="px-4 pt-5 pb-4 border-b border-gray-100 flex-shrink-0">
       <div class="flex items-center gap-3 mb-1">
         <a href="<?= APP_URL ?>/messages"
-           class="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 dark:hover:text-indigo-300 rounded-lg transition flex-shrink-0" title="Back to messages">
-          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+           class="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 dark:hover:text-indigo-300 rounded-lg transition flex-shrink-0" title="<?= __('messages.back_to_messages') ?>">
+          <svg class="h-5 w-5 <?= __('lang') === 'ar' ? 'rotate-180' : '' ?>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
           </svg>
         </a>
         <div>
-          <h1 class="text-xl font-extrabold text-gray-900 tracking-tight leading-tight">Message Requests</h1>
+          <h1 class="text-xl font-extrabold text-gray-900 tracking-tight leading-tight"><?= __('messages.requests_title') ?></h1>
           <p class="text-xs text-gray-400 mt-0.5">
             <?php if (!empty($requests)): ?>
-              <?= count($requests) ?> pending request<?= count($requests) !== 1 ? 's' : '' ?>
+              <?= str_replace(':count', count($requests), __('messages.pending_requests')) ?>
             <?php else: ?>
-              No pending requests
+              <?= __('messages.no_requests') ?>
             <?php endif; ?>
           </p>
         </div>
@@ -155,7 +162,7 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
         <svg class="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
-        <p class="text-xs text-amber-700 leading-relaxed">These are messages from people you haven't spoken with. Accept to start chatting, or decline to remove.</p>
+        <p class="text-xs text-amber-700 leading-relaxed"><?= __('messages.requests_desc') ?></p>
       </div>
       <?php endif; ?>
     </div>
@@ -202,11 +209,11 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
               <path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
             </svg>
           </div>
-          <p class="text-base font-bold text-gray-600">All caught up!</p>
-          <p class="text-sm text-gray-400 mt-1 max-w-[200px]">No pending message requests right now.</p>
+          <p class="text-base font-bold text-gray-600"><?= __('messages.all_caught_up') ?></p>
+          <p class="text-sm text-gray-400 mt-1 max-w-[200px]"><?= __('messages.no_requests_desc') ?></p>
           <a href="<?= APP_URL ?>/messages"
              class="mt-5 px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition">
-            ← Back to Messages
+            <?= __('lang') === 'ar' ? '→' : '←' ?> <?= __('messages.back_to_messages') ?>
           </a>
         </div>
       <?php endif; ?>
@@ -249,7 +256,7 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
     <div class="flex items-center gap-3 px-5 py-3 bg-white border-b border-gray-100 flex-shrink-0">
       <!-- Mobile back -->
       <button class="md:hidden p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition" onclick="closeMobileReq()">
-        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <svg class="h-5 w-5 <?= __('lang') === 'ar' ? 'rotate-180' : '' ?>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
         </svg>
       </button>
@@ -262,11 +269,11 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
       <!-- Name -->
       <div class="flex-1 min-w-0">
         <p class="text-sm font-bold text-gray-900 truncate"><?= e($previewUser['first_name'] . ' ' . $previewUser['last_name']) ?></p>
-        <p class="text-xs text-amber-600 font-semibold">Wants to message you</p>
+        <p class="text-xs text-amber-600 font-semibold"><?= __('messages.wants_to_message') ?></p>
       </div>
       <!-- View profile -->
       <a href="<?= APP_URL ?>/profile/<?= e($previewUser['username'] ?? '') ?>"
-         class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 dark:hover:text-indigo-300 rounded-lg transition flex-shrink-0" title="View profile">
+         class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 dark:hover:text-indigo-300 rounded-lg transition flex-shrink-0" title="<?= __('messages.view_profile') ?>">
         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
         </svg>
@@ -277,14 +284,14 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
     <div class="flex-1 overflow-y-auto px-6 py-5 space-y-3" id="req-msgs">
       <?php if (empty($previewMsgs)): ?>
       <div class="flex flex-col items-center justify-center h-full gap-3 text-gray-400">
-        <p class="text-sm">No messages yet</p>
+        <p class="text-sm"><?= __('messages.no_messages') ?></p>
       </div>
       <?php else: ?>
         <?php
         $prevDate = null;
         foreach ($previewMsgs as $msg):
             $isMe     = ($msg['sender_id'] == $_SESSION['user_id']);
-            $time     = date('g:i A', strtotime($msg['created_at']));
+            $time     = date('H:i', strtotime($msg['created_at']));
             $dateLabel = format_message_date($msg['created_at']);
             if ($dateLabel !== $prevDate):
                 $prevDate = $dateLabel;
@@ -297,10 +304,10 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
         <?php if ($isMe): ?>
         <div class="flex justify-end">
           <div style="max-width:65%">
-            <div style="background:#4f46e5;color:#fff;border-radius:18px 18px 4px 18px;padding:9px 14px;font-size:14px;line-height:1.55;word-break:break-word;display:inline-block;min-width:48px;">
+            <div style="background:#4f46e5;color:#fff;border-radius:<?= __('lang') === 'ar' ? '18px 18px 18px 4px' : '18px 18px 4px 18px' ?>;padding:9px 14px;font-size:14px;line-height:1.55;word-break:break-word;display:inline-block;min-width:48px;">
               <?= nl2br(e($msg['message_body'])) ?>
             </div>
-            <p class="text-[10px] text-gray-400 text-right mt-1 px-1"><?= $time ?></p>
+            <p class="text-[10px] text-gray-400 text-right mt-1 px-1" dir="ltr"><?= $time ?></p>
           </div>
         </div>
         <?php else: ?>
@@ -309,7 +316,7 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
                class="h-7 w-7 rounded-full object-cover flex-shrink-0 border border-gray-100">
           <div style="max-width:65%">
             <div class="req-bubble"><?= nl2br(e($msg['message_body'])) ?></div>
-            <p class="text-[10px] text-gray-400 mt-1 px-1"><?= $time ?></p>
+            <p class="text-[10px] text-gray-400 mt-1 px-1" dir="ltr"><?= $time ?></p>
           </div>
         </div>
         <?php endif; ?>
@@ -322,17 +329,17 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
     <div id="req-action-bar">
       <div class="flex-1 min-w-0">
         <p class="text-sm font-semibold text-gray-800">
-          Accept request from <span class="text-indigo-600"><?= e($previewUser['first_name']) ?></span>?
+          <?= __('messages.accept_request_1') ?> <span class="text-indigo-600"><?= e($previewUser['first_name']) ?></span><?= __('messages.accept_request_2') ?>
         </p>
-        <p class="text-xs text-gray-400 mt-0.5">Once accepted you can reply and the conversation moves to your inbox.</p>
+        <p class="text-xs text-gray-400 mt-0.5"><?= __('messages.accept_desc') ?></p>
       </div>
       <button onclick="doAccept(<?= (int)$previewUser['other_user_id'] ?>, '<?= e(addslashes($previewUser['username'])) ?>')"
               class="px-5 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 transition shadow-sm flex-shrink-0">
-        Accept
+        <?= __('messages.accept') ?>
       </button>
       <button onclick="promptDecline(<?= (int)$previewUser['other_user_id'] ?>, '<?= e(addslashes($previewUser['first_name'])) ?>')"
               class="px-5 py-2.5 bg-red-100 text-red-800 text-sm font-bold rounded-xl hover:bg-red-600 hover:text-white dark:bg-red-700 dark:text-white dark:hover:bg-red-600 transition flex-shrink-0">
-        Decline
+        <?= __('messages.decline') ?>
       </button>
     </div>
 
@@ -345,8 +352,8 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
         </svg>
       </div>
       <div>
-        <p class="font-semibold text-gray-600">Select a request</p>
-        <p class="text-sm text-gray-400 mt-1">Click a request from the list to preview it</p>
+        <p class="font-semibold text-gray-600"><?= __('messages.select_request') ?></p>
+        <p class="text-sm text-gray-400 mt-1"><?= __('messages.select_request_desc') ?></p>
       </div>
     </div>
     <?php endif; ?>
@@ -367,18 +374,18 @@ html.dark .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !import
           </svg>
         </div>
         <div>
-          <p class="font-bold text-gray-900 dark:text-white text-base">Decline request?</p>
-          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1" id="decline-msg-text">This will remove the request. The sender won't be notified.</p>
+          <p class="font-bold text-gray-900 dark:text-white text-base"><?= __('messages.decline_prompt') ?></p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1" id="decline-msg-text"><?= __('messages.decline_desc') ?></p>
         </div>
       </div>
       <div class="flex gap-3">
         <button onclick="hideDeclineModal()"
                 class="flex-1 px-4 py-2.5 bg-gray-100 text-gray-700 text-sm font-bold rounded-xl hover:bg-gray-200 dark:bg-gray-500 dark:text-white dark:hover:bg-gray-400 transition">
-          Cancel
+          <?= __('messages.cancel') ?>
         </button>
         <button onclick="confirmDecline()"
                 class="flex-1 px-4 py-2.5 bg-red-100 text-red-800 text-sm font-bold rounded-xl hover:bg-red-600 hover:text-white dark:bg-red-700 dark:text-white dark:hover:bg-red-600 transition">
-          Decline
+          <?= __('messages.decline') ?>
         </button>
       </div>
     </div>
@@ -415,23 +422,21 @@ async function doAccept(userId, username) {
     });
     const data = await res.json();
     if (data.success) {
-      showToast('Request accepted!');
+      showToast('<?= __('messages.request_accepted') ?>');
       setTimeout(() => {
         window.location.href = appUrl + '/messages/' + username;
       }, 500);
     } else {
-      showToast('Something went wrong. Try again.');
+      showToast('<?= __('messages.error_generic') ?>');
     }
   } catch(e) {
-    showToast('Network error. Please retry.');
+    showToast('<?= __('messages.error_network') ?>');
   }
 }
 
 /* ── Decline ─────────────────────────────────────────── */
 function promptDecline(userId, firstName) {
   _pendingDeclineId = userId;
-  const el = document.getElementById('decline-msg-text');
-  if (el) el.textContent = 'Decline the request from ' + firstName + '? They won\'t be notified.';
   document.getElementById('decline-modal').classList.remove('hidden');
 }
 function hideDeclineModal() {
@@ -468,11 +473,11 @@ async function confirmDecline() {
               <path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
             </svg>
           </div>
-          <p class="font-semibold text-gray-600">Request declined</p>
-          <p class="text-sm text-gray-400 mt-1">Select another request from the list</p>
+          <p class="font-semibold text-gray-600"><?= __('messages.request_declined') ?></p>
+          <p class="text-sm text-gray-400 mt-1"><?= __('messages.select_another') ?></p>
         </div>`;
     }
-    showToast('Request declined');
+    showToast('<?= __('messages.request_declined') ?>');
   } catch(e) {}
 }
 

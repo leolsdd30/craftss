@@ -7,12 +7,7 @@ $canQuote     = $isCraftsman && $job['status'] === 'open' && !$isOwner;
 
 $catStyles = get_category_classes($job['service_category'] ?? 'General Handyman');
 
-$diff = time() - strtotime($job['created_at']);
-if ($diff < 3600)        $timeAgo = floor($diff / 60) . 'm ago';
-elseif ($diff < 86400)   $timeAgo = floor($diff / 3600) . 'h ago';
-elseif ($diff < 604800)  $timeAgo = floor($diff / 86400) . 'd ago';
-elseif ($diff < 2592000) $timeAgo = floor($diff / 604800) . 'w ago';
-else                     $timeAgo = date('M d, Y', strtotime($job['created_at']));
+$timeAgo = job_time_ago($job['created_at']);
 $hideFooter = true;
 ?>
 
@@ -88,7 +83,7 @@ $hideFooter = true;
                             </span>
                             <span class="flex items-center gap-1.5">
                                 <svg class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
-                                <?= htmlspecialchars(preg_replace('/^\d{2}\s-\s/', '', $job['address'])) ?>
+                                <?= htmlspecialchars(preg_replace('/^\d{2}\s-\s/', '', __('wilayas.' . $job['address']) ?? $job['address'])) ?>
                             </span>
                             <span class="flex items-center gap-1.5 text-gray-400">
                                 <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
@@ -330,7 +325,7 @@ $hideFooter = true;
                         </div>
                         <div class="flex items-center justify-between text-sm">
                             <span class="text-gray-500 dark:text-gray-400"><?= __('job_show.location') ?></span>
-                            <span class="font-medium text-gray-700 dark:text-gray-300"><?= htmlspecialchars(preg_replace('/^\d{2}\s-\s/', '', $job['address'])) ?></span>
+                            <span class="font-medium text-gray-700 dark:text-gray-300"><?= htmlspecialchars(preg_replace('/^\d{2}\s-\s/', '', __('wilayas.' . $job['address']) ?? $job['address'])) ?></span>
                         </div>
                         <?php if (!empty($job['budget_range'])): ?>
                         <div class="flex items-center justify-between text-sm">

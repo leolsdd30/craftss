@@ -184,7 +184,16 @@ if (!function_exists('job_time_ago')) {
         elseif  ($diff < 3600)   return __('time.m_ago', ['m' => floor($diff / 60)]);
         elseif  ($diff < 86400)  return __('time.h_ago', ['h' => floor($diff / 3600)]);
         elseif  ($diff < 604800) return __('time.d_ago', ['d' => floor($diff / 86400)]);
-        else                     return date('M d', strtotime($datetime));
+        elseif  ($diff < 2592000) return __('time.w_ago', ['w' => floor($diff / 604800)]);
+        elseif  ($diff < 31104000) return __('time.mo_ago', ['mo' => floor($diff / 2592000)]);
+        else {
+            $m = date('M', strtotime($datetime));
+            if (__('lang') === 'ar') {
+                $arM = ['Jan'=>'جانفي','Feb'=>'فيفري','Mar'=>'مارس','Apr'=>'أفريل','May'=>'ماي','Jun'=>'جوان','Jul'=>'جويلية','Aug'=>'أوت','Sep'=>'سبتمبر','Oct'=>'أكتوبر','Nov'=>'نوفمبر','Dec'=>'ديسمبر'];
+                return date('j', strtotime($datetime)) . ' ' . ($arM[$m] ?? $m);
+            }
+            return $m . ' ' . date('j', strtotime($datetime));
+        }
     }
 }
 
@@ -207,11 +216,12 @@ if (!function_exists('req_time_ago')) {
     function req_time_ago($datetime) {
         if (!$datetime) return '';
         $diff = time() - strtotime($datetime);
-        if ($diff < 60)     return __('time.just_now');
-        if ($diff < 3600)   return __('time.m_ago', ['m' => floor($diff / 60)]);
-        if ($diff < 86400)  return __('time.h_ago', ['h' => floor($diff / 3600)]);
-        if ($diff < 604800) return __('time.d_ago', ['d' => floor($diff / 86400)]);
-        return date('M j', strtotime($datetime));
+        $isAr = __('lang') === 'ar';
+        if ($diff < 60)     return __('messages.now') ?? ($isAr ? 'الآن' : 'now');
+        if ($diff < 3600)   return floor($diff / 60) . ($isAr ? 'د' : 'm');
+        if ($diff < 86400)  return floor($diff / 3600) . ($isAr ? 'س' : 'h');
+        if ($diff < 604800) return floor($diff / 86400) . ($isAr ? 'ي' : 'd');
+        return floor($diff / 604800) . ($isAr ? 'أ' : 'w');
     }
 }
 
@@ -223,10 +233,18 @@ if (!function_exists('format_message_date')) {
         if ($diff < 86400)  return __('time.today');
         if ($diff < 172800) return __('time.yesterday');
         if ($diff < 604800) {
-            // Translate day name securely, or return English
-            return date('l', strtotime($dt)); // We can add day names to lang files later if needed
+            $l = date('l', strtotime($dt));
+            $arD = ['Sunday'=>'الأحد','Monday'=>'الاثنين','Tuesday'=>'الثلاثاء','Wednesday'=>'الأربعاء','Thursday'=>'الخميس','Friday'=>'الجمعة','Saturday'=>'السبت'];
+            return __('lang') === 'ar' ? ($arD[$l] ?? $l) : $l;
         }
-        return date('M j, Y', strtotime($dt));
+        $m = date('M', strtotime($dt));
+        if (__('lang') === 'ar') {
+            $arM = ['Jan'=>'جانفي','Feb'=>'فيفري','Mar'=>'مارس','Apr'=>'أفريل','May'=>'ماي','Jun'=>'جوان','Jul'=>'جويلية','Aug'=>'أوت','Sep'=>'سبتمبر','Oct'=>'أكتوبر','Nov'=>'نوفمبر','Dec'=>'ديسمبر'];
+            $mStr = $arM[$m] ?? $m;
+        } else {
+            $mStr = $m;
+        }
+        return date('j', strtotime($dt)) . ' ' . $mStr;
     }
 }
 

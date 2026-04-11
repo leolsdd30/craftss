@@ -213,13 +213,7 @@
                         <div class="flex items-center justify-between text-sm">
                             <span class="text-gray-500 dark:text-gray-400">Joined</span>
                             <span class="text-gray-400 dark:text-gray-500">
-                                <?php
-                                    $diff = time() - strtotime($c['user_created']);
-                                    if ($diff < 86400)       echo floor($diff / 3600) . 'h ago';
-                                    elseif ($diff < 604800)  echo floor($diff / 86400) . 'd ago';
-                                    elseif ($diff < 2592000) echo floor($diff / 604800) . 'w ago';
-                                    else                     echo date('M d, Y', strtotime($c['user_created']));
-                                ?>
+                                    <?= job_time_ago($c['user_created']) ?>
                             </span>
                         </div>
                         <div class="flex items-center justify-between text-sm">

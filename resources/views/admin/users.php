@@ -194,14 +194,7 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <p class="text-sm text-gray-500 dark:text-gray-400"><?= date('M d, Y', strtotime($u['created_at'])) ?></p>
                                 <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
-                                    <?php
-                                        $diff = time() - strtotime($u['created_at']);
-                                        if ($diff < 3600)        echo floor($diff / 60) . 'm ago';
-                                        elseif ($diff < 86400)   echo floor($diff / 3600) . 'h ago';
-                                        elseif ($diff < 604800)  echo floor($diff / 86400) . 'd ago';
-                                        elseif ($diff < 2592000) echo floor($diff / 604800) . 'w ago';
-                                        else                     echo floor($diff / 2592000) . 'mo ago';
-                                    ?>
+                                    <?= job_time_ago($u['created_at']) ?>
                                 </p>
                             </td>
 

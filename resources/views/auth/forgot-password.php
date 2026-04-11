@@ -38,7 +38,7 @@
         </div>
 
         <!-- Stat badges -->
-        <div class="relative z-10 flex items-center gap-6">
+        <div class="relative z-10 flex items-center space-x-6">
             <div class="text-center">
                 <p class="text-2xl font-extrabold text-white">500+</p>
                 <p class="text-xs text-indigo-200 mt-0.5"><?= __('auth_forgot.stats_craftsmen') ?></p>
@@ -62,7 +62,7 @@
 
             <!-- Mobile logo -->
             <div class="flex justify-center mb-8 lg:hidden">
-                <a href="<?= APP_URL ?>/" class="flex items-center gap-2">
+                <a href="<?= APP_URL ?>/" class="flex items-center space-x-2">
                     <div class="h-9 w-9 bg-indigo-600 rounded-xl flex items-center justify-center">
                         <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
@@ -88,7 +88,7 @@
                 <?php if (!empty($mockResetUrl)): ?>
                 <!-- MOCK BLOCK — remove once Resend is wired up -->
                 <div class="mb-6 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-xl p-5 text-left">
-                    <div class="flex items-center gap-2 mb-3">
+                    <div class="flex items-center space-x-2 mb-3">
                         <svg class="h-5 w-5 text-amber-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
@@ -121,7 +121,7 @@
             </div>
 
             <?php if (!empty($error)): ?>
-            <div class="mb-6 flex items-start gap-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
+            <div class="mb-6 flex items-start space-x-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
                 <svg class="h-5 w-5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
