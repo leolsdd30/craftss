@@ -248,6 +248,22 @@ if (!function_exists('format_message_date')) {
     }
 }
 
+// Global helper for standard absolute dates (Admin Panel tables)
+if (!function_exists('format_date')) {
+    function format_date($dt) {
+        if (!$dt) return '';
+        $time = strtotime($dt);
+        $m = date('M', $time);
+        $y = date('Y', $time);
+        if (__('lang') === 'ar') {
+            $arM = ['Jan'=>'جانفي','Feb'=>'فيفري','Mar'=>'مارس','Apr'=>'أفريل','May'=>'ماي','Jun'=>'جوان','Jul'=>'جويلية','Aug'=>'أوت','Sep'=>'سبتمبر','Oct'=>'أكتوبر','Nov'=>'نوفمبر','Dec'=>'ديسمبر'];
+            $mStr = $arM[$m] ?? $m;
+            return date('j', $time) . ' ' . $mStr . ' ' . $y;
+        }
+        return $m . ' ' . date('j', $time) . ', ' . $y;
+    }
+}
+
 // Global hook to catch native PHP Warnings & Notices and elevate them to Exceptions
 if (($_ENV['APP_ENV'] ?? 'production') !== 'production') {
     set_error_handler(function ($severity, $message, $file, $line) {

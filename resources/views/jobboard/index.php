@@ -306,19 +306,10 @@ $activeFilterCount = (int)!empty($selectedCat)
 
             <!-- Pagination -->
             <?php if ($totalPages > 1): ?>
-            <div class="flex items-center justify-between bg-white dark:bg-gray-800 px-4 py-3 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
-                <div class="flex flex-1 justify-between sm:hidden">
-                    <?php if ($page > 1): ?>
-                    <a href="<?= build_job_url($page - 1, $filters) ?>" class="relative inline-flex items-center rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"><?= __('jobs.prev') ?></a>
-                    <?php endif; ?>
-                    <?php if ($page < $totalPages): ?>
-                    <a href="<?= build_job_url($page + 1, $filters) ?>" class="relative ml-3 inline-flex items-center rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"><?= __('jobs.next') ?></a>
-                    <?php endif; ?>
-                </div>
-                <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                        <?= __('jobs.showing') ?> <span class="font-semibold text-gray-700 dark:text-gray-300"><?= (($page - 1) * 12) + 1 ?></span>–<span class="font-semibold text-gray-700 dark:text-gray-300"><?= min($page * 12, $totalJobs) ?></span> <?= __('jobs.of') ?> <span class="font-semibold text-gray-700 dark:text-gray-300"><?= number_format($totalJobs) ?></span> <?= __('jobs.jobs_count') ?>
-                    </p>
+            <div class="flex flex-col sm:flex-row items-center justify-between bg-white dark:bg-gray-800 px-4 py-3 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 gap-4">
+                <p class="text-sm text-gray-500 dark:text-gray-400 hidden sm:block">
+                    <?= __('jobs.showing') ?> <span class="font-semibold text-gray-700 dark:text-gray-300"><?= (($page - 1) * 12) + 1 ?></span>–<span class="font-semibold text-gray-700 dark:text-gray-300"><?= min($page * 12, $totalJobs) ?></span> <?= __('jobs.of') ?> <span class="font-semibold text-gray-700 dark:text-gray-300"><?= number_format($totalJobs) ?></span> <?= __('jobs.jobs_count') ?>
+                </p>
                     <nav class="isolate inline-flex -space-x-px rounded-lg shadow-sm">
                         <?php if ($page > 1): ?>
                         <a href="<?= build_job_url($page - 1, $filters) ?>" class="relative inline-flex items-center rounded-l-lg rtl:rounded-l-none rtl:rounded-r-lg px-2 py-2 text-gray-400 dark:text-gray-500 ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
@@ -336,8 +327,7 @@ $activeFilterCount = (int)!empty($selectedCat)
                             <svg class="h-4 w-4 <?= __('lang') === 'ar' ? 'rotate-180' : '' ?>" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"/></svg>
                         </a>
                         <?php endif; ?>
-                    </nav>
-                </div>
+                </nav>
             </div>
             <?php endif; ?>
 
