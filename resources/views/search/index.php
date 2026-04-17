@@ -263,7 +263,7 @@ $searchQuery    = $filters['search']   ?? '';
 
                         <!-- Bio snippet -->
                         <?php if (!empty($craft['bio'])): ?>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed mb-4 flex-grow break-words"><?= htmlspecialchars($craft['bio']) ?></p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed mb-4 flex-grow break-words text-start" dir="auto"><?= htmlspecialchars($craft['bio']) ?></p>
                         <?php else: ?>
                         <div class="flex-grow"></div>
                         <?php endif; ?>
@@ -272,7 +272,7 @@ $searchQuery    = $filters['search']   ?? '';
                         <div class="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700 mt-auto">
                             <div>
                                 <span class="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wider"><?= __('search.hourly') ?></span>
-                                <p class="font-bold text-gray-900 dark:text-gray-100 text-base leading-tight"><?= number_format($craft['hourly_rate'], 2) ?> DZD</p>
+                                <p class="font-bold text-gray-900 dark:text-gray-100 text-base leading-tight"><?= number_format($craft['hourly_rate'], 2) ?> <?= __('lang') === 'ar' ? 'د.ج' : 'DZD' ?></p>
                             </div>
                             <?php if ($craft['is_verified']): ?>
                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800">
@@ -286,12 +286,12 @@ $searchQuery    = $filters['search']   ?? '';
                     <!-- Card footer: actions -->
                     <div class="px-6 py-3.5 bg-gray-50/50 dark:bg-gray-700/30 border-t border-gray-100 dark:border-gray-700 flex gap-2">
                         <a href="<?= APP_URL ?>/profile/<?= htmlspecialchars($craft['username']) ?>"
-                           class="flex-1 text-center py-2 px-3 rounded-xl text-sm font-semibold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 border border-indigo-100 dark:border-indigo-800 transition duration-150">
+                           class="flex-1 text-center py-2 px-2 sm:px-3 rounded-xl text-[13px] sm:text-sm font-semibold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 border border-indigo-100 dark:border-indigo-800 transition duration-150 whitespace-nowrap">
                             <?= __('search.view_profile') ?>
                         </a>
                         <?php if (isset($_SESSION['user_id']) && ($_SESSION['role'] ?? '') !== 'admin'): ?>
                         <a href="<?= APP_URL ?>/bookings/create/<?= htmlspecialchars($craft['username']) ?>"
-                           class="flex-1 text-center py-2 px-3 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150">
+                           class="flex-1 text-center py-2 px-2 sm:px-3 rounded-xl text-[13px] sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 whitespace-nowrap">
                             <?= __('search.book_now') ?>
                         </a>
                         <?php endif; ?>

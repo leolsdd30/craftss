@@ -207,7 +207,7 @@
                         <?php if (!empty($c['hourly_rate'])): ?>
                         <div class="flex items-center justify-between text-sm">
                             <span class="text-gray-500 dark:text-gray-400"><?= __('profile_edit.hourly_rate') ?></span>
-                            <span class="font-medium text-gray-900 dark:text-white"><?= number_format($c['hourly_rate'], 2) ?> DZD</span>
+                            <span class="font-medium text-gray-900 dark:text-white"><?= number_format($c['hourly_rate'], 2) ?> <?= __('lang') === 'ar' ? 'د.ج' : 'DZD' ?></span>
                         </div>
                         <?php endif; ?>
                         <div class="flex items-center justify-between text-sm">

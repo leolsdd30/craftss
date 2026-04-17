@@ -68,6 +68,8 @@ class ApiController extends Controller
 
                 if (function_exists('__') && __('lang') === 'ar') {
                     $arMsg = [
+                        'Congratulations! Your profile has been verified by Crafts. You now have a verified badge!' => 'تهانينا! تم التحقق من ملفك الشخصي. لديك الآن شارة موثق!',
+                        'Your verified status has been removed. Please contact support for more info.' => 'تمت إزالة حالة التحقق الخاصة بك. يرجى الاتصال بالدعم لمزيد من المعلومات.',
                         ' sent you a booking request.' => ' أرسل لك طلب حجز.',
                         'Your booking request has been accepted. The job is now in progress.' => 'تم قبول طلب الحجز الخاص بك. العمل قيد التنفيذ الآن.',
                         ' has sent a counter-offer for your booking. Please review the changes.' => ' أرسل عرضًا مضادًا لحجزك. يرجى مراجعة التغييرات.',

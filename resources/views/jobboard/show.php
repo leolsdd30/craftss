@@ -92,7 +92,7 @@ $hideFooter = true;
                             <?php if (!empty($job['budget_range'])): ?>
                             <span class="flex items-center gap-1.5 font-semibold text-gray-700 dark:text-gray-300">
                                 <svg class="h-4 w-4 text-green-500 dark:text-green-400" viewBox="0 0 20 20" fill="currentColor"><path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/></svg>
-                                <?= htmlspecialchars($job['budget_range']) ?> DZD
+                                <?= htmlspecialchars($job['budget_range']) ?> <?= __('lang') === 'ar' ? 'د.ج' : 'DZD' ?>
                             </span>
                             <?php endif; ?>
                         </div>
@@ -105,7 +105,7 @@ $hideFooter = true;
                         <svg class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         <?= __('job_show.job_description') ?>
                     </h2>
-                    <div class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line break-words">
+                    <div class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line break-words text-start" dir="auto">
                         <?= htmlspecialchars($job['description']) ?>
                     </div>
                 </div>
@@ -214,7 +214,7 @@ $hideFooter = true;
                                     </div>
                                 </div>
                                 <div class="text-right flex-shrink-0">
-                                    <p class="text-xl font-extrabold text-gray-900 dark:text-white"><?= number_format($quote['quoted_price'], 0) ?> <span class="text-sm font-semibold text-gray-400 dark:text-gray-500">DZD</span></p>
+                                    <p class="text-xl font-extrabold text-gray-900 dark:text-white"><?= number_format($quote['quoted_price'], 0) ?> <span class="text-sm font-semibold text-gray-400 dark:text-gray-500"><?= __('lang') === 'ar' ? 'د.ج' : 'DZD' ?></span></p>
                                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold
                                         <?= $quote['status'] === 'accepted' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400' : ($quote['status'] === 'rejected' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400' : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400') ?>">
                                         <?= __('job_show.status_' . strtolower($quote['status'])) ?>
@@ -330,7 +330,7 @@ $hideFooter = true;
                         <?php if (!empty($job['budget_range'])): ?>
                         <div class="flex items-center justify-between text-sm">
                             <span class="text-gray-500 dark:text-gray-400"><?= __('job_show.budget') ?></span>
-                            <span class="font-semibold text-green-700 dark:text-green-400"><?= htmlspecialchars($job['budget_range']) ?> DZD</span>
+                            <span class="font-semibold text-green-700 dark:text-green-400"><?= htmlspecialchars($job['budget_range']) ?> <?= __('lang') === 'ar' ? 'د.ج' : 'DZD' ?></span>
                         </div>
                         <?php endif; ?>
                         <div class="flex items-center justify-between text-sm">
@@ -463,11 +463,11 @@ $hideFooter = true;
                                step="1" min="1" required placeholder="<?= __('job_show.price_placeholder') ?>"
                                class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2.5 rtl:pl-16 rtl:pr-4 ltr:pr-16 text-sm">
                         <div class="absolute inset-y-0 ltr:right-0 rtl:left-0 flex items-center ltr:pr-4 rtl:pl-4 pointer-events-none">
-                            <span class="text-sm font-semibold text-gray-400 dark:text-gray-500">DZD</span>
+                            <span class="text-sm font-semibold text-gray-400 dark:text-gray-500"><?= __('lang') === 'ar' ? 'د.ج' : 'DZD' ?></span>
                         </div>
                     </div>
                     <?php if (!empty($job['budget_range'])): ?>
-                    <p class="mt-1 text-xs text-gray-400 dark:text-gray-500"><?= __('job_show.homeowner_budget') ?> <span class="font-semibold text-gray-600 dark:text-gray-400"><?= htmlspecialchars($job['budget_range']) ?> DZD</span></p>
+                    <p class="mt-1 text-xs text-gray-400 dark:text-gray-500"><?= __('job_show.homeowner_budget') ?> <span class="font-semibold text-gray-600 dark:text-gray-400"><?= htmlspecialchars($job['budget_range']) ?> <?= __('lang') === 'ar' ? 'د.ج' : 'DZD' ?></span></p>
                     <?php endif; ?>
                 </div>
                 <!-- Cover Message — bigger, no tips -->

@@ -41,8 +41,10 @@ class Mailer
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
         
         // Disable SSL verification for local XAMPP testing (common issue)
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        if (($_ENV['APP_ENV'] ?? 'local') === 'local') {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        }
 
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             "api-key: " . $apiKey,
@@ -63,7 +65,7 @@ class Mailer
         if ($httpcode >= 200 && $httpcode < 300) {
             return true;
         } else {
-            throw new \Exception("Brevo API HTTP Error ($httpcode): " . $response . " | Hint: Make sure grgh1414@gmail.com is strictly verified as a Sender in your Brevo account dashboard.");
+            throw new \Exception("Brevo API HTTP Error ($httpcode): " . $response . " | Hint: Make sure {$senderEmail} is strictly verified as a Sender in your Brevo account dashboard.");
             return false;
         }
     }

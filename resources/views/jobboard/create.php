@@ -210,7 +210,7 @@ $categories = [
                                            class="block w-full px-4 h-[46px] pr-14 bg-gray-50/50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500
                                                   focus:bg-white dark:focus:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
                                     <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none border-l border-gray-200 dark:border-gray-600 my-1.5 pl-3">
-                                        <span class="text-xs font-bold text-gray-400 dark:text-gray-500">DZD</span>
+                                        <span class="text-xs font-bold text-gray-400 dark:text-gray-500"><?= __('lang') === 'ar' ? 'د.ج' : 'DZD' ?></span>
                                     </div>
                                 </div>
                             </div>

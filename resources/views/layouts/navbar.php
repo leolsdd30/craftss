@@ -273,7 +273,7 @@
                                  style="animation: dropdownIn 0.15s ease-out; max-width: calc(100vw - 1rem);">
                                 <!-- Header -->
                                 <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
-                                    <div class="flex items-center space-x-3">
+                                    <div class="flex items-center gap-3">
                                         <?php if ($headerPicUrl): ?>
                                         <img src="<?= $headerPicUrl ?>" alt="Profile" class="w-10 h-10 rounded-full object-cover border border-gray-200 dark:border-gray-600 flex-shrink-0">
                                         <?php endif; ?>

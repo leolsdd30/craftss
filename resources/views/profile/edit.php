@@ -242,7 +242,7 @@ if (!empty($user['username_updated_at'])) {
                                        value="<?= e($craftsmanDetails['hourly_rate'] ?? '0.00') ?>"
                                        class="block w-full px-4 py-2.5 h-11 <?= __('lang') === 'ar' ? 'pl-14 direction-ltr text-right' : 'pr-14' ?> border border-gray-200 dark:border-gray-600 rounded-xl text-sm bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                                 <div class="absolute inset-y-0 <?= __('lang') === 'ar' ? 'left-0 pl-3' : 'right-0 pr-3' ?> flex items-center pointer-events-none">
-                                    <span class="text-gray-400 dark:text-gray-500 text-sm font-medium">DZD</span>
+                                    <span class="text-gray-400 dark:text-gray-500 text-sm font-medium"><?= __('lang') === 'ar' ? 'د.ج' : 'DZD' ?></span>
                                 </div>
                             </div>
                         </div>

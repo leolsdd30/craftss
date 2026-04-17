@@ -1,10 +1,4 @@
 <?php
-/**
- * Craftsman Dashboard — Refined UI
- * Drop-in replacement for resources/views/craftsman/dashboard.php
- * Keeps ALL backend logic, PHP variables, form actions, modals intact.
- * Pure UI refine — 3 column layout (sidebar nav | main content | metrics panel)
- */
 
 // Profile completeness data needed for metrics panel
 $craftsmanProfileData = (new \App\Models\CraftsmanProfile())->findByUserId($_SESSION['user_id']);
@@ -19,11 +13,12 @@ $craftsmanProfileData = (new \App\Models\CraftsmanProfile())->findByUserId($_SES
     background: #f8f7ff;
     font-family: 'Inter', sans-serif;
 }
+html[lang="ar"], html[lang="ar"] body, html[lang="ar"] * { font-family: 'Cairo', sans-serif !important; }
 
 /* ── Left Sidebar ────────────────────────────────────────── */
 .dash-sidebar {
     background: #ffffff;
-    border-right: 1px solid #ede9fe;
+    border-inline-end: 1px solid #ede9fe;
     display: flex;
     flex-direction: column;
     padding: 1.5rem 0.75rem;
@@ -74,10 +69,10 @@ $craftsmanProfileData = (new \App\Models\CraftsmanProfile())->findByUserId($_SES
     cursor: pointer;
     transition: all 0.15s ease;
     border: none;
-    border-left: 3px solid transparent;
+    border-inline-start: 3px solid transparent;
     background: none;
     width: 100%;
-    text-align: left;
+    text-align: start;
 }
 
 .dash-nav-item:hover {
@@ -85,11 +80,12 @@ $craftsmanProfileData = (new \App\Models\CraftsmanProfile())->findByUserId($_SES
     color: #4f46e5;
     transform: translateX(2px);
 }
+html[dir="rtl"] .dash-nav-item:hover { transform: translateX(-2px); }
 
 .dash-nav-item.active {
     background: #eef2ff;
     color: #4f46e5;
-    border-left-color: #4f46e5;
+    border-inline-start-color: #4f46e5;
 }
 
 .dash-nav-item svg {
@@ -99,7 +95,7 @@ $craftsmanProfileData = (new \App\Models\CraftsmanProfile())->findByUserId($_SES
 }
 
 .dash-nav-badge {
-    margin-left: auto;
+    margin-inline-start: auto;
     background: #4f46e5;
     color: white;
     font-size: 0.62rem;
@@ -337,7 +333,6 @@ $craftsmanProfileData = (new \App\Models\CraftsmanProfile())->findByUserId($_SES
     padding: 0.42rem 0.825rem; border-radius: 0.5rem;
     font-size: 0.775rem; font-weight: 800; border: none; cursor: pointer;
     transition: all 0.15s; text-decoration: none; white-space: nowrap;
-    font-family: 'Inter', sans-serif;
 }
 .btn svg { width: 12px; height: 12px; }
 .btn-green  { background: #dcfce7; color: #166534; }
@@ -419,6 +414,7 @@ $craftsmanProfileData = (new \App\Models\CraftsmanProfile())->findByUserId($_SES
     content: ''; position: absolute; top: -18px; right: -18px;
     width: 64px; height: 64px; border-radius: 50%; opacity: 0.12;
 }
+html[dir="rtl"] .metric-card::after { right: auto; left: -18px; }
 .metric-card.green  { background: #f0fdf4; border: 1px solid #bbf7d0; }
 .metric-card.green::after  { background: #22c55e; }
 .metric-card.indigo { background: #eef2ff; border: 1px solid #c7d2fe; }
@@ -489,7 +485,7 @@ footer { display: none !important; }
 .mob-dash-fab {
     position: fixed !important;
     bottom: 1.5rem !important;
-    right: 1.5rem !important;
+    inset-inline-end: 1.5rem !important;
     z-index: 9999 !important;
     width: 52px !important;
     height: 52px !important;
@@ -552,17 +548,16 @@ footer { display: none !important; }
     border-radius: 0.65rem;
     font-size: 0.9rem; font-weight: 600; color: #374151;
     cursor: pointer; border: none; background: none;
-    width: 100%; text-align: left;
-    border-left: 3px solid transparent;
+    width: 100%; text-align: start;
+    border-inline-start: 3px solid transparent;
     transition: all 0.15s;
-    font-family: 'Inter', sans-serif;
 }
 .mob-dash-nav-item:hover { background: #f5f3ff; color: #4f46e5; }
-.mob-dash-nav-item.active { background: #eef2ff; color: #4f46e5; border-left-color: #4f46e5; font-weight: 700; }
+.mob-dash-nav-item.active { background: #eef2ff; color: #4f46e5; border-inline-start-color: #4f46e5; font-weight: 700; }
 .mob-dash-nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
 
 .mob-dash-badge {
-    margin-left: auto; font-size: 0.62rem; font-weight: 900;
+    margin-inline-start: auto; font-size: 0.62rem; font-weight: 900;
     padding: 0.1rem 0.45rem; border-radius: 99px;
     color: white; line-height: 1.5;
 }
@@ -603,7 +598,7 @@ footer { display: none !important; }
 .filter-btn:hover { background: #f9fafb; border-color: #d1d5db; color: #111827; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
 .filter-btn svg { width: 14px; height: 14px; color: #9ca3af; }
 .filter-menu {
-    position: absolute; top: calc(100% + 0.5rem); right: 0;
+    position: absolute; top: calc(100% + 0.5rem); inset-inline-end: 0;
     width: 230px; background: white; border: 1px solid #e5e7eb;
     border-radius: 1rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
     z-index: 50; padding: 0.5rem; display: none;
@@ -628,7 +623,7 @@ html.dark .dash-shell { background: #111827; }
 html.dark .dash-sidebar, html.dark .dash-metrics { background: #1f2937; border-color: #374151; }
 html.dark .dash-nav-item { color: #9ca3af; }
 html.dark .dash-nav-item:hover, html.dark .dash-nav-item.active { background: #374151; color: #a5b4fc; }
-html.dark .dash-nav-item.active { border-left-color: #818cf8; color: #818cf8; }
+html.dark .dash-nav-item.active { border-inline-start-color: #818cf8; color: #818cf8; }
 html.dark .dash-sidebar-bottom { border-color: #374151; }
 html.dark .dash-sidebar-greeting { border-color: #374151; }
 html.dark .dash-sidebar-greeting h2 { color: #f3f4f6; }
@@ -650,7 +645,7 @@ html.dark .job-card:hover, html.dark .quote-card:hover, html.dark .booking-card:
 html.dark .job-title, html.dark .quote-craftsman, html.dark .quote-title, html.dark .booking-name, html.dark .saved-name, html.dark .review-name, html.dark .dash-tab-header h2 { color: #f3f4f6; }
 html.dark .quote-card-actions, html.dark .booking-card-actions { background: #111827; border-color: #374151; }
 html.dark .saved-bottom { background: transparent; border-color: #374151; }
-html.dark .quote-msg { background: #374151; border-left-color: #4f46e5; color: #d1d5db; }
+html.dark .quote-msg { background: #374151; border-inline-start-color: #4f46e5; color: #d1d5db; }
 html.dark .quote-price, html.dark .bchip.price { color: #34d399; }
 html.dark .quote-date, html.dark .booking-desc, html.dark .bchip, html.dark .review-date { color: #9ca3af; }
 html.dark .review-comment { color: #d1d5db; }
@@ -828,42 +823,42 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
 
             <button onclick="switchTab('overview')" data-tab="overview" class="dash-nav-item active">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
-                Overview
+                <?= __('dashboard.shared.overview') ?>
             </button>
 
             <button onclick="switchTab('quotes')" data-tab="quotes" class="dash-nav-item">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-                My Quotes
+                <?= __('dashboard.craftsman.my_quotes') ?>
                 <span id="tab-badge-pending-bids" class="dash-nav-badge amber" style="<?= $pendingBids > 0 ? '' : 'display:none;' ?>"><?= $pendingBids ?></span>
             </button>
 
             <button onclick="switchTab('active')" data-tab="active" class="dash-nav-item">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                Active Jobs
+                <?= __('dashboard.craftsman.active_jobs') ?>
                 <span id="tab-badge-active-jobs" class="dash-nav-badge" style="<?= $activeBookings > 0 ? '' : 'display:none;' ?>"><?= $activeBookings ?></span>
             </button>
 
             <button onclick="switchTab('bookings')" data-tab="bookings" class="dash-nav-item">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                Bookings
+                <?= __('dashboard.shared.bookings') ?>
                 <span id="tab-badge-pending-bookings" class="dash-nav-badge red" style="<?= $pendingBookings > 0 ? '' : 'display:none;' ?>"><?= $pendingBookings ?></span>
             </button>
 
             <button onclick="switchTab('reviews')" data-tab="reviews" class="dash-nav-item">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-                Reviews
+                <?= __('dashboard.shared.reviews') ?>
             </button>
 
             <button onclick="switchTab('sent-bookings')" data-tab="sent-bookings" class="dash-nav-item">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-                Sent Bookings
+                <?= __('dashboard.craftsman.sent_bookings') ?>
                 <?php $sentBookingsCount = count($sentBookings??[]); ?>
                 <span id="tab-badge-sent-bookings" class="dash-nav-badge" style="<?= $sentBookingsCount > 0 ? '' : 'display:none;' ?>"><?= $sentBookingsCount ?></span>
             </button>
 
             <button onclick="switchTab('saved')" data-tab="saved" class="dash-nav-item">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                Saved
+                <?= __('dashboard.shared.saved') ?>
                 <?php $favsCount = count($favorites??[]); ?>
                 <span id="tab-badge-saved" class="dash-nav-badge pink" style="<?= $favsCount > 0 ? '' : 'display:none;' ?>"><?= $favsCount ?></span>
             </button>
@@ -873,11 +868,11 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
         <div class="dash-sidebar-bottom">
             <a href="<?= APP_URL ?>/jobs" class="dash-quick-btn primary">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                Browse Job Board
+                <?= __('dashboard.craftsman.browse_jobs') ?>
             </a>
             <a href="<?= APP_URL ?>/profile/<?= e($_SESSION['username'] ?? '') ?>" class="dash-quick-btn secondary">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/></svg>
-                My Public Profile
+                <?= __('dashboard.craftsman.my_public_profile') ?>
             </a>
         </div>
 
@@ -890,8 +885,8 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
     <main class="dash-main">
 
         <div class="dash-welcome">
-            <h1>Welcome back, <?= htmlspecialchars($_SESSION['name'] ?? 'Craftsman') ?>!</h1>
-            <p>Manage your business, track your bids, and grow your career.</p>
+            <h1><?= __('dashboard.craftsman.welcome') ?>, <?= htmlspecialchars($_SESSION['name'] ?? 'Craftsman') ?>!</h1>
+            <p><?= __('dashboard.craftsman.welcome_desc') ?></p>
         </div>
 
         <!-- ── OVERVIEW ─────────────────────────────── -->
@@ -915,10 +910,10 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
                             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
                         </div>
                         <div>
-                            <h3>New Booking Request</h3>
-                            <p><?= htmlspecialchars($b['first_name'] . ' ' . $b['last_name']) ?> sent you a booking request</p>
+                            <h3><?= __('dashboard.craftsman.new_booking_req') ?></h3>
+                            <p><?= htmlspecialchars($b['first_name'] . ' ' . $b['last_name']) ?> <?= __('dashboard.craftsman.new_booking_req_desc') ?></p>
                             <a href="#" onclick="switchTab('bookings');return false;">
-                                Review Request
+                                <?= __('dashboard.craftsman.review_request') ?>
                                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                             </a>
                         </div>
@@ -929,10 +924,10 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
                             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                         </div>
                         <div>
-                            <h3>Counter-Offer Received</h3>
-                            <p><?= htmlspecialchars($b['first_name'] . ' ' . $b['last_name']) ?> sent a counter-offer — review and respond</p>
+                            <h3><?= __('dashboard.craftsman.counter_received') ?></h3>
+                            <p><?= htmlspecialchars($b['first_name'] . ' ' . $b['last_name']) ?> <?= __('dashboard.craftsman.counter_received_desc') ?></p>
                             <a href="#" onclick="switchTab('sent-bookings');return false;">
-                                Review Counter
+                                <?= __('dashboard.craftsman.review_counter') ?>
                                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                             </a>
                         </div>
@@ -942,26 +937,26 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
             <?php else: ?>
                 <div class="all-good-banner">
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <p>You're all caught up — nothing needs your attention right now.</p>
+                    <p><?= __('dashboard.craftsman.all_caught_up') ?></p>
                 </div>
             <?php endif; ?>
 
-            <p class="section-label" style="margin-top:1.25rem">Recent Activity</p>
+            <p class="section-label" style="margin-top:1.25rem"><?= __('dashboard.shared.recent_activity') ?></p>
             <div class="activity-list">
                 <?php
                 $acts = [];
                 foreach (array_slice($bookings, 0, 3) as $b) {
                     $map = [
-                        'requested'   => ['txt'=>'New booking from '.($b['first_name']??'Homeowner'), 'dot'=>'blue',   'icon'=>'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', 'tab'=>'bookings'],
-                        'in_progress' => ['txt'=>'Job in progress with '.($b['first_name']??'Homeowner'), 'dot'=>'indigo', 'icon'=>'M13 10V3L4 14h7v7l9-11h-7z', 'tab'=>'bookings'],
-                        'completed'   => ['txt'=>'Job completed with '.($b['first_name']??'Homeowner'), 'dot'=>'green',  'icon'=>'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'tab'=>'bookings'],
-                        'cancelled'   => ['txt'=>'Booking cancelled', 'dot'=>'red', 'icon'=>'M6 18L18 6M6 6l12 12', 'tab'=>'bookings'],
+                        'requested'   => ['txt'=>__('dashboard.craftsman.new_booking_req').' '.($b['first_name']??'Homeowner'), 'dot'=>'blue',   'icon'=>'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', 'tab'=>'bookings'],
+                        'in_progress' => ['txt'=>__('dashboard.craftsman.job_in_progress').($b['first_name']??'Homeowner'), 'dot'=>'indigo', 'icon'=>'M13 10V3L4 14h7v7l9-11h-7z', 'tab'=>'bookings'],
+                        'completed'   => ['txt'=>__('dashboard.craftsman.job_completed').($b['first_name']??'Homeowner'), 'dot'=>'green',  'icon'=>'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'tab'=>'bookings'],
+                        'cancelled'   => ['txt'=>__('dashboard.shared.cancelled'), 'dot'=>'red', 'icon'=>'M6 18L18 6M6 6l12 12', 'tab'=>'bookings'],
                     ];
                     $info = $map[$b['status']] ?? ['txt'=>'Booking updated','dot'=>'indigo','icon'=>'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z','tab'=>'bookings'];
                     $acts[] = ['info'=>$info, 'time'=>$b['created_at']??''];
                 }
                 foreach (array_slice($reviews, 0, 2) as $r) {
-                    $acts[] = ['info'=>['txt'=>($r['first_name']??'Someone').' left you a '.$r['star_rating'].'★ review','dot'=>'amber','icon'=>'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z','tab'=>'reviews'], 'time'=>$r['created_at']??''];
+                    $acts[] = ['info'=>['txt'=>($r['first_name']??'Someone').__('dashboard.craftsman.left_review').$r['star_rating'].__('dashboard.craftsman.star_review'),'dot'=>'amber','icon'=>'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z','tab'=>'reviews'], 'time'=>$r['created_at']??''];
                 }
                 usort($acts, fn($a,$b) => strtotime($b['time'])-strtotime($a['time']));
                 $acts = array_slice($acts, 0, 6);
@@ -969,8 +964,8 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
                 <?php if (empty($acts)): ?>
                 <div class="activity-empty">
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <p>No activity yet — start by browsing the job board!</p>
-                    <a href="<?= APP_URL ?>/jobs">Browse Job Board →</a>
+                    <p><?= __('dashboard.shared.no_activity_yet') ?></p>
+                    <a href="<?= APP_URL ?>/jobs"><?= __('dashboard.shared.browse_job_board') ?></a>
                 </div>
                 <?php else: ?>
                 <?php foreach ($acts as $act): ?>
@@ -982,10 +977,10 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
                         <p><?= htmlspecialchars($act['info']['txt']) ?></p>
                         <span><?php
                             $diff = time() - strtotime($act['time']);
-                            if ($diff < 3600) echo floor($diff/60).'m ago';
-                            elseif ($diff < 86400) echo floor($diff/3600).'h ago';
-                            elseif ($diff < 604800) echo floor($diff/86400).'d ago';
-                            else echo date('M d', strtotime($act['time']));
+                            if ($diff < 3600) echo floor($diff/60).__('dashboard.shared.ago_m').__('dashboard.shared.ago_suffix');
+                            elseif ($diff < 86400) echo floor($diff/3600).__('dashboard.shared.ago_h').__('dashboard.shared.ago_suffix');
+                            elseif ($diff < 604800) echo floor($diff/86400).__('dashboard.shared.ago_d').__('dashboard.shared.ago_suffix');
+                            else echo (__('lang')==='ar' ? date('d/m/Y', strtotime($act['time'])) : date('M d', strtotime($act['time'])));
                         ?></span>
                     </div>
                     <svg class="activity-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
@@ -1001,23 +996,23 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
         <div id="tab-quotes" class="dash-tab">
             <?php
             $qGroups = [
-                ['label'=>'Pending',      'color'=>'#f59e0b', 'key'=>'pending',  'items'=>array_filter($quotes??[], fn($q)=>$q['status']==='pending')],
-                ['label'=>'Won',          'color'=>'#22c55e', 'key'=>'accepted', 'items'=>array_filter($quotes??[], fn($q)=>$q['status']==='accepted')],
-                ['label'=>'Not Selected', 'color'=>'#9ca3af', 'key'=>'rejected', 'items'=>array_filter($quotes??[], fn($q)=>$q['status']==='rejected')],
+                ['label'=>__('dashboard.craftsman.pending'),      'color'=>'#f59e0b', 'key'=>'pending',  'items'=>array_filter($quotes??[], fn($q)=>$q['status']==='pending')],
+                ['label'=>__('dashboard.craftsman.won'),          'color'=>'#22c55e', 'key'=>'accepted', 'items'=>array_filter($quotes??[], fn($q)=>$q['status']==='accepted')],
+                ['label'=>__('dashboard.craftsman.not_selected'), 'color'=>'#9ca3af', 'key'=>'rejected', 'items'=>array_filter($quotes??[], fn($q)=>$q['status']==='rejected')],
             ];
             ?>
             <div class="dash-tab-header">
-                <h2>My Quotes</h2>
+                <h2><?= __('dashboard.craftsman.my_quotes') ?></h2>
                 <div class="filter-dropdown">
                     <button class="filter-btn" type="button" onclick="toggleFilter('filter-craft-quotes')">
                         <div class="filter-opt-dot" style="display:none"></div>
-                        <span class="lbl">Filter: All</span>
+                        <span class="lbl"><?= __('dashboard.shared.filter_all') ?></span>
                         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                     </button>
                     <div id="filter-craft-quotes" class="filter-menu">
-                        <button type="button" class="filter-opt" onclick="applyDashFilter('tab-quotes', 'all', '', 'All Quotes')">
+                        <button type="button" class="filter-opt" onclick="applyDashFilter('tab-quotes', 'all', '', '<?= __('dashboard.craftsman.all_quotes') ?>')">
                             <div class="filter-opt-left">
-                                <span style="font-weight:700">All Quotes</span>
+                                <span style="font-weight:700"><?= __('dashboard.craftsman.all_quotes') ?></span>
                             </div>
                             <span class="filter-opt-count"><?= count($quotes??[]) ?></span>
                         </button>
@@ -1046,10 +1041,10 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
             <a href="<?= APP_URL ?>/jobs/<?= $q['job_posting_id'] ?>" class="quote-card <?= $grp['key']==='rejected'?'rejected':'' ?>">
                 <div class="quote-card-top">
                     <div><div class="quote-title"><?= htmlspecialchars($q['title']) ?></div>
-                    <div class="quote-meta"><span class="quote-price"><?= number_format($q['quoted_price'],2) ?> DZD</span><?php if($grp['key']==='pending'): ?><span class="quote-date">· <?= date('M d, Y', strtotime($q['created_at'])) ?></span><?php endif; ?></div></div>
-                    <?php if($grp['key']==='pending'): ?><span class="sbadge yellow">Pending</span>
-                    <?php elseif($grp['key']==='accepted'): ?><span class="sbadge green">Won ✓</span>
-                    <?php else: ?><span class="sbadge gray">Not Selected</span><?php endif; ?>
+                    <div class="quote-meta"><span class="quote-price"><?= number_format($q['quoted_price'],2) ?> <?= __('lang')==='ar' ? 'د.ج' : 'DZD' ?></span><?php if($grp['key']==='pending'): ?><span class="quote-date">· <?= date('d', strtotime($q['created_at'])) ?> <?= __('months_short.'.date('M', strtotime($q['created_at']))) ?> <?= date('Y', strtotime($q['created_at'])) ?></span><?php endif; ?></div></div>
+                    <?php if($grp['key']==='pending'): ?><span class="sbadge yellow"><?= __('dashboard.craftsman.pending') ?></span>
+                    <?php elseif($grp['key']==='accepted'): ?><span class="sbadge green"><?= __('dashboard.craftsman.won') ?> ✓</span>
+                    <?php else: ?><span class="sbadge gray"><?= __('dashboard.craftsman.not_selected') ?></span><?php endif; ?>
                 </div>
                 <?php if ($grp['key']==='pending' && !empty($q['cover_message'])): ?><div class="quote-msg">"<?= htmlspecialchars($q['cover_message']) ?>"</div><?php endif; ?>
             </a>
@@ -1059,9 +1054,9 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
             <?php else: ?>
             <div class="empty-state">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-                <h3>No quotes submitted yet</h3>
-                <p>Browse the job board and submit quotes to win work.</p>
-                <a href="<?= APP_URL ?>/jobs" class="btn btn-indigo">Browse Job Board</a>
+                <h3><?= __('dashboard.craftsman.no_quotes_yet') ?></h3>
+                <p><?= __('dashboard.craftsman.no_quotes_desc') ?></p>
+                <a href="<?= APP_URL ?>/jobs" class="btn btn-indigo"><?= __('dashboard.craftsman.browse_jobs') ?></a>
             </div>
             <?php endif; ?>
         </div><!-- /quotes -->
@@ -1085,10 +1080,10 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
                 <div class="quote-card-top pb-3 <?= $assocBk && in_array($assocBk['status'], ['in_progress', 'pending_completion']) ? 'border-b border-gray-100/60' : '' ?>" style="cursor:pointer;" onclick="window.location.href='<?= APP_URL ?>/jobs/<?= $q['job_posting_id'] ?>'">
                     <div>
                         <div class="quote-title text-indigo-700 hover:text-indigo-900 transition-colors"><?= htmlspecialchars($q['title']) ?></div>
-                        <div class="quote-meta"><span class="quote-price">Agreed: <?= number_format($q['quoted_price'],2) ?> DZD</span></div>
+                        <div class="quote-meta"><span class="quote-price"><?= __('dashboard.craftsman.agreed') ?>: <?= number_format($q['quoted_price'],2) ?> <?= __('lang')==='ar' ? 'د.ج' : 'DZD' ?></span></div>
                     </div>
                     <span class="sbadge <?= $assocBk && $assocBk['status']==='pending_completion' ? 'purple' : 'blue' ?>">
-                        <?= $assocBk && $assocBk['status']==='pending_completion' ? 'Completion Pending' : 'In Progress' ?>
+                        <?= $assocBk && $assocBk['status']==='pending_completion' ? __('dashboard.shared.completion_pending') : __('dashboard.shared.in_progress') ?>
                     </span>
                 </div>
                 
@@ -1098,16 +1093,16 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
                         <form id="active-complete-<?= $assocBk['id'] ?>" action="<?= APP_URL ?>/bookings/complete" method="POST">
                             <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']??'') ?>">
                             <input type="hidden" name="booking_id" value="<?= $assocBk['id'] ?>">
-                            <button type="button" onclick="showConfirmModal('active-complete-<?= $assocBk['id'] ?>','Mark as Complete?','The homeowner will confirm the work is done.','accept')" class="btn btn-blue">
-                                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Mark Complete
+                            <button type="button" onclick="showConfirmModal('active-complete-<?= $assocBk['id'] ?>','<?= __('dashboard.shared.mark_complete_q') ?>','<?= __('dashboard.shared.mark_complete_desc') ?>','accept')" class="btn btn-blue">
+                                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> <?= __('dashboard.shared.mark_complete') ?>
                             </button>
                         </form>
-                        <a href="<?= APP_URL ?>/profile/<?= $assocBk['username'] ?>" class="btn btn-indigo">Message Homeowner</a>
+                        <a href="<?= APP_URL ?>/profile/<?= $assocBk['username'] ?>" class="btn btn-indigo"><?= __('dashboard.shared.message_homeowner') ?></a>
                     </div>
                     <?php elseif ($assocBk['status'] === 'pending_completion'): ?>
                     <div class="booking-footer-banner purple mt-3">
                         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Waiting for homeowner to confirm completion
+                        <?= __('dashboard.craftsman.waiting_completion') ?>
                     </div>
                     <?php endif; ?>
                 <?php endif; ?>
@@ -1116,8 +1111,8 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
             <?php else: ?>
             <div class="empty-state">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                <h3>No active jobs</h3>
-                <p>Once a homeowner accepts your quote, the job appears here.</p>
+                <h3><?= __('dashboard.craftsman.no_active_jobs') ?></h3>
+                <p><?= __('dashboard.craftsman.no_active_jobs_desc') ?></p>
             </div>
             <?php endif; ?>
         </div><!-- /active -->
@@ -1127,29 +1122,29 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
         <div id="tab-bookings" class="dash-tab">
             <?php
             $badgeMap = ['requested'=>'yellow','counter_offered'=>'orange','in_progress'=>'blue','pending_completion'=>'purple','completed'=>'green','cancelled'=>'gray'];
-            $labelMap = ['requested'=>'Requested','counter_offered'=>'Counter Sent','in_progress'=>'In Progress','pending_completion'=>'Awaiting Confirm','completed'=>'Completed','cancelled'=>'Cancelled'];
+            $labelMap = ['requested'=>__('dashboard.shared.requested'),'counter_offered'=>__('dashboard.craftsman.counter_sent'),'in_progress'=>__('dashboard.shared.in_progress'),'pending_completion'=>__('dashboard.craftsman.awaiting_confirm'),'completed'=>__('dashboard.shared.completed'),'cancelled'=>__('dashboard.shared.cancelled')];
 
             $bGroups = [
-                ['label'=>'Needs Response',       'color'=>'#f59e0b', 'key'=>'req',      'items'=> array_filter($bookings, fn($b)=>$b['status']==='requested')],
-                ['label'=>'Counter Sent',         'color'=>'#ea580c', 'key'=>'counter',  'items'=> array_filter($bookings, fn($b)=>$b['status']==='counter_offered')],
-                ['label'=>'In Progress',          'color'=>'#6366f1', 'key'=>'prog',     'items'=> array_filter($bookings, fn($b)=>$b['status']==='in_progress')],
-                ['label'=>'Awaiting Confirmation','color'=>'#a855f7', 'key'=>'pendingc', 'items'=> array_filter($bookings, fn($b)=>$b['status']==='pending_completion')],
-                ['label'=>'Completed',            'color'=>'#22c55e', 'key'=>'comp',     'items'=> array_filter($bookings, fn($b)=>$b['status']==='completed')],
-                ['label'=>'Cancelled',            'color'=>'#9ca3af', 'key'=>'canc',     'items'=> array_filter($bookings, fn($b)=>$b['status']==='cancelled')],
+                ['label'=>__('dashboard.craftsman.needs_response'),  'color'=>'#f59e0b', 'key'=>'req',      'items'=> array_filter($bookings, fn($b)=>$b['status']==='requested')],
+                ['label'=>__('dashboard.craftsman.counter_sent'),    'color'=>'#ea580c', 'key'=>'counter',  'items'=> array_filter($bookings, fn($b)=>$b['status']==='counter_offered')],
+                ['label'=>__('dashboard.shared.in_progress'),       'color'=>'#6366f1', 'key'=>'prog',     'items'=> array_filter($bookings, fn($b)=>$b['status']==='in_progress')],
+                ['label'=>__('dashboard.craftsman.awaiting_confirm'),'color'=>'#a855f7', 'key'=>'pendingc', 'items'=> array_filter($bookings, fn($b)=>$b['status']==='pending_completion')],
+                ['label'=>__('dashboard.shared.completed'),         'color'=>'#22c55e', 'key'=>'comp',     'items'=> array_filter($bookings, fn($b)=>$b['status']==='completed')],
+                ['label'=>__('dashboard.shared.cancelled'),         'color'=>'#9ca3af', 'key'=>'canc',     'items'=> array_filter($bookings, fn($b)=>$b['status']==='cancelled')],
             ];
             ?>
             <div class="dash-tab-header">
-                <h2>Bookings</h2>
+                <h2><?= __('dashboard.shared.bookings') ?></h2>
                 <div class="filter-dropdown">
                     <button class="filter-btn" type="button" onclick="toggleFilter('filter-craft-bookings')">
                         <div class="filter-opt-dot" style="display:none"></div>
-                        <span class="lbl">Filter: All</span>
+                        <span class="lbl"><?= __('dashboard.shared.filter_all') ?></span>
                         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                     </button>
                     <div id="filter-craft-bookings" class="filter-menu">
-                        <button type="button" class="filter-opt" onclick="applyDashFilter('tab-bookings', 'all', '', 'All Bookings')">
+                        <button type="button" class="filter-opt" onclick="applyDashFilter('tab-bookings', 'all', '', '<?= __('dashboard.craftsman.all_bookings') ?>')">
                             <div class="filter-opt-left">
-                                <span style="font-weight:700">All Bookings</span>
+                                <span style="font-weight:700"><?= __('dashboard.craftsman.all_bookings') ?></span>
                             </div>
                             <span class="filter-opt-count"><?= count($bookings) ?></span>
                         </button>
@@ -1181,9 +1176,16 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
                     </div>
                     <div class="booking-desc"><?= htmlspecialchars($booking['description']) ?></div>
                     <div class="booking-chips">
-                        <span class="bchip"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg><?= htmlspecialchars(preg_replace('/^\d{2}\s-\s/','',$booking['address'])) ?></span>
-                        <span class="bchip"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><?= date('M d, Y', strtotime($booking['scheduled_date'])) ?></span>
-                        <?php if (!empty($booking['quoted_price'])): ?><span class="bchip price"><?= number_format($booking['quoted_price'],2) ?> DZD</span><?php endif; ?>
+                        <?php 
+                            $rawAddr   = $booking['address']??'';
+                            $addrParts = explode(',', $rawAddr, 2);
+                            $wilayaKey = trim($addrParts[0]);
+                            $restAddr  = isset($addrParts[1]) ? '، ' . trim($addrParts[1]) : '';
+                            $mappedW   = __('wilayas.'.$wilayaKey) !== 'wilayas.'.$wilayaKey ? preg_replace('/^\d{2}\s-\s/','',__('wilayas.'.$wilayaKey)) : preg_replace('/^\d{2}\s-\s/','',$wilayaKey);
+                        ?>
+                        <span class="bchip"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg><?= htmlspecialchars($mappedW . $restAddr) ?></span>
+                        <span class="bchip"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><?= date('d', strtotime($booking['scheduled_date'])) ?> <?= __('months_short.'.date('M', strtotime($booking['scheduled_date']))) ?> <?= date('Y', strtotime($booking['scheduled_date'])) ?></span>
+                        <?php if (!empty($booking['quoted_price'])): ?><span class="bchip price"><?= number_format($booking['quoted_price'],2) ?> <?= __('lang')==='ar' ? 'د.ج' : 'DZD' ?></span><?php endif; ?>
                     </div>
                 </div>
 
@@ -1192,27 +1194,27 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
                     <form id="accept-booking-<?= $booking['id'] ?>" action="<?= APP_URL ?>/bookings/accept" method="POST">
                         <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']??'') ?>">
                         <input type="hidden" name="booking_id" value="<?= $booking['id'] ?>">
-                        <button type="button" onclick="showConfirmModal('accept-booking-<?= $booking['id'] ?>','Accept this booking?','The job will start immediately. The homeowner will be notified.','accept')" class="btn btn-green">
-                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Accept
+                        <button type="button" onclick="showConfirmModal('accept-booking-<?= $booking['id'] ?>','<?= __('dashboard.shared.accept_booking_q') ?>','<?= __('dashboard.shared.accept_booking_desc') ?>','accept')" class="btn btn-green">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <?= __('dashboard.shared.accept') ?>
                         </button>
                     </form>
                     <button type="button" onclick="openCounterModal(<?= $booking['id'] ?>,'<?= e($booking['description']) ?>','<?= e($booking['scheduled_date']) ?>')" class="btn btn-orange">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg> Counter
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg> <?= __('dashboard.shared.counter') ?>
                     </button>
                     <form id="decline-booking-<?= $booking['id'] ?>" action="<?= APP_URL ?>/bookings/decline" method="POST">
                         <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']??'') ?>">
                         <input type="hidden" name="booking_id" value="<?= $booking['id'] ?>">
-                        <button type="button" onclick="showConfirmModal('decline-booking-<?= $booking['id'] ?>','Decline this booking?','Are you sure?','decline')" class="btn btn-red">
-                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> Decline
+                        <button type="button" onclick="showConfirmModal('decline-booking-<?= $booking['id'] ?>','<?= __('dashboard.shared.decline_booking_q') ?>','<?= __('dashboard.shared.decline_booking_desc') ?>','decline')" class="btn btn-red">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> <?= __('dashboard.shared.decline') ?>
                         </button>
                     </form>
-                    <a href="<?= APP_URL ?>/profile/<?= $booking['username'] ?>" class="btn btn-indigo" style="margin-left:auto">View Profile</a>
+                    <a href="<?= APP_URL ?>/profile/<?= $booking['username'] ?>" class="btn btn-indigo" style="margin-left:auto"><?= __('dashboard.shared.view_profile') ?></a>
                 </div>
 
                 <?php elseif ($booking['status'] === 'counter_offered'): ?>
                 <div class="booking-footer-banner orange">
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    Counter-offer sent — waiting for homeowner response
+                    <?= __('dashboard.shared.counter_sent_wait') ?>
                 </div>
 
                 <?php elseif ($booking['status'] === 'in_progress'): ?>
@@ -1220,28 +1222,28 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
                     <form id="complete-booking-<?= $booking['id'] ?>" action="<?= APP_URL ?>/bookings/complete" method="POST">
                         <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']??'') ?>">
                         <input type="hidden" name="booking_id" value="<?= $booking['id'] ?>">
-                        <button type="button" onclick="showConfirmModal('complete-booking-<?= $booking['id'] ?>','Mark as Complete?','The homeowner will confirm the work is done.','accept')" class="btn btn-blue">
-                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Mark as Complete
+                        <button type="button" onclick="showConfirmModal('complete-booking-<?= $booking['id'] ?>','<?= __('dashboard.shared.mark_complete_q') ?>','<?= __('dashboard.shared.mark_complete_desc') ?>','accept')" class="btn btn-blue">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> <?= __('dashboard.shared.mark_complete') ?>
                         </button>
                     </form>
-                    <a href="<?= APP_URL ?>/profile/<?= $booking['username'] ?>" class="btn btn-indigo">View Homeowner</a>
+                    <a href="<?= APP_URL ?>/profile/<?= $booking['username'] ?>" class="btn btn-indigo"><?= __('dashboard.shared.view_homeowner') ?></a>
                 </div>
 
                 <?php elseif ($booking['status'] === 'pending_completion'): ?>
                 <div class="booking-footer-banner purple">
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    Waiting for homeowner to confirm the job is complete
+                    <?= __('dashboard.shared.waiting_confirm') ?>
                 </div>
 
                 <?php elseif ($booking['status'] === 'completed'): ?>
                 <div class="booking-footer-banner green">
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    Job completed and confirmed
+                    <?= __('dashboard.shared.job_confirmed') ?>
                 </div>
 
                 <?php else: ?>
                 <div class="booking-card-actions">
-                    <a href="<?= APP_URL ?>/profile/<?= $booking['username'] ?>" class="btn btn-indigo">View Homeowner</a>
+                    <a href="<?= APP_URL ?>/profile/<?= $booking['username'] ?>" class="btn btn-indigo"><?= __('dashboard.shared.view_homeowner') ?></a>
                 </div>
                 <?php endif; ?>
 
@@ -1252,8 +1254,8 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
             <?php else: ?>
             <div class="empty-state">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                <h3>No booking requests yet</h3>
-                <p>When homeowners send you booking requests, they'll appear here.</p>
+                <h3><?= __('dashboard.craftsman.no_bookings') ?></h3>
+                <p><?= __('dashboard.craftsman.no_bookings_desc') ?></p>
             </div>
             <?php endif; ?>
         </div><!-- /bookings -->
@@ -1269,7 +1271,7 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
                     <div style="flex:1;min-width:0">
                         <div style="display:flex;align-items:center;justify-content:space-between">
                             <span class="review-name"><?= htmlspecialchars($rev['first_name'].' '.$rev['last_name']) ?></span>
-                            <span class="review-date"><?= date('M d, Y', strtotime($rev['created_at'])) ?></span>
+                            <span class="review-date"><?= date('d', strtotime($rev['created_at'])) ?> <?= __('months_short.'.date('M', strtotime($rev['created_at']))) ?> <?= date('Y', strtotime($rev['created_at'])) ?></span>
                         </div>
                         <div class="review-stars">
                             <?php for ($i=1;$i<=5;$i++): ?>
@@ -1286,8 +1288,8 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
             <?php else: ?>
             <div class="empty-state">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-                <h3>No reviews yet</h3>
-                <p>Complete jobs to start receiving reviews from homeowners.</p>
+                <h3><?= __('dashboard.craftsman.no_reviews') ?></h3>
+                <p><?= __('dashboard.craftsman.no_reviews_desc') ?></p>
             </div>
             <?php endif; ?>
         </div><!-- /reviews -->
@@ -1297,12 +1299,12 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
         <div id="tab-sent-bookings" class="dash-tab">
             <?php
             $sbGroups = [
-                ['label'=>'Pending Response', 'color'=>'#f59e0b', 'items'=> array_filter($sentBookings, fn($b)=>$b['status']==='requested')],
-                ['label'=>'Counter Received', 'color'=>'#ea580c', 'items'=> array_filter($sentBookings, fn($b)=>$b['status']==='counter_offered')],
-                ['label'=>'In Progress',      'color'=>'#6366f1', 'items'=> array_filter($sentBookings, fn($b)=>$b['status']==='in_progress')],
-                ['label'=>'Awaiting Confirm', 'color'=>'#a855f7', 'items'=> array_filter($sentBookings, fn($b)=>$b['status']==='pending_completion')],
-                ['label'=>'Completed',        'color'=>'#22c55e', 'items'=> array_filter($sentBookings, fn($b)=>$b['status']==='completed')],
-                ['label'=>'Cancelled',        'color'=>'#9ca3af', 'items'=> array_filter($sentBookings, fn($b)=>$b['status']==='cancelled')],
+                ['label'=>__('dashboard.craftsman.pending_response'), 'color'=>'#f59e0b', 'items'=> array_filter($sentBookings, fn($b)=>$b['status']==='requested')],
+                ['label'=>__('dashboard.craftsman.counter_received_short'), 'color'=>'#ea580c', 'items'=> array_filter($sentBookings, fn($b)=>$b['status']==='counter_offered')],
+                ['label'=>__('dashboard.shared.in_progress'),      'color'=>'#6366f1', 'items'=> array_filter($sentBookings, fn($b)=>$b['status']==='in_progress')],
+                ['label'=>__('dashboard.craftsman.awaiting_confirm'), 'color'=>'#a855f7', 'items'=> array_filter($sentBookings, fn($b)=>$b['status']==='pending_completion')],
+                ['label'=>__('dashboard.shared.completed'),        'color'=>'#22c55e', 'items'=> array_filter($sentBookings, fn($b)=>$b['status']==='completed')],
+                ['label'=>__('dashboard.shared.cancelled'),        'color'=>'#9ca3af', 'items'=> array_filter($sentBookings, fn($b)=>$b['status']==='cancelled')],
             ];
             ?>
             <?php if (!empty($sentBookings)): ?>
@@ -1325,14 +1327,14 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
                     </div>
                     <div class="booking-desc"><?= htmlspecialchars($booking['description']) ?></div>
                     <div class="booking-chips">
-                        <span class="bchip"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><?= date('M d, Y', strtotime($booking['scheduled_date'])) ?></span>
-                        <?php if (!empty($booking['quoted_price'])): ?><span class="bchip price"><?= number_format($booking['quoted_price'],2) ?> DZD</span><?php endif; ?>
+                        <span class="bchip"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><?= __('lang')==='ar' ? date('d/m/Y', strtotime($booking['scheduled_date'])) : date('M d, Y', strtotime($booking['scheduled_date'])) ?></span>
+                        <?php if (!empty($booking['quoted_price'])): ?><span class="bchip price"><?= number_format($booking['quoted_price'],2) ?> <?= __('lang')==='ar' ? 'د.ج' : 'DZD' ?></span><?php endif; ?>
                     </div>
                 </div>
 
                 <?php if ($booking['status'] === 'counter_offered'): ?>
                 <div class="booking-card-actions" style="flex-direction:column;align-items:flex-start">
-                    <p style="font-size:0.75rem;font-weight:800;color:#9a3412;margin-bottom:0.4rem">Counter-offer received — review and respond</p>
+                    <p style="font-size:0.75rem;font-weight:800;color:#9a3412;margin-bottom:0.4rem"><?= __('dashboard.craftsman.counter_review_respond') ?></p>
                     <?php if (!empty($booking['counter_description'])): ?>
                     <p style="font-size:0.75rem;color:#6b7280;font-weight:600;margin-bottom:0.5rem"><?= htmlspecialchars($booking['counter_description']) ?></p>
                     <?php endif; ?>
@@ -1340,18 +1342,18 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
                         <form action="<?= APP_URL ?>/bookings/accept-counter" method="POST">
                             <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']??'') ?>">
                             <input type="hidden" name="booking_id" value="<?= $booking['id'] ?>">
-                            <button type="submit" class="btn btn-green">Accept Counter</button>
+                            <button type="submit" class="btn btn-green"><?= __('dashboard.craftsman.accept_counter') ?></button>
                         </form>
                         <form action="<?= APP_URL ?>/bookings/cancel-counter" method="POST">
                             <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']??'') ?>">
                             <input type="hidden" name="booking_id" value="<?= $booking['id'] ?>">
-                            <button type="submit" class="btn btn-gray">Decline</button>
+                            <button type="submit" class="btn btn-gray"><?= __('dashboard.shared.decline') ?></button>
                         </form>
                     </div>
                 </div>
                 <?php else: ?>
                 <div class="booking-card-actions">
-                    <a href="<?= APP_URL ?>/profile/<?= $booking['username'] ?>" class="btn btn-indigo">View Craftsman</a>
+                    <a href="<?= APP_URL ?>/profile/<?= $booking['username'] ?>" class="btn btn-indigo"><?= __('dashboard.shared.view_craftsman') ?></a>
                 </div>
                 <?php endif; ?>
             </div>
@@ -1361,9 +1363,9 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
             <?php else: ?>
             <div class="empty-state">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-                <h3>No sent bookings yet</h3>
-                <p>When you book another craftsman, your requests appear here.</p>
-                <a href="<?= APP_URL ?>/search" class="btn btn-indigo">Find Craftsmen</a>
+                <h3><?= __('dashboard.craftsman.no_sent_bookings') ?></h3>
+                <p><?= __('dashboard.craftsman.no_sent_bookings_desc') ?></p>
+                <a href="<?= APP_URL ?>/search" class="btn btn-indigo"><?= __('dashboard.craftsman.find_craftsmen') ?></a>
             </div>
             <?php endif; ?>
         </div><!-- /sent-bookings -->
@@ -1385,22 +1387,23 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
                                 <?php endif; ?>
                             </div>
                             <?php $favCatStyles = get_category_classes($fav['service_category']??'General Handyman'); ?>
-                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[0.62rem] font-bold uppercase tracking-wider ring-1 ring-inset <?= $favCatStyles['badge'] ?>" style="margin-top:0.2rem"><?= htmlspecialchars($fav['service_category']??'') ?></span>
+                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[0.62rem] font-bold uppercase tracking-wider ring-1 ring-inset <?= $favCatStyles['badge'] ?>" style="margin-top:0.2rem"><?= htmlspecialchars(__('categories.'.($fav['service_category']??'')) !== 'categories.'.($fav['service_category']??'') ? __('categories.'.($fav['service_category']??'')) : ($fav['service_category']??'')) ?></span>
                             <div style="display:flex;align-items:center;gap:0.55rem;margin-top:0.3rem;flex-wrap:wrap">
                                 <?php if (!empty($fav['wilaya'])): ?>
-                                <span class="saved-meta"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:10px;height:10px;flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg><?= htmlspecialchars(preg_replace('/^\d{2}\s-\s/','',$fav['wilaya'])) ?></span>
+                                <?php $cleanWilaya = preg_replace('/^\d{2}\s-\s/','',$fav['wilaya']); ?>
+                                <span class="saved-meta"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:10px;height:10px;flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg><?= htmlspecialchars(__('wilayas.'.$fav['wilaya']) !== 'wilayas.'.$fav['wilaya'] ? preg_replace('/^\d{2}\s-\s/','',__('wilayas.'.$fav['wilaya'])) : $cleanWilaya) ?></span>
                                 <?php endif; ?>
                                 <span class="saved-meta"><svg viewBox="0 0 20 20" fill="#f59e0b" style="width:10px;height:10px;flex-shrink:0"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><?= number_format((float)($fav['rating_score']??0),1) ?> (<?= (int)($fav['reviews_count']??0) ?>)</span>
                             </div>
                         </div>
                     </div>
                     <div class="saved-bottom">
-                        <div class="saved-rate"><?= number_format($fav['hourly_rate']??0,0) ?> <span>DZD/hr</span></div>
+                        <div class="saved-rate"><?= number_format($fav['hourly_rate']??0,0) ?> <span><?= __('dashboard.shared.dzd_hr') ?></span></div>
                         <div class="saved-actions">
-                            <button type="button" onclick="confirmRemoveFavorite(<?= $fav['id'] ?>)" class="btn btn-pink" style="padding:0.32rem 0.55rem" title="Remove">
+                            <button type="button" onclick="confirmRemoveFavorite(<?= $fav['id'] ?>)" class="btn btn-pink" style="padding:0.32rem 0.55rem" title="<?= __('dashboard.shared.remove') ?>">
                                 <svg fill="currentColor" viewBox="0 0 20 20" style="width:12px;height:12px"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/></svg>
                             </button>
-                            <a href="<?= APP_URL ?>/profile/<?= $fav['username'] ?>" class="btn btn-indigo">View</a>
+                            <a href="<?= APP_URL ?>/profile/<?= $fav['username'] ?>" class="btn btn-indigo"><?= __('dashboard.shared.view_details') ?></a>
                         </div>
                     </div>
                 </div>
@@ -1409,9 +1412,9 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
             <?php else: ?>
             <div class="empty-state">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                <h3>No saved craftsmen yet</h3>
-                <p>Save craftsmen you trust for quick access later.</p>
-                <a href="<?= APP_URL ?>/search" class="btn btn-indigo">Browse Craftsmen</a>
+                <h3><?= __('dashboard.craftsman.no_saved') ?></h3>
+                <p><?= __('dashboard.craftsman.no_saved_desc') ?></p>
+                <a href="<?= APP_URL ?>/search" class="btn btn-indigo"><?= __('dashboard.craftsman.find_craftsmen') ?></a>
             </div>
             <?php endif; ?>
         </div><!-- /saved -->
@@ -1439,45 +1442,45 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
 
 <div class="mob-dash-drawer" id="mob-dash-drawer">
     <div class="mob-dash-handle"></div>
-    <p class="mob-dash-drawer-title">Navigation</p>
+    <p class="mob-dash-drawer-title"><?= __('dashboard.shared.overview') ?></p>
 
     <button onclick="mobSwitchTab('overview')" data-mob-tab="overview" class="mob-dash-nav-item active">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
-        Overview
+        <?= __('dashboard.shared.overview') ?>
     </button>
 
     <button onclick="mobSwitchTab('quotes')" data-mob-tab="quotes" class="mob-dash-nav-item">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-        My Quotes
+        <?= __('dashboard.craftsman.my_quotes') ?>
         <?php if ($pendingBids > 0): ?><span class="mob-dash-badge amber"><?= $pendingBids ?></span><?php endif; ?>
     </button>
 
     <button onclick="mobSwitchTab('active')" data-mob-tab="active" class="mob-dash-nav-item">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        Active Jobs
+        <?= __('dashboard.craftsman.active_jobs') ?>
         <?php if ($activeBookings > 0): ?><span class="mob-dash-badge indigo"><?= $activeBookings ?></span><?php endif; ?>
     </button>
 
     <button onclick="mobSwitchTab('bookings')" data-mob-tab="bookings" class="mob-dash-nav-item">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-        Bookings
+        <?= __('dashboard.shared.bookings') ?>
         <?php if ($pendingBookings > 0): ?><span class="mob-dash-badge red"><?= $pendingBookings ?></span><?php endif; ?>
     </button>
 
     <button onclick="mobSwitchTab('reviews')" data-mob-tab="reviews" class="mob-dash-nav-item">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-        Reviews
+        <?= __('dashboard.shared.reviews') ?>
     </button>
 
     <button onclick="mobSwitchTab('sent-bookings')" data-mob-tab="sent-bookings" class="mob-dash-nav-item">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-        Sent Bookings
+        <?= __('dashboard.craftsman.sent_bookings') ?>
         <?php if (!empty($sentBookings)): ?><span class="mob-dash-badge indigo"><?= count($sentBookings) ?></span><?php endif; ?>
     </button>
 
     <button onclick="mobSwitchTab('saved')" data-mob-tab="saved" class="mob-dash-nav-item">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-        Saved
+        <?= __('dashboard.shared.saved') ?>
         <?php if (!empty($favorites)): ?><span class="mob-dash-badge pink"><?= count($favorites) ?></span><?php endif; ?>
     </button>
 
@@ -1485,12 +1488,12 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
 
     <a href="<?= APP_URL ?>/jobs" class="mob-dash-quick primary">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        Browse Job Board
+        <?= __('dashboard.craftsman.browse_jobs') ?>
     </a>
     <div style="height:0.4rem"></div>
     <a href="<?= APP_URL ?>/profile/<?= e($_SESSION['username'] ?? '') ?>" class="mob-dash-quick secondary">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/></svg>
-        My Public Profile
+        <?= __('dashboard.craftsman.my_public_profile') ?>
     </a>
 </div>
 
@@ -1507,26 +1510,26 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
         <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full">
             <div class="p-6">
                 <div class="flex items-center mb-5">
-                    <div class="w-9 h-9 bg-orange-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                    <div class="w-9 h-9 bg-orange-100 rounded-full flex items-center justify-center me-3 flex-shrink-0">
                         <svg class="h-5 w-5 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                     </div>
-                    <h3 class="text-base font-extrabold text-gray-900">Send Counter-Offer</h3>
+                    <h3 class="text-base font-extrabold text-gray-900"><?= __('dashboard.shared.counter') ?></h3>
                 </div>
                 <form id="counter-offer-form" action="<?= APP_URL ?>/bookings/counter-offer" method="POST">
                     <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']??'') ?>">
                     <input type="hidden" name="booking_id" id="counter-booking-id">
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">Updated Description</label>
+                            <label class="block text-sm font-bold text-gray-700 mb-1"><?= __('dashboard.shared.view_details') ?></label>
                             <textarea name="counter_description" id="counter-description" rows="3" class="block w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-orange-400 focus:ring-orange-400 outline-none" required></textarea>
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-1">Your Price (DZD)</label>
+                                <label class="block text-sm font-bold text-gray-700 mb-1"><?= __('dashboard.shared.price') ?> (<?= __('lang')==='ar' ? 'د.ج' : 'DZD' ?>)</label>
                                 <input type="number" name="counter_price" id="counter-price" step="0.01" min="0" class="block w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-orange-400 outline-none" required>
                             </div>
                             <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-1">Proposed Date</label>
+                                <label class="block text-sm font-bold text-gray-700 mb-1"><?= __('dashboard.shared.date') ?></label>
                                 <input type="datetime-local" name="counter_date" id="counter-date" class="block w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-orange-400 outline-none" required>
                             </div>
                         </div>
@@ -1536,8 +1539,8 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
                         </div>
                     </div>
                     <div class="flex justify-end gap-2 mt-5">
-                        <button type="button" onclick="closeCounterModal()" class="btn btn-gray">Cancel</button>
-                        <button type="submit" class="btn btn-orange">Send Counter-Offer</button>
+                        <button type="button" onclick="closeCounterModal()" class="btn btn-gray"><?= __('dashboard.shared.cancel') ?></button>
+                        <button type="submit" class="btn btn-orange"><?= __('dashboard.shared.counter') ?></button>
                     </div>
                 </form>
             </div>
@@ -1552,18 +1555,18 @@ html.dark .flash.error { background: #7f1d1d; border-color: #991b1b; color: #fca
         <div class="bg-white rounded-xl shadow-2xl max-w-sm w-full">
             <div class="p-6">
                 <div class="flex items-center mb-4">
-                    <div id="modal-icon-accept" class="hidden w-9 h-9 bg-green-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                    <div id="modal-icon-accept" class="hidden w-9 h-9 bg-green-100 rounded-full flex items-center justify-center me-3 flex-shrink-0">
                         <svg class="h-5 w-5 text-green-600" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                     </div>
-                    <div id="modal-icon-decline" class="hidden w-9 h-9 bg-red-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                    <div id="modal-icon-decline" class="hidden w-9 h-9 bg-red-100 rounded-full flex items-center justify-center me-3 flex-shrink-0">
                         <svg class="h-5 w-5 text-red-600" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
                     </div>
                     <h3 id="modal-title" class="text-base font-extrabold text-gray-900"></h3>
                 </div>
                 <p id="modal-message" class="text-sm text-gray-500 font-semibold mb-5"></p>
                 <div class="flex justify-end gap-2">
-                    <button onclick="hideConfirmModal()" class="btn btn-gray">Cancel</button>
-                    <button id="modal-confirm-btn" onclick="confirmAction()" class="btn">Confirm</button>
+                    <button onclick="hideConfirmModal()" class="btn btn-gray"><?= __('dashboard.shared.cancel') ?></button>
+                    <button id="modal-confirm-btn" onclick="confirmAction()" class="btn"><?= __('dashboard.shared.confirm') ?></button>
                 </div>
             </div>
         </div>
@@ -1610,6 +1613,50 @@ const D = {
     }
 };
 
+/* PHP → JS translation bridge */
+const T = {
+    metrics_glance:    '<?= __('dashboard.shared.overview') ?>',
+    total_earnings:    '<?= __('dashboard.shared.price') ?>',
+    active_jobs:       '<?= __('dashboard.craftsman.active_jobs') ?>',
+    total_quotes:      '<?= __('dashboard.craftsman.my_quotes') ?>',
+    avg_rating:        '<?= __('dashboard.shared.reviews') ?>',
+    pending_bids:      '<?= __('dashboard.craftsman.pending_bids') ?>',
+    completed:         '<?= __('dashboard.shared.completed') ?>',
+    in_progress:       '<?= __('dashboard.shared.in_progress') ?>',
+    pending_review:    '<?= __('dashboard.craftsman.pending') ?>',
+    lifetime:          'LIFETIME',
+    quote_summary:     '<?= __('dashboard.craftsman.my_quotes') ?>',
+    submitted:         '<?= __('dashboard.craftsman.my_quotes') ?>',
+    accepted:          '<?= __('dashboard.craftsman.won') ?>',
+    under_review:      '<?= __('dashboard.craftsman.pending') ?>',
+    awaiting_resp:     '<?= __('dashboard.craftsman.pending_response') ?>',
+    jobs_awarded:      '<?= __('dashboard.craftsman.won') ?>',
+    waiting_ho:        '<?= __('dashboard.shared.waiting_confirm') ?>',
+    running:           '<?= __('dashboard.shared.in_progress') ?>',
+    win_rate:          'Win Rate',
+    quotes_submitted:  '<?= __('dashboard.craftsman.my_quotes') ?>',
+    booking_overview:  '<?= __('dashboard.shared.bookings') ?>',
+    needs_response:    '<?= __('dashboard.craftsman.needs_response') ?>',
+    awaiting_reply:    '<?= __('dashboard.craftsman.pending_response') ?>',
+    awaiting_confirm:  '<?= __('dashboard.craftsman.awaiting_confirm') ?>',
+    ho_to_confirm:     '<?= __('dashboard.shared.waiting_confirm') ?>',
+    all_done:          '<?= __('dashboard.shared.completed') ?>',
+    your_rating:       '<?= __('dashboard.shared.reviews') ?>',
+    reviews:           '<?= __('dashboard.shared.reviews') ?>',
+    sent_bookings:     '<?= __('dashboard.craftsman.sent_bookings') ?>',
+    not_accepted:      '<?= __('dashboard.craftsman.pending_response') ?>',
+    saved_craftsmen:   '<?= __('dashboard.shared.saved') ?>',
+    in_saved_list:     '<?= __('dashboard.shared.saved') ?>',
+    start_earning:     '<?= __('dashboard.shared.browse_job_board') ?>',
+    from_completed:    '<?= __('dashboard.shared.completed') ?>',
+    yes_accept:        '<?= __('dashboard.shared.accept') ?>',
+    yes_decline:       '<?= __('dashboard.shared.decline') ?>',
+    remove:            '<?= __('dashboard.shared.remove') ?>',
+    remove_saved:      '<?= __('dashboard.craftsman.confirm_remove_fav') ?>',
+    remove_saved_desc: '<?= __('dashboard.craftsman.confirm_remove_fav_desc') ?>',
+    review_s:          '<?= __('dashboard.shared.reviews') ?>',
+};
+
 /* Helpers */
 const fmt    = n => Number(n).toLocaleString('fr-DZ');
 const star   = f => `<svg viewBox="0 0 20 20" fill="${f?'#fbbf24':'#e5e7eb'}" style="width:13px;height:13px"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>`;
@@ -1647,7 +1694,7 @@ function starDistCard() {
             <div class="metric-value purple">${D.avgRating>0?D.avgRating:'—'}</div>
             <div style="display:flex;gap:1px">${starsHtml}</div>
         </div>
-        <div class="metric-label" style="margin-bottom:0.65rem">${D.totalReviews} review${D.totalReviews!==1?'s':''}</div>
+        <div class="metric-label" style="margin-bottom:0.65rem">${D.totalReviews} ${T.review_s}</div>
         ${stars}
     </div>`;
 }
@@ -1658,44 +1705,44 @@ function starDistCard() {
 function metricsHTML(tab) {
     switch(tab) {
         case 'overview':
-            return `<p class="metrics-heading">Metrics at a Glance</p>
-                ${mCard('green',  'COMPLETED',      IC.earn,  'Total Earnings',  fmt(D.earnings)+' DZD',   D.earnings===0?'Start earning today':'From completed jobs')}
-                ${mCard('indigo', 'IN PROGRESS',    IC.jobs,  'Active Jobs',     D.activeJobs,             D.activeJobs+' job'+(D.activeJobs!==1?'s':'')+' running')}
-                ${mCard('amber',  'PENDING REVIEW', IC.quote, 'Total Quotes',    D.quotes,                 D.pendingBids+' pending review')}
-                ${mCard('purple', 'LIFETIME',       IC.star,  'Avg Rating',      D.avgRating>0?'★ '+D.avgRating:'—', D.totalReviews+' review'+(D.totalReviews!==1?'s':''))}
+            return `<p class="metrics-heading">${T.metrics_glance}</p>
+                ${mCard('green',  T.completed,      IC.earn,  T.total_earnings,  fmt(D.earnings)+(document.documentElement.lang==='ar'?' د.ج':' DZD'),   D.earnings===0?T.start_earning:T.from_completed)}
+                ${mCard('indigo', T.in_progress,    IC.jobs,  T.active_jobs,     D.activeJobs,             D.activeJobs+' '+T.active_jobs)}
+                ${mCard('amber',  T.pending_review, IC.quote, T.total_quotes,    D.quotes,                 D.pendingBids+' '+T.pending_bids)}
+                ${mCard('purple', T.lifetime,       IC.star,  T.avg_rating,      D.avgRating>0?'★ '+D.avgRating:'—', D.totalReviews+' '+T.review_s)}
                 `;
 
         case 'quotes':
-            return `<p class="metrics-heading">Quote Summary</p>
-                ${mCard('amber',  'TOTAL',   IC.quote, 'Submitted',    D.quotes,           D.qCount.pending+' awaiting response')}
-                ${mCard('green',  'WON',     IC.jobs,  'Accepted',     D.qCount.accepted,  'Jobs awarded to you')}
-                ${mCard('indigo', 'PENDING', IC.quote, 'Under Review', D.qCount.pending,   'Waiting for homeowner')}`;
+            return `<p class="metrics-heading">${T.quote_summary}</p>
+                ${mCard('amber',  'TOTAL',   IC.quote, T.submitted,    D.quotes,           D.qCount.pending+' '+T.awaiting_resp)}
+                ${mCard('green',  T.accepted, IC.jobs,  T.accepted,     D.qCount.accepted,  T.jobs_awarded)}
+                ${mCard('indigo', T.pending_review, IC.quote, T.under_review, D.qCount.pending,   T.waiting_ho)}`;
 
         case 'active':
-            return `<p class="metrics-heading">Active Jobs</p>
-                ${mCard('indigo', 'RUNNING',  IC.jobs,  'Active Jobs', D.activeJobs, 'Currently in progress')}
-                ${mCard('green',  'WIN RATE', IC.earn,  'Win Rate',    D.winRate+'%', D.quotes+' quotes submitted')}`;
+            return `<p class="metrics-heading">${T.active_jobs}</p>
+                ${mCard('indigo', T.running,  IC.jobs,  T.active_jobs, D.activeJobs, T.in_progress)}
+                ${mCard('green',  T.win_rate, IC.earn,  T.win_rate,    D.winRate+'%', D.quotes+' '+T.quotes_submitted)}`;
 
         case 'bookings':
-            return `<p class="metrics-heading">Booking Overview</p>
-                ${mCard('amber',  'ACTION',  IC.jobs, 'Needs Response',   D.bCount.requested, 'Awaiting your reply')}
-                ${mCard('indigo', 'RUNNING', IC.jobs, 'In Progress',      D.bCount.progress,  'Jobs underway')}
-                ${mCard('purple', 'CONFIRM', IC.jobs, 'Awaiting Confirm', D.bCount.pendComp,  'Homeowner to confirm')}
-                ${mCard('green',  'DONE',    IC.jobs, 'Completed',        D.bCount.completed, 'All done')}`;
+            return `<p class="metrics-heading">${T.booking_overview}</p>
+                ${mCard('amber',  'ACTION',  IC.jobs, T.needs_response,   D.bCount.requested, T.awaiting_reply)}
+                ${mCard('indigo', T.running, IC.jobs, T.in_progress,      D.bCount.progress,  T.running)}
+                ${mCard('purple', 'CONFIRM', IC.jobs, T.awaiting_confirm, D.bCount.pendComp,  T.ho_to_confirm)}
+                ${mCard('green',  'DONE',    IC.jobs, T.completed,        D.bCount.completed, T.all_done)}`;
 
         case 'reviews':
-            return `<p class="metrics-heading">Your Rating</p>
+            return `<p class="metrics-heading">${T.your_rating}</p>
                 ${starDistCard()}`;
 
         case 'sent-bookings':
-            return `<p class="metrics-heading">Sent Bookings</p>
-                ${mCard('amber',  'PENDING',   IC.jobs, 'Awaiting Reply', D.sbCount.pending,   'Not yet accepted')}
-                ${mCard('indigo', 'RUNNING',   IC.jobs, 'In Progress',    D.sbCount.progress,  'Jobs underway')}
-                ${mCard('green',  'COMPLETED', IC.jobs, 'Completed',      D.sbCount.completed, 'All done')}`;
+            return `<p class="metrics-heading">${T.sent_bookings}</p>
+                ${mCard('amber',  T.pending_review,   IC.jobs, T.awaiting_reply, D.sbCount.pending,   T.not_accepted)}
+                ${mCard('indigo', T.running,   IC.jobs, T.in_progress,    D.sbCount.progress,  T.running)}
+                ${mCard('green',  T.completed, IC.jobs, T.completed,      D.sbCount.completed, T.all_done)}`;
 
         case 'saved':
-            return `<p class="metrics-heading">Saved Craftsmen</p>
-                ${mCard('purple', 'SAVED', IC.star, 'Saved Craftsmen', D.savedCount, 'In your saved list')}`;
+            return `<p class="metrics-heading">${T.saved_craftsmen}</p>
+                ${mCard('purple', T.saved_craftsmen, IC.star, T.saved_craftsmen, D.savedCount, T.in_saved_list)}`;
 
         default: return '';
     }
@@ -1736,10 +1783,10 @@ function showConfirmModal(formId, title, message, type) {
     const ia = document.getElementById('modal-icon-accept');
     const id = document.getElementById('modal-icon-decline');
     if (type === 'accept') {
-        btn.className = 'btn btn-green'; btn.textContent = 'Yes, Accept';
+        btn.className = 'btn btn-green'; btn.textContent = T.yes_accept;
         ia.classList.remove('hidden'); id.classList.add('hidden');
     } else {
-        btn.className = 'btn btn-red'; btn.textContent = 'Yes, Decline';
+        btn.className = 'btn btn-red'; btn.textContent = T.yes_decline;
         ia.classList.add('hidden'); id.classList.remove('hidden');
     }
     document.getElementById('confirm-modal').classList.remove('hidden');
@@ -1770,12 +1817,12 @@ function closeCounterModal() { document.getElementById('counter-modal').classLis
 /* Favorites */
 function confirmRemoveFavorite(id) {
     pendingFavoriteId = id; pendingFormId = null;
-    document.getElementById('modal-title').innerText = 'Remove from Saved';
-    document.getElementById('modal-message').innerText = 'Are you sure you want to remove this craftsman from your saved list?';
+    document.getElementById('modal-title').innerText = T.remove_saved;
+    document.getElementById('modal-message').innerText = T.remove_saved_desc;
     document.getElementById('modal-icon-accept').classList.add('hidden');
     document.getElementById('modal-icon-decline').classList.remove('hidden');
     const btn = document.getElementById('modal-confirm-btn');
-    btn.innerText = 'Remove'; btn.className = 'btn btn-red';
+    btn.innerText = T.remove; btn.className = 'btn btn-red';
     document.getElementById('confirm-modal').classList.remove('hidden');
 }
 async function removeFavorite(craftsmanId) {

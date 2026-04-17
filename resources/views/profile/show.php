@@ -362,7 +362,7 @@ if ($isCraftsman) {
                             <svg class="w-4 h-4 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             <p class="text-[11px] font-bold text-indigo-700/80 dark:text-indigo-400 uppercase tracking-wider"><?= __('profile.hourly_rate') ?></p>
                         </div>
-                        <p class="text-xl font-bold text-gray-900 dark:text-white tracking-tight leading-none mt-0.5"><?= number_format($craftsmanDetails['hourly_rate'] ?? 0, 2) ?> <span class="text-sm font-medium text-gray-500 dark:text-gray-400 ml-0.5">DZD</span></p>
+                        <p class="text-xl font-bold text-gray-900 dark:text-white tracking-tight leading-none mt-0.5"><?= number_format($craftsmanDetails['hourly_rate'] ?? 0, 2) ?> <span class="text-sm font-medium text-gray-500 dark:text-gray-400 ml-0.5"><?= __('lang') === 'ar' ? 'د.ج' : 'DZD' ?></span></p>
                     </div>
 
                     <!-- Platform Member -->
@@ -432,7 +432,7 @@ if ($isCraftsman) {
                         <?= __('profile.about_me') ?>
                     </h2>
                     <?php if (!empty($craftsmanDetails['bio'])): ?>
-                    <div class="prose prose-sm text-gray-600 dark:text-gray-300 leading-relaxed max-w-none">
+                    <div class="prose prose-sm text-gray-600 dark:text-gray-300 leading-relaxed max-w-none text-start" dir="auto">
                         <?= nl2br(htmlspecialchars($craftsmanDetails['bio'])) ?>
                     </div>
                     <?php else: ?>
@@ -541,7 +541,7 @@ if ($isCraftsman) {
                                     <p class="text-[11px] font-semibold text-indigo-400/80 uppercase tracking-wider mb-2.5"><?= date('F j, Y', strtotime($review['created_at'])) ?></p>
                                     
                                     <?php if (!empty($review['comment'])): ?>
-                                    <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed break-words relative z-10 italic">"<?= nl2br(htmlspecialchars($review['comment'])) ?>"</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed break-words relative z-10 italic text-start" dir="auto">"<?= nl2br(htmlspecialchars($review['comment'])) ?>"</p>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -697,7 +697,7 @@ html.dark .custom-scrollbar::-webkit-scrollbar-thumb {
                         <div class="flex items-center justify-between text-sm py-3 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/80 -mx-6 px-6 -mb-6">
                             <div>
                                 <span class="text-gray-500 dark:text-gray-400 text-xs font-medium uppercase tracking-wider"><?= __('profile.hourly_rate') ?></span>
-                                <p class="font-bold text-gray-900 dark:text-white text-base"><?= number_format($craftsmanDetails['hourly_rate'] ?? 0, 2) ?> DZD</p>
+                                <p class="font-bold text-gray-900 dark:text-white text-base"><?= number_format($craftsmanDetails['hourly_rate'] ?? 0, 2) ?> <?= __('lang') === 'ar' ? 'د.ج' : 'DZD' ?></p>
                             </div>
                             <div class="text-<?= __('lang') === 'ar' ? 'left' : 'right' ?>">
                                 <span class="text-gray-500 dark:text-gray-400 text-xs font-medium uppercase tracking-wider"><?= __('profile.success_rating') ?></span>
